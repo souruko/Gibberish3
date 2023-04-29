@@ -4,7 +4,7 @@
 --      Description:    set all Timer defaults
 --===================================================================================
 
-Timer.Defaults[Timer.Types.Timer] = {}
+Timer.Defaults[Timer.Types.BAR] = {}
 
-Timer.Defaults[Timer.Types.Timer].unique = false
-Timer.Defaults[Timer.Types.Timer].removable = true
+Timer.Defaults[Timer.Types.BAR].unique = false
+Timer.Defaults[Timer.Types.BAR].removable = true

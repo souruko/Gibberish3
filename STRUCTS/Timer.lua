@@ -18,6 +18,19 @@
 -------------------------------------------------------------------------------------
 function Timer.GetStruct()
 
+    local timer = {}
+
+    timer.id = Turbine.Engine.GetGameTime()
+    timer.enabled = true
+
+
+    timer.effectSelfTrigger = {}
+    timer.effectGroupTrigger = {}
+    timer.effectTargetTrigger = {}
+    timer.skillTrigger = {}
+    timer.chatTrigger = {}
+
+    return timer
 
 end
 
@@ -31,6 +44,7 @@ end
 -------------------------------------------------------------------------------------
 function Timer.New()
 
+    return Timer.GetStruct()
 
 end
 

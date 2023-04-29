@@ -24,7 +24,7 @@ function Group.GetStruct(type)
     group.id = Group.GetlastID()
     group.name = ""
     group.type = type
-    group.enabled = 1
+    group.enabled = true
     group.resetOnTargetChange = false
 
     -- position / size
@@ -33,6 +33,9 @@ function Group.GetStruct(type)
 
     -- color / opacity
     -- text
+
+    -- timerList
+    group.timerList = {}
 
     return group
 

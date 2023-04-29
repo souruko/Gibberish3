@@ -1,5 +1,5 @@
 --===================================================================================
---             Name:    TIMER
+--             Name:    TRIGGER
 -------------------------------------------------------------------------------------
 --      Description:    init
 --===================================================================================
@@ -8,5 +8,5 @@
 
 
 
-import "Gibberish3.ELEMENTS.TIMER.BAR"
-import "Gibberish3.ELEMENTS.TIMER.ICON"
+import "Gibberish3.TRIGGER.Chat"
+import "Gibberish3.TRIGGER.Functions"

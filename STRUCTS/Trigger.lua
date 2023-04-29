@@ -10,14 +10,22 @@
 
 
 -------------------------------------------------------------------------------------
---      Description:     
+--      Description:     return the base structure for creating a new trigger 
 -------------------------------------------------------------------------------------
 --        Parameter:    
 -------------------------------------------------------------------------------------
---           Return:    
+--           Return:    trigger struct
 -------------------------------------------------------------------------------------
-function Trigger.GetStuct()
+function Trigger.GetStruct()
 
+    local trigger = {}
+
+    trigger.id = Turbine.Engine.GetGameTime()
+    trigger.enabled = true
+    trigger.token = ""
+    trigger.useRegex = false
+
+    return trigger
 
 end
 
@@ -31,6 +39,7 @@ end
 -------------------------------------------------------------------------------------
 function Trigger.New()
 
+    return Trigger.GetStruct()
 
 end
 
