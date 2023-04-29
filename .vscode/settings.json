@@ -1,0 +1,38 @@
+{
+    "Lua.runtime.special": {
+        "import": "require"
+    },
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.pathStrict": false,
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "?/__init__.lua"
+    ],
+    "Lua.runtime.plugin": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\Lua\\Plugin\\plugin.lua",
+    "Lua.workspace.library": [
+        "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\Lua\\EmmyLua\\Turbine"
+    ],
+    "xml.fileAssociations": [
+        {
+            "pattern": "**/*.plugin",
+            "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\lotroplugin.xsd"
+        },
+        {
+            "pattern": "**/*.plugincompendium",
+            "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\plugincompendium.xsd"
+        },
+        {
+            "pattern": "**/*.musiccompendium",
+            "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\musiccompendium.xsd"
+        },
+        {
+            "pattern": "**/*.skincompendium",
+            "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\skincompendium.xsd"
+        },
+        {
+            "pattern": "**/SkinDefinition.xml",
+            "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\lotro-skin.xsd"
+        }
+    ]
+}

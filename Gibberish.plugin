@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Plugin> 
+	<Information>
+		<Name>Gibberish3</Name>
+		<Author>Souru</Author>
+		<Version>3.0.0</Version>
+		<Description>/gibberish [options] [reload] [reset] [collection] [move]</Description>
+	</Information>
+	<Package>Gibberish.Main</Package>
+	<Configuration Apartment="Gibberish" />
+</Plugin>
