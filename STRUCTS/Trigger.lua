@@ -26,6 +26,7 @@ function Trigger.GetStruct(type)
     trigger.token       = Trigger.Defaults[type].token
     trigger.useRegex    = Trigger.Defaults[type].useRegex
     trigger.description = Trigger.Defaults[type].description
+    trigger.action      = Action.Add
 
     return trigger
 

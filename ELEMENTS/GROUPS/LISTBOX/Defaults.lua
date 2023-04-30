@@ -15,8 +15,8 @@ Group.Defaults[Group.Types.LISTBOX].resetOnTargetChange     = false
 
 Group.Defaults[Group.Types.LISTBOX].width                   = 150
 Group.Defaults[Group.Types.LISTBOX].height                  = 20
-Group.Defaults[Group.Types.LISTBOX].left                    = 200
-Group.Defaults[Group.Types.LISTBOX].top                     = 200
+Group.Defaults[Group.Types.LISTBOX].left                    = 0.1
+Group.Defaults[Group.Types.LISTBOX].top                     = 0.1
 Group.Defaults[Group.Types.LISTBOX].frame                   = 2
 Group.Defaults[Group.Types.LISTBOX].spacing                 = 5
 Group.Defaults[Group.Types.LISTBOX].direction               = false

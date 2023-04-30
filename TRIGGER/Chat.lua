@@ -127,6 +127,9 @@ function Trigger.ProcessChatTrigger(
                                     posAdjustment
                                    )
 
+    local groupData = Data.group[groupIndex]
+    local timerData = groupData.timerList[timerIndex]
+    local triggerData = timerData.chatTrigger[triggerIndex]
    
     local startTime = Turbine.Engine.GetGameTime()
     local text      = ""
@@ -136,9 +139,15 @@ function Trigger.ProcessChatTrigger(
     local entity    = nil
 
     -- check for placeholder
-    local token = Data.group[groupIndex].timerList[timerIndex].chatTrigger[triggerIndex].token
+    local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
+
+    if triggerData.action == Action.Add then
+        Group[groupIndex]:Add(timerData, timerIndex, startTime, duration, icon, text, entity)
+    else
+        Group[groupIndex]:Remove(timerIndex)
+    end
 
 end
 

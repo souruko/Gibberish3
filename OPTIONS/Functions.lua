@@ -1,29 +1,20 @@
 --===================================================================================
---             Name:    Data
+--             Name:    OPTIONS  Functions
 -------------------------------------------------------------------------------------
---      Description:    Data structure and functions
+--      Description:    
 --===================================================================================
 
 
+
+
+
 -------------------------------------------------------------------------------------
---      Description:    Set base data structure       
+--      Description:    listbox constructor
 -------------------------------------------------------------------------------------
---        Parameter:    
+--        Parameter:    group data 
 -------------------------------------------------------------------------------------
---           Return:    
+--           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function Data.New()
-
-    Data.group  = {}   -- list of group data
-    Data.group.lastID = 0
-
-    Data.folder  = {}   -- list of folder data
-    Data.folder.lastID = 0
-
-    Data.options = {}   -- list of options data
-
-    Data.selectedGroupIndex = nil
-    Data.moveMode = false
-
+function Options.SelectedWindowChanged()
+    
 end
-

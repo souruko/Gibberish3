@@ -14,16 +14,37 @@
 -------------------------------------------------------------------------------------
 --           Return:    the created group element
 -------------------------------------------------------------------------------------
-function CreateGroup(type, data)
+function Group.Create(type, index, data)
 
     if type == Group.Types.LISTBOX then
 
-        return LISTBOX.ListBoxElement(data)
+        return LISTBOX.ListBoxElement(index, data)
     
     else
 
         -- ERROR case
     
+    end
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    selection changed event
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.SelectionChanged(index)
+
+    Data.selectedGroupIndex = index
+
+    for key, group in ipairs(Group) do
+
+        group:SelectionChanged()
+
     end
 
 end

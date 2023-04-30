@@ -34,5 +34,10 @@
             "pattern": "**/SkinDefinition.xml",
             "systemId": "c:\\Users\\souru\\.vscode\\extensions\\lunarwtr.lotro-api-1.0.14\\resources\\xsds\\lotro-skin.xsd"
         }
+    ],
+    "Lua.diagnostics.disable": [
+        "duplicate-set-field",
+        "assign-type-mismatch",
+        "undefined-field"
     ]
 }
