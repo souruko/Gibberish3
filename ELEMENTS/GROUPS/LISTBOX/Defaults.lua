@@ -12,6 +12,8 @@ Group.Defaults[Group.Types.LISTBOX]                         = {}
 
 Group.Defaults[Group.Types.LISTBOX].description             = ""
 Group.Defaults[Group.Types.LISTBOX].resetOnTargetChange     = false
+Group.Defaults[Group.Types.LISTBOX].useTargetEntity         = false
+
 
 Group.Defaults[Group.Types.LISTBOX].width                   = 150
 Group.Defaults[Group.Types.LISTBOX].height                  = 20
@@ -23,12 +25,11 @@ Group.Defaults[Group.Types.LISTBOX].direction               = false
 Group.Defaults[Group.Types.LISTBOX].orientation             = true
 Group.Defaults[Group.Types.LISTBOX].overlay                 = false
 
-
-Group.Defaults[Group.Types.LISTBOX].color1                  = {1, 1, 1}
-Group.Defaults[Group.Types.LISTBOX].color2                  = {1, 1, 1}
-Group.Defaults[Group.Types.LISTBOX].color3                  = {1, 1, 1}
-Group.Defaults[Group.Types.LISTBOX].color4                  = {1, 1, 1}
-Group.Defaults[Group.Types.LISTBOX].color5                  = {1, 1, 1}
+Group.Defaults[Group.Types.LISTBOX].color1                  = {R=1, G=1, B=1}
+Group.Defaults[Group.Types.LISTBOX].color2                  = {R=0, G=0, B=0}
+Group.Defaults[Group.Types.LISTBOX].color3                  = {R=1, G=1, B=1}
+Group.Defaults[Group.Types.LISTBOX].color4                  = {R=0, G=0, B=0}
+Group.Defaults[Group.Types.LISTBOX].color5                  = {R=0, G=0, B=0}
 
 Group.Defaults[Group.Types.LISTBOX].opacityActiv            = 1
 Group.Defaults[Group.Types.LISTBOX].opacityPassiv           = 1
@@ -36,5 +37,6 @@ Group.Defaults[Group.Types.LISTBOX].opacityPassiv           = 1
 
 Group.Defaults[Group.Types.LISTBOX].font                    = 1
 Group.Defaults[Group.Types.LISTBOX].durationFormat          = 1
-Group.Defaults[Group.Types.LISTBOX].textAllignment          = 1
-Group.Defaults[Group.Types.LISTBOX].timerAllignment         = 1
+Group.Defaults[Group.Types.LISTBOX].textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
+Group.Defaults[Group.Types.LISTBOX].timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
+Group.Defaults[Group.Types.LISTBOX].showTimer               = true

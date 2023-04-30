@@ -28,6 +28,7 @@ function Group.GetStruct(type)
     group.saveGlobaly           = true
     group.description           = Group.Defaults[type].description
     group.resetOnTargetChange   = Group.Defaults[type].resetOnTargetChange
+    group.useTargetEntity       = Group.Defaults[type].useTargetEntity
 
     -- position / size
     group.left                  = Group.Defaults[type].left
@@ -47,14 +48,15 @@ function Group.GetStruct(type)
     group.color4                = Group.Defaults[type].color4
     group.color5                = Group.Defaults[type].color5
 
-    group.opacityActiv          = group.opacityActiv
-    group.opacityPassiv         = group.opacityPassiv
+    group.opacityActiv          = Group.Defaults[type].opacityActiv
+    group.opacityPassiv         = Group.Defaults[type].opacityPassiv
 
     -- text
-    group.font                  = group.font
-    group.durationFormat        = group.durationFormat
-    group.textAllignment        = group.textAllignment
-    group.timerAllignment       = group.timerAllignment
+    group.font                  = Group.Defaults[type].font
+    group.durationFormat        = Group.Defaults[type].durationFormat
+    group.textAlignment         = Group.Defaults[type].textAlignment
+    group.timerAlignment        = Group.Defaults[type].timerAlignment
+    group.showTimer             = Group.Defaults[type].showTimer
 
     -- timerList
     group.timerList             = {}

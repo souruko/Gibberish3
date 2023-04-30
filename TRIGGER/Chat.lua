@@ -18,13 +18,13 @@
 function Turbine.Chat.Received(sender, args)
 
     -- filter unwanted stuff
-    if  (args.ChatType == Turbine.ChatType.Tell) or 
-        (args.ChatType == Turbine.ChatType.FellowLoot) or 
-        (args.ChatType == Turbine.ChatType.SelfLoot) or 
-        (args.ChatType == Turbine.ChatType.World) or 
-        (args.ChatType == Turbine.ChatType.Trade) or 
-        (args.ChatType == Turbine.ChatType.Standard) or 
-        (args.ChatType == Turbine.ChatType.Unfiltered) or 
+    if  (args.ChatType == Turbine.ChatType.Tell) or
+        (args.ChatType == Turbine.ChatType.FellowLoot) or
+        (args.ChatType == Turbine.ChatType.SelfLoot) or
+        (args.ChatType == Turbine.ChatType.World) or
+        (args.ChatType == Turbine.ChatType.Trade) or
+        (args.ChatType == Turbine.ChatType.Standard) or
+        (args.ChatType == Turbine.ChatType.Unfiltered) or
         (args.ChatType == Turbine.ChatType.LFF) or
         (args.Message  == nil) then
 
@@ -137,16 +137,19 @@ function Trigger.ProcessChatTrigger(
     local duration  = 1
     local icon      = nil
     local entity    = nil
+    local key
 
     -- check for placeholder
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
-
+    text = placeholder["&2"]
+    duration = tonumber( placeholder["&1"] )
+    
     if triggerData.action == Action.Add then
-        Group[groupIndex]:Add(timerData, timerIndex, startTime, duration, icon, text, entity)
+        Group[groupIndex]:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
     else
-        Group[groupIndex]:Remove(timerIndex)
+        Group[groupIndex]:Remove(timerIndex, key)
     end
 
 end

@@ -19,14 +19,12 @@ Timer.Defaults[Timer.Types.BAR].unique              = false
 Timer.Defaults[Timer.Types.BAR].removable           = true
 Timer.Defaults[Timer.Types.BAR].reset               = false
 Timer.Defaults[Timer.Types.BAR].loop                = false
-Timer.Defaults[Timer.Types.BAR].useTargetEntity     = false
 
-Timer.Defaults[Timer.Types.BAR].showTimer           = true
 Timer.Defaults[Timer.Types.BAR].timerValue          = 10
 Timer.Defaults[Timer.Types.BAR].useCustomTimer      = false
 Timer.Defaults[Timer.Types.BAR].direction           = false
 
-Timer.Defaults[Timer.Types.BAR].icon                = nil
+Timer.Defaults[Timer.Types.BAR].icon                = 1091637312
 Timer.Defaults[Timer.Types.BAR].textValue           = ""
 Timer.Defaults[Timer.Types.BAR].textOption          = 1
 

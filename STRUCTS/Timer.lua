@@ -32,10 +32,8 @@ function Timer.GetStruct(type)
     timer.removable             = Timer.Defaults[type].removable
     timer.loop                  = Timer.Defaults[type].loop
     timer.reset                 = Timer.Defaults[type].reset
-    timer.useTargetEntity       = Timer.Defaults[type].useTargetEntity
 
     -- timer
-    timer.showTimer             = Timer.Defaults[type].showTimer
     timer.useCustomTimer        = Timer.Defaults[type].useCustomTimer
     timer.timerValue            = Timer.Defaults[type].timerValue
     timer.direction             = Timer.Defaults[type].direction

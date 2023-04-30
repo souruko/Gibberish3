@@ -32,5 +32,5 @@ Group.Defaults[Group.Types.ELEMENTNAME].opacityPassiv           = 1
 
 Group.Defaults[Group.Types.ELEMENTNAME].font                    = 1
 Group.Defaults[Group.Types.ELEMENTNAME].durationFormat          = 1
-Group.Defaults[Group.Types.ELEMENTNAME].textAllignment          = 1
-Group.Defaults[Group.Types.ELEMENTNAME].timerAllignment         = 1
+Group.Defaults[Group.Types.ELEMENTNAME].textAlignment          = 1
+Group.Defaults[Group.Types.ELEMENTNAME].timerAlignment         = 1

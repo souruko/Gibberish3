@@ -122,7 +122,34 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Add(data, timerIndex, startTime, duration, icon, text, entity)
+function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+
+    local child = self:CheckRunningTimer(timerIndex, key)
+
+    if child then
+    
+        child:UpdateTimer()
+
+    else
+
+        local index = #self.children + 1
+
+        self.children[index] = Timer.Create(timerData.type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+        self.TimerListBox:AddItem(self.children[index])
+
+    end
+
+
+    self.TimerListBox:Sort(
+
+        function (child1, child2)
+            if child1 < child2 then
+                return true
+            else
+                return false
+            end
+        end
+    )
 
 end
 
@@ -132,12 +159,53 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    remove call from triggers
 -------------------------------------------------------------------------------------
+--        Parameter:    timer index
+--                      key
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function ListBoxElement:Remove(timerIndex, key)
+
+    for i = #self.children, 1, -1 do
+
+        if self.children[i].index == timerIndex then
+
+            if key == nil or self.children[i].key == key then
+
+                self.children[i]:Remove()
+
+            end
+
+        end
+
+    end
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    add call from triggers
+-------------------------------------------------------------------------------------
 --        Parameter:    trigger data 
 --                      timer index
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Remove(data, timer)
+function ListBoxElement:CheckRunningTimer(timerIndex, key)
+
+    for key, child in pairs(self.children) do
+
+        if child.Index == timerIndex and child.key == key then
+
+            return child
+            
+        end
+        
+    end
+
+    return nil
 
 end
 
