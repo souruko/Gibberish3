@@ -1,50 +1,61 @@
 --===================================================================================
---             Name:    BAR Element
+--             Name:    TEMPLATE Element
 -------------------------------------------------------------------------------------
---      Description:    BAR Class
+--      Description:    TEMPLATE Class
 --===================================================================================
-BarElement = class(Turbine.UI.Window)
+TemplateTimerElement = class(Turbine.UI.Window)
 
 
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    BAR constructor
+--      Description:    TEMPLATE constructor
 -------------------------------------------------------------------------------------
 --        Parameter:    group data 
 -------------------------------------------------------------------------------------
---           Return:    group BAR element
+--           Return:    group TEMPLATE element
 -------------------------------------------------------------------------------------
-function BarElement:Constructor(data)
+function TemplateTimerElement:Constructor(data)
 
 end
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    add call from triggers
+--      Description:    reset event
 -------------------------------------------------------------------------------------
---        Parameter:    trigger data 
---                      timer index
+--        Parameter:     
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Add(data, timer)
+function TemplateTimerElement:Reset()
 
 end
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    remove call from triggers
+--      Description:    data has changed event
 -------------------------------------------------------------------------------------
---        Parameter:    trigger data 
---                      timer index
+--        Parameter:    
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Remove(data, timer)
+function TemplateTimerElement:DataChanged()
 
 end
 
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    update timer 
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function TemplateTimerElement:UpdateTimer(stuff)
+
+end

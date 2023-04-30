@@ -21,21 +21,43 @@ function Group.GetStruct(type)
     local group = {}
 
     -- general
-    group.id = Group.GetlastID()
-    group.name = ""
-    group.type = type
-    group.enabled = true
-    group.resetOnTargetChange = false
+    group.id                    = Group.GetlastID()
+    group.name                  = ""
+    group.type                  = type
+    group.enabled               = true
+    group.saveGlobaly           = true
+    group.description           = Group.Defaults[type].description
+    group.resetOnTargetChange   = Group.Defaults[type].resetOnTargetChange
 
     -- position / size
-    group.width  = Group.Defaults[type].width
-    group.height = Group.Defaults[type].height
+    group.left                  = Group.Defaults[type].left
+    group.top                   = Group.Defaults[type].top
+    group.width                 = Group.Defaults[type].width
+    group.height                = Group.Defaults[type].height
+    group.frame                 = Group.Defaults[type].frame
+    group.spacing               = Group.Defaults[type].spacing
+    group.direction             = Group.Defaults[type].direction
+    group.orientation           = Group.Defaults[type].orientation
+    group.overlay               = Group.Defaults[type].overlay
 
     -- color / opacity
+    group.color1                = Group.Defaults[type].color1
+    group.color2                = Group.Defaults[type].color2
+    group.color3                = Group.Defaults[type].color3
+    group.color4                = Group.Defaults[type].color4
+    group.color5                = Group.Defaults[type].color5
+
+    group.opacityActiv          = group.opacityActiv
+    group.opacityPassiv         = group.opacityPassiv
+
     -- text
+    group.font                  = group.font
+    group.durationFormat        = group.durationFormat
+    group.textAllignment        = group.textAllignment
+    group.timerAllignment       = group.timerAllignment
 
     -- timerList
-    group.timerList = {}
+    group.timerList             = {}
 
     return group
 

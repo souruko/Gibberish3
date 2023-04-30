@@ -7,8 +7,6 @@
 
 
 
-
-
 -------------------------------------------------------------------------------------
 --      Description:   chat Message Received Event
 -------------------------------------------------------------------------------------
@@ -141,9 +139,6 @@ function Trigger.ProcessChatTrigger(
     local token = Data.group[groupIndex].timerList[timerIndex].chatTrigger[triggerIndex].token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
-    
-
-    --TODO window call
 
 end
 

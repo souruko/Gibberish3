@@ -6,6 +6,8 @@
 
 
 
+Group.Types.LISTBOX = 1
+Group.Types.WINDOW  = 2
 
 
 import "Gibberish3.ELEMENTS.GROUPS.LISTBOX"
