@@ -476,7 +476,7 @@ end
 -------------------------------------------------------------------------------------
 function BarElement:Shutdown()
 
-    self:SetWantsUpdates(true)
+    self:SetWantsUpdates(false)
 
     self:Visibility(false)
 

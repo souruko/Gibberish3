@@ -12,7 +12,7 @@ Timer.Defaults[Timer.Types.BAR]                     = {}
 
 
 Timer.Defaults[Timer.Types.BAR].description         = ""
-Timer.Defaults[Timer.Types.BAR].listOfTargets       = ""
+Timer.Defaults[Timer.Types.BAR].listOfTargets       = {}
 
 
 Timer.Defaults[Timer.Types.BAR].unique              = false

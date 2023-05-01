@@ -89,58 +89,56 @@ ScreenWidth , ScreenHeight = Turbine.UI.Display:GetSize()
 -------------------------------------------------------------------------------------
 --      Description:    TimerTextOptions 
 -------------------------------------------------------------------------------------
-TimerTextOptions = {}
-TimerTextOptions.No_Text = 1
-TimerTextOptions.Token = 2
-TimerTextOptions.Custom_Text = 3
-TimerTextOptions.Let_the_plugin_decide = 4
+TimerTextOptions                = {}
+TimerTextOptions.NoText         = 1
+TimerTextOptions.Token          = 2
+TimerTextOptions.CustomText     = 3
+TimerTextOptions.Target         = 4
 
 
 -------------------------------------------------------------------------------------
 --      Description:    Orientation 
 -------------------------------------------------------------------------------------
-Orientation = {}
-Orientation.Horizontal = true
-Orientation.Vertical = false
+Orientation             = {}
+Orientation.Horizontal  = true
+Orientation.Vertical    = false
 
 
 -------------------------------------------------------------------------------------
 --      Description:    Direction 
 -------------------------------------------------------------------------------------
-Direction = {}
-Direction.Ascending = true
-Direction.Descending = false
+Direction               = {}
+Direction.Ascending     = true
+Direction.Descending    = false
 
 
 -------------------------------------------------------------------------------------
 --      Description:    NumberFormat 
 -------------------------------------------------------------------------------------
-NumberFormat = {}
-NumberFormat.Seconds = 1
-NumberFormat.Minutes = 2
+NumberFormat            = {}
+NumberFormat.Seconds    = 1
+NumberFormat.Minutes    = 2
 
 
 
 -------------------------------------------------------------------------------------
 --      Description:    AnimationType 
 -------------------------------------------------------------------------------------
-AnimationType = {}
-AnimationType.Flashing = 1
-AnimationType.Dotted_Border = 2
-AnimationType.Activation_Border = 3
+AnimationType                       = {}
+AnimationType.Flashing              = 1
+AnimationType.Dotted_Border         = 2
+AnimationType.Activation_Border     = 3
 AnimationType.New_Activation_Border = 4
-AnimationType.New_Dotted_Border = 5
+AnimationType.New_Dotted_Border     = 5
 
 
 
 -------------------------------------------------------------------------------------
 --      Description:    Action 
 -------------------------------------------------------------------------------------
-Action = {}
-Action.Add = 1
-Action.Remove = 2
-
-
+Action          = {}
+Action.Add      = 1
+Action.Remove   = 2
 
 
 -------------------------------------------------------------------------------------

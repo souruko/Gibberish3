@@ -127,6 +127,10 @@ function Trigger.ProcessChatTrigger(
                                     posAdjustment
                                    )
 
+
+-------------------------------------------------------------------------------------
+-- declarations
+                                     
     local groupData = Data.group[groupIndex]
     local timerData = groupData.timerList[timerIndex]
     local triggerData = timerData.chatTrigger[triggerIndex]
@@ -134,21 +138,77 @@ function Trigger.ProcessChatTrigger(
     local startTime = Turbine.Engine.GetGameTime()
     local text      = ""
     local target    = ""
-    local duration  = 1
+    local duration  = 10
     local icon      = timerData.icon
     local entity    = nil
     local key
 
-    -- check for placeholder
+
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
+-------------------------------------------------------------------------------------
+-- text   
 
-    --TODO
-    text = placeholder["&2"]
-    duration = tonumber( placeholder["&1"] )
+    if timerData.textOption == TimerTextOptions.Target and
+     ( chatType             == Turbine.ChatType.PlayerCombat or
+       chatType             == Turbine.ChatType.EnemyCombat ) then
+
+        text, target = GetTargetNameFromCombatChat(message, chatType)
+
+        if Utils.CheckListForName(target, timerData.targetList) then
+            return
+        end
+
+        if text == "" then
+
+            text = target
+
+        else
+
+            text = text .. " - " .. target
+
+        end
 
 
+    elseif timerData.textOption == TimerTextOptions.Token then
+
+        text = message
+
+
+    elseif timerData.textOption == TimerTextOptions.CustomText then
+
+        text = timerData.textValue
+
+        for key, value in pairs(placeholder) do
+
+            text = string.gsub ( text, key, value)
+
+        end
+
+    end
+
+
+-------------------------------------------------------------------------------------
+-- duration   
+
+    if timerData.useCustomTimer == true then
+        
+        duration = timerData.timerValue
+
+        for key, value in pairs(placeholder) do
+
+            duration = string.gsub ( duration, key, value)
+
+        end
+
+        duration = tonumber( duration )
+
+    end
+
+
+-------------------------------------------------------------------------------------
+-- group call   
 
     if triggerData.action == Action.Add then
         Group[groupIndex]:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
@@ -158,3 +218,57 @@ function Trigger.ProcessChatTrigger(
 
 end
 
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    check combat message for name   
+-------------------------------------------------------------------------------------
+--        Parameter:    message
+--                      chatType
+-------------------------------------------------------------------------------------
+--           Return:    text        - number or empty
+--                      target      - name of target
+-------------------------------------------------------------------------------------
+function GetTargetNameFromCombatChat(message, chatType)
+
+    local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 =  Utils.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
+   
+    local text = CheckingSkillNameForNumber(skillName)
+  
+    local target = nil
+
+    if chatType == Turbine.ChatType.PlayerCombat then
+
+        target = targetName
+
+    elseif chatType == Turbine.ChatType.EnemyCombat then
+
+        target = initiatorName
+    end
+
+    return text, target
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    check for numbers in skillname
+-------------------------------------------------------------------------------------
+--        Parameter:    skillname
+-------------------------------------------------------------------------------------
+--           Return:    number / ""
+-------------------------------------------------------------------------------------
+function CheckingSkillNameForNumber(skillName)
+
+    local start_tier, end_tier = string.find(skillName, "%d+")
+    
+    if start_tier ~= nil then
+        return string.sub(skillName, start_tier, end_tier)
+    else
+        return ""
+    end
+
+end

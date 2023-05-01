@@ -23,6 +23,11 @@ Data.New()
 local testIndex = Group.New("hi", 1)
 
 Data.group[testIndex].timerList[1] = Timer.New(1)
+Data.group[testIndex].timerList[1].useCustomTimer = true
+Data.group[testIndex].timerList[1].timerValue = "&1"
+Data.group[testIndex].timerList[1].textOption = TimerTextOptions.CustomText
+Data.group[testIndex].timerList[1].textValue = "Text: &2"
+
 Data.group[testIndex].timerList[1].chatTrigger[1] = Trigger.New(Trigger.Types.CHAT)
 Data.group[testIndex].timerList[1].chatTrigger[1].useRegex = true
 Data.group[testIndex].timerList[1].chatTrigger[1].token = "pull in &1 &2"

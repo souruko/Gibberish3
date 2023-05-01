@@ -105,3 +105,36 @@ function Utils.SecondsToClock(seconds, format)
     end
 
 end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    check if targetname is in targetlist
+-------------------------------------------------------------------------------------
+--        Parameter:    name
+--                      list
+-------------------------------------------------------------------------------------
+--           Return:    found / not found
+-------------------------------------------------------------------------------------
+function Utils.CheckListForName(name, list)
+
+    if list == nil then
+
+        return true
+
+    end
+
+    for key, value in pairs(list) do
+
+        if value == name then
+
+            return true
+
+        end
+
+    end
+
+    return false
+
+end
