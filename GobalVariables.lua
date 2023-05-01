@@ -139,3 +139,43 @@ AnimationType.New_Dotted_Border = 5
 Action = {}
 Action.Add = 1
 Action.Remove = 2
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    fonts
+-------------------------------------------------------------------------------------
+
+Font        = {}
+Font[1]     = Turbine.UI.Lotro.Font.Arial12
+Font[2]     = Turbine.UI.Lotro.Font.TrajanPro13
+Font[3]     = Turbine.UI.Lotro.Font.TrajanPro14
+Font[4]     = Turbine.UI.Lotro.Font.TrajanPro15
+Font[5]     = Turbine.UI.Lotro.Font.TrajanPro16
+Font[6]     = Turbine.UI.Lotro.Font.TrajanPro18
+Font[7]     = Turbine.UI.Lotro.Font.TrajanPro19
+Font[8]     = Turbine.UI.Lotro.Font.TrajanPro20
+Font[9]     = Turbine.UI.Lotro.Font.TrajanPro21
+Font[10]    = Turbine.UI.Lotro.Font.TrajanPro23
+Font[11]    = Turbine.UI.Lotro.Font.TrajanPro24
+Font[12]    = Turbine.UI.Lotro.Font.TrajanPro25
+Font[13]    = Turbine.UI.Lotro.Font.TrajanPro26
+Font[14]    = Turbine.UI.Lotro.Font.TrajanPro28
+
+Font[15]    = Turbine.UI.Lotro.Font.TrajanProBold16
+Font[16]    = Turbine.UI.Lotro.Font.TrajanProBold22
+Font[17]    = Turbine.UI.Lotro.Font.TrajanProBold24
+Font[18]    = Turbine.UI.Lotro.Font.TrajanProBold25
+Font[19]    = Turbine.UI.Lotro.Font.TrajanProBold30
+Font[20]    = Turbine.UI.Lotro.Font.TrajanProBold36
+
+Font[20]    = Turbine.UI.Lotro.Font.Verdana10
+Font[21]    = Turbine.UI.Lotro.Font.Verdana12
+Font[22]    = Turbine.UI.Lotro.Font.Verdana14
+Font[23]    = Turbine.UI.Lotro.Font.Verdana16
+Font[24]    = Turbine.UI.Lotro.Font.Verdana18
+Font[25]    = Turbine.UI.Lotro.Font.Verdana20
+Font[26]    = Turbine.UI.Lotro.Font.Verdana22
+Font[27]    = Turbine.UI.Lotro.Font.Verdana23
+

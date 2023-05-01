@@ -55,71 +55,53 @@ end
 
 
 
+
+local size_item = Turbine.UI.Control()
 -------------------------------------------------------------------------------------
---      Description:    fix font from savedata
+--      Description:    get image size
 -------------------------------------------------------------------------------------
---        Parameter:    font number
+--        Parameter:    image
 -------------------------------------------------------------------------------------
---           Return:    font
+--           Return:    width / height
 -------------------------------------------------------------------------------------
-function Utils.FontFix( number )
+function Utils.GetImageSize(image)
+
+	size_item:SetBackground(image)
+	size_item:SetStretchMode(2)
+
+	return size_item:GetSize()
     
-    if number == 1 then
-        return Turbine.UI.Lotro.Font.Arial12;
-    elseif number == 2 then
-        return Turbine.UI.Lotro.Font.TrajanPro13;
-    elseif number == 3 then
-        return Turbine.UI.Lotro.Font.TrajanPro14;
-    elseif number == 4 then
-        return Turbine.UI.Lotro.Font.TrajanPro15;
-    elseif number == 5 then
-        return Turbine.UI.Lotro.Font.TrajanPro16;
-    elseif number == 6 then
-        return Turbine.UI.Lotro.Font.TrajanPro18;
-    elseif number == 7 then
-        return Turbine.UI.Lotro.Font.TrajanPro19;
-    elseif number == 8 then
-        return Turbine.UI.Lotro.Font.TrajanPro20;
-    elseif number == 9 then
-        return Turbine.UI.Lotro.Font.TrajanPro21;
-    elseif number == 10 then
-        return Turbine.UI.Lotro.Font.TrajanPro23;
-    elseif number == 11 then
-        return Turbine.UI.Lotro.Font.TrajanPro24;
-    elseif number == 12 then
-        return Turbine.UI.Lotro.Font.TrajanPro25;
-    elseif number == 13 then
-        return Turbine.UI.Lotro.Font.TrajanPro26;
-    elseif number == 14 then
-        return Turbine.UI.Lotro.Font.TrajanPro28;
-    elseif number == 15 then
-        return Turbine.UI.Lotro.Font.TrajanProBold16;
-    elseif number == 16 then
-        return Turbine.UI.Lotro.Font.TrajanProBold22;
-    elseif number == 17 then
-        return Turbine.UI.Lotro.Font.TrajanProBold24;
-    elseif number == 18 then
-        return Turbine.UI.Lotro.Font.TrajanProBold25;
-    elseif number == 19 then
-        return Turbine.UI.Lotro.Font.TrajanProBold30;
-    elseif number == 20 then
-        return Turbine.UI.Lotro.Font.TrajanProBold36;
-    elseif number == 21 then
-        return Turbine.UI.Lotro.Font.Verdana10;
-    elseif number == 22 then
-        return Turbine.UI.Lotro.Font.Verdana12;
-    elseif number == 23 then
-        return Turbine.UI.Lotro.Font.Verdana14;
-    elseif number == 24 then
-        return Turbine.UI.Lotro.Font.Verdana16;
-    elseif number == 25 then
-        return Turbine.UI.Lotro.Font.Verdana18;
-    elseif number == 26 then
-        return Turbine.UI.Lotro.Font.Verdana20;
-    elseif number == 27 then
-        return Turbine.UI.Lotro.Font.Verdana22;
-    elseif number == 28 then
-        return Turbine.UI.Lotro.Font.Verdana23;
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    format time
+-------------------------------------------------------------------------------------
+--        Parameter:    seconds
+--                      format
+-------------------------------------------------------------------------------------
+--           Return:    formated string
+-------------------------------------------------------------------------------------
+function Utils.SecondsToClock(seconds, format)
+
+    if format == 1 then
+
+        return tostring( math.floor(seconds) )
+
+    elseif format == 2 then
+
+        local seconds = tonumber(seconds)
+
+        if seconds <= 0 then
+            return "00:00";
+        else
+
+            local mins = string.format("%02.f", math.floor(seconds/60));
+            local secs = string.format("%02.f", math.floor(seconds - mins *60));
+            return mins..":"..secs
+        end
+
     end
 
 end

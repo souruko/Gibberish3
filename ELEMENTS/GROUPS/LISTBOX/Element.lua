@@ -134,7 +134,7 @@ function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duratio
 
         local index = #self.children + 1
 
-        self.children[index] = Timer.Create(timerData.type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+        self.children[index] = Timer.Create(self, timerData.type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
         self.TimerListBox:AddItem(self.children[index])
 
     end
@@ -382,5 +382,56 @@ function ListBoxElement:ReSize()
     self.MoveWindow:SetSize     ( width, height )
     self.MoveLabel:SetSize      ( width, height )
     self.TimerListBox:SetSize   ( width, height )
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    remove child
+-------------------------------------------------------------------------------------
+--        Parameter:    child
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function ListBoxElement:RemoveChild( child )
+
+    local index = self:FindChildIndex( child )
+
+    if index ~= nil then
+
+        self.children[index] = self.children[#self.children]
+        self.children[#self.children] = nil
+
+    end
+
+    self.TimerListBox:RemoveItem(child)
+    
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    get index of a child
+-------------------------------------------------------------------------------------
+--        Parameter:    child
+-------------------------------------------------------------------------------------
+--           Return:    index
+-------------------------------------------------------------------------------------
+function ListBoxElement:FindChildIndex(child)
+
+    for index, control in ipairs(self.children) do
+
+        if child == control then
+
+            return index
+
+        end
+
+    end
+
+    return nil
 
 end

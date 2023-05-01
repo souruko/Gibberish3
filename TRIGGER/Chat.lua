@@ -135,7 +135,7 @@ function Trigger.ProcessChatTrigger(
     local text      = ""
     local target    = ""
     local duration  = 1
-    local icon      = nil
+    local icon      = timerData.icon
     local entity    = nil
     local key
 
@@ -143,9 +143,13 @@ function Trigger.ProcessChatTrigger(
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
+
+    --TODO
     text = placeholder["&2"]
     duration = tonumber( placeholder["&1"] )
-    
+
+
+
     if triggerData.action == Action.Add then
         Group[groupIndex]:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
     else

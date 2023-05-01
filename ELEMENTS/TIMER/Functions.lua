@@ -16,11 +16,11 @@
 -------------------------------------------------------------------------------------
 --           Return:    the created timer element
 -------------------------------------------------------------------------------------
-function Timer.Create(type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+function Timer.Create(parent, type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
 
     if type == Timer.Types.BAR then
 
-        return BAR.BarElement( groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
+        return BAR.BarElement( parent, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
     
     else
 
