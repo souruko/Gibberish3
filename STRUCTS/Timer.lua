@@ -25,7 +25,6 @@ function Timer.GetStruct(type)
     timer.enabled               = true
     timer.type                  = type
     timer.description           = Timer.Defaults[type].description
-    timer.listOfTargets         = Timer.Defaults[type].listOfTargets
 
     -- stuff
     timer.unique                = Timer.Defaults[type].unique
@@ -56,6 +55,9 @@ function Timer.GetStruct(type)
     timer.effectTargetTrigger   = {}
     timer.skillTrigger          = {}
     timer.chatTrigger           = {}
+    timer.timerEndTrigger       = {}
+    timer.timerStartTrigger     = {}
+    timer.timerThresholdTrigger = {}
 
     return timer
 

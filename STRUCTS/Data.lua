@@ -25,5 +25,8 @@ function Data.New()
     Data.selectedGroupIndex = nil
     Data.moveMode = false
 
+    Data.trackGroupEffects = true
+    Data.trackTargetEffects = false
+
 end
 

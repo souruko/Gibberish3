@@ -8,34 +8,36 @@
 
 
 -------------------------------------------------------------------------------------
---      Description:   chat Message Received Event
+--      Description:   initialse the chat Message Received Event
 -------------------------------------------------------------------------------------
---        Parameter:   ChatType
---                     Message
+--        Parameter:   
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Turbine.Chat.Received(sender, args)
+Trigger.Init[Trigger.Types.CHAT] = function ()
 
-    -- filter unwanted stuff
-    if  (args.ChatType == Turbine.ChatType.Tell) or
-        (args.ChatType == Turbine.ChatType.FellowLoot) or
-        (args.ChatType == Turbine.ChatType.SelfLoot) or
-        (args.ChatType == Turbine.ChatType.World) or
-        (args.ChatType == Turbine.ChatType.Trade) or
-        (args.ChatType == Turbine.ChatType.Standard) or
-        (args.ChatType == Turbine.ChatType.Unfiltered) or
-        (args.ChatType == Turbine.ChatType.LFF) or
-        (args.Message  == nil) then
+    function Turbine.Chat.Received(sender, args)
 
-        return
+        -- filter unwanted stuff
+        if  (args.ChatType == Turbine.ChatType.Tell) or
+            (args.ChatType == Turbine.ChatType.FellowLoot) or
+            (args.ChatType == Turbine.ChatType.SelfLoot) or
+            (args.ChatType == Turbine.ChatType.World) or
+            (args.ChatType == Turbine.ChatType.Trade) or
+            (args.ChatType == Turbine.ChatType.Standard) or
+            (args.ChatType == Turbine.ChatType.Unfiltered) or
+            (args.ChatType == Turbine.ChatType.LFF) or
+            (args.Message  == nil) then
+
+            return
+
+        end
+
+        Trigger.CHAT.CheckChat(args.Message, args.ChatType)
 
     end
 
-    Trigger.CheckChat(args.Message, args.ChatType)
-
 end
-
 
 -------------------------------------------------------------------------------------
 --      Description:   check for triggers from the message
@@ -44,7 +46,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.CheckChat(message, chatType)
+function Trigger.CHAT.CheckChat(message, chatType)
 
     for groupIndex, groupData in ipairs(Data.group) do                                      -- all groups
 
@@ -58,28 +60,29 @@ function Trigger.CheckChat(message, chatType)
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
-                            local token = Trigger.ReplacePlaceholder(triggerData.token)     -- fix token
+                            local token = Utils.ReplacePlaceholder(triggerData.token)     -- fix token
 
                             if triggerData.useRegex == true then                            -- useRegex
 
                                 local pos1 = string.find( message, token )
+
                                 if pos1 ~= nil then
 
-                                    Trigger.ProcessChatTrigger(
+                                    Trigger.CHAT.ProcessTrigger(
                                                                 message,
                                                                 chatType,
                                                                 groupIndex,
                                                                 timerIndex,
                                                                 triggerIndex,
-                                                                (pos1 - 1)
-                                                            )
+                                                                (pos1 - 1) )
+
                                 end
 
                             else
 
                                 if message == token then
 
-                                    Trigger.ProcessChatTrigger(
+                                    Trigger.CHAT.ProcessTrigger(
                                                                 message,
                                                                 chatType,
                                                                 groupIndex,
@@ -118,7 +121,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.ProcessChatTrigger(
+function Trigger.CHAT.ProcessTrigger(
                                     message,
                                     chatType,
                                     groupIndex,
@@ -141,11 +144,21 @@ function Trigger.ProcessChatTrigger(
     local duration  = 10
     local icon      = timerData.icon
     local entity    = nil
-    local key
+    local key       = nil
 
 
     local token = triggerData.token
-    local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
+    local placeholder = Utils.GetPlaceholder(token, message, posAdjustment)
+
+-------------------------------------------------------------------------------------
+-- key
+
+    if timerData.unique == false then
+
+        key              = ChatTriggerID
+        ChatTriggerID    = ChatTriggerID + 1
+        
+    end
 
 -------------------------------------------------------------------------------------
 -- text   
@@ -154,9 +167,9 @@ function Trigger.ProcessChatTrigger(
      ( chatType             == Turbine.ChatType.PlayerCombat or
        chatType             == Turbine.ChatType.EnemyCombat ) then
 
-        text, target = GetTargetNameFromCombatChat(message, chatType)
+        text, target = Utils.GetTargetNameFromCombatChat(message, chatType)
 
-        if Utils.CheckListForName(target, timerData.targetList) then
+        if Utils.CheckListForName(target, triggerData.listOfTargets) == false  then
             return
         end
 
@@ -180,9 +193,9 @@ function Trigger.ProcessChatTrigger(
 
         text = timerData.textValue
 
-        for key, value in pairs(placeholder) do
+        for index, value in pairs(placeholder) do
 
-            text = string.gsub ( text, key, value)
+            text = string.gsub ( text, index, value)
 
         end
 
@@ -196,9 +209,9 @@ function Trigger.ProcessChatTrigger(
         
         duration = timerData.timerValue
 
-        for key, value in pairs(placeholder) do
+        for index, value in pairs(placeholder) do
 
-            duration = string.gsub ( duration, key, value)
+            duration = string.gsub ( duration, index, value)
 
         end
 
@@ -211,64 +224,26 @@ function Trigger.ProcessChatTrigger(
 -- group call   
 
     if triggerData.action == Action.Add then
-        Group[groupIndex]:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+
+        Group[groupIndex]:Add(  groupData,
+                                timerData,
+                                timerIndex,
+                                startTime,
+                                duration,
+                                icon,
+                                text,
+                                entity,
+                                key )
+      
     else
+
         Group[groupIndex]:Remove(timerIndex, key)
+
     end
 
 end
 
 
+ChatTriggerID = 1
 
 
--------------------------------------------------------------------------------------
---      Description:    check combat message for name   
--------------------------------------------------------------------------------------
---        Parameter:    message
---                      chatType
--------------------------------------------------------------------------------------
---           Return:    text        - number or empty
---                      target      - name of target
--------------------------------------------------------------------------------------
-function GetTargetNameFromCombatChat(message, chatType)
-
-    local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 =  Utils.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
-   
-    local text = CheckingSkillNameForNumber(skillName)
-  
-    local target = nil
-
-    if chatType == Turbine.ChatType.PlayerCombat then
-
-        target = targetName
-
-    elseif chatType == Turbine.ChatType.EnemyCombat then
-
-        target = initiatorName
-    end
-
-    return text, target
-
-end
-
-
-
-
--------------------------------------------------------------------------------------
---      Description:    check for numbers in skillname
--------------------------------------------------------------------------------------
---        Parameter:    skillname
--------------------------------------------------------------------------------------
---           Return:    number / ""
--------------------------------------------------------------------------------------
-function CheckingSkillNameForNumber(skillName)
-
-    local start_tier, end_tier = string.find(skillName, "%d+")
-    
-    if start_tier ~= nil then
-        return string.sub(skillName, start_tier, end_tier)
-    else
-        return ""
-    end
-
-end

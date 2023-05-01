@@ -20,13 +20,14 @@ function Trigger.GetStruct(type)
 
     local trigger = {}
 
-    trigger.id          = Turbine.Engine.GetGameTime()
-    trigger.enabled     = true
-    trigger.type        = type
-    trigger.token       = Trigger.Defaults[type].token
-    trigger.useRegex    = Trigger.Defaults[type].useRegex
-    trigger.description = Trigger.Defaults[type].description
-    trigger.action      = Action.Add
+    trigger.id              = Turbine.Engine.GetGameTime()
+    trigger.enabled         = true
+    trigger.type            = type
+    trigger.token           = Trigger.Defaults[type].token
+    trigger.useRegex        = Trigger.Defaults[type].useRegex
+    trigger.description     = Trigger.Defaults[type].description
+    trigger.action          = Action.Add
+    trigger.listOfTargets   = Trigger.Defaults[type].listOfTargets
 
     return trigger
 

@@ -119,7 +119,7 @@ end
 -------------------------------------------------------------------------------------
 function Utils.CheckListForName(name, list)
 
-    if list == nil then
+    if #list == 0 then
 
         return true
 
@@ -136,5 +136,141 @@ function Utils.CheckListForName(name, list)
     end
 
     return false
+
+end
+
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    check combat message for name   
+-------------------------------------------------------------------------------------
+--        Parameter:    message
+--                      chatType
+-------------------------------------------------------------------------------------
+--           Return:    text        - number or empty
+--                      target      - name of target
+-------------------------------------------------------------------------------------
+function Utils.GetTargetNameFromCombatChat(message, chatType)
+
+    local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 =  Utils.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
+   
+    local text = Utils.CheckingNameForNumber(skillName)
+  
+    local target = nil
+
+    if chatType == Turbine.ChatType.PlayerCombat then
+
+        target = targetName
+
+    elseif chatType == Turbine.ChatType.EnemyCombat then
+
+        target = initiatorName
+    end
+
+    return text, target
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    check for numbers in skillname
+-------------------------------------------------------------------------------------
+--        Parameter:    name
+-------------------------------------------------------------------------------------
+--           Return:    number / ""
+-------------------------------------------------------------------------------------
+function Utils.CheckingNameForNumber(name)
+
+    local start_tier, end_tier = string.find(name, "%d+")
+    
+    if start_tier ~= nil then
+        return string.sub(name, start_tier, end_tier)
+    else
+        return ""
+    end
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:   replace placeholder if necessary
+-------------------------------------------------------------------------------------
+--        Parameter:   token
+-------------------------------------------------------------------------------------
+--           Return:   token (all placeholder replaced with %w+)
+-------------------------------------------------------------------------------------
+function Utils.ReplacePlaceholder(token)
+
+    return string.gsub(token, "&%d", "%%w+")
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:   find all placeholders and return them as table
+-------------------------------------------------------------------------------------
+--        Parameter:   token            - pattern
+--                     message          - string
+--                     posAdjustment    - position adjustment between token and message
+-------------------------------------------------------------------------------------
+--           Return:   list of placeholders
+-------------------------------------------------------------------------------------
+function Utils.GetPlaceholder(token, message, posAdjustment)
+
+    
+    local placeholder = {}
+    local pos1 = 1
+
+    while pos1 ~= nil do    -- as long as a placeholder is found
+
+        pos1 = string.find(token, "&%d", pos1)
+
+        if pos1 ~= nil then     -- extrect the placeholder at the same position
+
+            local index = string.match(token, "&%d", pos1)
+        
+            placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment))
+
+            posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
+            pos1 = pos1+2
+        end
+
+    end
+
+    return placeholder
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:   parse text for target format
+-------------------------------------------------------------------------------------
+--        Parameter:   effect name
+--                     target name
+-------------------------------------------------------------------------------------
+--           Return:   text
+-------------------------------------------------------------------------------------
+function Utils.TextTargetParse(name, target)
+
+    local text = Utils.CheckingNameForNumber(name)
+
+    if text ~= "" then
+
+        text = text .. " - "
+        
+    end
+
+    text = text .. target
+
+    return text
 
 end

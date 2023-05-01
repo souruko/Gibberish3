@@ -9,10 +9,12 @@ ListBoxElement = class(Turbine.UI.Window)
 
 
 
+
 -------------------------------------------------------------------------------------
 --      Description:    listbox constructor
 -------------------------------------------------------------------------------------
---        Parameter:    group data 
+--        Parameter:    index
+--                      data
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
@@ -128,13 +130,13 @@ function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duratio
 
     if child then
     
-        child:UpdateTimer()
+        child:UpdateTimer( startTime, duration, icon, text, entity, key )
 
     else
 
         local index = #self.children + 1
 
-        self.children[index] = Timer.Create(self, timerData.type, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+        self.children[index] = Timer.Constructor[timerData.type](self, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
         self.TimerListBox:AddItem(self.children[index])
 
     end
@@ -143,12 +145,15 @@ function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duratio
     self.TimerListBox:Sort(
 
         function (child1, child2)
-            if child1 < child2 then
+
+            if child1.endTime < child2.endTime then
                 return true
             else
                 return false
             end
+
         end
+
     )
 
 end
@@ -195,9 +200,9 @@ end
 -------------------------------------------------------------------------------------
 function ListBoxElement:CheckRunningTimer(timerIndex, key)
 
-    for key, child in pairs(self.children) do
+    for index, child in pairs(self.children) do
 
-        if child.Index == timerIndex and child.key == key then
+        if child.index == timerIndex and child.key == key then
 
             return child
             

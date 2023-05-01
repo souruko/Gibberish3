@@ -9,52 +9,212 @@
 
 
 -------------------------------------------------------------------------------------
---      Description:   replace placeholder if necessary
+--      Description:   init all Triggers
 -------------------------------------------------------------------------------------
---        Parameter:   token
+--        Parameter:   
 -------------------------------------------------------------------------------------
---           Return:   token (all placeholder replaced with %w+)
+--           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.ReplacePlaceholder(token)
+function Trigger.InitAll()
+  
+    for index, InitFunction in ipairs(Trigger.Init) do
 
-    return string.gsub(token, "&%d", "%%w+")
+        InitFunction()
+        
+    end
 
 end
 
 
 
 
--------------------------------------------------------------------------------------
---      Description:   find all placeholders and return them as table
--------------------------------------------------------------------------------------
---        Parameter:   token            - pattern
---                     message          - string
---                     posAdjustment    - position adjustment between token and message
--------------------------------------------------------------------------------------
---           Return:   list of placeholders
--------------------------------------------------------------------------------------
-function Trigger.GetPlaceholder(token, message, posAdjustment)
 
+
+
+-------------------------------------------------------------------------------------
+--      Description:   process found effect trigger
+-------------------------------------------------------------------------------------
+--        Parameter:   
+-------------------------------------------------------------------------------------
+--           Return:   
+-------------------------------------------------------------------------------------
+function Trigger.ProcessEffectTrigger(      effect,
+                                            player,
+                                            groupIndex,
+                                            timerIndex,
+                                            triggerData,
+                                            posAdjustment )
+
+------------------------------------------
+-- declarations
+
+    local groupData = Data.group[groupIndex]
+    local timerData = groupData.timerList[timerIndex]
+    local name = effect:GetName()
     
-    local placeholder = {}
-    local pos1 = 1
+    local startTime = effect:GetStartTime()
+    local text      = ""
+    local target    = player:GetName()
+    local duration  = 10
+    local icon      = timerData.icon
+    local entity    = player
+    local key       = nil
 
-    while pos1 ~= nil do    -- as long as a placeholder is found
 
-        pos1 = string.find(token, "&%d", pos1)
+    local token = triggerData.token
+    local placeholder = Utils.GetPlaceholder(token, effect:GetName(), posAdjustment)
 
-        if pos1 ~= nil then     -- extrect the placeholder at the same position
+--------------------------------------------
+-- target list
 
-            local index = string.match(token, "&%d", pos1)
+    if Utils.CheckListForName(target, triggerData.listOfTargets) == false then
+        return
+    end
+
+---------------------------------------------
+-- key
+
+    if timerData.unique == false then
+
+        key = effect:GetID()
         
-            placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment))
+    end
 
-            posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
-            pos1 = pos1+2
+---------------------------------------------
+-- icon
+
+if icon == nil then
+    icon = effect:GetIcon()
+end
+
+----------------------------------------------
+-- text   
+
+    if timerData.textOption == TimerTextOptions.Target then
+
+        text = Utils.TextTargetParse(name, target)
+        
+    elseif  timerData.textOption == TimerTextOptions.Token then
+
+        text = name
+
+    elseif timerData.textOption == TimerTextOptions.CustomText then
+
+        text = timerData.textValue
+
+        for index, value in pairs(placeholder) do
+
+            text = string.gsub ( text, index, value)
+
         end
 
     end
 
-    return placeholder
+---------------------------------------------
+-- duration  
+
+    if timerData.useCustomTimer == true then
+            
+        duration = timerData.timerValue
+
+        for index, value in pairs(placeholder) do
+
+            duration = string.gsub ( duration, index, value)
+
+        end
+
+        duration = tonumber( duration )
+
+    else
+
+        duration = effect:GetDuration()
+
+    end
+
+---------------------------------------------
+-- group call   
+
+    if triggerData.action == Action.Add then
+
+        Group[groupIndex]:Add(  groupData,
+                                timerData,
+                                timerIndex,
+                                startTime,
+                                duration,
+                                icon,
+                                text,
+                                entity,
+                                key )
+    
+    else
+
+        Group[groupIndex]:Remove(timerIndex, key)
+
+    end
 
 end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:   process found effect trigger
+-------------------------------------------------------------------------------------
+--        Parameter:   
+-------------------------------------------------------------------------------------
+--           Return:   
+-------------------------------------------------------------------------------------
+function Timer.ProcessTimerTrigger( groupIndex,
+                                    timerIndex,
+                                    triggerData )
+
+    local groupData = Data.group[groupIndex]
+    local timerData = groupData.timerList[timerIndex]
+
+    local startTime = Turbine.Engine.GetGameTime()
+    local text      = timerData.textValue
+    local duration  = 10
+    local icon      = timerData.icon
+    local entity    = nil
+    local key       = nil
+
+---------------------------------------------
+-- key
+
+    if timerData.unique == false then
+
+        key = startTime
+        
+    end
+
+---------------------------------------------
+-- duration  
+
+    if timerData.useCustomTimer == true then
+            
+        duration = timerData.timerValue
+
+    end
+
+---------------------------------------------
+-- group call   
+
+    if triggerData.action == Action.Add then
+
+        Group[groupIndex]:Add(  groupData,
+                                timerData,
+                                timerIndex,
+                                startTime,
+                                duration,
+                                icon,
+                                text,
+                                entity,
+                                key )
+
+    else
+
+        Group[groupIndex]:Remove(timerIndex, key)
+
+    end
+
+end                          

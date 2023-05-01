@@ -9,14 +9,35 @@ BarElement = class(Turbine.UI.Window)
 
 
 
+
+
 -------------------------------------------------------------------------------------
 --      Description:    BAR constructor
 -------------------------------------------------------------------------------------
---        Parameter:    timer data 
+--        Parameter:    parent,
+--                      groupData
+--                      timerData
+--                      timerIndex
+--                      startTime
+--                      duration
+--                      icon
+--                      text
+--                      entity
+--                      key
 -------------------------------------------------------------------------------------
 --           Return:    timer BAR element
 -------------------------------------------------------------------------------------
-function BarElement:Constructor(parent, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+function BarElement:Constructor(    parent,
+                                    groupData,
+                                    timerData,
+                                    timerIndex,
+                                    startTime,
+                                    duration,
+                                    icon,
+                                    text,
+                                    entity,
+                                    key)
+
     Turbine.UI.Window.Constructor( self )
 
 -------------------------------------------------------------------------------------

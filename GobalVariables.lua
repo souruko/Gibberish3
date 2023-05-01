@@ -24,26 +24,28 @@ Folder = {}
 -------------------------------------------------------------------------------------
 --      Description:    Group structure and functions   
 -------------------------------------------------------------------------------------
-Group = {}
-Group.Defaults = {}
-Group.Types = {}
-
-
+Group                   = {}
+Group.Defaults          = {}
+Group.Types             = {}
+Group.Constructor       = {}
+Group.GetAllowedTimer   = {}
 
 -------------------------------------------------------------------------------------
 --      Description:    Timer structure and functions    
 -------------------------------------------------------------------------------------
-Timer = {}
-Timer.Defaults = {}
-Timer.Types = {}
+Timer                   = {}
+Timer.Defaults          = {}
+Timer.Types             = {}
+Timer.Constructor       = {}
 
 
 -------------------------------------------------------------------------------------
 --      Description:    Trigger structure and functions    
 -------------------------------------------------------------------------------------
-Trigger = {}
-Trigger.Defaults = {}
-Trigger.Types = {}
+Trigger                 = {}
+Trigger.Defaults        = {}
+Trigger.Types           = {}
+Trigger.Init            = {}
 
 
 -------------------------------------------------------------------------------------

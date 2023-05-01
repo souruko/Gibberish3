@@ -35,7 +35,7 @@ Group.Defaults[Group.Types.LISTBOX].opacityActiv            = 0.5
 Group.Defaults[Group.Types.LISTBOX].opacityPassiv           = 0.5
 
 
-Group.Defaults[Group.Types.LISTBOX].font                    = 6
+Group.Defaults[Group.Types.LISTBOX].font                    = 23
 Group.Defaults[Group.Types.LISTBOX].durationFormat          = NumberFormat.Minutes
 Group.Defaults[Group.Types.LISTBOX].textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
 Group.Defaults[Group.Types.LISTBOX].timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
