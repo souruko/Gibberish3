@@ -36,7 +36,8 @@ function BarElement:Constructor(    parent,
                                     icon,
                                     text,
                                     entity,
-                                    key)
+                                    key,
+                                    activ )
 
     Turbine.UI.Window.Constructor( self )
 
@@ -53,6 +54,8 @@ function BarElement:Constructor(    parent,
     self.barWdith       = self.groupData.width
     self.backColor      = Utils.ColorFix( self.groupData.color2 )
     self.firstThreshold = false
+
+    Trigger.TIMER_START.Event( self.timerData.id )
 
 -------------------------------------------------------------------------------------
 --  construct
@@ -107,7 +110,7 @@ function BarElement:Constructor(    parent,
     self:GroupDataChanged                   ( )
     self:TimerDataChanged                   ( )
 
-    self:UpdateTimer                        ( startTime, duration, icon, text, entity, key )
+    self:UpdateTimer                        ( startTime, duration, icon, text, entity, key, activ )
 
     self:Visibility                         ( true )
 
@@ -142,6 +145,8 @@ end
 function BarElement:Reset()
 
     if self.timerData.reset == true then
+
+        self:Shutdown()
 
     end
 
@@ -243,13 +248,6 @@ function BarElement:GroupDataChanged()
 
 
 -------------------------------------------------------------------------------------
---  opacity
-
-    self:SetOpacity                 ( self.groupData.opacityActiv )
-    self.barBack:SetOpacity                 ( self.groupData.opacityActiv )
-
-
--------------------------------------------------------------------------------------
 --  text
 
     self.textLabel:SetTextAlignment ( self.groupData.textAlignment )
@@ -280,7 +278,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key)
+function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key, activ)
 
     self.key        = key
 
@@ -304,7 +302,8 @@ function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key)
     self.textLabel:SetText                  ( text )
     self.timerLabel:SetText                 ( "" )
 
-    self:SetWantsUpdates(true)
+    self:Activ(activ)
+
 
 end
 
@@ -422,6 +421,8 @@ function BarElement:UpdateThreshol(timeLeft)
             if self.firstThreshold == true then
 
                 self.firstThreshold = false
+
+                Trigger.TIMER_THRESHOLD.Event( self.timerData.id )
                 
             end
 
@@ -497,10 +498,59 @@ end
 -------------------------------------------------------------------------------------
 function BarElement:Shutdown()
 
-    self:SetWantsUpdates(false)
+    Trigger.TIMER_END.Event( self.timerData.id )
 
-    self:Visibility(false)
+    if self.timerData.permanent == true then
+        
+        self:Activ(false)
 
-    self.parent:RemoveChild(self)
+    else
+
+        self:SetWantsUpdates(false)
+
+        self:Visibility(false)
+
+        self.parent:RemoveChild(self)
+
+        self.labelBack:Close()
+        self.barBack:Close()
+        self:Close()
+
+    end
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    Activ
+-------------------------------------------------------------------------------------
+--        Parameter:    true/false
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function BarElement:Activ(activ)
+
+    self.activ = activ
+
+    if activ == true then
+
+        self:SetOpacity                 ( self.groupData.opacityActiv )
+        self.barBack:SetOpacity         ( self.groupData.opacityActiv )
+        self.textLabel:SetVisible(true)
+        self.timerLabel:SetVisible(true)
+
+    else
+
+        self:SetOpacity                 ( self.groupData.opacityPassiv )
+        self.barBack:SetOpacity         ( self.groupData.opacityPassiv )
+        
+        self.bar:SetWidth(0)
+        self.textLabel:SetVisible(false)
+        self.timerLabel:SetVisible(false)
+
+    end
+
+    self:SetWantsUpdates(self.activ)
 
 end

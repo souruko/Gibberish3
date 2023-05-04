@@ -59,6 +59,8 @@ Data.group[testIndex].timerList[3].skillTrigger[1] = Trigger.New(Trigger.Types.S
 Data.group[testIndex].timerList[3].skillTrigger[1].useRegex = false
 Data.group[testIndex].timerList[3].skillTrigger[1].token = "Chord of Salvation"
 Data.group[testIndex].timerList[3].icon = nil
+Data.group[testIndex].timerList[3].permanent = true
+Data.group[testIndex].opacityPassiv = 0.2
 
 
 Group[testIndex] = Group.Constructor[ Group.Types.LISTBOX ](testIndex, Data.group[testIndex])

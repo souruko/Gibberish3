@@ -1,5 +1,5 @@
 --===================================================================================
---             Name:    BAR Functions
+--             Name:    TEMPLATE Functions
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
@@ -26,7 +26,7 @@
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-Timer.Constructor[Timer.Types.BAR] = function ( parent,
+Timer.Constructor[Timer.Types.TEMPLATE] = function ( parent,
                                                 groupData,
                                                 timerData,
                                                 timerIndex,
@@ -35,10 +35,9 @@ Timer.Constructor[Timer.Types.BAR] = function ( parent,
                                                 icon,
                                                 text,
                                                 entity,
-                                                key,
-                                                activ )
+                                                key )
 
-return BAR.BarElement(  parent,
+return TEMPLATE.TemplateElement(  parent,
                         groupData,
                         timerData,
                         timerIndex,
@@ -47,7 +46,6 @@ return BAR.BarElement(  parent,
                         icon,
                         text,
                         entity,
-                        key,
-                        activ )
+                        key )
 
 end

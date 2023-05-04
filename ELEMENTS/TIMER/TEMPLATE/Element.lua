@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------------
 --      Description:    TEMPLATE Class
 --===================================================================================
-TemplateTimerElement = class(Turbine.UI.Window)
+TemplateElement = class(Turbine.UI.Window)
 
 
 
@@ -16,7 +16,7 @@ TemplateTimerElement = class(Turbine.UI.Window)
 -------------------------------------------------------------------------------------
 --           Return:    group TEMPLATE element
 -------------------------------------------------------------------------------------
-function TemplateTimerElement:Constructor(data)
+function TemplateElement:Constructor(data)
 
 end
 
@@ -29,7 +29,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateTimerElement:Reset()
+function TemplateElement:Reset()
 
 end
 
@@ -42,7 +42,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateTimerElement:TimerDataChanged()
+function TemplateElement:TimerDataChanged()
 
 end
 
@@ -55,7 +55,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateTimerElement:GroupDataChanged()
+function TemplateElement:GroupDataChanged()
 
 end
 
@@ -69,6 +69,6 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateTimerElement:UpdateTimer(stuff)
+function TemplateElement:UpdateTimer( startTime, duration, icon, text, entity, key )
 
 end

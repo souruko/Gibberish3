@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------------
 --      Description:    TEMPLATE Class
 --===================================================================================
-TemplateGroupElement = class(Turbine.UI.Window)
+TemplateElement = class(Turbine.UI.Window)
 
 
 
@@ -16,7 +16,9 @@ TemplateGroupElement = class(Turbine.UI.Window)
 -------------------------------------------------------------------------------------
 --           Return:    group template element
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:Constructor(data)
+function TemplateElement:Constructor( index, data )
+	Turbine.UI.Window.Constructor( self )
+
 
 end
 
@@ -30,7 +32,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:Add(data, timer)
+function TemplateElement:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
 
 end
 
@@ -44,7 +46,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:Remove(data, timer)
+function TemplateElement:Remove(timerIndex, key)
 
 end
 
@@ -58,7 +60,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:Reset()
+function TemplateElement:Reset()
 
 end
 
@@ -72,7 +74,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:SelectionChanged()
+function TemplateElement:SelectionChanged()
 
 end
 
@@ -86,7 +88,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:MoveChanged()
+function TemplateElement:MoveChanged()
 
 end
 
@@ -100,7 +102,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:GroupDataChanged()
+function TemplateElement:GroupDataChanged()
 
 end
 
@@ -114,6 +116,6 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateGroupElement:TimerDataChanged()
+function TemplateElement:TimerDataChanged()
 
 end

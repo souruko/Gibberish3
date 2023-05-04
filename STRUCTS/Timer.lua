@@ -25,6 +25,7 @@ function Timer.GetStruct(type)
     timer.enabled               = true
     timer.type                  = type
     timer.description           = Timer.Defaults[type].description
+    timer.permanent             = Timer.Defaults[type].permanent
 
     -- stuff
     timer.unique                = Timer.Defaults[type].unique

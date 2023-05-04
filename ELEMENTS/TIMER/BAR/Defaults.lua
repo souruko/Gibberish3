@@ -18,6 +18,7 @@ Timer.Defaults[Timer.Types.BAR].unique              = false
 Timer.Defaults[Timer.Types.BAR].removable           = true
 Timer.Defaults[Timer.Types.BAR].reset               = false
 Timer.Defaults[Timer.Types.BAR].loop                = false
+Timer.Defaults[Timer.Types.BAR].permanent           = false
 
 Timer.Defaults[Timer.Types.BAR].timerValue          = 10
 Timer.Defaults[Timer.Types.BAR].useCustomTimer      = false

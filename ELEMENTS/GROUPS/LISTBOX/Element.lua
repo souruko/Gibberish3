@@ -110,6 +110,8 @@ function ListBoxElement:Constructor(index, data)
     self:SelectionChanged                   ( )
     self:MoveChanged                        ( )
 
+    self:FillPermanentTimers()
+
     self:SetVisible                         ( true )
 
 end
@@ -127,29 +129,72 @@ end
 function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
 
     local child = self:CheckRunningTimer(timerIndex, key)
+    local activ = true
 
     if child then
     
-        child:UpdateTimer( startTime, duration, icon, text, entity, key )
+        child:UpdateTimer( startTime, duration, icon, text, entity, key, activ )
 
     else
 
         local index = #self.children + 1
-
-        self.children[index] = Timer.Constructor[timerData.type](self, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+        
+        self.children[index] = Timer.Constructor[timerData.type](self, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key, activ)
         self.TimerListBox:AddItem(self.children[index])
 
     end
 
+    self:SortList()
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    remove call from triggers
+-------------------------------------------------------------------------------------
+--        Parameter:    timer index
+--                      key
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function ListBoxElement:SortList()
 
     self.TimerListBox:Sort(
 
         function (child1, child2)
 
-            if child1.endTime < child2.endTime then
-                return true
+            if child1.timerData.permanent == true then
+
+                if child2.timerData.permanent == true then
+
+                    if child1.index < child2.index then         -- both permanent sort by index
+                        return true
+
+                    else
+                        return false
+
+                    end
+
+                else                                            -- only 1 permanent sort by that
+                    return true
+
+                end
+
             else
-                return false
+
+                if child2.timerData.permanent == true then      -- only 1 permanent sort by that
+                    return false
+
+                else
+                    if child1.endTime < child2.endTime then     -- both not permanent sort by endTime
+                        return true
+
+                    else
+                        return false
+
+                    end
+                end
+
             end
 
         end
@@ -157,7 +202,6 @@ function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duratio
     )
 
 end
-
 
 
 
@@ -440,3 +484,40 @@ function ListBoxElement:FindChildIndex(child)
     return nil
 
 end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    fill permanent timers
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function ListBoxElement:FillPermanentTimers()
+
+    for i, child in pairs(self.children) do                 -- kill all permanent children!
+
+        if child.timerData.permanent == true then
+            -- kill!!!
+        end
+
+    end
+
+    for j, timerData in ipairs(self.data.timerList) do
+
+        if timerData.permanent == true then
+        
+            local index = #self.children + 1
+
+            self.children[index] = Timer.Constructor[timerData.type](self, self.data, timerData, j, 0, 10, timerData.icon, "", nil, nil, false)
+            self.TimerListBox:AddItem(self.children[index])
+
+        end
+
+    end
+
+    self:SortList()
+
+end
+

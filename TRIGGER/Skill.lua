@@ -177,7 +177,7 @@ function Trigger.SKILL.ProcessSkillTrigger( skill, groupIndex, timerIndex, trigg
 -- icon
 
     if icon == nil then
-        skill:GetSkillInfo():GetIconImageID()
+        icon = skill:GetSkillInfo():GetIconImageID()
     end
 
 ----------------------------------------------
