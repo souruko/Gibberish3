@@ -1,0 +1,15 @@
+
+
+*   timer icon
+
+*   group counter
+
+*   reset
+
+*   auto reload
+
+*   doku
+
+*   options
+
+*   save / load

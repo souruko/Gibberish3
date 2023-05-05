@@ -15,7 +15,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-Trigger.Init[Trigger.Types.EFFECT_SELF] = function ()
+Trigger.Init[Trigger.Types.EffectSelf] = function ()
 
 -------------------------------------------------------------------------------------
 -- remove 
@@ -23,7 +23,7 @@ Trigger.Init[Trigger.Types.EFFECT_SELF] = function ()
 
     function effects.EffectRemoved(sender, args)
 
-        Trigger.EFFECT_SELF.EffectRemoved( args.Effect )
+        Trigger.EffectSelf.EffectRemoved( args.Effect )
 
     end
 
@@ -33,14 +33,14 @@ Trigger.Init[Trigger.Types.EFFECT_SELF] = function ()
 
         local effect = effects:Get(args.Index)
 
-        Trigger.EFFECT_SELF.EffectAdded( effect )
-        Trigger.EFFECT_GROUP.EffectAdded( effect, LocalPlayer )
+        Trigger.EffectSelf.EffectAdded( effect )
+        Trigger.EffectGroup.EffectAdded( effect, LocalPlayer )
 
     end
 
 -------------------------------------------------------------------------------------
 -- init active effects
-    Trigger.EFFECT_SELF.InitActivEffect()
+    Trigger.EffectSelf.InitActivEffect()
 
 end
 
@@ -53,7 +53,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_SELF.EffectRemoved( effect )
+function Trigger.EffectSelf.EffectRemoved( effect )
 
 end
 
@@ -66,7 +66,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_SELF.EffectAdded( effect )
+function Trigger.EffectSelf.EffectAdded( effect )
 
     local name = effect:GetName()
     local icon = effect:GetIcon()
@@ -79,7 +79,7 @@ function Trigger.EFFECT_SELF.EffectAdded( effect )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.effectSelfTrigger) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectSelf]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
@@ -143,7 +143,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_SELF.InitActivEffect()
+function Trigger.EffectSelf.InitActivEffect()
 
     local effects = LocalPlayer:GetEffects()
 
@@ -151,8 +151,8 @@ function Trigger.EFFECT_SELF.InitActivEffect()
         
         local effect = effects:Get(index)
     
-        Trigger.EFFECT_SELF.EffectAdded( effect )
-        Trigger.EFFECT_GROUP.EffectAdded( effect, LocalPlayer )
+        Trigger.EffectSelf.EffectAdded( effect )
+        Trigger.EffectGroup.EffectAdded( effect, LocalPlayer )
 
     end
 

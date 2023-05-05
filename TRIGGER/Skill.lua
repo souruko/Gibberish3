@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-Trigger.Init[Trigger.Types.SKILL] = function ()
+Trigger.Init[Trigger.Types.Skill] = function ()
 
     local listOfSkills = LocalPlayer:GetTrainedSkills()
 
@@ -22,17 +22,17 @@ Trigger.Init[Trigger.Types.SKILL] = function ()
 
         local skill = listOfSkills:GetItem(i)
 
-        if Trigger.SKILL.IsSkillUsed( skill:GetSkillInfo():GetName() ) then
+        if Trigger.Skill.IsSkillUsed( skill:GetSkillInfo():GetName() ) then
 
             function skill:ResetTimeChanged( sender, args )
 
-                Trigger.SKILL.SkillUsed( skill )
+                Trigger.Skill.SkillUsed( skill )
                 
             end
 
             if skill:GetResetTime() > 0 then
 
-                Trigger.SKILL.SkillUsed( skill )
+                Trigger.Skill.SkillUsed( skill )
 
             end
             
@@ -51,7 +51,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   used / not used
 -------------------------------------------------------------------------------------
-function Trigger.SKILL.IsSkillUsed( skillName )
+function Trigger.Skill.IsSkillUsed( skillName )
 
     for groupIndex, groupData in ipairs(Data.group) do                                      -- all groups
 
@@ -61,7 +61,7 @@ function Trigger.SKILL.IsSkillUsed( skillName )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.skillTrigger) do      -- all skill of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Skill]) do      -- all skill of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
                        
@@ -96,7 +96,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.SKILL.SkillUsed( skill )
+function Trigger.Skill.SkillUsed( skill )
 
     local name = skill:GetSkillInfo():GetName()
 
@@ -109,13 +109,13 @@ function Trigger.SKILL.SkillUsed( skill )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.skillTrigger) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Skill]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
                             if name == triggerData.token then
 
-                                Trigger.SKILL.ProcessSkillTrigger( skill, groupIndex, timerIndex, triggerIndex )
+                                Trigger.Skill.ProcessSkillTrigger( skill, groupIndex, timerIndex, triggerIndex )
                                 
                             end
                                
@@ -143,14 +143,14 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.SKILL.ProcessSkillTrigger( skill, groupIndex, timerIndex, triggerIndex )
+function Trigger.Skill.ProcessSkillTrigger( skill, groupIndex, timerIndex, triggerIndex )
 
 ------------------------------------------
 -- declarations
 
     local groupData = Data.group[groupIndex]
     local timerData = groupData.timerList[timerIndex]
-    local triggerData = timerData.skillTrigger[triggerIndex]
+    local triggerData = timerData[Trigger.Skill][triggerIndex]
     local name = skill:GetSkillInfo():GetName()
 
     local startTime = skill:GetResetTime() - skill:GetCooldown()

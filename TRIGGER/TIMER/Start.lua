@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.TIMER_START.Event( timerID )
+function Trigger.TimerStart.Event( timerID )
 
     for groupIndex, groupData in ipairs(Data.group) do                                      -- all groups
 
@@ -24,7 +24,7 @@ function Trigger.TIMER_START.Event( timerID )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.timerStartTrigger) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.TimerStart]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 

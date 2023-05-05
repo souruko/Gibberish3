@@ -499,7 +499,7 @@ function ListBoxElement:FillPermanentTimers()
     for i, child in pairs(self.children) do                 -- kill all permanent children!
 
         if child.timerData.permanent == true then
-            -- kill!!!
+            child:Finish()
         end
 
     end
@@ -507,7 +507,7 @@ function ListBoxElement:FillPermanentTimers()
     for j, timerData in ipairs(self.data.timerList) do
 
         if timerData.permanent == true then
-        
+
             local index = #self.children + 1
 
             self.children[index] = Timer.Constructor[timerData.type](self, self.data, timerData, j, 0, 10, timerData.icon, "", nil, nil, false)

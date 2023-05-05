@@ -1,9 +1,9 @@
 --===================================================================================
---             Name:    BAR Element
+--             Name:    ICON Element
 -------------------------------------------------------------------------------------
---      Description:    BAR Class
+--      Description:    ICON Class
 --===================================================================================
-BarElement = class(Turbine.UI.Window)
+IconElement = class(Turbine.UI.Window)
 
 
 
@@ -12,7 +12,7 @@ BarElement = class(Turbine.UI.Window)
 
 
 -------------------------------------------------------------------------------------
---      Description:    BAR constructor
+--      Description:    ICON constructor
 -------------------------------------------------------------------------------------
 --        Parameter:    parent,
 --                      groupData
@@ -25,9 +25,9 @@ BarElement = class(Turbine.UI.Window)
 --                      entity
 --                      key
 -------------------------------------------------------------------------------------
---           Return:    timer BAR element
+--           Return:    timer ICON element
 -------------------------------------------------------------------------------------
-function BarElement:Constructor(    parent,
+function IconElement:Constructor(    parent,
                                     groupData,
                                     timerData,
                                     timerIndex,
@@ -49,10 +49,12 @@ function BarElement:Constructor(    parent,
     self.timerData      = timerData
     self.parent         = parent
 
+    self.nextAnimation  = 0
+    self.animationStep  = 1
+
     self.key            = key
 
-    self.barWdith       = self.groupData.width
-    self.backColor      = Utils.ColorFix( self.groupData.color2 )
+    self.backColor      = Utils.ColorFix( self.groupData.color1 )
     self.firstThreshold = false
 
     Trigger.TimerStart.Event( self.timerData.id )
@@ -60,25 +62,32 @@ function BarElement:Constructor(    parent,
 -------------------------------------------------------------------------------------
 --  construct
 
-
-    self.entityControl = Turbine.UI.Lotro.EntityControl ( )
-    self.entityControl:SetParent            ( self )
-    self.entityControl:SetZOrder            ( 1 )
-
     self.frame = Turbine.UI.Control         ( )
     self.frame:SetParent                    ( self )
     self.frame:SetMouseVisible              ( false )
     self.frame:SetZOrder                    ( 2 )
 
-    self.barBack = Turbine.UI.Window        ( )
-    self.barBack:SetParent                  ( self )
-    self.barBack:SetMouseVisible            ( false )
-    self.barBack:SetZOrder                  ( 4 )
+    self.iconControl = Turbine.UI.Control   ( )
+    self.iconControl:SetParent              ( self )
+    self.iconControl:SetMouseVisible        ( false )
+    self.iconControl:SetZOrder              ( 3 )
 
-    self.bar = Turbine.UI.Control           ( )
-    self.bar:SetParent                      ( self.barBack )
-    self.bar:SetMouseVisible                ( false )
-    self.bar:SetZOrder                      ( 5 )
+    self.shadow = Turbine.UI.Control        ()
+    self.shadow:SetParent                   (self)
+    self.shadow:SetBackColorBlendMode       (Turbine.UI.BlendMode.Overlay)
+    self.shadow:SetBackColor                (Turbine.UI.Color.Black)
+    self.shadow:SetMouseVisible             (false)
+    self.shadow:SetZOrder                   (4)
+
+    self.animation = Turbine.UI.Control     ()
+    self.animation:SetParent                (self)
+    self.animation:SetBackColorBlendMode    (Turbine.UI.BlendMode.Overlay)
+    self.animation:SetMouseVisible          (false)
+    self.animation:SetZOrder                (5)
+
+    self.entityControl = Turbine.UI.Lotro.EntityControl ( )
+    self.entityControl:SetParent            ( self )
+    self.entityControl:SetZOrder            ( 1 )
 
     self.labelBack = Turbine.UI.Window      ( )
     self.labelBack:SetParent                ( self )
@@ -96,13 +105,6 @@ function BarElement:Constructor(    parent,
     self.timerLabel:SetMouseVisible         ( false )
     self.timerLabel:SetZOrder               ( 8 )
     self.timerLabel:SetFontStyle            ( Turbine.UI.FontStyle.Outline )
-
-
-    self.iconControl = Turbine.UI.Control   ( )
-    self.iconControl:SetParent              ( self )
-    self.iconControl:SetMouseVisible        ( false )
-    self.iconControl:SetZOrder              ( 3 )
-
 
 
 
@@ -127,10 +129,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Visibility ( visible )
+function IconElement:Visibility ( visible )
 
     self:SetVisible            ( visible )
-    self.barBack:SetVisible    ( visible )
     self.labelBack:SetVisible  ( visible )
 
 end
@@ -144,7 +145,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Reset()
+function IconElement:Reset()
 
     if self.timerData.reset == true then
 
@@ -163,7 +164,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:TimerDataChanged()
+function IconElement:TimerDataChanged()
 
 end
 
@@ -177,81 +178,51 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:GroupDataChanged()
+function IconElement:GroupDataChanged()
 
 -------------------------------------------------------------------------------------
 --  size
 
     local labelSpacing = 4
-    local maxHeight, maxWidth, width, height, barBackLeft, barBackTop
-    local labelBackLeft, labelBackTop, selfWdith, selfHeight
+    local maxHeight, maxWidth, selfWdith, selfHeight
 
+    maxWidth            = self.groupData.width  + ( 2 * self.groupData.frame )
+    maxHeight           = self.groupData.height + ( 2 * self.groupData.frame )
 
-    if self.groupData.orientation == Orientation.Vertical then
-
-        maxWidth        = self.groupData.width  + ( 2 * self.groupData.frame ) + self.groupData.height
-        maxHeight       = self.groupData.height + ( 2 * self.groupData.frame )
-
-        selfWdith       = maxWidth
-        selfHeight      = maxHeight + self.groupData.spacing
-
-        width           = self.groupData.width
-        height          = self.groupData.height
-
-        barBackLeft     = self.groupData.frame + self.groupData.height
-        barBackTop      = self.groupData.frame
-
-        labelBackLeft   = self.groupData.frame + self.groupData.height + labelSpacing
-        labelBackTop    = self.groupData.frame
-
-    else
-
-        maxHeight       = self.groupData.width  + ( 2 * self.groupData.frame ) + self.groupData.height
-        maxWidth        = self.groupData.height + ( 2 * self.groupData.frame )
-
-        selfWdith       = maxWidth + self.groupData.spacing
-        selfHeight      = maxHeight
-
-        width           = self.groupData.height
-        height          = self.groupData.width
-
-        barBackTop      = self.groupData.frame + self.groupData.height
-        barBackLeft     = self.groupData.frame
-
-        labelBackTop    = self.groupData.frame + self.groupData.height + labelSpacing
-        labelBackLeft   = self.groupData.frame
-
-    end
+    selfWdith       = maxWidth  + self.groupData.spacing
+    selfHeight      = maxHeight + self.groupData.spacing
 
     self:SetSize                    ( selfWdith, selfHeight )
+    if self.groupData.frame == 0 then
+        self.frame:SetVisible(false)
+    else
+        self.frame:SetVisible(true)
+    end
     self.frame:SetSize              ( maxWidth, maxHeight )
     self.entityControl:SetSize      ( maxWidth, maxHeight )
 
-    self.barBack:SetSize            ( width, height )
-    self.bar:SetSize                ( width, self.groupData.heigth )
+    self.labelBack:SetSize          ( self.groupData.width - ( 2 * labelSpacing ),
+                                      self.groupData.height - ( 2 * labelSpacing ) )
 
-    self.labelBack:SetSize          ( width - ( 2 * labelSpacing ), height )
     self.timerLabel:SetSize         ( self.labelBack:GetSize() )
     self.textLabel:SetSize          ( self.labelBack:GetSize() )
 
-    self.iconControl:SetSize        ( height, height )
+    self.iconControl:SetSize        ( self.groupData.width, self.groupData.height)
+
 
 
 -------------------------------------------------------------------------------------
 --  position
 
-    self.barBack:SetPosition        ( barBackLeft, barBackTop )
-    self.labelBack:SetPosition      ( labelBackLeft, labelBackTop )
-
     self.iconControl:SetPosition    ( self.groupData.frame, self.groupData.frame )
-
+    self.shadow:SetPosition    ( self.groupData.frame, self.groupData.frame )
+    self.animation:SetPosition    ( self.groupData.frame, self.groupData.frame )
+    self.labelBack:SetPosition      ( labelSpacing, labelSpacing )
 
 -------------------------------------------------------------------------------------
 --  color
 
     self.frame:SetBackColor         (  Utils.ColorFix( self.groupData.color1 ) )
-    self.barBack:SetBackColor       (  Utils.ColorFix( self.groupData.color2 ) )
-    self.bar:SetBackColor           (  Utils.ColorFix( self.groupData.color3 ) )
 
     self.timerLabel:SetForeColor    (  Utils.ColorFix( self.groupData.color4 ) )
     self.textLabel:SetForeColor     (  Utils.ColorFix( self.groupData.color5 ) )
@@ -288,7 +259,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key, activ)
+function IconElement:UpdateTimer(startTime, duration, icon, text, entity, key, activ)
 
     self.key        = key
 
@@ -326,7 +297,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Update()
+function IconElement:Update()
 
     local gameTime = Turbine.Engine.GetGameTime()
 
@@ -354,14 +325,13 @@ function BarElement:Update()
 
     if timeLeft < 99999 then
 
-        self:UpdateTimeAndBar   ( timeLeft )
+        self:UpdateTimeAndIcon   ( timeLeft )
 
-        self:UpdateThreshol     ( timeLeft )
+        self:UpdateThreshold     ( timeLeft, gameTime )
 
     else
 
         self.timerLabel:SetText("")
-		self.bar:SetSize(0, 0)
  
     end
 
@@ -377,7 +347,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateTimeAndBar(timeLeft)
+function IconElement:UpdateTimeAndIcon(timeLeft)
 
     if self.timerData.direction == Direction.Ascending then
 
@@ -385,32 +355,31 @@ function BarElement:UpdateTimeAndBar(timeLeft)
 
         self.timerLabel:SetText( Utils.SecondsToClock( timePast, self.groupData.durationFormat ) )
 
-        if self.groupData.orientation == Orientation.Vertical then
+        if self.timerData.useShadow == true then
+            local shadowIndex = 61- math.floor(timeLeft / self.duration * 60)
 
-            self.bar:SetSize( timePast / self.duration * self.barWdith, self.groupData.height )
-
-        else
-
-            self.bar:SetSize( self.groupData.height, timePast / self.duration * self.barWdith )
-
+            self.shadow:SetSize(32, 32)
+            self.shadow:SetBackground( IconID[ IconID.Type.Shadow ][ shadowIndex ] )
+            self.shadow:SetStretchMode(1)
+            self.shadow:SetSize( self.groupData.width, self.groupData.height )
+    
         end
 
     else
 
         self.timerLabel:SetText( Utils.SecondsToClock( timeLeft, self.groupData.durationFormat ) )
 
-        if self.groupData.orientation == Orientation.Vertical then
+        if self.timerData.useShadow == true then
 
-            self.bar:SetSize( timeLeft / self.duration * self.barWdith, self.groupData.height )
-
-        else
-
-            self.bar:SetSize( self.groupData.height, timeLeft / self.duration * self.barWdith )
-
+            local shadowIndex = math.floor(timeLeft / self.duration * 60)
+            self.shadow:SetSize(32, 32)
+            self.shadow:SetBackground( IconID[ IconID.Type.Shadow ][ shadowIndex ] )
+            self.shadow:SetStretchMode(1)
+            self.shadow:SetSize( self.groupData.width, self.groupData.height)
         end
 
     end
-    
+
 end
 
 
@@ -422,7 +391,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateThreshol(timeLeft)
+function IconElement:UpdateThreshold( timeLeft, gameTime )
 
     if self.timerData.useThreshold then
 
@@ -439,38 +408,17 @@ function BarElement:UpdateThreshol(timeLeft)
 
             if self.timerData.useAnimation == true then
 
-                if self.timerData.animationType == AnimationType.Flashing then
-
-                    local value
-                    local flashValue = timeLeft * self.timerData.animationSpeed
-                    
-                    if math.floor( flashValue ) % 2 == 0 then
-                    
-                        value = 1 - ( flashValue - math.floor( flashValue ) )
-
-                    else
-
-                        value = ( flashValue - math.floor( flashValue ) )
-
-                    end
-
-                    self.barBack:SetBackColor( Turbine.UI.Color( 1, value, value ) )
-
-                else
-
-                    self.barBack:SetBackColor( Turbine.UI.Color.Red )
-
-                end
+                self:ThresholdAnimation( gameTime )
 
             else
 
-                self.barBack:SetBackColor( Turbine.UI.Color.Red )
+                self.frame:SetBackColor( Turbine.UI.Color.Red )
                 
             end
 
         else
 
-            self.barBack:SetBackColor( self.backColor )
+            self.frame:SetBackColor( self.backColor )
 
         end
         
@@ -478,6 +426,37 @@ function BarElement:UpdateThreshol(timeLeft)
 
 end
 
+
+
+-------------------------------------------------------------------------------------
+--      Description:    Threshold Animation 
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function IconElement:ThresholdAnimation ( gameTime )
+
+    if  self.nextAnimation < gameTime then
+        
+        self.animation:SetSize(32, 32)
+        self.animation:SetBackground(IconID[ self.timerData.animationType ][ self.animationStep ])
+        self.animation:SetStretchMode(1)
+        self.animation:SetSize( self.groupData.width, self.groupData.height )
+
+        --set next step
+        if self.animationStep == #IconID[ self.timerData.animationType ] then
+            self.animationStep = 1
+
+        else
+            self.animationStep = self.animationStep + 1
+
+        end
+        -- set next frame for animation
+        self.nextAnimation = gameTime + ( 0.2 / self.timerData.animationSpeed )
+    end
+ 
+end
 
 
 
@@ -488,7 +467,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Loop()
+function IconElement:Loop()
 
     local startTime = Turbine.Engine.GetGameTime()
 
@@ -506,7 +485,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Shutdown()
+function IconElement:Shutdown()
 
     Trigger.TimerEnd.Event( self.timerData.id )
 
@@ -530,7 +509,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Finish()
+function IconElement:Finish()
 
     self:SetWantsUpdates(false)
 
@@ -539,7 +518,6 @@ function BarElement:Finish()
     self.parent:RemoveChild(self)
 
     self.labelBack:Close()
-    self.barBack:Close()
     self:Close()
 
 end
@@ -552,21 +530,22 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Activ(activ)
+function IconElement:Activ(activ)
 
     self.activ = activ
 
     if activ == true then
 
         self:SetOpacity                 ( self.groupData.opacityActiv )
-        self.barBack:SetOpacity         ( self.groupData.opacityActiv )
+        self.iconControl:SetOpacity     ( self.groupData.opacityActiv )
+
         self.textLabel:SetVisible(true)
         self.timerLabel:SetVisible(true)
 
     else
 
         self:SetOpacity                 ( self.groupData.opacityPassiv )
-        self.barBack:SetOpacity         ( self.groupData.opacityPassiv )
+        self.iconControl:SetOpacity     ( self.groupData.opacityPassiv )
         
         self.bar:SetWidth(0)
         self.textLabel:SetVisible(false)

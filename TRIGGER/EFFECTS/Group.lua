@@ -15,7 +15,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-Trigger.Init[Trigger.Types.EFFECT_GROUP] = function ()
+Trigger.Init[Trigger.Types.EffectGroup] = function ()
 
     if  Data.trackGroupEffects == true then                     -- track group
 
@@ -40,7 +40,7 @@ Trigger.Init[Trigger.Types.EFFECT_GROUP] = function ()
 
                         local effect = effects:Get(args.Index)
 
-                        Trigger.EFFECT_GROUP.EffectAdded( effect, player )
+                        Trigger.EffectGroup.EffectAdded( effect, player )
 
                     end
 
@@ -48,7 +48,7 @@ Trigger.Init[Trigger.Types.EFFECT_GROUP] = function ()
 -------------------------------------------------------------------------------------
 -- init active effects
 
-                    Trigger.EFFECT_GROUP.InitActivEffect()
+                    Trigger.EffectGroup.InitActivEffect()
 
                 end
 
@@ -69,7 +69,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_GROUP.EffectAdded( effect, player)
+function Trigger.EffectGroup.EffectAdded( effect, player)
 
     local name = effect:GetName()
     local icon = effect:GetIcon()
@@ -82,7 +82,7 @@ function Trigger.EFFECT_GROUP.EffectAdded( effect, player)
 
                 if timerData.enabled == true then                                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.effectGroupTrigger) do                 -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectGroup]) do                 -- all effect self of the timer
 
                         if triggerData.enabled == true then                                                 -- check if trigger is enabled
 
@@ -149,7 +149,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_GROUP.InitActivEffect()
+function Trigger.EffectGroup.InitActivEffect()
 
     local party = LocalPlayer:GetParty()
 
@@ -169,7 +169,7 @@ function Trigger.EFFECT_GROUP.InitActivEffect()
 
                     local effect = effects:Get(j)
 
-                    Trigger.EFFECT_GROUP.EffectAdded( effect, player )
+                    Trigger.EffectGroup.EffectAdded( effect, player )
 
                 end
 

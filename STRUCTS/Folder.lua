@@ -24,6 +24,8 @@ function Folder.GetStruct()
     folder.enabled = false
     folder.collapsed = false
 
+    folder.triggerList = {}
+
     return folder
 
 end

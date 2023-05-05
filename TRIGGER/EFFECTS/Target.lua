@@ -15,7 +15,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-Trigger.Init[Trigger.Types.EFFECT_TARGET] = function ()
+Trigger.Init[Trigger.Types.EffectTarget] = function ()
 
     if  Data.trackTargetEffects == true then                     -- track group
 
@@ -40,17 +40,17 @@ Trigger.Init[Trigger.Types.EFFECT_TARGET] = function ()
                                                         function( sender, args )
 
                                                             local effect = effects:Get( args.Index )
-                                                            Trigger.EFFECT_TARGET.EffectAdded(effect, target)
+                                                            Trigger.EffectTarget.EffectAdded(effect, target)
 
                                                         end )
 
-                Trigger.EFFECT_TARGET.InitActivEffect()
+                Trigger.EffectTarget.InitActivEffect()
             
             end
 
         end
 
-        Trigger.EFFECT_TARGET.InitActivEffect()
+        Trigger.EffectTarget.InitActivEffect()
 
     end
 
@@ -66,7 +66,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_TARGET.EffectAdded( effect, target )
+function Trigger.EffectTarget.EffectAdded( effect, target )
 
 
     local name = effect:GetName()
@@ -80,7 +80,7 @@ function Trigger.EFFECT_TARGET.EffectAdded( effect, target )
 
                 if timerData.enabled == true then                                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.effectTargetTrigger) do                 -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectTarget]) do                 -- all effect self of the timer
 
                         if triggerData.enabled == true then                                                 -- check if trigger is enabled
 
@@ -148,7 +148,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.EFFECT_TARGET.InitActivEffect()
+function Trigger.EffectTarget.InitActivEffect()
 
     local target = LocalPlayer:GetTarget()
 
@@ -160,7 +160,7 @@ function Trigger.EFFECT_TARGET.InitActivEffect()
 
             local effect = effects:Get(i)
 
-            Trigger.EFFECT_TARGET.EffectAdded(effect, target)
+            Trigger.EffectTarget.EffectAdded(effect, target)
 
         end
 

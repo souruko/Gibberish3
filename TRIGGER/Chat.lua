@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-Trigger.Init[Trigger.Types.CHAT] = function ()
+Trigger.Init[Trigger.Types.Chat] = function ()
 
     function Turbine.Chat.Received(sender, args)
 
@@ -33,7 +33,7 @@ Trigger.Init[Trigger.Types.CHAT] = function ()
 
         end
 
-        Trigger.CHAT.CheckChat(args.Message, args.ChatType)
+        Trigger.Chat.CheckChat(args.Message, args.ChatType)
 
     end
 
@@ -46,7 +46,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.CHAT.CheckChat(message, chatType)
+function Trigger.Chat.CheckChat(message, chatType)
 
     for groupIndex, groupData in ipairs(Data.group) do                                      -- all groups
 
@@ -56,7 +56,7 @@ function Trigger.CHAT.CheckChat(message, chatType)
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData.chatTrigger) do       -- all chatTrigger of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Chat]) do       -- all chatTrigger of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
@@ -68,7 +68,7 @@ function Trigger.CHAT.CheckChat(message, chatType)
 
                                 if pos1 ~= nil then
 
-                                    Trigger.CHAT.ProcessTrigger(
+                                    Trigger.Chat.ProcessTrigger(
                                                                 message,
                                                                 chatType,
                                                                 groupIndex,
@@ -82,7 +82,7 @@ function Trigger.CHAT.CheckChat(message, chatType)
 
                                 if message == token then
 
-                                    Trigger.CHAT.ProcessTrigger(
+                                    Trigger.Chat.ProcessTrigger(
                                                                 message,
                                                                 chatType,
                                                                 groupIndex,
@@ -121,7 +121,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Trigger.CHAT.ProcessTrigger(
+function Trigger.Chat.ProcessTrigger(
                                     message,
                                     chatType,
                                     groupIndex,
@@ -136,7 +136,7 @@ function Trigger.CHAT.ProcessTrigger(
                                      
     local groupData = Data.group[groupIndex]
     local timerData = groupData.timerList[timerIndex]
-    local triggerData = timerData.chatTrigger[triggerIndex]
+    local triggerData = timerData[Trigger.Chat][triggerIndex]
    
     local startTime = Turbine.Engine.GetGameTime()
     local text      = ""

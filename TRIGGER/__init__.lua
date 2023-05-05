@@ -7,24 +7,24 @@
 
 
 
-Trigger.Types.EFFECT_SELF       = 1
-Trigger.Types.EFFECT_GROUP      = 2
-Trigger.Types.EFFECT_TARGET     = 3
-Trigger.Types.CHAT              = 4
-Trigger.Types.SKILL             = 5
-Trigger.Types.TIMER_END         = 6
-Trigger.Types.TIMER_START       = 7
-Trigger.Types.TIMER_THRESHOLD   = 8
+Trigger.Types.EffectSelf       = 1
+Trigger.Types.EffectGroup      = 2
+Trigger.Types.EffectTarget     = 3
+Trigger.Types.Chat              = 4
+Trigger.Types.Skill             = 5
+Trigger.Types.TimerEnd         = 6
+Trigger.Types.TimerStart       = 7
+Trigger.Types.TimerThreshold   = 8
 
 
-Trigger.EFFECT_SELF       = {}
-Trigger.EFFECT_GROUP      = {}
-Trigger.EFFECT_TARGET     = {}
-Trigger.CHAT              = {}
-Trigger.SKILL             = {}
-Trigger.TIMER_END         = {}
-Trigger.TIMER_START       = {}
-Trigger.TIMER_THRESHOLD   = {}
+Trigger.EffectSelf       = {}
+Trigger.EffectGroup      = {}
+Trigger.EffectTarget     = {}
+Trigger.Chat              = {}
+Trigger.Skill             = {}
+Trigger.TimerEnd         = {}
+Trigger.TimerStart       = {}
+Trigger.TimerThreshold   = {}
 
 
 

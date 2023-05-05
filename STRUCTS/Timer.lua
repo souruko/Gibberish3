@@ -51,14 +51,14 @@ function Timer.GetStruct(type)
     timer.animationType         = Timer.Defaults[type].animationType
     timer.useShadow             = Timer.Defaults[type].useShadow
 
-    timer.effectSelfTrigger     = {}
-    timer.effectGroupTrigger    = {}
-    timer.effectTargetTrigger   = {}
-    timer.skillTrigger          = {}
-    timer.chatTrigger           = {}
-    timer.timerEndTrigger       = {}
-    timer.timerStartTrigger     = {}
-    timer.timerThresholdTrigger = {}
+    timer[Trigger.EffectSelf]     = {}
+    timer[Trigger.EffectGroup]    = {}
+    timer[Trigger.EffectTarget]   = {}
+    timer[Trigger.Skill]          = {}
+    timer[Trigger.Chat]           = {}
+    timer[Trigger.TimerEnd]       = {}
+    timer[Trigger.TimerStart]     = {}
+    timer[Trigger.TimerThreshold] = {}
 
     return timer
 

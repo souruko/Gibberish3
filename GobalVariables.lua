@@ -179,3 +179,18 @@ Font[25]    = Turbine.UI.Lotro.Font.Verdana20
 Font[26]    = Turbine.UI.Lotro.Font.Verdana22
 Font[27]    = Turbine.UI.Lotro.Font.Verdana23
 
+-------------------------------------------------------------------------------------
+--      Description:    icon id types
+-------------------------------------------------------------------------------------
+
+IconID                       = {}
+IconID.Type                  = {}
+IconID.Type.Shadow           = 1
+IconID.Type.DottedBorder = 2
+IconID.Type.ActivationBorder = 3
+IconID.Type.NewActivationBorder = 4
+IconID.Type.NewDottedBorder = 5
+
+-------------------------------------------------------------------------------------
+--      Description:    icon ids
+-------------------------------------------------------------------------------------
