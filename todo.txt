@@ -1,7 +1,5 @@
 
 
-*   timer icon
-
 *   group counter
 
 *   reset

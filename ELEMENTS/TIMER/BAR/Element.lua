@@ -538,7 +538,14 @@ function BarElement:Finish()
 
     self.parent:RemoveChild(self)
 
+    self.iconControl:Close()
+    self.frame:Close()
+
+    self.timerLabel:Close()
+    self.textLabel:Clse()
     self.labelBack:Close()
+
+    self.bar:Close()
     self.barBack:Close()
     self:Close()
 

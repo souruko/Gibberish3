@@ -103,8 +103,20 @@ function Trigger.Chat.CheckChat(message, chatType)
             end
 
         end
+
+        for triggerIndex, triggerData in ipairs(groupData[Trigger.Chat]) do       -- all chatTrigger for enable/disable
+
+            Group.Enable(groupIndex, triggerData.action)
+
+        end
         
     end
+
+    -- for triggerIndex, triggerData in ipairs(folderData[Trigger.Chat]) do       -- all chatTrigger for enable/disable
+
+
+
+    -- end
     
 end
 

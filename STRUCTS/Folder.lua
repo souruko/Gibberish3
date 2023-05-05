@@ -24,7 +24,14 @@ function Folder.GetStruct()
     folder.enabled = false
     folder.collapsed = false
 
-    folder.triggerList = {}
+    folder[Trigger.EffectSelf]     = {}
+    folder[Trigger.EffectGroup]    = {}
+    folder[Trigger.EffectTarget]   = {}
+    folder[Trigger.Skill]          = {}
+    folder[Trigger.Chat]           = {}
+    folder[Trigger.TimerEnd]       = {}
+    folder[Trigger.TimerStart]     = {}
+    folder[Trigger.TimerThreshold] = {}
 
     return folder
 

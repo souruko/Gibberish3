@@ -517,7 +517,15 @@ function IconElement:Finish()
 
     self.parent:RemoveChild(self)
 
+    self.iconControl:Close()
+    self.frame:Close()
+
+    self.timerLabel:Close()
+    self.textLabel:Clse()
     self.labelBack:Close()
+
+    self.animation:Close()
+    self.shadow:Close()
     self:Close()
 
 end

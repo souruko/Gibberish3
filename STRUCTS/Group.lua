@@ -58,8 +58,17 @@ function Group.GetStruct(type)
     group.timerAlignment        = Group.Defaults[type].timerAlignment
     group.showTimer             = Group.Defaults[type].showTimer
 
+    group.timerList = {}
+
     -- timerList
-    group.timerList             = {}
+    group[Trigger.EffectSelf]     = {}
+    group[Trigger.EffectGroup]    = {}
+    group[Trigger.EffectTarget]   = {}
+    group[Trigger.Skill]          = {}
+    group[Trigger.Chat]           = {}
+    group[Trigger.TimerEnd]       = {}
+    group[Trigger.TimerStart]     = {}
+    group[Trigger.TimerThreshold] = {}
 
     return group
 

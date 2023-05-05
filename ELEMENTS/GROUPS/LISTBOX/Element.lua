@@ -521,3 +521,27 @@ function ListBoxElement:FillPermanentTimers()
 
 end
 
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    close the group
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function ListBoxElement:Finish()
+
+    for key, child in pairs(self.children) do
+        
+        child:Finish()
+
+    end
+
+    self.MoveLabel:Close()
+    self.MoveWindow:Close()
+    self.TimerListBox:Close()
+    self:Close()
+
+end

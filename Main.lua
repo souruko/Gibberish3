@@ -77,16 +77,14 @@ Data.group[testIndex].timerList[3].permanent = true
 Data.group[testIndex].opacityPassiv = 0.3
 Data.group[testIndex].opacityActiv = 1
 
-Group[testIndex] = Group.Constructor[ Group.Types.LISTBOX ](testIndex, Data.group[testIndex])
-
 local testIndex2 = Group.New("bye", 1)
 Data.group[testIndex2].top = 0.5
-
-Group[testIndex2] = Group.Constructor[ Group.Types.LISTBOX ](testIndex2, Data.group[testIndex2])
 
 -------------------------------------------------------------------------------------
 --      Description:    TOBEDELETED   
 -------------------------------------------------------------------------------------
+
+Group.OpenAll()
 
 Trigger.InitAll()
 
