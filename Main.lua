@@ -84,11 +84,16 @@ Data.group[testIndex2].top = 0.5
 --      Description:    TOBEDELETED   
 -------------------------------------------------------------------------------------
 
+
+import "Gibberish3.OPTIONS"
+import "Gibberish3.ChatCommand"
+
 Group.OpenAll()
+
+if Data.moveMode == true then
+    Options.Move.UpdateMode(true)
+end
 
 Trigger.InitAll()
 
 
-
-import "Gibberish3.OPTIONS"
-import "Gibberish3.ChatCommand"

@@ -39,17 +39,22 @@ function ListBoxElement:Constructor(index, data)
     self.MoveWindow = Turbine.UI.Window     ( )
     self.MoveWindow:SetParent               ( self )
     self.MoveWindow:SetMouseVisible         ( false )
+    self.MoveWindow:SetZOrder               ( 5 )
 
+    local moveFrame = 2
     self.MoveLabel = Turbine.UI.Label       ( )
     self.MoveLabel:SetParent                ( self.MoveWindow )
     self.MoveLabel:SetMouseVisible          ( false )
     self.MoveLabel:SetTextAlignment         ( Turbine.UI.ContentAlignment.MiddleCenter )
     self.MoveLabel:SetFont                  ( Turbine.UI.Lotro.Font.Verdana12 )
     self.MoveLabel:SetFontStyle             ( Turbine.UI.FontStyle.Outline )
+    self.MoveLabel:SetPosition              ( moveFrame, moveFrame )
+    self.MoveWindow:SetZOrder               ( 4 )
 
     self.TimerListBox = Turbine.UI.ListBox  ( )
     self.TimerListBox:SetParent             ( self )
     self.TimerListBox:SetMouseVisible       ( false )
+    self.MoveWindow:SetZOrder               ( 3 )
 
 
 -------------------------------------------------------------------------------------
@@ -108,7 +113,6 @@ function ListBoxElement:Constructor(index, data)
 
     self:GroupDataChanged                   ( )
     self:SelectionChanged                   ( )
-    self:MoveChanged                        ( )
 
     self:FillPermanentTimers()
 
@@ -273,7 +277,7 @@ function ListBoxElement:Reset()
     for i = #self.children, 1, -1 do
 
         self.children[i]:Reset()
-        
+ 
     end
 
 end
@@ -293,8 +297,9 @@ function ListBoxElement:SelectionChanged()
     if Data.selectedGroupIndex == self.index then
         
         self.selected = true
-        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Orange )
-        
+        self.MoveWindow:SetBackColor     ( Turbine.UI.Color.White )
+        self.MoveLabel:SetBackColor      ( Turbine.UI.Color.Black )
+
         if Data.moveMode == true then
             self:SetZOrder              (11)
 
@@ -309,8 +314,8 @@ function ListBoxElement:SelectionChanged()
     else
 
         self.selected = false
-        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Black )
-    
+        self.MoveWindow:SetBackColor     ( Turbine.UI.Color.Black )
+        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Orange )
         if Data.moveMode == true then
             self:SetZOrder              (10)
 
@@ -427,9 +432,10 @@ function ListBoxElement:ReSize()
 
     end
 
+    local moveFrame = 2
     self:SetSize                ( width, height )
     self.MoveWindow:SetSize     ( width, height )
-    self.MoveLabel:SetSize      ( width, height )
+    self.MoveLabel:SetSize      ( width - 2 * moveFrame, height - 2 * moveFrame )
     self.TimerListBox:SetSize   ( width, height )
 
 end

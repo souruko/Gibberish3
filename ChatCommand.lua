@@ -2,6 +2,7 @@
 Command = Turbine.ShellCommand()
 
 function Command:Execute( _, str )
+
     if str == nil or string.len( str ) == 0 then
         Turbine.Shell.WriteLine( "Missing Argument.")
         return
@@ -20,12 +21,15 @@ function Command:Execute( _, str )
     if cmd == "options" then
 
     elseif cmd == "reload" then
+        Options.Reload()
 
     elseif cmd == "reset" then
+        Group.Reset()
 
     elseif cmd == "collection" then
 
     elseif cmd == "move" then
+        Options.Move.UpdateMode(not(Data.moveMode))
 
     end
 

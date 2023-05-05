@@ -26,6 +26,8 @@ function Group.SelectionChanged(index)
 
     end
 
+    Options.SaveData()
+
 end
 
 
@@ -37,7 +39,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Group.SelectionChanged(index, enable)
+function Group.Enable(index, enable)
 
     Data.group[index].enabled = enable
 
@@ -106,6 +108,53 @@ function Group.OpenAll()
             end
             
             Group.Open(index)
+
+        end
+
+    end
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    reset all timers with the reset setting
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.Reset()
+
+    for index, groupData in ipairs(Data.group) do
+
+        if groupData.enabled == true then
+
+            Group[index]:Reset()
+
+        end
+
+    end
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    move mode changed
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.MoveModeChanged()
+
+    for index, groupData in ipairs(Data.group) do
+
+        if groupData.enabled == true then
+
+            Group[index]:MoveChanged()
 
         end
 
