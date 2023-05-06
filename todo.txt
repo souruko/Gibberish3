@@ -1,9 +1,5 @@
 
 
-*   group counter
-
-*   reset
-
 *   auto reload
 
 *   doku

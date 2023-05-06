@@ -5,7 +5,8 @@ import "Turbine.UI"
 import "Turbine.UI.Lotro"
 
 
-import "Gibberish3.GobalVariables"
+import "Gibberish3.GlobalVariables"
+import "Gibberish3.GlobalDefaults"
 import "Gibberish3.Resources.IconIDs"
 
 import "Gibberish3.UTILS"

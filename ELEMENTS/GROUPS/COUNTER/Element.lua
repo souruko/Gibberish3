@@ -283,7 +283,7 @@ function CounterElement:SelectionChanged()
 	if Data.selectedGroupIndex == self.index then
         
         self.selected = true
-        self.MoveWindow:SetBackColor     ( Turbine.UI.Color.White )
+        self.MoveWindow:SetBackColor     ( Defaults.Colors.Selected )
         self.MoveLabel:SetBackColor      ( Turbine.UI.Color.Black )
 
         if Data.moveMode == true then
@@ -300,8 +300,8 @@ function CounterElement:SelectionChanged()
     else
 
         self.selected = false
-        self.MoveWindow:SetBackColor     ( Turbine.UI.Color.Black )
-        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Orange )
+        self.MoveWindow:SetBackColor     ( Defaults.Colors.NotSelected )
+        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Black )
         if Data.moveMode == true then
             self:SetZOrder              (10)
 

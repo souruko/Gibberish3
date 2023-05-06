@@ -60,7 +60,11 @@ Data = {}
 Options = {}
 Options.Move = {}
 Options.Collection = {}
-Options.Window = {}
+Options.MainWindow = {}
+
+Options.Move.Window = nil
+Options.Collection.Window = nil
+Options.MainWindow.Window = nil
 
 
 -------------------------------------------------------------------------------------
@@ -195,5 +199,6 @@ IconID.Type.NewActivationBorder = 4
 IconID.Type.NewDottedBorder = 5
 
 -------------------------------------------------------------------------------------
---      Description:    icon ids
+--      Description:    Defaults
 -------------------------------------------------------------------------------------
+Defaults = {}

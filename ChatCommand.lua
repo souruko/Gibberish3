@@ -19,6 +19,7 @@ function Command:Execute( _, str )
     local cmd = string.lower( list[ 1 ] )
 
     if cmd == "options" then
+        Options.MainWindow.OpenClose()
 
     elseif cmd == "reload" then
         Options.Reload()
