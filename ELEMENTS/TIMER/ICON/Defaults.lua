@@ -33,3 +33,5 @@ Timer.Defaults[Timer.Types.ICON].useAnimation        = false
 Timer.Defaults[Timer.Types.ICON].animationSpeed      = 2
 Timer.Defaults[Timer.Types.ICON].animationType       = AnimationType.Flashing
 Timer.Defaults[Timer.Types.ICON].useShadow           = false
+
+Timer.Defaults[Timer.Types.ICON].counterValue         = nil

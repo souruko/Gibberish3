@@ -144,7 +144,7 @@ AnimationType.New_Dotted_Border     = 5
 Action          = {}
 Action.Add      = 1
 Action.Remove   = 2
-
+Action.Reset    = 3
 
 -------------------------------------------------------------------------------------
 --      Description:    fonts

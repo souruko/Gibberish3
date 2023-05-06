@@ -1,9 +1,9 @@
 --===================================================================================
---             Name:    BAR Element
+--             Name:    COUNTER_BAR Element
 -------------------------------------------------------------------------------------
---      Description:    BAR Class
+--      Description:    COUNTER_BAR Class
 --===================================================================================
-BarElement = class(Turbine.UI.Window)
+CounterBarElement = class(Turbine.UI.Window)
 
 
 
@@ -12,7 +12,7 @@ BarElement = class(Turbine.UI.Window)
 
 
 -------------------------------------------------------------------------------------
---      Description:    BAR constructor
+--      Description:    COUNTER_BAR constructor
 -------------------------------------------------------------------------------------
 --        Parameter:    parent,
 --                      groupData
@@ -25,9 +25,9 @@ BarElement = class(Turbine.UI.Window)
 --                      entity
 --                      key
 -------------------------------------------------------------------------------------
---           Return:    timer BAR element
+--           Return:    timer COUNTER_BAR element
 -------------------------------------------------------------------------------------
-function BarElement:Constructor(    parent,
+function CounterBarElement:Constructor(    parent,
                                     groupData,
                                     timerData,
                                     timerIndex,
@@ -112,7 +112,23 @@ function BarElement:Constructor(    parent,
     self:GroupDataChanged                   ( )
     self:TimerDataChanged                   ( )
 
-    self:UpdateTimer                        ( startTime, duration, icon, text, entity, key, activ )
+    if self.groupData.counterDirection == Direction.Ascending then
+        self.counter = 0
+
+    else
+        if self.timerData.counterValue == nil then
+
+            self.counter        = 10
+
+        else
+
+            self.counter        = self.timerData.counterValue
+        
+        end
+
+    end
+    
+    self:UpdateTimer                        ( startTime, 0, icon, text, entity, key, activ )
 
     self:Visibility                         ( true )
 
@@ -127,7 +143,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Visibility ( visible )
+function CounterBarElement:Visibility ( visible )
 
     self:SetVisible            ( visible )
     self.barBack:SetVisible    ( visible )
@@ -144,7 +160,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Reset()
+function CounterBarElement:Reset()
 
     if self.timerData.reset == true then
 
@@ -163,7 +179,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:TimerDataChanged()
+function CounterBarElement:TimerDataChanged()
 
 end
 
@@ -177,7 +193,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:GroupDataChanged()
+function CounterBarElement:GroupDataChanged()
 
 -------------------------------------------------------------------------------------
 --  size
@@ -288,13 +304,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key, activ)
+function CounterBarElement:UpdateTimer(startTime, counter, icon, text, entity, key, activ)
 
     self.key        = key
-
-    self.startTime  = startTime
-    self.duration   = duration
-    self.endTime    = startTime + duration
 
     if entity ~= nil then
         self.entityControl:SetEntity            ( entity )
@@ -309,64 +321,31 @@ function BarElement:UpdateTimer(startTime, duration, icon, text, entity, key, ac
 
     end
 
-    self.textLabel:SetText                  ( text )
-    self.timerLabel:SetText                 ( "" )
-
-    self:Activ(activ)
-
-
-end
-
-
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function BarElement:Update()
-
-    local gameTime = Turbine.Engine.GetGameTime()
-
-    local timeLeft = self.endTime - gameTime
-
--------------------------------------------------------------------------------------
--- stop
-
-    if timeLeft <= 0 then
-
-        if self.timerData.loop == true then
-        
-            self:Loop()
-
-        else
-
+    self.counter = self.counter + counter
+    if self.groupData.counterDirection == Direction.Ascending then
+       
+        if self.counter >= self.timerData.counterValue then
             self:Shutdown()
+            return
+        end
 
+    else
+
+        if self.counter < 1 then
+            self:Shutdown()
+            return
         end
 
     end
 
--------------------------------------------------------------------------------------
--- running
+    self.textLabel:SetText                  ( text )
+    self.timerLabel:SetText                 ( tostring( self.counter ) )
 
-    if timeLeft < 99999 then
+    self:Activ(activ)
 
-        self:UpdateTimeAndBar   ( timeLeft )
-
-        self:UpdateThreshol     ( timeLeft )
-
-    else
-
-        self.timerLabel:SetText("")
-		self.bar:SetSize(0, 0)
- 
-    end
+    self:UpdateTimeAndCounterBar()
 
 end
-
 
 
 
@@ -377,40 +356,26 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateTimeAndBar(timeLeft)
+function CounterBarElement:UpdateTimeAndCounterBar()
 
     if self.timerData.direction == Direction.Ascending then
 
-        local timePast = self.duration - timeLeft
+        local counterPast = self.timerData.counterValue - self.counter
 
-        self.timerLabel:SetText( Utils.SecondsToClock( timePast, self.groupData.durationFormat ) )
-
-        if self.groupData.orientation == Orientation.Vertical then
-
-            self.bar:SetSize( timePast / self.duration * self.barWdith, self.groupData.height )
-
-        else
-
-            self.bar:SetSize( self.groupData.height, timePast / self.duration * self.barWdith )
-
-        end
+        self.bar:SetSize( counterPast / self.timerData.counterValue * self.barWdith, self.groupData.height )
 
     else
 
-        self.timerLabel:SetText( Utils.SecondsToClock( timeLeft, self.groupData.durationFormat ) )
+        local counterValue = self.timerData.counterValue
 
-        if self.groupData.orientation == Orientation.Vertical then
-
-            self.bar:SetSize( timeLeft / self.duration * self.barWdith, self.groupData.height )
-
-        else
-
-            self.bar:SetSize( self.groupData.height, timeLeft / self.duration * self.barWdith )
-
+        if counterValue == nil then
+           counterValue = 0
         end
 
+        self.bar:SetSize( self.counter / counterValue * self.barWdith, self.groupData.height )
+
     end
-    
+
 end
 
 
@@ -422,59 +387,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:UpdateThreshol(timeLeft)
-
-    if self.timerData.useThreshold then
-
-        if timeLeft <= self.timerData.thresholdValue then
-
-            if self.firstThreshold == true then
-
-                self.firstThreshold = false
-
-                Trigger.TimerThreshold.Event( self.timerData.id )
-                
-            end
-
-
-            if self.timerData.useAnimation == true then
-
-                if self.timerData.animationType == AnimationType.Flashing then
-
-                    local value
-                    local flashValue = timeLeft * self.timerData.animationSpeed
-                    
-                    if math.floor( flashValue ) % 2 == 0 then
-                    
-                        value = 1 - ( flashValue - math.floor( flashValue ) )
-
-                    else
-
-                        value = ( flashValue - math.floor( flashValue ) )
-
-                    end
-
-                    self.barBack:SetBackColor( Turbine.UI.Color( 1, value, value ) )
-
-                else
-
-                    self.barBack:SetBackColor( Turbine.UI.Color.Red )
-
-                end
-
-            else
-
-                self.barBack:SetBackColor( Turbine.UI.Color.Red )
-                
-            end
-
-        else
-
-            self.barBack:SetBackColor( self.backColor )
-
-        end
-        
-    end
+function CounterBarElement:UpdateThreshold()
 
 end
 
@@ -488,7 +401,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Loop()
+function CounterBarElement:Loop()
 
     local startTime = Turbine.Engine.GetGameTime()
 
@@ -506,7 +419,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Shutdown()
+function CounterBarElement:Shutdown()
 
     Trigger.TimerEnd.Event( self.timerData.id )
 
@@ -530,9 +443,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Finish()
-
-    self:SetWantsUpdates(false)
+function CounterBarElement:Finish()
 
     self:Visibility(false)
 
@@ -553,7 +464,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function BarElement:Activ(activ)
+function CounterBarElement:Activ(activ)
 
     self.activ = activ
 
@@ -574,7 +485,5 @@ function BarElement:Activ(activ)
         self.timerLabel:SetVisible(false)
 
     end
-
-    self:SetWantsUpdates(self.activ)
 
 end

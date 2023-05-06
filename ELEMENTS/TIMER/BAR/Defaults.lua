@@ -34,3 +34,5 @@ Timer.Defaults[Timer.Types.BAR].useAnimation        = false
 Timer.Defaults[Timer.Types.BAR].animationSpeed      = 2
 Timer.Defaults[Timer.Types.BAR].animationType       = AnimationType.Flashing
 Timer.Defaults[Timer.Types.BAR].useShadow           = false
+
+Timer.Defaults[Timer.Types.BAR].counterValue         = nil

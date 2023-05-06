@@ -107,18 +107,15 @@ function Trigger.EffectTarget.EffectAdded( effect, target )
 
                                     if name == token then
 
-                                        if timerData.icon == nil or timerData.icon == icon then
-
-                                            Trigger.ProcessEffectTrigger(           effect,
-                                                                                    target,
-                                                                                    groupIndex,
-                                                                                    timerIndex,
-                                                                                    triggerData,
-                                                                                    0 )
-                                            
-                                        end
+                                        Trigger.ProcessEffectTrigger(           effect,
+                                                                                target,
+                                                                                groupIndex,
+                                                                                timerIndex,
+                                                                                triggerData,
+                                                                                0 )
                                         
                                     end
+                                     
 
                                 end
                                

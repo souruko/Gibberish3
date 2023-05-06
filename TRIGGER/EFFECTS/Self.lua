@@ -104,18 +104,15 @@ function Trigger.EffectSelf.EffectAdded( effect )
 
                                 if name == token then
 
-                                    if timerData.icon == nil or timerData.icon == icon then
-
-                                        Trigger.ProcessEffectTrigger(       effect,
-                                                                            LocalPlayer,
-                                                                            groupIndex,
-                                                                            timerIndex,
-                                                                            triggerData,
-                                                                            0 )
-                                        
-                                    end
+                                    Trigger.ProcessEffectTrigger(       effect,
+                                                                        LocalPlayer,
+                                                                        groupIndex,
+                                                                        timerIndex,
+                                                                        triggerData,
+                                                                        0 )
                                     
                                 end
+                                   
                                
                             end
 

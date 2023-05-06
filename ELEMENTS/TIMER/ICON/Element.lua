@@ -276,7 +276,7 @@ function IconElement:UpdateTimer(startTime, duration, icon, text, entity, key, a
         self.iconControl:SetSize            ( Utils.GetImageSize(icon) )
         self.iconControl:SetStretchMode     ( 1 )
         self.iconControl:SetBackground      ( icon )
-        self.iconControl:SetSize            ( self.groupData.height, self.groupData.height )
+        self.iconControl:SetSize            ( self.groupData.width, self.groupData.height )
 
     end
 
@@ -517,15 +517,9 @@ function IconElement:Finish()
 
     self.parent:RemoveChild(self)
 
-    self.iconControl:Close()
-    self.frame:Close()
 
-    self.timerLabel:Close()
-    self.textLabel:Clse()
     self.labelBack:Close()
 
-    self.animation:Close()
-    self.shadow:Close()
     self:Close()
 
 end

@@ -46,7 +46,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function TemplateElement:Remove(timerIndex, key)
+function TemplateElement:Remove(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
 
 end
 

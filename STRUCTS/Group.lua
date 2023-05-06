@@ -58,6 +58,8 @@ function Group.GetStruct(type)
     group.timerAlignment        = Group.Defaults[type].timerAlignment
     group.showTimer             = Group.Defaults[type].showTimer
 
+    group.counterDirection      = Group.Defaults[type].counterDirection
+
     group.timerList = {}
 
     -- timerList

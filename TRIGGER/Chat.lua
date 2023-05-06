@@ -247,10 +247,14 @@ function Trigger.Chat.ProcessTrigger(
                                 entity,
                                 key )
       
-    else
+    elseif triggerData.action == Action.Remove then
 
-        Group[groupIndex]:Remove(timerIndex, key)
+        Group[groupIndex]:Remove(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
 
+    elseif triggerData.action == Action.Reset then
+
+        Group[groupIndex]:ResetAction(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
+                        
     end
 
 end

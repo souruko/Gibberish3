@@ -1,31 +1,28 @@
 --===================================================================================
---             Name:    LISTBOX Element
+--             Name:    COUNTER Element
 -------------------------------------------------------------------------------------
---      Description:    LISTBOX Class
+--      Description:    COUNTER Class
 --===================================================================================
-ListBoxElement = class(Turbine.UI.Window)
-
+CounterElement = class(Turbine.UI.Window)
 
 
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    listbox constructor
+--      Description:    template constructor
 -------------------------------------------------------------------------------------
---        Parameter:    index
---                      data
+--        Parameter:    group data 
 -------------------------------------------------------------------------------------
---           Return:    group listbox element
+--           Return:    group template element
 -------------------------------------------------------------------------------------
-function ListBoxElement:Constructor(index, data)
+function CounterElement:Constructor( index, data )
 	Turbine.UI.Window.Constructor( self )
-
 
 -------------------------------------------------------------------------------------
 --  attributes
 
-    self.index      = index
+	self.index      = index
     self.data       = data
     self.children   = {}
     self.selected   = false
@@ -34,89 +31,88 @@ function ListBoxElement:Constructor(index, data)
 -------------------------------------------------------------------------------------
 --  construct
 
-    self:SetMouseVisible                    ( false )
+	self:SetMouseVisible                    ( false )
 
-    self.MoveWindow = Turbine.UI.Window     ( )
-    self.MoveWindow:SetParent               ( self )
-    self.MoveWindow:SetMouseVisible         ( false )
-    self.MoveWindow:SetZOrder               ( 5 )
+	self.MoveWindow = Turbine.UI.Window     ( )
+	self.MoveWindow:SetParent               ( self )
+	self.MoveWindow:SetMouseVisible         ( false )
+	self.MoveWindow:SetZOrder               ( 5 )
 
-    local moveFrame = 2
-    self.MoveLabel = Turbine.UI.Label       ( )
-    self.MoveLabel:SetParent                ( self.MoveWindow )
-    self.MoveLabel:SetMouseVisible          ( false )
-    self.MoveLabel:SetTextAlignment         ( Turbine.UI.ContentAlignment.MiddleCenter )
-    self.MoveLabel:SetFont                  ( Turbine.UI.Lotro.Font.Verdana12 )
-    self.MoveLabel:SetFontStyle             ( Turbine.UI.FontStyle.Outline )
-    self.MoveLabel:SetPosition              ( moveFrame, moveFrame )
-    self.MoveLabel:SetZOrder               ( 4 )
+	local moveFrame = 2
+	self.MoveLabel = Turbine.UI.Label       ( )
+	self.MoveLabel:SetParent                ( self.MoveWindow )
+	self.MoveLabel:SetMouseVisible          ( false )
+	self.MoveLabel:SetTextAlignment         ( Turbine.UI.ContentAlignment.MiddleCenter )
+	self.MoveLabel:SetFont                  ( Turbine.UI.Lotro.Font.Verdana12 )
+	self.MoveLabel:SetFontStyle             ( Turbine.UI.FontStyle.Outline )
+	self.MoveLabel:SetPosition              ( moveFrame, moveFrame )
+	self.MoveLabel:SetZOrder               ( 4 )
 
-    self.TimerListBox = Turbine.UI.ListBox  ( )
-    self.TimerListBox:SetParent             ( self )
-    self.TimerListBox:SetMouseVisible       ( false )
-    self.TimerListBox:SetZOrder               ( 3 )
+	self.TimerListBox = Turbine.UI.ListBox  ( )
+	self.TimerListBox:SetParent             ( self )
+	self.TimerListBox:SetMouseVisible       ( false )
+	self.TimerListBox:SetZOrder               ( 3 )
 
 
 -------------------------------------------------------------------------------------
 --  move
 
-    function self.MoveWindow.MouseDown  ( sender, args )
+	function self.MoveWindow.MouseDown  ( sender, args )
 
-        if args.Button == Turbine.UI.MouseButton.Left then
+		if args.Button == Turbine.UI.MouseButton.Left then
 
-            Dragging = true
-            DragStartX = args.X
-            DragStartY = args.Y
+			Dragging = true
+			DragStartX = args.X
+			DragStartY = args.Y
 
-            Group.SelectionChanged(self.index)
-            
-        end
-        
-    end 
+			Group.SelectionChanged(self.index)
+			
+		end
 
-    function self.MoveWindow.MouseMove  ( sender, args )
+	end
 
-        if Dragging == true then
-            
-            local x, y = self:GetPosition()
+	function self.MoveWindow.MouseMove  ( sender, args )
+
+		if Dragging == true then
+
+			local x, y = self:GetPosition()
 
 			x = x + ( args.X - DragStartX )
-            y = y + ( args.Y - DragStartY )
+			y = y + ( args.Y - DragStartY )
 
-            self:SetPosition( x, y )
+			self:SetPosition( x, y )
 
-            self.data.left, self.data.top = Utils.PixelToScreenRatio( x, y )
+			self.data.left, self.data.top = Utils.PixelToScreenRatio( x, y )
 
-            Options.SelectedWindowChanged()
+			Options.SelectedWindowChanged()
 
-        end
-        
-    end
+		end
 
-    function self.MoveWindow.MouseUp    ( sender, args )
+	end
 
-        if args.Button == Turbine.UI.MouseButton.Left then
-            
-            Dragging = false
+	function self.MoveWindow.MouseUp    ( sender, args )
 
-            self.data.left, self.data.top = Utils.PixelToScreenRatio( self:GetPosition() )
+		if args.Button == Turbine.UI.MouseButton.Left then
 
-            Options.SaveData()
+			Dragging = false
 
-        end
-        
-    end
+			self.data.left, self.data.top = Utils.PixelToScreenRatio( self:GetPosition() )
+
+			Options.SaveData()
+
+		end
+
+	end
 
 
 -------------------------------------------------------------------------------------
 --  ready
 
-    self:GroupDataChanged                   ( )
-    self:SelectionChanged                   ( )
+	self:GroupDataChanged                   ( )
+	self:SelectionChanged                   ( )
 
-    self:FillPermanentTimers()
+	self:SetVisible                         ( true )
 
-    self:SetVisible                         ( true )
 
 end
 
@@ -125,28 +121,100 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    add call from triggers
 -------------------------------------------------------------------------------------
---        Parameter:    trigger data 
+--        Parameter:    timer data 
+--                      key
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function CounterElement:Add(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
+
+    local child = self:CheckRunningTimer(timerIndex, key)
+
+    if child == nil then
+        return
+    end
+
+    local activ = true
+
+	if groupData.counterDirection == Direction.Descending then
+
+        counter = -1
+
+        child:UpdateTimer( startTime, counter, icon, text, entity, key, activ )
+	
+	else
+
+        counter = 1
+
+        child:UpdateTimer( startTime, counter, icon, text, entity, key, activ )
+
+	end
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    remove call from triggers
+-------------------------------------------------------------------------------------
+--        Parameter:    groupData
+--						timerData 
+--    					trigger data 
 --                      timer index
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Add(groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+function CounterElement:Remove(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
 
     local child = self:CheckRunningTimer(timerIndex, key)
+
+    if child == nil then
+        return
+    end
+
     local activ = true
 
-    if child then
-    
-        child:UpdateTimer( startTime, duration, icon, text, entity, key, activ )
+	if groupData.counterDirection == Direction.Descending then
 
-    else
+        counter = 1
 
-        local index = #self.children + 1
-        
-        self.children[index] = Timer.Constructor[timerData.type](self, groupData, timerData, timerIndex, startTime, duration, icon, text, entity, key, activ)
-        self.TimerListBox:AddItem(self.children[index])
+        child:UpdateTimer( startTime, counter, icon, text, entity, key, activ )
+	
+	else
 
+        counter = -1
+
+        child:UpdateTimer( startTime, counter, icon, text, entity, key, activ )
+
+	end
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    reset action from trigger from triggers
+-------------------------------------------------------------------------------------
+--        Parameter:    groupData
+--						timerData 
+--						timer index
+--                      key
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function CounterElement:ResetAction(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
+
+    local child = self:CheckRunningTimer(timerIndex, key)
+
+    if child ~= nil then
+        child:Finish()
     end
+
+    local index = #self.children + 1
+    local activ = true
+
+        
+    self.children[index] = Timer.Constructor[timerData.type](self, groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key, activ)
+    self.TimerListBox:AddItem(self.children[index])
 
     self:SortList()
 
@@ -154,111 +222,29 @@ end
 
 
 -------------------------------------------------------------------------------------
---      Description:    remove call from triggers
+--      Description:    sort children
 -------------------------------------------------------------------------------------
---        Parameter:    timer index
---                      key
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function ListBoxElement:SortList()
-
-    self.TimerListBox:Sort(
-
-        function (child1, child2)
-
-            if child1.timerData.permanent == true then
-
-                if child2.timerData.permanent == true then
-
-                    if child1.index < child2.index then         -- both permanent sort by index
-                        return true
-
-                    else
-                        return false
-
-                    end
-
-                else                                            -- only 1 permanent sort by that
-                    return true
-
-                end
-
-            else
-
-                if child2.timerData.permanent == true then      -- only 1 permanent sort by that
-                    return false
-
-                else
-                    if child1.endTime < child2.endTime then     -- both not permanent sort by endTime
-                        return true
-
-                    else
-                        return false
-
-                    end
-                end
-
-            end
-
-        end
-
-    )
-
-end
-
-
-
--------------------------------------------------------------------------------------
---      Description:    remove call from triggers
--------------------------------------------------------------------------------------
---        Parameter:    timer index
---                      key
+--        Parameter:    
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Remove(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
+function CounterElement:SortList()
 
-    for i = #self.children, 1, -1 do
+	self.TimerListBox:Sort(
 
-        if self.children[i].index == timerIndex then
+		function (child1, child2)
 
-            if key == nil or self.children[i].key == key then
+			if child1.index < child2.index then         -- sort by index
+				return true
 
-                self.children[i]:Remove()
+			else
+				return false
 
-            end
+			end
 
-        end
+		end
 
-    end
-
-end
-
-
-
-
--------------------------------------------------------------------------------------
---      Description:    add call from triggers
--------------------------------------------------------------------------------------
---        Parameter:    trigger data 
---                      timer index
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function ListBoxElement:CheckRunningTimer(timerIndex, key)
-
-    for index, child in pairs(self.children) do
-
-        if child.index == timerIndex and child.key == key then
-
-            return child
-            
-        end
-        
-    end
-
-    return nil
+	)
 
 end
 
@@ -272,19 +258,19 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Reset()
+function CounterElement:Reset()
 
-    for i = #self.children, 1, -1 do
+	for i = #self.children, 1, -1 do
 
         self.children[i]:Reset()
- 
+
     end
 
 end
 
 
 
- 
+
 -------------------------------------------------------------------------------------
 --      Description:    selection has changed event
 -------------------------------------------------------------------------------------
@@ -292,9 +278,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:SelectionChanged()
+function CounterElement:SelectionChanged()
 
-    if Data.selectedGroupIndex == self.index then
+	if Data.selectedGroupIndex == self.index then
         
         self.selected = true
         self.MoveWindow:SetBackColor     ( Turbine.UI.Color.White )
@@ -341,7 +327,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:MoveChanged()
+function CounterElement:MoveChanged()
 
     self.MoveWindow:SetVisible      (Data.moveMode)
     self.MoveWindow:SetMouseVisible (Data.moveMode)
@@ -360,7 +346,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:GroupDataChanged()
+function CounterElement:GroupDataChanged()
 
     self:SetPosition( Utils.ScreenRatioToPixel( self.data.left, self.data.top ) )
 
@@ -387,7 +373,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:TimerDataChanged(timerIndex)
+function CounterElement:TimerDataChanged(timerIndex)
 
     for key, child in pairs(self.children) do
 
@@ -400,8 +386,6 @@ function ListBoxElement:TimerDataChanged(timerIndex)
 end
 
 
-
-
 -------------------------------------------------------------------------------------
 --      Description:    fix size relativ to the amout of children
 -------------------------------------------------------------------------------------
@@ -409,7 +393,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:ReSize()
+function CounterElement:ReSize()
 
     local childrenCount = self.TimerListBox:GetItemCount() + 1
 
@@ -441,8 +425,6 @@ function ListBoxElement:ReSize()
 end
 
 
-
-
 -------------------------------------------------------------------------------------
 --      Description:    remove child
 -------------------------------------------------------------------------------------
@@ -450,7 +432,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:RemoveChild( child )
+function CounterElement:RemoveChild( child )
 
     local index = self:FindChildIndex( child )
 
@@ -466,8 +448,6 @@ function ListBoxElement:RemoveChild( child )
 end
 
 
-
-
 -------------------------------------------------------------------------------------
 --      Description:    get index of a child
 -------------------------------------------------------------------------------------
@@ -475,7 +455,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    index
 -------------------------------------------------------------------------------------
-function ListBoxElement:FindChildIndex(child)
+function CounterElement:FindChildIndex(child)
 
     for index, control in ipairs(self.children) do
 
@@ -491,8 +471,6 @@ function ListBoxElement:FindChildIndex(child)
 
 end
 
-
-
 -------------------------------------------------------------------------------------
 --      Description:    fill permanent timers
 -------------------------------------------------------------------------------------
@@ -500,19 +478,16 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function ListBoxElement:FillPermanentTimers()
+function CounterElement:FillTimers()
 
     for i, child in pairs(self.children) do                 -- kill all permanent children!
 
-        if child.timerData.permanent == true then
-            child:Finish()
-        end
+	  	child:Finish()
+
 
     end
 
     for j, timerData in ipairs(self.data.timerList) do
-
-        if timerData.permanent == true then
 
             local index = #self.children + 1
 
@@ -521,23 +496,18 @@ function ListBoxElement:FillPermanentTimers()
 
         end
 
-    end
-
     self:SortList()
 
 end
 
-
-
-
 -------------------------------------------------------------------------------------
---      Description:    close the group
+--      Description:    close group
 -------------------------------------------------------------------------------------
---        Parameter:     
+--        Parameter:    
 -------------------------------------------------------------------------------------
---           Return:     
+--           Return:    
 -------------------------------------------------------------------------------------
-function ListBoxElement:Finish()
+function CounterElement:Finish()
 
     for key, child in pairs(self.children) do
         
@@ -549,5 +519,31 @@ function ListBoxElement:Finish()
     self.MoveWindow:Close()
     self.TimerListBox:Close()
     self:Close()
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    add call from triggers
+-------------------------------------------------------------------------------------
+--        Parameter:    trigger data 
+--                      timer index
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function CounterElement:CheckRunningTimer(timerIndex, key)
+
+    for index, child in pairs(self.children) do
+
+        if child.index == timerIndex and child.key == key then
+
+            return child
+            
+        end
+        
+    end
+
+    return nil
 
 end

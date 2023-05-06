@@ -40,3 +40,5 @@ Group.Defaults[Group.Types.LISTBOX].durationFormat          = NumberFormat.Minut
 Group.Defaults[Group.Types.LISTBOX].textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
 Group.Defaults[Group.Types.LISTBOX].timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
 Group.Defaults[Group.Types.LISTBOX].showTimer               = true
+
+Group.Defaults[Group.Types.LISTBOX].counterDirection        = Direction.Descending

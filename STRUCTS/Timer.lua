@@ -51,6 +51,8 @@ function Timer.GetStruct(type)
     timer.animationType         = Timer.Defaults[type].animationType
     timer.useShadow             = Timer.Defaults[type].useShadow
 
+    timer.counterValue          = Timer.Defaults[type].counterValue
+
     timer[Trigger.EffectSelf]     = {}
     timer[Trigger.EffectGroup]    = {}
     timer[Trigger.EffectTarget]   = {}

@@ -1,15 +1,13 @@
 --===================================================================================
---             Name:    GROUPS
+--             Name:    COUNTER
 -------------------------------------------------------------------------------------
 --      Description:    init
 --===================================================================================
 
 
 
-Group.Types.LISTBOX = 1
-Group.Types.COUNTER = 2
 
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX"
-import "Gibberish3.ELEMENTS.GROUPS.COUNTER"
 
-import "Gibberish3.ELEMENTS.GROUPS.Functions"
+import "Gibberish3.ELEMENTS.GROUPS.COUNTER.Defaults"
+import "Gibberish3.ELEMENTS.GROUPS.COUNTER.Element"
+import "Gibberish3.ELEMENTS.GROUPS.COUNTER.Functions"

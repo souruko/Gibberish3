@@ -1,15 +1,15 @@
 --===================================================================================
---             Name:    GROUPS
+--             Name:    TIMER CounterBar
 -------------------------------------------------------------------------------------
 --      Description:    init
 --===================================================================================
 
 
 
-Group.Types.LISTBOX = 1
-Group.Types.COUNTER = 2
 
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX"
-import "Gibberish3.ELEMENTS.GROUPS.COUNTER"
 
-import "Gibberish3.ELEMENTS.GROUPS.Functions"
+import "Gibberish3.ELEMENTS.TIMER.COUNTER_BAR.Defaults"
+import "Gibberish3.ELEMENTS.TIMER.COUNTER_BAR.Element"
+import "Gibberish3.ELEMENTS.TIMER.COUNTER_BAR.Functions"
+
+
