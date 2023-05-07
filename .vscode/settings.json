@@ -38,6 +38,7 @@
     "Lua.diagnostics.disable": [
         "duplicate-set-field",
         "assign-type-mismatch",
-        "undefined-field"
+        "undefined-field",
+        "redundant-parameter"
     ]
 }

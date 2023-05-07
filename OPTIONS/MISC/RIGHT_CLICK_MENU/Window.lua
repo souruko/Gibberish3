@@ -1,0 +1,179 @@
+--===================================================================================
+--             Name:    RightClickMenu
+-------------------------------------------------------------------------------------
+--      Description:    
+--===================================================================================
+Options.Constructor.RightClickMenu = class( Turbine.UI.Window )
+
+
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    RightClickMenu constructor
+-------------------------------------------------------------------------------------
+--        Parameter:    width
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.RightClickMenu:Constructor( width )
+	Turbine.UI.Window.Constructor( self )
+
+    self.width                  = width
+    self.item_height            = 24
+    self.seperator_height       = 12
+    self.height                 = 10
+
+    self:SetZOrder(             100 )
+    self:SetMouseVisible(       false )
+
+    self.list                   = Turbine.UI.ListBox()
+    self.list:SetParent(        self )
+    self.list:SetTop(           5 )
+    self.list:SetBackColor(     Defaults.Colors.AccentColor6 )
+    self.list:SetOpacity(       0.9 )
+    self.list:SetMouseVisible(  false )
+    
+    
+    self:SetWidth(              2 * self.width )
+    self.list:SetWidth(         self.width )
+
+end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    show right click window
+-------------------------------------------------------------------------------------
+--        Parameter:    left
+--                      top
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function  Options.Constructor.RightClickMenu:Show( left, top )
+
+    if left == nil then
+        self:SetPosition( Turbine.UI.Display.GetMousePosition() )
+
+    else
+        self:SetPosition( left, top )
+
+    end
+
+    Options.MainWindow.Window:ClickBlockShow( self )
+
+    self:SetVisible( true )
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    hide right click window
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function  Options.Constructor.RightClickMenu:Hide()
+
+    self:SetVisible(            false )
+    Options.MainWindow.Window:  ClickBlockHide()
+
+    local parent                = self:GetParent()
+    if parent ~= nil then
+        parent:Hide()
+
+    end
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    add row
+-------------------------------------------------------------------------------------
+--        Parameter:    text
+--                      function()
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.RightClickMenu:AddRow( text, func )
+
+    local row = Row(        self, self.width, self.item_height, text, func)
+
+    self.list:AddItem(      row )
+
+    self.height           = self.height + self.item_height
+    self:SetHeight(         self.height + 200 )
+    self.list:SetHeight(    self.height )
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    add seperator
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.RightClickMenu:AddSeperator()
+
+    local seperator   = Seperator(self, self.width, self.seperator_height )
+
+    self.list:AddItem(  seperator )
+
+    self.height       = self.height + self.seperator_height
+    self:SetHeight(     self.height + 200 )
+    self.list:SetHeight(self.height )
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    add sub menu row
+-------------------------------------------------------------------------------------
+--        Parameter:    text
+--                      subMenu
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.RightClickMenu:AddSubMenuRow( text, subMenu )
+
+    local row = SubMenuRow(self, self.width, self.item_height, text, subMenu)
+
+    subMenu:SetParent(self)
+
+    self.list:AddItem( row )
+
+    self.height = self.height + self.item_height
+    self:SetHeight( self.height + 200 )
+    self.list:SetHeight(self.height)
+
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    hover changed
+-------------------------------------------------------------------------------------
+--        Parameter:    selected row
+-------------------------------------------------------------------------------------
+--           Return:   
+-------------------------------------------------------------------------------------
+function Options.Constructor.RightClickMenu:HoverChanged( selected )
+
+    for i = 1, self.list:GetItemCount() do
+ 
+        local child = self.list:GetItem(i)
+
+        if child ~= selected then
+            child:Deactivate()
+            
+        end
+
+    end
+    
+
+end
+
+

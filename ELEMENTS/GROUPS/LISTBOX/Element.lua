@@ -298,7 +298,7 @@ function ListBoxElement:SelectionChanged()
         
         self.selected = true
         self.MoveWindow:SetBackColor     ( Defaults.Colors.Selected )
-        self.MoveLabel:SetBackColor      ( Turbine.UI.Color.Black )
+        self.MoveLabel:SetBackColor      ( Defaults.Colors.BackgroundColor1 )
 
         if Data.moveMode == true then
             self:SetZOrder              (11)
@@ -315,7 +315,7 @@ function ListBoxElement:SelectionChanged()
 
         self.selected = false
         self.MoveWindow:SetBackColor     ( Defaults.Colors.NotSelected )
-        self.MoveLabel:SetBackColor     ( Turbine.UI.Color.Black )
+        self.MoveLabel:SetBackColor     ( Defaults.Colors.BackgroundColor1 )
         if Data.moveMode == true then
             self:SetZOrder              (10)
 

@@ -7,9 +7,8 @@
 
 
 
-import "Gibberish3.OPTIONS.MISC"
-import "Gibberish3.OPTIONS.MOVE_WINDOWS"
-import "Gibberish3.OPTIONS.OPTION_WINDOW"
-
-import "Gibberish3.OPTIONS.Functions"
-
+import "Gibberish3.OPTIONS.MISC.RIGHT_CLICK_MENU.ClickBlock"
+import "Gibberish3.OPTIONS.MISC.RIGHT_CLICK_MENU.Row"
+import "Gibberish3.OPTIONS.MISC.RIGHT_CLICK_MENU.SubMenuRow"
+import "Gibberish3.OPTIONS.MISC.RIGHT_CLICK_MENU.Seperator"
+import "Gibberish3.OPTIONS.MISC.RIGHT_CLICK_MENU.Window"

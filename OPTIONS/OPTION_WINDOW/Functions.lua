@@ -19,11 +19,13 @@ function Options.MainWindow.OpenClose()
 
     if Options.MainWindow.Window == nil then
     
-        Options.MainWindow.Window = OptionsMainWindow()
+        Options.MainWindow.Window = Options.Constructor.OptionsWindow()
 
     else
 
         Options.MainWindow.Window:Finish()
+
+        Options.MainWindow.Window = nil
 
     end
     

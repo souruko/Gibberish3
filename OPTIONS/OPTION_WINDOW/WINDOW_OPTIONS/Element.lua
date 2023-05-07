@@ -1,35 +1,33 @@
 --===================================================================================
---             Name:    OPTIONS MAIN WINDOW
+--             Name:    Window Options
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
-OptionsMainWindow = class(Turbine.UI.Lotro.Window)
+Options.Constructor.WindowOptions = class(Turbine.UI.Control)
 
 
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    template constructor
+--      Description:    Window Options constructor
 -------------------------------------------------------------------------------------
---        Parameter:    group data 
+--        Parameter:    parent
+--                      width
+--                      height
 -------------------------------------------------------------------------------------
---           Return:    group template element
+--           Return:     
 -------------------------------------------------------------------------------------
-function OptionsMainWindow:Constructor(  )
-	Turbine.UI.Lotro.Window.Constructor( self )
+function Options.Constructor.WindowOptions:Constructor( parent )
+	Turbine.UI.Control.Constructor( self )
 
-    self.width  = 1080
-    self.height = 720
-
+    self.parent = parent
 
 
-    self:SetText("Gibberish")
-    self:SetSize(self.width, self.height)
+    self:SetBackColor( Defaults.Colors.BackgroundColor2 )
 
 
-
-    self:SetVisible(true)
+    self:SetParent(parent)
 
 end
 
@@ -43,10 +41,8 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group template element
 -------------------------------------------------------------------------------------
-function OptionsMainWindow:Finish(  )
+function Options.Constructor.WindowOptions:Finish(  )
 
     self:SetVisible(false)
-
-    
 
 end
