@@ -28,10 +28,14 @@ function Options.Constructor.RightClickMenu:Constructor( width )
     self:SetZOrder(             100 )
     self:SetMouseVisible(       false )
 
+    self.background             = Turbine.UI.Control()
+    self.background:SetParent(        self )
+    self.background:SetWidth(         self.width )
+    self.background:SetBackColor(     Defaults.Colors.AccentColor6 )
+
     self.list                   = Turbine.UI.ListBox()
     self.list:SetParent(        self )
     self.list:SetTop(           5 )
-    self.list:SetBackColor(     Defaults.Colors.AccentColor6 )
     self.list:SetOpacity(       0.9 )
     self.list:SetMouseVisible(  false )
     
@@ -108,6 +112,7 @@ function Options.Constructor.RightClickMenu:AddRow( text, func )
     self.height           = self.height + self.item_height
     self:SetHeight(         self.height + 200 )
     self.list:SetHeight(    self.height )
+    self.background:SetHeight(    self.height )
 end
 
 -------------------------------------------------------------------------------------
@@ -125,7 +130,8 @@ function Options.Constructor.RightClickMenu:AddSeperator()
 
     self.height       = self.height + self.seperator_height
     self:SetHeight(     self.height + 200 )
-    self.list:SetHeight(self.height )
+    self.list:SetHeight( self.height )
+    self.list:background( self.height )
 
 end
 
@@ -147,7 +153,8 @@ function Options.Constructor.RightClickMenu:AddSubMenuRow( text, subMenu )
 
     self.height = self.height + self.item_height
     self:SetHeight( self.height + 200 )
-    self.list:SetHeight(self.height)
+    self.list:SetHeight( self.height )
+    self.list:background( self.height )
 
 
 end

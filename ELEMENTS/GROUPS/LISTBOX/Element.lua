@@ -68,7 +68,8 @@ function ListBoxElement:Constructor(index, data)
             DragStartX = args.X
             DragStartY = args.Y
 
-            Group.SelectionChanged(self.index)
+            Data.selectedGroupIndex = self.index
+            Options.SelectedWindowChanged()
             
         end
         
@@ -86,8 +87,6 @@ function ListBoxElement:Constructor(index, data)
             self:SetPosition( x, y )
 
             self.data.left, self.data.top = Utils.PixelToScreenRatio( x, y )
-
-            Options.SelectedWindowChanged()
 
         end
         

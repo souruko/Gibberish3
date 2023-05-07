@@ -23,6 +23,7 @@ function Group.GetStruct(type)
     -- general
     group.id                    = Group.GetlastID()
     group.name                  = ""
+    group.folder                = nil
     group.type                  = type
     group.enabled               = true
     group.saveGlobaly           = true

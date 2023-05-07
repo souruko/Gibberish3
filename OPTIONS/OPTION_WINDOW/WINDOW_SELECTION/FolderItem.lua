@@ -1,28 +1,26 @@
 --===================================================================================
---             Name:    OPTIONS  Functions
+--             Name:    Window selection
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
+FolderItem = class( Turbine.UI.Control )
 
 
 
 
 
 -------------------------------------------------------------------------------------
---      Description:    listbox constructor
+--      Description:    
 -------------------------------------------------------------------------------------
---        Parameter:    group data 
+--        Parameter:    folder data
+--                      index
 -------------------------------------------------------------------------------------
---           Return:    group listbox element
+--           Return:     
 -------------------------------------------------------------------------------------
-function Options.SelectedWindowChanged()
+function FolderItem:Constructor( folderData, index )
+	Turbine.UI.Control.Constructor( self )
 
-    if Options.MainWindow.Window ~= nil then
-    
-        Options.MainWindow.Window:SelectedWindowChanged()
-
-    end
-
-    Group.SelectionChanged(Data.selectedGroupIndex)
 
 end
+
+

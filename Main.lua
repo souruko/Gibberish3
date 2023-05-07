@@ -133,6 +133,14 @@ Data.group[testIndex2].timerList[2][Trigger.Chat][1].useRegex = true
 Data.group[testIndex2].timerList[2][Trigger.Chat][1].token = "pull in &1 &2"
 Data.group[testIndex2].timerList[2][Trigger.Chat][1].action = Action.Add
 Data.group[testIndex2].timerList[2][Trigger.Chat][1].action = Action.Reset
+
+
+Group.New("Content Stuff", 1)
+Group.New("Hello there", 1)
+Group.New("Wulfs group", 1)
+Group.New("of timers", 1)
+Group.New("with special needs", 1)
+Group.New("yeahhaaha", 1)
 -------------------------------------------------------------------------------------
 --      Description:    TOBEDELETED   
 -------------------------------------------------------------------------------------

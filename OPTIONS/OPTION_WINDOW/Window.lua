@@ -134,3 +134,19 @@ function Options.Constructor.OptionsWindow:ClickBlockHide()
     self.clickBlock:Hide()
 
 end
+
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    group selection changed
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:SelectedWindowChanged()
+
+    self.windowSelection:SelectedWindowChanged()
+
+end

@@ -35,7 +35,7 @@ function Row:Constructor(parent, width, height, text, func )
     self.text:SetSize(          width - 30, height )
     self.text:SetLeft(          30 )
     self.text:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
-    self.text:SetFont(          Font[21] )
+    self.text:SetFont(          Defaults.Fonts.SmallFont )
     self.text:SetText(          text )
     self.text:SetMouseVisible(  false )
 

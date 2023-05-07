@@ -8,7 +8,13 @@
 
 
 
+if Language.Local == Language.English then
+    import "Gibberish3.UTILS.LOCALISATION.en"
 
-import "Gibberish3.UTILS.LOCALISATION.en"
-import "Gibberish3.UTILS.LOCALISATION.de"
-import "Gibberish3.UTILS.LOCALISATION.fr"
+elseif Language.Local == Language.German then
+    import "Gibberish3.UTILS.LOCALISATION.de"
+
+elseif Language.Local == Language.French then
+    import "Gibberish3.UTILS.LOCALISATION.fr"
+
+end

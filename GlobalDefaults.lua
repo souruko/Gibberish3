@@ -17,7 +17,7 @@ Defaults.Colors = {}
 -------------------------------------------------------------------------------------
 --      Description:    Selected 
 -------------------------------------------------------------------------------------
-Defaults.Colors.Selected            = Turbine.UI.Color.LimeGreen	
+Defaults.Colors.Selected            = Turbine.UI.Color.LimeGreen
 Defaults.Colors.NotSelected         = Turbine.UI.Color.White
 
 
@@ -37,3 +37,19 @@ Defaults.Colors.AccentColor4            = Turbine.UI.Color(0.2,0.1,0.1)
 Defaults.Colors.AccentColor5            = Turbine.UI.Color(0.1,0.2,0.1)
 Defaults.Colors.AccentColor6            = Turbine.UI.Color(0.1,0.1,0.2)
 Defaults.Colors.AccentColor7            = Turbine.UI.Color(0.2,0.2,0.3)
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    Fonts
+-------------------------------------------------------------------------------------
+Defaults.Fonts = {}
+
+
+-------------------------------------------------------------------------------------
+--      Description:    Selected 
+-------------------------------------------------------------------------------------
+Defaults.Fonts.SmallFont = Turbine.UI.Lotro.Font.Verdana12
+Defaults.Fonts.ButtonFont = Turbine.UI.Lotro.Font.Verdana12
+
+Defaults.Fonts.HeadingFont = Turbine.UI.Lotro.Font.Verdana18
