@@ -23,6 +23,7 @@ function Data.New()
     Data.options = {}   -- list of options data
 
     Data.selectedGroupIndex = nil
+    Data.selectedFolderIndex = nil
     Data.moveMode = false
 
     Data.trackGroupEffects = true

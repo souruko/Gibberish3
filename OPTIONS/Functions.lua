@@ -15,14 +15,14 @@
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function Options.SelectedWindowChanged()
+function Options.SelectionChanged()
 
     if Options.MainWindow.Window ~= nil then
     
-        Options.MainWindow.Window:SelectedWindowChanged()
+        Options.MainWindow.Window:SelectionChanged()
 
     end
 
-    Group.SelectionChanged(Data.selectedGroupIndex)
+    Group.SelectionChanged()
 
 end

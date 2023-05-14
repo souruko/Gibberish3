@@ -1,5 +1,5 @@
 --===================================================================================
---             Name:    LISTBOX
+--             Name:    OPTIONS
 -------------------------------------------------------------------------------------
 --      Description:    init
 --===================================================================================
@@ -7,9 +7,4 @@
 
 
 
-
-
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX.Defaults"
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX.Element"
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX.Functions"
-import "Gibberish3.ELEMENTS.GROUPS.LISTBOX.Options"
+import "Gibberish3.OPTIONS.MISC.CHECKBOX.Window"

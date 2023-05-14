@@ -69,7 +69,9 @@ function ListBoxElement:Constructor(index, data)
             DragStartY = args.Y
 
             Data.selectedGroupIndex = self.index
-            Options.SelectedWindowChanged()
+            Data.selectedFolderIndex = nil
+            
+            Options.SelectionChanged()
             
         end
         

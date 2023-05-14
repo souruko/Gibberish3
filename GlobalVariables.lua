@@ -67,7 +67,7 @@ Options.Collection.Window = nil
 Options.MainWindow.Window = nil
 
 Options.Constructor = {}
-
+Options.Controls    = {}
 -------------------------------------------------------------------------------------
 --      Description:    Data structure and functions   
 -------------------------------------------------------------------------------------

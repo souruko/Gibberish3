@@ -26,12 +26,11 @@ function Options.Constructor.RightClickMenu:Constructor( width )
     self.height                 = 10
 
     self:SetZOrder(             100 )
-    self:SetMouseVisible(       false )
 
     self.background             = Turbine.UI.Control()
-    self.background:SetParent(        self )
-    self.background:SetWidth(         self.width )
-    self.background:SetBackColor(     Defaults.Colors.AccentColor6 )
+    self.background:SetParent(  self )
+    self.background:SetWidth(   self.width )
+    self.background:SetBackColor(Defaults.Colors.AccentColor6 )
 
     self.list                   = Turbine.UI.ListBox()
     self.list:SetParent(        self )
@@ -56,7 +55,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function  Options.Constructor.RightClickMenu:Show( left, top )
+function  Options.Constructor.RightClickMenu:Show( left, top, focus )
 
     if left == nil then
         self:SetPosition( Turbine.UI.Display.GetMousePosition() )
@@ -66,12 +65,45 @@ function  Options.Constructor.RightClickMenu:Show( left, top )
 
     end
 
-    Options.MainWindow.Window:ClickBlockShow( self )
-
     self:SetVisible( true )
+
+    if focus == true then
+        self:Activate()
+        self:Focus()
+    end
 
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    show right click window
+-------------------------------------------------------------------------------------
+--        Parameter:    left
+--                      top
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function  Options.Constructor.RightClickMenu:FocusGained()
+
+
+    
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    show right click window
+-------------------------------------------------------------------------------------
+--        Parameter:    left
+--                      top
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function  Options.Constructor.RightClickMenu:FocusLost()
+
+    self:Hide()
+ 
+end
 
 
 -------------------------------------------------------------------------------------
@@ -84,8 +116,7 @@ end
 function  Options.Constructor.RightClickMenu:Hide()
 
     self:SetVisible(            false )
-    Options.MainWindow.Window:  ClickBlockHide()
-
+  
     local parent                = self:GetParent()
     if parent ~= nil then
         parent:Hide()
@@ -131,7 +162,7 @@ function Options.Constructor.RightClickMenu:AddSeperator()
     self.height       = self.height + self.seperator_height
     self:SetHeight(     self.height + 200 )
     self.list:SetHeight( self.height )
-    self.list:background( self.height )
+    self.background:SetHeight( self.height )
 
 end
 
@@ -154,7 +185,7 @@ function Options.Constructor.RightClickMenu:AddSubMenuRow( text, subMenu )
     self.height = self.height + self.item_height
     self:SetHeight( self.height + 200 )
     self.list:SetHeight( self.height )
-    self.list:background( self.height )
+    self.background:SetHeight( self.height )
 
 
 end

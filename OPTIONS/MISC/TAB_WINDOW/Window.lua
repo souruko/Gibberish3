@@ -1,125 +1,120 @@
-
 --===================================================================================
---             Name:    STRUCTS - Folder
+--             Name:    TabWindow
 -------------------------------------------------------------------------------------
---      Description:    Folder structure and functions
+--      Description:    
 --===================================================================================
+Options.Constructor.TabWindow = class( Turbine.UI.Control )
+
+
 
 
 
 
 -------------------------------------------------------------------------------------
---      Description:   return the base structure for creating a new folder 
+--      Description:    TabWindow constructor
 -------------------------------------------------------------------------------------
---        Parameter:       
+--        Parameter:    parent, mouseclick function
 -------------------------------------------------------------------------------------
---           Return:   folder struct 
+--           Return:     
 -------------------------------------------------------------------------------------
-function Folder.GetStruct()
+function Options.Constructor.TabWindow:Constructor( parent, width )
+	Turbine.UI.Control.Constructor( self )
 
-    local folder = {}
+    self.parent = parent
+    self.children = {}
+    self.activChild = nil
 
-    folder.id = Folder.GetlastID()
-    folder.name = ""
-    folder.enabled = false
-    folder.collapsed = false
-    folder.parent = nil
+    self:SetWidth( width )
+    self:SetParent(parent)
 
-    folder[Trigger.EffectSelf]     = {}
-    folder[Trigger.EffectGroup]    = {}
-    folder[Trigger.EffectTarget]   = {}
-    folder[Trigger.Skill]          = {}
-    folder[Trigger.Chat]           = {}
-    folder[Trigger.TimerEnd]       = {}
-    folder[Trigger.TimerStart]     = {}
-    folder[Trigger.TimerThreshold] = {}
-
-    return folder
+    self.list = Turbine.UI.ListBox()
+    self.list:SetParent(self)
+    self.list:SetSize( width, 30 )
+    self.list:SetMaxItemsPerLine(1)
+    self.list:SetBackColor( Defaults.Colors.BackgroundColor1 )
 
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:    create nur folderdata and returns id
+--      Description:    Add Tab
 -------------------------------------------------------------------------------------
---        Parameter:    name    - folder name
+--        Parameter:    Tab
 -------------------------------------------------------------------------------------
---           Return:    index   - index of the new folder
+--           Return:     
 -------------------------------------------------------------------------------------
-function Folder.New(name)
+function Options.Constructor.TabWindow:AddTab( tab )
 
-    local index = #Data.folder + 1
-
-    Data.folder[index] = Folder.GetStruct()
-    Data.folder[index].name = name
-
-    return index
+    self.children[#self.children+1] = tab
+    self.list:AddItem( tab.header )
 
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:     
+--      Description:    fix size of children
 -------------------------------------------------------------------------------------
 --        Parameter:    
 -------------------------------------------------------------------------------------
---           Return:    
+--           Return:     
 -------------------------------------------------------------------------------------
-function Folder.Delete(index)
+function Options.Constructor.TabWindow:SizeChanged()
 
-    for i = index, (#Data.folder - 1) do
+    self.list:SetSize( self:GetWidth(), 30 )
 
-        Data.folder[i] = Data.folder[i + 1]
+    for index, child in ipairs(self.children) do
+
+        child:SetSize( self:GetSize() )
 
     end
-
-    Data.folder[#Data.folder] = nil
 
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:    return next folder id and add up 
+--      Description:    selection changed
 -------------------------------------------------------------------------------------
---        Parameter:    
+--        Parameter:    childheader
 -------------------------------------------------------------------------------------
---           Return:    next folder id
+--           Return:     
 -------------------------------------------------------------------------------------
-function Folder.GetlastID()
+function Options.Constructor.TabWindow:SelectionChanged(selected)
 
-    Data.folder.lastID = Data.folder.lastID + 1
+    if self.activChild ~= nil then
+        self.activChild:SetParent(nil)
+    end
 
-    return Data.folder.lastID
+    for index, child in ipairs(self.children) do
+
+        if child ~= selected then
+            child:Deselect()
+        end
+
+    end
+
+    if selected ~= nil then
+        self.activChild = selected
+        selected:SetParent(self)
+    end
 
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:    get folder path
+--      Description:    selection changed
 -------------------------------------------------------------------------------------
---        Parameter:    
+--        Parameter:    childheader
 -------------------------------------------------------------------------------------
---           Return:    string
+--           Return:     
 -------------------------------------------------------------------------------------
-function Folder.GetFolderPath( index )
+function Options.Constructor.TabWindow:ResetSelection()
 
-    local base = "> "
+    for index, child in ipairs(self.children) do
 
-    if index == nil then
-        return base
+        child:Deselect()
+
     end
 
-    local folderData = Data.folder[index]
-    local string = Data.folder[index].name
-
-    while folderData.parent ~= nil do
-
-        folderData = Data.folder[folderData.parent]
-
-        string = folderData.name .. " > " .. string
-        
-    end
-
-    return base .. string
+    self.children[1]:Select()
 
 end

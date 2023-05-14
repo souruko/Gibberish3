@@ -16,9 +16,8 @@
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Group.SelectionChanged(index)
+function Group.SelectionChanged()
 
-    Data.selectedGroupIndex = index
 
     for key, group in ipairs(Group) do
 

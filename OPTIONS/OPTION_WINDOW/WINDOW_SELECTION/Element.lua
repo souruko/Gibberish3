@@ -21,6 +21,10 @@ Options.Constructor.WindowSelection = class( Turbine.UI.Control )
 function Options.Constructor.WindowSelection:Constructor( parent )
 	Turbine.UI.Control.Constructor( self )
 
+    self.folderList = {}
+    self.groupList = {}
+
+    self.currentFolderIndex = nil
 
     self.parent = parent
     self:SetParent(     parent)
@@ -30,24 +34,26 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     local background_pos        = 5
     local newButton_pos         = 10
     local heading_top           = 7
-    local collapsButton_width   = 18
-    local collapsButton_height  = 15
-    local collapsButton_left    = 270
+    local searchButton_left     = 70
+    local collapsButton_width   = 24
+    local collapsButton_height  = 24
     local collapsButton_top     = 12
     local frame_left            = 10
     local frame_top             = 40
     local content_left          = 12
-    local searchBox_top         = 42
-    local searchBox_width       = 300 - 24
-    local searchBox_height      = 20
+    local folderPath_top         = 42
+    local folderPath_width       = 300 - 24
+    local folderPath_height      = 20
     local background_width      = width - 10
     local frame_width           = background_width - 10
     local list_width            = frame_width - 4
+    local currentFolder_height  = 60
+    local currentFolder_top     = folderPath_top + folderPath_height + 2
 
     self.content_width          = list_width
 
 
-    local list_top              = 64
+    local list_top              = 66 + currentFolder_height
     local heading_height        = 25
 
 
@@ -62,26 +68,56 @@ function Options.Constructor.WindowSelection:Constructor( parent )
 
 -------------------------------------------------------------------------------------
 --  new group / fodler  
-    self.newButton                    = Turbine.UI.Lotro.Button()
-    self.newButton:SetParent(           self )
-    self.newButton:SetFont(             Defaults.Fonts.ButtonFont )
-    self.newButton:SetForeColor(        Turbine.UI.Color.White)
-    self.newButton:SetText(             L[Language.Local].Button.New )
-    self.newButton:SetPosition(         newButton_pos, newButton_pos )
+    -- self.newButton                    = Turbine.UI.Lotro.Button()
+    -- self.newButton:SetParent(           self )
+    -- self.newButton:SetFont(             Defaults.Fonts.ButtonFont )
+    -- self.newButton:SetForeColor(        Turbine.UI.Color.White)
+    -- self.newButton:SetText(             L[Language.Local].Button.New )
+    -- self.newButton:SetPosition(         newButton_pos, newButton_pos )
 
-    self.newMenu                      = Options.Constructor.RightClickMenu( 90 )
-    self.newMenu:AddRow(                L[Language.Local].Menu.Folder, function ()
+    -- self.newMenu                      = Options.Constructor.RightClickMenu( 90 )
+    -- self.newMenu:AddRow(                L[Language.Local].Menu.Folder, function ()
 
-    end )
+    -- end )
 
-    self.newMenu:AddRow(                L[Language.Local].Menu.Group, function ()
+    -- self.newMenu:AddSeperator()
 
-    end )
+    -- self.newMenu:AddRow(                L[Language.Local].Menu.Group, function ()
 
-    function self.newButton.Click( sender, args )
-        self.newMenu:Show()
+    -- end )
 
-    end
+    -- function self.newButton.Click( sender, args )
+    --     self.newMenu:Show(nil, nil, true)
+
+    -- end
+
+    self.newFileButton                    = Turbine.UI.Button()
+    self.newFileButton:SetParent(           self )
+    self.newFileButton:SetFont(             Defaults.Fonts.ButtonFont )
+    self.newFileButton:SetForeColor(        Turbine.UI.Color.White)
+    self.newFileButton:SetPosition(         newButton_pos, newButton_pos - 2 )
+    self.newFileButton:SetSize( 30, 30)
+    self.newFileButton:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.newFileButton:SetBackground("Gibberish3/Resources/new_file.tga")
+
+    self.newFolderButton                    = Turbine.UI.Button()
+    self.newFolderButton:SetParent(           self )
+    self.newFolderButton:SetFont(             Defaults.Fonts.ButtonFont )
+    self.newFolderButton:SetForeColor(        Turbine.UI.Color.White)
+    self.newFolderButton:SetPosition(         newButton_pos + 30, newButton_pos )
+    self.newFolderButton:SetSize( 30, 30)
+    self.newFolderButton:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.newFolderButton:SetBackground("Gibberish3/Resources/new_folder.tga")
+    
+-------------------------------------------------------------------------------------
+--  collapsButton
+    -- self.searchButton               = Turbine.UI.Button()
+    -- self.searchButton:SetParent(      self )
+    -- self.searchButton:SetPosition(    searchButton_left, collapsButton_top )
+    -- self.searchButton:SetSize(        collapsButton_width, collapsButton_height )
+    -- self.searchButton:SetBackground(  "Gibberish3/Resources/suche_1.tga" )
+    -- self.searchButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
+
 
 
 -------------------------------------------------------------------------------------
@@ -96,15 +132,6 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.headingLabel:SetText(          L[Language.Local].Headings.WindowSelection )
     self.headingLabel:SetMouseVisible(  false )
 
--------------------------------------------------------------------------------------
---  collapsButton
-    self.collapseButton               = Turbine.UI.Button()
-    self.collapseButton:SetParent(      self )
-    self.collapseButton:SetPosition(    collapsButton_left, collapsButton_top )
-    self.collapseButton:SetSize(        collapsButton_width, collapsButton_height )
-    self.collapseButton:SetText(        "-")
-    self.collapseButton:SetTextAlignment( Turbine.UI.ContentAlignment.BottomCenter )
-    self.collapseButton:SetBackColor(   Defaults.Colors.BackgroundColor2)
 
 -------------------------------------------------------------------------------------
 --  frame  
@@ -116,40 +143,17 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.frame:SetWidth(                frame_width )
 
 -------------------------------------------------------------------------------------
---  searchBoxBox
+--  folderPathBox
 
-    self.searchBoxText = ""
-
-    self.searchBox                    = Turbine.UI.Lotro.TextBox()
-    self.searchBox:SetPosition(         content_left, searchBox_top )
-    self.searchBox:SetParent(           self )
-    self.searchBox:SetSize(             searchBox_width, searchBox_height)
-    self.searchBox:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
-    self.searchBox:SetFont(             Defaults.Fonts.SmallFont )
-    self.searchBox:SetText(             L[Language.Local].Text.SearchBoxDefault )
-
-    self.searchBox.FocusGained = function(sender, args)
-
-        if self.searchBoxText == "" then
-            self.searchBox:SetText("")
-
-        end
-
-    end
-
-    self.searchBox.FocusLost = function(sender, args)
-
-        if self.searchBoxText == "" then
-            self.searchBox:SetText( L[Language.Local].Text.SearchBoxDefault )
-
-        end
-
-    end
-
-    self.searchBox.TextChanged = function(sender, args)
+    self.folderPath                    = Turbine.UI.Lotro.TextBox()
+    self.folderPath:SetPosition(         content_left, folderPath_top )
+    self.folderPath:SetParent(           self )
+    self.folderPath:SetSize(             folderPath_width, folderPath_height)
+    self.folderPath:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
+    self.folderPath:SetFont(             Defaults.Fonts.SmallFont )
+    self.folderPath:SetForeColor(       Turbine.UI.Color.White)
 
 
-    end
 
 
 -------------------------------------------------------------------------------------
@@ -161,13 +165,156 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.list:SetWidth(         list_width )
 
 
+
+-------------------------------------------------------------------------------------
+--  currentFolder
+    self.currentFolder = Turbine.UI.Control()
+    self.currentFolder:SetParent(           self )
+    self.currentFolder:SetPosition(         content_left, currentFolder_top )
+    self.currentFolder:SetSize(             self.content_width, currentFolder_height )
+    self.currentFolder:SetBackColor(        Defaults.Colors.BackgroundColor2 )
+    self.currentFolder.MouseLeave         = function ()
+        self.currentFolder:SetBackColor(    Defaults.Colors.BackgroundColor2 )
+    end
+    self.currentFolder.MouseEnter         = function ()
+        self.currentFolder:SetBackColor(    Defaults.Colors.BackgroundColor3 )
+    end
+    self.currentFolder.MouseClick         = function ( sender, args )
+
+        if args.Button == Turbine.UI.MouseButton.Right then
+
+            self.folderRightClick:Show(nil, nil, true)
+
+        end
+
+    end
+
+-------------------------------------------------------------------------------------
+--      export
+    self.exportMenu                       = Options.Constructor.RightClickMenu(125)
+    self.exportMenu:AddRow(                 "Group", function ()
+        Turbine.Shell.WriteLine(            "group" )
+    end)
+
+    self.exportMenu:AddRow(                 "List of Timers", function ()
+        
+    end)
+
+-------------------------------------------------------------------------------------
+--      addToFolder
+    self.addToMenu                        = Options.Constructor.RightClickMenu( 125 )
+
+    for i, folder in ipairs(Data.folder) do
+
+        self.addToMenu:AddRow( folder.name, function ()
+            
+        end)
+        
+    end
+
+
+
+-------------------------------------------------------------------------------------
+--      right click
+    self.folderRightClick                 = Options.Constructor.RightClickMenu(125)
+
+    self.folderRightClick:AddSubMenuRow(    "Export", self.exportMenu )
+
+    self.folderRightClick:AddSeperator()
+
+    self.folderRightClick:AddSubMenuRow(    "Move to Folder", self.addToMenu )
+
+    self.folderRightClick:AddSeperator()
+
+    self.folderRightClick:AddRow(           "Move", function ()
+
+    end)
+
+    self.folderRightClick:AddRow(           "Delete", function ()
+        
+    end)
+
+    self.folderRightClick:AddSeperator()
+
+    self.folderRightClick:AddRow(           "Cut", function ()
+        
+    end)
+
+    self.folderRightClick:AddRow(           "Copy", function ()
+        
+    end)
+
+    self.folderRightClick:AddRow(           "Past", function ()
+        
+    end)
+
+
+    self.currentFolder.backButton             = Turbine.UI.Button()
+    self.currentFolder.backButton:SetParent(    self.currentFolder )
+    self.currentFolder.backButton.MouseClick  = function (sender, args )
+
+        if self.currentFolderIndex == nil then
+            return
+        end
+
+        self:OpenFolder(                            Data.folder[self.currentFolderIndex].parent )
+        
+    end
+    
+    self.currentFolder.backButton:SetSize(          30, 30 )
+    self.currentFolder.backButton:SetPosition(      5, 3 )
+    self.currentFolder.backButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
+    self.currentFolder.backButton:SetBackground( "Gibberish3/Resources/back.tga" )
+
+
+    self.currentFolder.enabledCheckBox = Options.Constructor.CheckBox( self.currentFolder, function ()
+        
+    end )
+    self.currentFolder.enabledCheckBox:SetPosition( self.content_width - 40, 5 )
+
+    self.currentFolder.nameLabel                  = Turbine.UI.Label()
+    self.currentFolder.nameLabel:SetParent(         self.currentFolder )
+    self.currentFolder.nameLabel:SetSize(           self.currentFolder:GetSize() )
+    self.currentFolder.nameLabel:SetTextAlignment(  Turbine.UI.ContentAlignment.MiddleCenter )
+    self.currentFolder.nameLabel:SetFont(           Defaults.Fonts.HeadingFont )
+    self.currentFolder.nameLabel:SetMouseVisible(   false )
+
+
 -------------------------------------------------------------------------------------
 --  getting started
 
+    self:CreateItems()
     self:FillContent()
 
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    finish and close window
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:CreateItems()
+
+    self.folderList = {}
+    self.groupList = {}
+
+
+    for i, folderData in ipairs(Data.folder) do
+
+        self.folderList[i] = FolderItem( self, folderData, i, self.content_width )
+        
+    end
+
+    for j, groupData in ipairs(Data.group) do
+
+        self.groupList[j] = GroupItem( self, groupData, j, self.content_width )
+
+    end
+
+end
 
 
 -------------------------------------------------------------------------------------
@@ -179,33 +326,56 @@ end
 -------------------------------------------------------------------------------------
 function Options.Constructor.WindowSelection:FillContent()
 
-    local folderList = {}
+    self.list:ClearItems()
 
-    for i, folderData in ipairs(Data.folder) do
+    for i, folder in ipairs(self.folderList) do
 
-        folderList[i] = FolderItem( folderData, i, self.content_width )
+        if folder.folderData.parent == self.currentFolderIndex then
+            
+            self.list:AddItem( folder )
 
-        self.list:AddItem( folderList[i] )
+        end
         
     end
+    
+    for j, group in ipairs(self.groupList) do
 
+        if group.groupData.folder == self.currentFolderIndex then
 
-    for i, groupData in ipairs(Data.group) do
-
-        local item = GroupItem( groupData, i, self.content_width )
-
-        if groupData.folder == nil then
-            self.list:AddItem( item )
-
-        else
-            folderList[i]:AddGroup( item )
+            self.list:AddItem( group )
 
         end
         
     end
 
+    self.folderPath:SetText( Folder.GetFolderPath( self.currentFolderIndex ) )
+
+    if  self.currentFolderIndex == nil then
+        self.currentFolder.nameLabel:SetText( "" )
+        self.currentFolder.backButton:SetVisible(false)
+    else
+        self.currentFolder.nameLabel:SetText( Data.folder[self.currentFolderIndex].name )
+        self.currentFolder.backButton:SetVisible(true)
+    end
+
+
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    open folder
+-------------------------------------------------------------------------------------
+--        Parameter:    folderIndex
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:OpenFolder( index )
+
+    self.currentFolderIndex = index
+
+    self:FillContent()
+
+end
 
 
 
@@ -249,13 +419,12 @@ end
 -------------------------------------------------------------------------------------
 function Options.Constructor.WindowSelection:SizeChanged()
 
-    local width, height       = self:GetSize()
+    local height       = self:GetHeight()
 
     local background_height   = height - 10
     local frame_height        = background_height - 40
-    local list_height         = frame_height - 26
+    local list_height         = frame_height - 88
 
-    
     self.background:SetHeight(   background_height )
     self.frame:SetHeight(        frame_height )
     self.list:SetHeight(         list_height )
@@ -270,7 +439,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:SelectedWindowChanged()
+function Options.Constructor.WindowSelection:SelectionChanged()
 
     for i = 1, self.list:GetItemCount() do
 

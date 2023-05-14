@@ -11,6 +11,7 @@ import "Gibberish3.Resources.IconIDs"
 
 import "Gibberish3.UTILS"
 
+import "Gibberish3.OPTIONS"
 
 import "Gibberish3.STRUCTS"
 import "Gibberish3.ELEMENTS"
@@ -135,18 +136,31 @@ Data.group[testIndex2].timerList[2][Trigger.Chat][1].action = Action.Add
 Data.group[testIndex2].timerList[2][Trigger.Chat][1].action = Action.Reset
 
 
-Group.New("Content Stuff", 1)
-Group.New("Hello there", 1)
-Group.New("Wulfs group", 1)
-Group.New("of timers", 1)
-Group.New("with special needs", 1)
-Group.New("yeahhaaha", 1)
+g3 = Group.New("Content Stuff", 1)
+g4 = Group.New("Hello there", 1)
+g5 = Group.New("Wulfs group", 1)
+g6 = Group.New("of timers", 1)
+g7 = Group.New("with special needs", 1)
+g8 = Group.New("yeahhaaha", 1)
+
+f1i = Folder.New("Folder of Life")
+f2i = Folder.New("Other Folder")
+f3i = Folder.New("Nethe in a Box")
+
+Data.group[g3].folder = f1i
+Data.group[g4].folder = f1i
+Data.group[g5].folder = f2i
+Data.group[g6].folder = f3i
+Data.group[g7].folder = f3i
+
+Data.folder[f3i].parent = f1i
+
+
 -------------------------------------------------------------------------------------
 --      Description:    TOBEDELETED   
 -------------------------------------------------------------------------------------
 
 
-import "Gibberish3.OPTIONS"
 import "Gibberish3.ChatCommand"
 
 Group.OpenAll()

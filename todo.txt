@@ -7,3 +7,19 @@
 *   options
 
 *   save / load
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////
+
+*   Current Folder Display
+
+*   right click for copy / past / cut

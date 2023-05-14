@@ -64,8 +64,11 @@ function CounterElement:Constructor( index, data )
 			Dragging = true
 			DragStartX = args.X
 			DragStartY = args.Y
+            
+            Data.selectedGroupIndex = self.index
+            Data.selectedFolderIndex = nil
 
-			Group.SelectionChanged(self.index)
+            Options.SelectionChanged()
 			
 		end
 
@@ -84,7 +87,7 @@ function CounterElement:Constructor( index, data )
 
 			self.data.left, self.data.top = Utils.PixelToScreenRatio( x, y )
 
-			Options.SelectedWindowChanged()
+			Options.SelectionChanged()
 
 		end
 

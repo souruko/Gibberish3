@@ -37,8 +37,6 @@ function Options.Constructor.OptionsWindow:Constructor(  )
     self.windowOptions    = Options.Constructor.WindowOptions  ( self )
     self.generalOptions   = Options.Constructor.GeneralOptions ( self )
  
-    self.clickBlock       = Options.Constructor.ClickBlock(      self )
-
     self:SizeChanged()
 
     self:SetVisible(true)
@@ -70,18 +68,13 @@ function Options.Constructor.OptionsWindow:SizeChanged()
     local windowOptions_left    = spacing_inner + spacing_sides         + windowSelection_width
     local generalOptions_top    = self.height   - generalOptions_height - spacing_sides
 
-    
     self.windowSelection:SetPosition(   spacing_sides,          spacing_top )
     self.windowOptions:SetPosition(     windowOptions_left,     spacing_top )
     self.generalOptions:SetPosition(    windowOptions_left,     generalOptions_top )
 
-    self.clickBlock:SetPosition(        spacing_sides,          spacing_top )
-
     self.windowSelection:SetSize(       windowSelection_width,  max_height )
     self.windowOptions:SetSize(         windowOptions_width,    windowOptions_height )
     self.generalOptions:SetSize(        windowOptions_width,    generalOptions_height )
-
-    self.clickBlock:SetSize(            self.width,             max_height )
 
 
 end
@@ -108,32 +101,6 @@ function Options.Constructor.OptionsWindow:Finish()
 end
 
 
--------------------------------------------------------------------------------------
---      Description:    show click block for right click menu
--------------------------------------------------------------------------------------
---        Parameter:    child       - the child that is using it
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Options.Constructor.OptionsWindow:ClickBlockShow( child )
-
-    self.clickBlock:Show( child )
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    hide click block again
--------------------------------------------------------------------------------------
---        Parameter:     
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.OptionsWindow:ClickBlockHide()
-
-    self.clickBlock:Hide()
-
-end
 
 
 
@@ -145,8 +112,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.OptionsWindow:SelectedWindowChanged()
+function Options.Constructor.OptionsWindow:SelectionChanged()
 
-    self.windowSelection:SelectedWindowChanged()
+    self.windowSelection:SelectionChanged()
+    self.windowOptions:SelectionChanged()
 
 end
