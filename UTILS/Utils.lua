@@ -85,11 +85,11 @@ end
 -------------------------------------------------------------------------------------
 function Utils.SecondsToClock(seconds, format)
 
-    if format == 1 then
+    if format == NumberFormat.Seconds then
 
         return tostring( math.floor(seconds) )
 
-    elseif format == 2 then
+    elseif format == NumberFormat.Minutes then
 
         local seconds = tonumber(seconds)
 
@@ -101,6 +101,13 @@ function Utils.SecondsToClock(seconds, format)
             local secs = string.format("%02.f", math.floor(seconds - mins *60));
             return mins..":"..secs
         end
+
+    
+    elseif format == NumberFormat.One then
+
+        local value =  tostring( math.floor(seconds * 10) / 10)
+
+        return value
 
     end
 

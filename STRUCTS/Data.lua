@@ -25,6 +25,7 @@ function Data.New()
     Data.selectedGroupIndex = nil
     Data.selectedFolderIndex = nil
     Data.moveMode = false
+    Data.showTooltips = true
 
     Data.trackGroupEffects = true
     Data.trackTargetEffects = false

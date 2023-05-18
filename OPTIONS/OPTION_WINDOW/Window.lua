@@ -36,6 +36,8 @@ function Options.Constructor.OptionsWindow:Constructor(  )
     self.windowSelection  = Options.Constructor.WindowSelection( self )
     self.windowOptions    = Options.Constructor.WindowOptions  ( self )
     self.generalOptions   = Options.Constructor.GeneralOptions ( self )
+
+    self.tooltip          = Options.Constructor.Tooltip()
  
     self:SizeChanged()
 
@@ -116,5 +118,35 @@ function Options.Constructor.OptionsWindow:SelectionChanged()
 
     self.windowSelection:SelectionChanged()
     self.windowOptions:SelectionChanged()
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    hide tooltip
+-------------------------------------------------------------------------------------
+--        Parameter:     left, top, width, height, heading, text
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:ShowTooltip( left, top, width, height, heading, text )
+
+    self.tooltip:Show( left, top, width, height, heading, text )
+    
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    group selection changed
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:HideTooltip()
+
+    self.tooltip:Hide()
 
 end

@@ -30,3 +30,39 @@ function Options.MainWindow.OpenClose()
     end
     
 end
+
+-------------------------------------------------------------------------------------
+--      Description:    show tooltip
+-------------------------------------------------------------------------------------
+--        Parameter:    left, top, width, height, heading, text
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.MainWindow.ShowTooltip( left, top, width, height, heading, text )
+
+    if Options.MainWindow.Window ~= nil then
+    
+        Options.MainWindow.Window:ShowTooltip( left, top, width, height, heading, text )
+
+    end
+    
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    hide tooltip
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.MainWindow.HideTooltip()
+
+    if Options.MainWindow.Window ~= nil then
+    
+        Options.MainWindow.Window:HideTooltip()
+
+    end
+    
+end

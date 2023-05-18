@@ -17,12 +17,13 @@ Options.Constructor.TabWindow = class( Turbine.UI.Control )
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.TabWindow:Constructor( parent, width )
+function Options.Constructor.TabWindow:Constructor( parent, width, header_width )
 	Turbine.UI.Control.Constructor( self )
 
     self.parent = parent
     self.children = {}
     self.activChild = nil
+    self.header_width = header_width
 
     self:SetWidth( width )
     self:SetParent(parent)

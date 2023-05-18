@@ -27,13 +27,11 @@ function Timer.GetStruct(type)
     timer.description           = Timer.Defaults[type].description
     timer.permanent             = Timer.Defaults[type].permanent
 
-    -- stuff
+    -- timer
     timer.unique                = Timer.Defaults[type].unique
     timer.removable             = Timer.Defaults[type].removable
     timer.loop                  = Timer.Defaults[type].loop
     timer.reset                 = Timer.Defaults[type].reset
-
-    -- timer
     timer.useCustomTimer        = Timer.Defaults[type].useCustomTimer
     timer.timerValue            = Timer.Defaults[type].timerValue
     timer.direction             = Timer.Defaults[type].direction

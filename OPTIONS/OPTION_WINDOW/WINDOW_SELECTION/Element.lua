@@ -41,14 +41,14 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     local frame_left            = 10
     local frame_top             = 40
     local content_left          = 12
-    local folderPath_top         = 42
-    local folderPath_width       = 300 - 24
-    local folderPath_height      = 20
+    local serachBox_top         = 42
+    local serachBox_width       = 300 - 24
+    local serachBox_height      = 20
     local background_width      = width - 10
     local frame_width           = background_width - 10
     local list_width            = frame_width - 4
     local currentFolder_height  = 60
-    local currentFolder_top     = folderPath_top + folderPath_height + 2
+    local currentFolder_top     = serachBox_top + serachBox_height + 2
 
     self.content_width          = list_width
 
@@ -68,28 +68,6 @@ function Options.Constructor.WindowSelection:Constructor( parent )
 
 -------------------------------------------------------------------------------------
 --  new group / fodler  
-    -- self.newButton                    = Turbine.UI.Lotro.Button()
-    -- self.newButton:SetParent(           self )
-    -- self.newButton:SetFont(             Defaults.Fonts.ButtonFont )
-    -- self.newButton:SetForeColor(        Turbine.UI.Color.White)
-    -- self.newButton:SetText(             L[Language.Local].Button.New )
-    -- self.newButton:SetPosition(         newButton_pos, newButton_pos )
-
-    -- self.newMenu                      = Options.Constructor.RightClickMenu( 90 )
-    -- self.newMenu:AddRow(                L[Language.Local].Menu.Folder, function ()
-
-    -- end )
-
-    -- self.newMenu:AddSeperator()
-
-    -- self.newMenu:AddRow(                L[Language.Local].Menu.Group, function ()
-
-    -- end )
-
-    -- function self.newButton.Click( sender, args )
-    --     self.newMenu:Show(nil, nil, true)
-
-    -- end
 
     self.newFileButton                    = Turbine.UI.Button()
     self.newFileButton:SetParent(           self )
@@ -108,16 +86,6 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.newFolderButton:SetSize( 30, 30)
     self.newFolderButton:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.newFolderButton:SetBackground("Gibberish3/Resources/new_folder.tga")
-    
--------------------------------------------------------------------------------------
---  collapsButton
-    -- self.searchButton               = Turbine.UI.Button()
-    -- self.searchButton:SetParent(      self )
-    -- self.searchButton:SetPosition(    searchButton_left, collapsButton_top )
-    -- self.searchButton:SetSize(        collapsButton_width, collapsButton_height )
-    -- self.searchButton:SetBackground(  "Gibberish3/Resources/suche_1.tga" )
-    -- self.searchButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-
 
 
 -------------------------------------------------------------------------------------
@@ -143,16 +111,31 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.frame:SetWidth(                frame_width )
 
 -------------------------------------------------------------------------------------
---  folderPathBox
+--  serachBoxBox
+    self.searchText = ""
 
-    self.folderPath                    = Turbine.UI.Lotro.TextBox()
-    self.folderPath:SetPosition(         content_left, folderPath_top )
-    self.folderPath:SetParent(           self )
-    self.folderPath:SetSize(             folderPath_width, folderPath_height)
-    self.folderPath:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
-    self.folderPath:SetFont(             Defaults.Fonts.SmallFont )
-    self.folderPath:SetForeColor(       Turbine.UI.Color.White)
+    self.serachBox                    = Turbine.UI.Lotro.TextBox()
+    self.serachBox:SetPosition(         content_left, serachBox_top )
+    self.serachBox:SetParent(           self )
+    self.serachBox:SetSize(             serachBox_width, serachBox_height)
+    self.serachBox:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
+    self.serachBox:SetFont(             Defaults.Fonts.SmallFont )
+    self.serachBox:SetForeColor(       Turbine.UI.Color.White)
+    self.serachBox:SetText(             L[Language.Local].Text.SearchBoxDefault)
 
+    self.serachBox.FocusGained = function(sender, args)
+		if self.searchText == "" then
+			self.serachBox:SetText("")
+		end		
+	end
+	self.serachBox.FocusLost = function(sender, args)
+		if self.searchText == "" then
+			self.serachBox:SetText(L[Language.Local].Text.SearchBoxDefault )
+		end
+	end
+	self.serachBox.TextChanged = function(sender, args)		
+		self.searchText = string.lower(self.serachBox:GetText())
+	end
 
 
 
@@ -347,8 +330,6 @@ function Options.Constructor.WindowSelection:FillContent()
         end
         
     end
-
-    self.folderPath:SetText( Folder.GetFolderPath( self.currentFolderIndex ) )
 
     if  self.currentFolderIndex == nil then
         self.currentFolder.nameLabel:SetText( "" )

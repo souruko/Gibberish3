@@ -1,9 +1,9 @@
 --===================================================================================
---             Name:    TabWindow
+--             Name:    Dropdown
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
- Options.Constructor.Tab = class( Turbine.UI.Control )
+Item = class( Turbine.UI.Control )
 
 
 
@@ -11,53 +11,51 @@
 
 
 -------------------------------------------------------------------------------------
---      Description:    TabWindow constructor
+--      Description:    Dropdown constructor
 -------------------------------------------------------------------------------------
 --        Parameter:    parent, mouseclick function
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Tab:Constructor( width, name, tabwindow )
+function Item:Constructor( parent, width, height, text, value )
 	Turbine.UI.Control.Constructor( self )
 
-    self.tabwindow = tabwindow
+    local left_spacing = 5
+
+    self.value = value
     self.selected = false
+    self.parent = parent
 
-    self:SetWidth( width )
-    self:SetMouseVisible(false)
+    self:SetSize( width, height )
+    self.MouseClick = function (sender, args)
+        
+        if self.selected == false then
+            self.parent:ItemClicked( self )
+        end
 
-    self.header = Turbine.UI.Control()
-    self.header:SetSize( self.tabwindow.header_width, 30 )
-    self.header:SetBackColor( Defaults.Colors.BackgroundColor1 )
-
-    self.header.label = Turbine.UI.Label()
-    self.header.label:SetParent(self.header)
-    self.header.label:SetSize( 100, 30 )
-    self.header.label:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleCenter )
-    self.header.label:SetFont(                 Defaults.Fonts.TabFont )
-    self.header.label:SetText( name )
-    self.header.label:SetMouseVisible(  false )
-
-    self.header.MouseEnter = function ()
+    end
+    self.MouseEnter = function ()
 
         if self.selected == false then
-            self.header:SetBackColor( Defaults.Colors.BackgroundColor3 )
+            self:SetBackColor( Defaults.Colors.BackgroundColor4 )
         end
         
     end
 
-    self.header.MouseLeave = function ()
+    self.MouseLeave = function ()
 
-        if self.selected == false then
-            self.header:SetBackColor( Defaults.Colors.BackgroundColor1 )
-        end
-    end
-
-    self.header.MouseClick = function ()
-
-        self:Select()
+        self:SetBackColor( nil )
 
     end
+
+    self.label = Turbine.UI.Label()
+    self.label:SetParent(self)
+    self.label:SetSize( width - left_spacing - 10, height )
+    self.label:SetLeft(left_spacing)
+    self.label:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleLeft )
+    self.label:SetFont(                 Defaults.Fonts.TabFont )
+    self.label:SetText( text )
+    self.label:SetMouseVisible(false)
 
 end
 
@@ -69,9 +67,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Tab:Deselect()
+function Item:Deselect()
 
-    self.header:SetBackColor( Defaults.Colors.BackgroundColor1 )
+    self.label:SetForeColor( Turbine.UI.Color.White )
     self.selected = false
 
 end
@@ -83,10 +81,9 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Tab:Select()
+function Item:Select()
 
     self.selected = true
-    self.header:SetBackColor( Defaults.Colors.BackgroundColor2 )
-    self.tabwindow:SelectionChanged(self)
+    self.label:SetForeColor( Defaults.Colors.BackgroundColor5 )
 
 end
