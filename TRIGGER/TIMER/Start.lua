@@ -24,7 +24,7 @@ function Trigger.TimerStart.Event( timerID )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.TimerStart]) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.TimerStart]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 

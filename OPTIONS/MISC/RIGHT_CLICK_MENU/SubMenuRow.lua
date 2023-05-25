@@ -57,7 +57,7 @@ function SubMenuRow:MouseEnter( sender, args )
     self.parent:HoverChanged( self )
 
     local left, top = self:GetPosition()
-    local left      = left + self:GetWidth()
+    local left      = left + self:GetWidth() +5
     local top       = top
 
     self.subMenu:Show( left, top )

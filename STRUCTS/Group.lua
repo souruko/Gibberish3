@@ -22,6 +22,8 @@ function Group.GetStruct(type)
 
     -- general
     group.id                    = Group.GetlastID()
+    group.sortIndex             = Data.GetNextSortIndex()
+    group.nextTimerSortIndex    = 1
     group.name                  = ""
     group.folder                = nil
     group.type                  = type
@@ -64,14 +66,14 @@ function Group.GetStruct(type)
     group.timerList = {}
 
     -- timerList
-    group[Trigger.EffectSelf]     = {}
-    group[Trigger.EffectGroup]    = {}
-    group[Trigger.EffectTarget]   = {}
-    group[Trigger.Skill]          = {}
-    group[Trigger.Chat]           = {}
-    group[Trigger.TimerEnd]       = {}
-    group[Trigger.TimerStart]     = {}
-    group[Trigger.TimerThreshold] = {}
+    group[Trigger.Types.EffectSelf]     = {}
+    group[Trigger.Types.EffectGroup]    = {}
+    group[Trigger.Types.EffectTarget]   = {}
+    group[Trigger.Types.Skill]          = {}
+    group[Trigger.Types.Chat]           = {}
+    group[Trigger.Types.TimerEnd]       = {}
+    group[Trigger.Types.TimerStart]     = {}
+    group[Trigger.Types.TimerThreshold] = {}
 
     return group
 
@@ -94,6 +96,28 @@ function Group.New(name, type)
     Data.group[index].type = type
 
     return index
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:     
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.AddTimer(group, type)
+
+    local timerIndex = #group.timerList+1
+
+    group.timerList[ timerIndex ] = Timer.New(type)
+    group.timerList[ timerIndex ].sortIndex = group.nextTimerSortIndex
+
+    group.nextTimerSortIndex = group.nextTimerSortIndex + 1
+    
+    return timerIndex
 
 end
 
@@ -132,3 +156,68 @@ function Group.GetlastID()
 
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    fromData, toData
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.SortTo(groupData, fromData, toData)
+
+    local fromSortIndex = fromData.sortIndex
+    local toSortIndex = toData.sortIndex
+
+    if fromSortIndex > toSortIndex then
+
+        for key, timer in ipairs(groupData.timerList) do
+
+            if timer.sortIndex >= toSortIndex and timer.sortIndex <= fromSortIndex then
+
+                timer.sortIndex = timer.sortIndex + 1
+
+            end
+    
+        end
+
+    else
+
+        for key, timer in ipairs(groupData.timerList) do
+
+            if timer.sortIndex <= toSortIndex and timer.sortIndex >= fromSortIndex then
+
+                timer.sortIndex = timer.sortIndex - 1
+
+            end
+    
+        end
+
+      
+    end
+
+    fromData.sortIndex = toSortIndex
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    fromData, toData
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.IsSelected(index)
+
+    for i, v in ipairs(Data.selectedGroupIndex) do
+
+        if v == index then
+            return true
+        end
+        
+    end
+
+    return false
+
+end

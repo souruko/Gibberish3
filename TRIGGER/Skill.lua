@@ -61,7 +61,7 @@ function Trigger.Skill.IsSkillUsed( skillName )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Skill]) do      -- all skill of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.Skill]) do      -- all skill of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
                        
@@ -109,7 +109,7 @@ function Trigger.Skill.SkillUsed( skill )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Skill]) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.Skill]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
@@ -150,7 +150,7 @@ function Trigger.Skill.ProcessSkillTrigger( skill, groupIndex, timerIndex, trigg
 
     local groupData = Data.group[groupIndex]
     local timerData = groupData.timerList[timerIndex]
-    local triggerData = timerData[Trigger.Skill][triggerIndex]
+    local triggerData = timerData[Trigger.Types.Skill][triggerIndex]
     local name = skill:GetSkillInfo():GetName()
 
     local startTime = skill:GetResetTime() - skill:GetCooldown()

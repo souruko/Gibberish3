@@ -24,8 +24,6 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.folderList = {}
     self.groupList = {}
 
-    self.currentFolderIndex = nil
-
     self.parent = parent
     self:SetParent(     parent)
     self:SetBackColor(  Defaults.Colors.BackgroundColor2 )
@@ -47,13 +45,10 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     local background_width      = width - 10
     local frame_width           = background_width - 10
     local list_width            = frame_width - 4
-    local currentFolder_height  = 60
-    local currentFolder_top     = serachBox_top + serachBox_height + 2
-
     self.content_width          = list_width
 
 
-    local list_top              = 66 + currentFolder_height
+    local list_top              = 64
     local heading_height        = 25
 
 
@@ -147,121 +142,45 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.list:SetBackColor(     Defaults.Colors.BackgroundColor1 )
     self.list:SetWidth(         list_width )
 
+    function self.list:DraggingEnd( fromData )
 
+        local left, top = self:GetMousePosition()
 
--------------------------------------------------------------------------------------
---  currentFolder
-    self.currentFolder = Turbine.UI.Control()
-    self.currentFolder:SetParent(           self )
-    self.currentFolder:SetPosition(         content_left, currentFolder_top )
-    self.currentFolder:SetSize(             self.content_width, currentFolder_height )
-    self.currentFolder:SetBackColor(        Defaults.Colors.BackgroundColor2 )
-    self.currentFolder.MouseLeave         = function ()
-        self.currentFolder:SetBackColor(    Defaults.Colors.BackgroundColor2 )
-    end
-    self.currentFolder.MouseEnter         = function ()
-        self.currentFolder:SetBackColor(    Defaults.Colors.BackgroundColor3 )
-    end
-    self.currentFolder.MouseClick         = function ( sender, args )
-
-        if args.Button == Turbine.UI.MouseButton.Right then
-
-            self.folderRightClick:Show(nil, nil, true)
-
-        end
-
-    end
-
--------------------------------------------------------------------------------------
---      export
-    self.exportMenu                       = Options.Constructor.RightClickMenu(125)
-    self.exportMenu:AddRow(                 "Group", function ()
-        Turbine.Shell.WriteLine(            "group" )
-    end)
-
-    self.exportMenu:AddRow(                 "List of Timers", function ()
-        
-    end)
-
--------------------------------------------------------------------------------------
---      addToFolder
-    self.addToMenu                        = Options.Constructor.RightClickMenu( 125 )
-
-    for i, folder in ipairs(Data.folder) do
-
-        self.addToMenu:AddRow( folder.name, function ()
-            
-        end)
-        
-    end
-
-
-
--------------------------------------------------------------------------------------
---      right click
-    self.folderRightClick                 = Options.Constructor.RightClickMenu(125)
-
-    self.folderRightClick:AddSubMenuRow(    "Export", self.exportMenu )
-
-    self.folderRightClick:AddSeperator()
-
-    self.folderRightClick:AddSubMenuRow(    "Move to Folder", self.addToMenu )
-
-    self.folderRightClick:AddSeperator()
-
-    self.folderRightClick:AddRow(           "Move", function ()
-
-    end)
-
-    self.folderRightClick:AddRow(           "Delete", function ()
-        
-    end)
-
-    self.folderRightClick:AddSeperator()
-
-    self.folderRightClick:AddRow(           "Cut", function ()
-        
-    end)
-
-    self.folderRightClick:AddRow(           "Copy", function ()
-        
-    end)
-
-    self.folderRightClick:AddRow(           "Past", function ()
-        
-    end)
-
-
-    self.currentFolder.backButton             = Turbine.UI.Button()
-    self.currentFolder.backButton:SetParent(    self.currentFolder )
-    self.currentFolder.backButton.MouseClick  = function (sender, args )
-
-        if self.currentFolderIndex == nil then
-            return
-        end
-
-        self:OpenFolder(                            Data.folder[self.currentFolderIndex].parent )
-        
-    end
+        local toData = self:GetItemAt(left, top)
     
-    self.currentFolder.backButton:SetSize(          30, 30 )
-    self.currentFolder.backButton:SetPosition(      5, 3 )
-    self.currentFolder.backButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.currentFolder.backButton:SetBackground( "Gibberish3/Resources/back.tga" )
+        if toData == nil then
+    
+            if top <= 0 then
+    
+                toData = self:GetItem(1)
+    
+            else
+    
+                toData = self:GetItem(self:GetItemCount())
+    
+            end
+
+        end
+
+        if toData ~= nil then
+
+            Data.SortTo( fromData, toData.data )
+
+            self:GetParent():Sort()
+
+        end
+
+    end
 
 
-    self.currentFolder.enabledCheckBox = Options.Constructor.CheckBox( self.currentFolder, function ()
-        
-    end )
-    self.currentFolder.enabledCheckBox:SetPosition( self.content_width - 40, 5 )
 
-    self.currentFolder.nameLabel                  = Turbine.UI.Label()
-    self.currentFolder.nameLabel:SetParent(         self.currentFolder )
-    self.currentFolder.nameLabel:SetSize(           self.currentFolder:GetSize() )
-    self.currentFolder.nameLabel:SetTextAlignment(  Turbine.UI.ContentAlignment.MiddleCenter )
-    self.currentFolder.nameLabel:SetFont(           Defaults.Fonts.HeadingFont )
-    self.currentFolder.nameLabel:SetMouseVisible(   false )
-
+    self.scroll = Turbine.UI.Lotro.ScrollBar()
+    self.scroll:SetOrientation(Turbine.UI.Orientation.Vertical)
+    self.scroll:SetPosition(content_left + list_width - 10, list_top)
+    self.scroll:SetParent(self)
+    self.scroll:SetWidth(10)
+    self.scroll:SetZOrder(50)
+    self.list:SetVerticalScrollBar(self.scroll)
 
 -------------------------------------------------------------------------------------
 --  getting started
@@ -284,17 +203,65 @@ function Options.Constructor.WindowSelection:CreateItems()
     self.folderList = {}
     self.groupList = {}
 
+    for j, groupData in ipairs(Data.group) do
+
+        self.groupList[j] = GroupItem( self, groupData, j, self.content_width )
+        
+    end
 
     for i, folderData in ipairs(Data.folder) do
 
         self.folderList[i] = FolderItem( self, folderData, i, self.content_width )
+  
+    end
+
+
+    for i, folderItem in pairs(self.folderList) do
+
+        if folderItem.data.folder ~= nil then
+            self.folderList[folderItem.data.folder]:AddItem(folderItem)
+        end
+
+        
+        for k, groupItem in pairs(self.groupList) do
+
+            if groupItem.folderIndex == i then
+                
+                self.folderList[i]:AddItem(groupItem)
+        
+            end
+            
+        end
         
     end
 
-    for j, groupData in ipairs(Data.group) do
+    for i, folderItem in pairs(self.folderList) do
 
-        self.groupList[j] = GroupItem( self, groupData, j, self.content_width )
+       folderItem:ChangeWidth(self.content_width - 5*Folder.GetFolderLevel(folderItem.data))
 
+    end
+
+    for k, groupItem in pairs(self.groupList) do
+        groupItem:ChangeWidth(self.content_width - 5*Folder.GetFolderLevel(groupItem.data))
+    end
+
+    self:CollapsedChanged()
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    finish and close window
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:CollapsedChanged()
+
+    for key, folderItem in pairs(self.folderList) do
+
+        folderItem:CollapsedChanged()
+        
     end
 
 end
@@ -313,48 +280,20 @@ function Options.Constructor.WindowSelection:FillContent()
 
     for i, folder in ipairs(self.folderList) do
 
-        if folder.folderData.parent == self.currentFolderIndex then
-            
+        if folder.data.folder == nil then
             self.list:AddItem( folder )
-
         end
-        
+
     end
     
     for j, group in ipairs(self.groupList) do
 
-        if group.groupData.folder == self.currentFolderIndex then
-
+        if group.folderIndex == nil then
             self.list:AddItem( group )
-
         end
-        
     end
 
-    if  self.currentFolderIndex == nil then
-        self.currentFolder.nameLabel:SetText( "" )
-        self.currentFolder.backButton:SetVisible(false)
-    else
-        self.currentFolder.nameLabel:SetText( Data.folder[self.currentFolderIndex].name )
-        self.currentFolder.backButton:SetVisible(true)
-    end
-
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    open folder
--------------------------------------------------------------------------------------
---        Parameter:    folderIndex
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:OpenFolder( index )
-
-    self.currentFolderIndex = index
-
-    self:FillContent()
+    self:Sort()
 
 end
 
@@ -375,6 +314,50 @@ function Options.Constructor.WindowSelection:Finish()
 
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:Sort()
+
+    self.list:Sort(function (itema, itemb)
+
+        if itema.data.sortIndex < itemb.data.sortIndex then
+            return true
+        end
+        return false
+        
+    end)
+    
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:DraggingEnd( fromData )
+
+    -- local toData = self.list:GetItemAt(self.list:GetMousePosition()).data
+
+    -- Data.SortTo( fromData, toData )
+
+    -- for key, folderItem in pairs(self.folderList) do
+
+    --     folderItem:Sort()
+        
+    -- end
+    
+    -- self:Sort()
+
+end
 
 
 -------------------------------------------------------------------------------------
@@ -404,11 +387,13 @@ function Options.Constructor.WindowSelection:SizeChanged()
 
     local background_height   = height - 10
     local frame_height        = background_height - 40
-    local list_height         = frame_height - 88
+    local list_height         = frame_height - 26
 
     self.background:SetHeight(   background_height )
     self.frame:SetHeight(        frame_height )
     self.list:SetHeight(         list_height )
+
+    self.scroll:SetHeight(list_height)
 
 end
 

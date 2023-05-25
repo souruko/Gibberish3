@@ -17,61 +17,62 @@ GroupItem = class( Turbine.UI.Control )
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function GroupItem:Constructor( parent, groupData, index, width )
+function GroupItem:Constructor( parent, data, index, width )
 	Turbine.UI.Control.Constructor( self )
 
-    self.groupData      = groupData
+    self.data      = data
     self.index          = index
     self.parent         = parent
+    self.folderIndex    = data.folder
 
+    self.height         = 40
     local height        = 40
 
     local name_left     = 55
-    local name_width    = width - name_left - 15
 
-    self:SetSize(       width, height )
+    self:SetHeight(        height )
 
     self.frame = Turbine.UI.Control()
     self.frame:SetParent(                   self)
-    self.frame:SetSize(width, height)
+    self.frame:SetHeight(height)
     self.frame:SetMouseVisible(false)
 
     self.background = Turbine.UI.Control()
     self.background:SetParent(              self )
-    self.background:SetPosition(            0, 1 )
-    self.background:SetSize(                width, height - 2 )
+    self.background:SetPosition(            0, 0 )
+    self.background:SetHeight(                height  )
     self.background:SetBackColor(           Defaults.Colors.BackgroundColor1 )
     self.background:SetBackColorBlendMode(  Turbine.UI.BlendMode.Overlay )
     self.background:SetMouseVisible(false)
 
     self.enabledCheckBox = Options.Constructor.CheckBox( self, function ()
 
-        groupData.enabled = not (groupData.enabled)
+        data.enabled = not (data.enabled)
         
         Options.SaveData()
         
     end )
     self.enabledCheckBox:SetPosition( 10, 5)
-    self.enabledCheckBox:SetChecked( groupData.enabled )
+    self.enabledCheckBox:SetChecked( data.enabled )
 
     self.nameLabel = Turbine.UI.Label()
     self.nameLabel:SetParent(               self )
     self.nameLabel:SetPosition(             name_left, 5 )
-    self.nameLabel:SetSize(                 name_width, height - 5 )
+    self.nameLabel:SetHeight(                 height - 5 )
     self.nameLabel:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleLeft )
     self.nameLabel:SetFont(                 Defaults.Fonts.HeadingFont )
-    self.nameLabel:SetText(                 groupData.name )
+    self.nameLabel:SetText(                 data.name )
     self.nameLabel:SetMouseVisible(         false )
     self.nameLabel:SetMouseVisible(         false )
 
 
     self.typeLabel = Turbine.UI.Label()
     self.typeLabel:SetParent(               self )
-    self.typeLabel:SetPosition(             width - 70, 1 )
+    self.typeLabel:SetTop(              1 )
     self.typeLabel:SetSize(                 50, 15 )
     self.typeLabel:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleLeft )
     self.typeLabel:SetFont(                 Defaults.Fonts.SmallFont )
-    self.typeLabel:SetText(                 L[Language.Local].Terms.GroupTypes[groupData.type] )
+    self.typeLabel:SetText(                 L[Language.Local].Terms.GroupTypes[data.type] )
     self.typeLabel:SetMouseVisible(         false )
     self.typeLabel:SetMouseVisible(         false )
     self.typeLabel:SetForeColor(            Defaults.Colors.BackgroundColor6 )
@@ -91,6 +92,12 @@ function GroupItem:Constructor( parent, groupData, index, width )
 --      addToFolder
     self.addToMenu                        = Options.Constructor.RightClickMenu(125)
 
+    self.addToMenu:AddRow( L[Language.Local].Menu.RemoveFromFolder, function ()
+            
+    end)
+
+    self.addToMenu:AddSeperator()
+
     for i, folder in ipairs(Data.folder) do
 
         self.addToMenu:AddRow( folder.name, function ()
@@ -104,33 +111,33 @@ function GroupItem:Constructor( parent, groupData, index, width )
 --      right click
     self.rightClickMenu = Options.Constructor.RightClickMenu(125)
 
-    self.rightClickMenu:AddSubMenuRow( "Export", self.exportMenu )
+    self.rightClickMenu:AddSubMenuRow( L[Language.Local].Menu.Export, self.exportMenu )
 
     self.rightClickMenu:AddSeperator()
 
-    self.rightClickMenu:AddSubMenuRow( "Move to Folder", self.addToMenu )
+    self.rightClickMenu:AddSubMenuRow( L[Language.Local].Menu.MoveToFolder, self.addToMenu )
 
     self.rightClickMenu:AddSeperator()
 
-    self.rightClickMenu:AddRow( "Move", function ()
-        Turbine.Shell.WriteLine("move")
+    self.rightClickMenu:AddRow( L[Language.Local].Menu.Move, function ()
+
     end)
 
-    self.rightClickMenu:AddRow( "Delete", function ()
+    self.rightClickMenu:AddRow( L[Language.Local].Menu.Delete, function ()
         
     end)
 
     self.rightClickMenu:AddSeperator()
 
-    self.rightClickMenu:AddRow( "Cut", function ()
+    self.rightClickMenu:AddRow( L[Language.Local].Menu.Cut, function ()
         
     end)
 
-    self.rightClickMenu:AddRow( "Copy", function ()
+    self.rightClickMenu:AddRow( L[Language.Local].Menu.Copy, function ()
         
     end)
 
-    self.rightClickMenu:AddRow( "Past", function ()
+    self.rightClickMenu:AddRow( L[Language.Local].Menu.Paste, function ()
         
     end)
 
@@ -141,8 +148,11 @@ function GroupItem:Constructor( parent, groupData, index, width )
     -------------------------------------------------------------------------------------
     self.MouseClick = function ( sender, args )
 
-        Data.selectedGroupIndex = self.index
-        Data.selectedFolderIndex = nil
+        Data.selectedGroupIndex = {}
+        Data.selectedFolderIndex = {}
+        
+        Data.selectedGroupIndex[1] = self.index
+
         Options.SelectionChanged()
 
         if args.Button == Turbine.UI.MouseButton.Right then
@@ -153,10 +163,66 @@ function GroupItem:Constructor( parent, groupData, index, width )
 
     end
 
+    
+    self.MouseDown = function( sender, args )
+		if args.Button == Turbine.UI.MouseButton.Left then
+			self.dragging = true	
+            self.topSave = self:GetTop()
+            self.dragStartY = args.Y
+            self:SetZOrder(200)
+		end
+	end
+	
+	self.MouseMove = function( sender, args )
+		if self.dragging then
+			local y = self:GetTop()	
+            local y_offset = args.Y - self.dragStartY
+            y = y + y_offset
+            if y < 0 then
+                y = 0
+            elseif y > self:GetParent():GetHeight() - self:GetHeight() then
+                y = self:GetParent():GetHeight() - self:GetHeight()
+            end
+
+            self:SetTop( y )
+		end
+	end
+	
+	self.MouseUp = function( sender, args )
+		if args.Button == Turbine.UI.MouseButton.Left then
+			self.dragging = false
+            self:SetTop( self.topSave )
+            self:GetParent():DraggingEnd(self.data)
+            self:SetZOrder(nil)
+		end
+    end
+    self:ChangeWidth( width )
+    self:SetVisible(true)
+
 end
 
 
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function GroupItem:ChangeWidth( width )
 
+    
+    local name_left     = 55
+    local name_width    = width - name_left - 15
+
+    self:SetWidth(        width )
+    self.frame:SetWidth(width)
+    self.background:SetWidth(                width )
+    self.nameLabel:SetWidth(                 name_width )
+    self.typeLabel:SetLeft(             width - 70)
+
+
+end
 
 
 -------------------------------------------------------------------------------------
@@ -168,11 +234,11 @@ end
 -------------------------------------------------------------------------------------
 function GroupItem:MouseEnter( sender, args )
 
-    if self.index == Data.selectedGroupIndex then
+    if Group.IsSelected(self.index) then
 
     else
 
-        self.background:SetBackColor(Defaults.Colors.BackgroundColor2)
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor3)
 
     end
 
@@ -189,7 +255,7 @@ end
 -------------------------------------------------------------------------------------
 function GroupItem:MouseLeave( sender, args )
 
-    if self.index == Data.selectedGroupIndex then
+    if Group.IsSelected(self.index) then
 
     else
 
@@ -210,13 +276,13 @@ end
 -------------------------------------------------------------------------------------
 function GroupItem:SelectionChanged()
 
-    if self.index == Data.selectedGroupIndex then
+    if Group.IsSelected(self.index) then
 
         self.frame:SetBackColor( Defaults.Colors.Selected )
-        self.background:SetBackColor(Turbine.UI.Color.Black)
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor2 )
 
     else
-
+ 
         self.frame:SetBackColor( Defaults.Colors.BackgroundColor1 )
         self.background:SetBackColor(Defaults.Colors.BackgroundColor1)
 

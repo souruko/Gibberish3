@@ -32,6 +32,7 @@ function Options.Constructor.OptionsWindow:Constructor(  )
     self:SetMinimumSize(    max_min_width,  min_height )
     self:SetMaximumWidth(   max_min_width )
     self:SetResizable(      true )
+    self:SetWantsKeyEvents(true)
 
     self.windowSelection  = Options.Constructor.WindowSelection( self )
     self.windowOptions    = Options.Constructor.WindowOptions  ( self )
@@ -40,6 +41,24 @@ function Options.Constructor.OptionsWindow:Constructor(  )
     self.tooltip          = Options.Constructor.Tooltip()
  
     self:SizeChanged()
+
+    self.KeyDown = function (sender, args)
+
+        -- if args.Control == true then
+        --     Turbine.Shell.WriteLine("down")
+        -- end
+       
+    end
+
+    
+    self.KeyUp = function (sender, args)
+
+        Turbine.Shell.WriteLine(".---------------")
+        for key, value in pairs(args) do
+            Turbine.Shell.WriteLine(tostring(key).. " "..tostring(value))
+        end
+       
+    end
 
     self:SetVisible(true)
 

@@ -82,7 +82,7 @@ function Trigger.EffectGroup.EffectAdded( effect, player)
 
                 if timerData.enabled == true then                                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectGroup]) do                 -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.EffectGroup]) do                 -- all effect self of the timer
 
                         if triggerData.enabled == true then                                                 -- check if trigger is enabled
 

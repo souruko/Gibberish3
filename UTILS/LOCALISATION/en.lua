@@ -11,7 +11,31 @@
 -------------------------------------------------------------------------------------
 L[Language.English].Terms = {}
 
+L[Language.English].Terms.Action = {}
+L[Language.English].Terms.Action[Action.Add] = "Add"
+L[Language.English].Terms.Action[Action.Reset] = "Reset"
+L[Language.English].Terms.Action[Action.Remove] = "Remove"
+
+
+L[Language.English].Terms.TriggerType = {}
+L[Language.English].Terms.TriggerType[4] = "Chat Message"
+L[Language.English].Terms.TriggerType[1] = "Effect Self"
+L[Language.English].Terms.TriggerType[2] = "Effect Group"
+L[Language.English].Terms.TriggerType[3] = "Effect Target"
+L[Language.English].Terms.TriggerType[7] = "Timer Start"
+L[Language.English].Terms.TriggerType[6] = "Timer End"
+L[Language.English].Terms.TriggerType[8] = "Timer Threshold"
+L[Language.English].Terms.TriggerType[5] = "Skill ResetTimeChanged"
+
+
 L[Language.English].Terms.GroupTypes = {}
+L[Language.English].Terms.GroupTypes[1] = "ListBox"
+L[Language.English].Terms.GroupTypes[2] = "Counter"
+
+L[Language.English].Terms.TimerType = {}
+L[Language.English].Terms.TimerType[ 1 ] = "Bar"
+L[Language.English].Terms.TimerType[ 2 ] = "Icon"
+L[Language.English].Terms.TimerType[ 3 ] = "Counter Bar"
 
 -------------------------------------------------------------------------------------
 --      Description:    button text
@@ -20,6 +44,7 @@ L[Language.English].Button = {}
 L[Language.English].Button.New = "New"
 L[Language.English].Button.Save = "Save"
 L[Language.English].Button.Reset = "Reset"
+L[Language.English].Button.Add = "Add"
 
 
 -------------------------------------------------------------------------------------
@@ -29,14 +54,23 @@ L[Language.English].Menu = {}
 L[Language.English].Menu.Group  = "Group"
 L[Language.English].Menu.Folder = "Folder"
 
+L[Language.English].Menu.Export = "Export"
+L[Language.English].Menu.ListOfTimers = "List of Timers"
+L[Language.English].Menu.MoveToFolder = "Move to Folder"
+L[Language.English].Menu.RemoveFromFolder = "Remove from Folder"
+L[Language.English].Menu.Move = "Move"
+L[Language.English].Menu.Delete = "Delete"
+L[Language.English].Menu.Cut = "Cut"
+L[Language.English].Menu.Copy = "Copy"
+L[Language.English].Menu.Paste = "Paste"
+
 
 -------------------------------------------------------------------------------------
 --      Description:    headings
 -------------------------------------------------------------------------------------
 L[Language.English].Headings = {}
 L[Language.English].Headings.WindowSelection    = "- Groups -"
-L[Language.English].Headings.GroupOptions       = "- Group Options -"
-L[Language.English].Headings.FolderOptions      = "- Folder Options -"
+L[Language.English].Headings.Options       = " Options -"
 
 
 -------------------------------------------------------------------------------------
@@ -52,7 +86,7 @@ L[Language.English].Text.SearchBoxDefault = "Search ..."
 -------------------------------------------------------------------------------------
 L[Language.English].Tab = {}
 L[Language.English].Tab.General = "General"
-L[Language.English].Tab.Size = "UI"
+L[Language.English].Tab.UI = "UI"
 L[Language.English].Tab.Color = "Color"
 L[Language.English].Tab.Text = "Text"
 L[Language.English].Tab.Timer = "Timer"

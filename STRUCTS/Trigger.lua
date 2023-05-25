@@ -22,6 +22,7 @@ function Trigger.GetStruct(type)
 
     trigger.id              = Turbine.Engine.GetGameTime()
     trigger.enabled         = true
+    trigger.sortIndex       = 0
     trigger.type            = type
     trigger.token           = Trigger.Defaults[type].token
     trigger.useRegex        = Trigger.Defaults[type].useRegex
@@ -57,5 +58,26 @@ end
 -------------------------------------------------------------------------------------
 function Trigger.Delete()
 
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    fromData, toData
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Trigger.IsSelected(index)
+
+    for i, v in ipairs(Data.selectedTriggerIndex) do
+
+        if v == index then
+            return true
+        end
+        
+    end
+
+    return false
 
 end

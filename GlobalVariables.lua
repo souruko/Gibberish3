@@ -19,6 +19,7 @@ LocalPlayer = Turbine.Gameplay.LocalPlayer:GetInstance()
 --      Description:    Folder structure and functions   
 -------------------------------------------------------------------------------------
 Folder = {}
+Folder.Options = {}
 
 
 -------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Group.Defaults          = {}
 Group.Types             = {}
 Group.Constructor       = {}
 Group.GetAllowedTimer   = {}
+Group.Options           = {}
 
 -------------------------------------------------------------------------------------
 --      Description:    Timer structure and functions    
@@ -61,13 +63,13 @@ Options = {}
 Options.Move = {}
 Options.Collection = {}
 Options.MainWindow = {}
+Options.CopyCache  = {}
 
 Options.Move.Window = nil
 Options.Collection.Window = nil
 Options.MainWindow.Window = nil
 
 Options.Constructor = {}
-Options.Controls    = {}
 -------------------------------------------------------------------------------------
 --      Description:    Data structure and functions   
 -------------------------------------------------------------------------------------
@@ -152,6 +154,25 @@ AnimationType.New_Activation_Border = 4
 AnimationType.New_Dotted_Border     = 5
 
 
+-------------------------------------------------------------------------------------
+--      Description:    CopyCache 
+-------------------------------------------------------------------------------------
+Options.CopyCache.ActionTypes      = {}
+Options.CopyCache.ActionTypes.Copy = 1
+Options.CopyCache.ActionTypes.Cut  = 2
+
+Options.CopyCache.ItemTypes                 = {}
+Options.CopyCache.ItemTypes.FolderAndGroup  = 1
+Options.CopyCache.ItemTypes.Timer           = 2
+Options.CopyCache.ItemTypes.Trigger         = 3
+
+Options.CopyCache.folderIndex   = nil
+Options.CopyCache.groupIndex    = nil
+Options.CopyCache.timerIndex    = nil
+Options.CopyCache.triggerIndex  = nil
+
+Options.CopyCache.actionType   = nil
+Options.CopyCache.itemType     = nil
 
 -------------------------------------------------------------------------------------
 --      Description:    Action 

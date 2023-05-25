@@ -33,10 +33,11 @@ Defaults.Colors.BackgroundColor4            = Turbine.UI.Color(0.4,0.4,0.4)
 Defaults.Colors.BackgroundColor5            = Turbine.UI.Color(0.5,0.5,0.5)
 Defaults.Colors.BackgroundColor6            = Turbine.UI.Color(0.6,0.6,0.6)
 
-Defaults.Colors.AccentColor4            = Turbine.UI.Color(0.19,0.19,0.40)
-Defaults.Colors.AccentColor5            = Turbine.UI.Color(0.11,0.11,0.31)
-Defaults.Colors.AccentColor6            = Turbine.UI.Color(0.2,0.2,0.3)
-Defaults.Colors.AccentColor7            = Turbine.UI.Color(0.25,0.25,0.35)
+Defaults.Colors.AccentColor6            = Turbine.UI.Color(0.15,0.15,0.35)
+Defaults.Colors.AccentColor5            = Turbine.UI.Color(0.25,0.25,0.45)
+Defaults.Colors.AccentColor4            = Turbine.UI.Color(0.4,0.4,0.6)
+
+-- Defaults.Colors.AccentColor7            = Turbine.UI.Color(0.25,0.25,0.35)
 
 
 
@@ -52,5 +53,6 @@ Defaults.Fonts = {}
 Defaults.Fonts.SmallFont = Turbine.UI.Lotro.Font.Verdana12
 Defaults.Fonts.ButtonFont = Turbine.UI.Lotro.Font.Verdana12
 Defaults.Fonts.TabFont = Turbine.UI.Lotro.Font.Verdana14
+Defaults.Fonts.MediumFont = Turbine.UI.Lotro.Font.Verdana16
 
 Defaults.Fonts.HeadingFont = Turbine.UI.Lotro.Font.Verdana18

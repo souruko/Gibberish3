@@ -118,39 +118,73 @@ end
 -------------------------------------------------------------------------------------
 function Options.Constructor.WindowOptions:SelectionChanged()
 
-    if Data.selectedGroupIndex ~= nil then
+    -- single group options
+    if #Data.selectedGroupIndex == 1 and #Data.selectedFolderIndex == 0 then
 
         self.resetButton:SetVisible(true)
         self.saveButton:SetVisible(true)
         self.frame:SetVisible(true)
-        self.headingLabel:SetText(          L[Language.Local].Headings.GroupOptions )
+        self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
+
+        if self.currentDisplay ~= nil then
+            self.currentDisplay:SetParent(nil)
+        end
+
+        local groupIndex = Data.selectedGroupIndex[1]
+        local groupData = Data.group[ Data.selectedGroupIndex[1] ]
+
+        self.headingLabel:SetText(   "- " ..   groupData.name ..    L[Language.Local].Headings.Options )
+      
+        self.currentDisplay = Group.Options[ groupData.type ]
+        self.currentDisplay:SetPosition(12, 42)
+        self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
+        self.currentDisplay.FillContent( groupData, groupIndex )
+        self.currentDisplay:SetParent(self)
+
+    -- multi group options
+    elseif #Data.selectedGroupIndex + #Data.selectedFolderIndex > 1 then
+
+
+
+    -- single folder options
+    elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex == 1 then
+
+        self.resetButton:SetVisible(true)
+        self.saveButton:SetVisible(true)
+        self.frame:SetVisible(true)
+        self.background:SetBackColor(       Defaults.Colors.AccentColor5 )
+      
         
         if self.currentDisplay ~= nil then
             self.currentDisplay:SetParent(nil)
         end
 
-        local groupIndex = Data.selectedGroupIndex 
-        local groupData = Data.group[ Data.selectedGroupIndex ]
-
-        self.currentDisplay = Options.Controls[ groupData.type ]
+        local folderIndex = Data.selectedFolderIndex[1] 
+        local folderData = Data.folder[ Data.selectedFolderIndex[1] ]
+      
+        self.headingLabel:SetText(   "- " ..   folderData.name ..    L[Language.Local].Headings.Options )
+      
+        self.currentDisplay = Folder.Options
+        self.currentDisplay:SetPosition(12, 42)
         self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay:FillContent( groupData, groupIndex )
+        self.currentDisplay.FillContent( folderData, folderIndex )
         self.currentDisplay:SetParent(self)
 
-    elseif Data.selectedFolderIndex ~= nil then
+    -- multi folder options
+    elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex > 1 then
 
-        
-        self.resetButton:SetVisible(true)
-        self.saveButton:SetVisible(true)
-        self.frame:SetVisible(true)
-        self.headingLabel:SetText(          L[Language.Local].Headings.FolderOptions )
 
+
+    -- no seletion
     else
 
+        self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
         self.headingLabel:SetText( "" )
         self.frame:SetVisible(false)
         self.resetButton:SetVisible(false)
         self.saveButton:SetVisible(false)
+        self.headingLabel:SetText(   "- " ..       L[Language.Local].Headings.Options )
+        
 
     end
 

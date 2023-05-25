@@ -1,5 +1,5 @@
 --===================================================================================
---             Name:    TRIGGER EFFECTS Target
+--             Name:    TRIGGER EFFECTS Targets
 -------------------------------------------------------------------------------------
 --      Description:    check every Effect on the  the Target for a trigger
 --===================================================================================
@@ -80,7 +80,7 @@ function Trigger.EffectTarget.EffectAdded( effect, target )
 
                 if timerData.enabled == true then                                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectTarget]) do                 -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.EffectTarget]) do                 -- all effect self of the timer
 
                         if triggerData.enabled == true then                                                 -- check if trigger is enabled
 

@@ -56,7 +56,7 @@ function Trigger.Chat.CheckChat(message, chatType)
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Chat]) do       -- all chatTrigger of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.Chat]) do       -- all chatTrigger of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
@@ -104,7 +104,7 @@ function Trigger.Chat.CheckChat(message, chatType)
 
         end
 
-        for triggerIndex, triggerData in ipairs(groupData[Trigger.Chat]) do       -- all chatTrigger for enable/disable
+        for triggerIndex, triggerData in ipairs(groupData[Trigger.Types.Chat]) do       -- all chatTrigger for enable/disable
 
             Group.Enable(groupIndex, triggerData.action)
 
@@ -112,7 +112,7 @@ function Trigger.Chat.CheckChat(message, chatType)
         
     end
 
-    -- for triggerIndex, triggerData in ipairs(folderData[Trigger.Chat]) do       -- all chatTrigger for enable/disable
+    -- for triggerIndex, triggerData in ipairs(folderData[Trigger.Types.Chat]) do       -- all chatTrigger for enable/disable
 
 
 
@@ -148,7 +148,7 @@ function Trigger.Chat.ProcessTrigger(
                                      
     local groupData = Data.group[groupIndex]
     local timerData = groupData.timerList[timerIndex]
-    local triggerData = timerData[Trigger.Chat][triggerIndex]
+    local triggerData = timerData[Trigger.Types.Chat][triggerIndex]
    
     local startTime = Turbine.Engine.GetGameTime()
     local text      = ""

@@ -17,25 +17,22 @@
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Tab:Constructor( width, name, tabwindow )
+function Options.Constructor.Tab:Constructor()
 	Turbine.UI.Control.Constructor( self )
 
-    self.tabwindow = tabwindow
     self.selected = false
 
-    self:SetWidth( width )
     self:SetMouseVisible(false)
 
     self.header = Turbine.UI.Control()
-    self.header:SetSize( self.tabwindow.header_width, 30 )
     self.header:SetBackColor( Defaults.Colors.BackgroundColor1 )
+    self.header:SetHeight( 30 )
 
     self.header.label = Turbine.UI.Label()
     self.header.label:SetParent(self.header)
-    self.header.label:SetSize( 100, 30 )
+    self.header.label:SetHeight( 30 )
     self.header.label:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleCenter )
     self.header.label:SetFont(                 Defaults.Fonts.TabFont )
-    self.header.label:SetText( name )
     self.header.label:SetMouseVisible(  false )
 
     self.header.MouseEnter = function ()
@@ -88,5 +85,34 @@ function Options.Constructor.Tab:Select()
     self.selected = true
     self.header:SetBackColor( Defaults.Colors.BackgroundColor2 )
     self.tabwindow:SelectionChanged(self)
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    TabWindow SetName
+-------------------------------------------------------------------------------------
+--        Parameter:    name
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.Tab:SetName( name )
+
+    self.header.label:SetText( name )
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    TabWindow SetTabWindow
+-------------------------------------------------------------------------------------
+--        Parameter:    tabwindow
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.Tab:SetTabWindow( tabwindow )
+
+    self.tabwindow = tabwindow
+    self.header:SetWidth( self.tabwindow.header_width )
+    self.header.label:SetWidth( self.tabwindow.header_width )
 
 end

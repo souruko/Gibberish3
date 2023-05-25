@@ -79,7 +79,7 @@ function Trigger.EffectSelf.EffectAdded( effect )
 
                 if timerData.enabled == true then                                           -- check if timer is enabled
                 
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.EffectSelf]) do -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.EffectSelf]) do -- all effect self of the timer
 
                         if triggerData.enabled == true then                                 -- check if trigger is enabled
 
