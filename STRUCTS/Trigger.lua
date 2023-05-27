@@ -27,7 +27,7 @@ function Trigger.GetStruct(type)
     trigger.token           = Trigger.Defaults[type].token
     trigger.useRegex        = Trigger.Defaults[type].useRegex
     trigger.description     = Trigger.Defaults[type].description
-    trigger.action          = Action.Add
+    trigger.action          = Actions.Add
     trigger.listOfTargets   = Trigger.Defaults[type].listOfTargets
 
     return trigger
@@ -72,7 +72,7 @@ function Trigger.IsSelected(index)
 
     for i, v in ipairs(Data.selectedTriggerIndex) do
 
-        if v == index then
+        if v.triggerIndex == index then
             return true
         end
         

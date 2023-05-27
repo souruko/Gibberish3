@@ -27,6 +27,7 @@ function Group.GetStruct(type)
     group.name                  = ""
     group.folder                = nil
     group.type                  = type
+    group.timerType             = Group.Defaults[type].timerType
     group.enabled               = true
     group.saveGlobaly           = true
     group.description           = Group.Defaults[type].description
@@ -56,6 +57,7 @@ function Group.GetStruct(type)
 
     -- text
     group.font                  = Group.Defaults[type].font
+    group.fontSize              = Group.Defaults[type].fontSize
     group.durationFormat        = Group.Defaults[type].durationFormat
     group.textAlignment         = Group.Defaults[type].textAlignment
     group.timerAlignment        = Group.Defaults[type].timerAlignment
@@ -116,7 +118,7 @@ function Group.AddTimer(group, type)
     group.timerList[ timerIndex ].sortIndex = group.nextTimerSortIndex
 
     group.nextTimerSortIndex = group.nextTimerSortIndex + 1
-    
+
     return timerIndex
 
 end
@@ -219,5 +221,49 @@ function Group.IsSelected(index)
     end
 
     return false
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:   
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.CopyCache()
+
+    if #Options.CopyCache.content == 0 then
+        return
+    end
+
+    -- local targetData = nil
+
+    -- if #Data.selectedGroupIndex ~= 0 then
+
+    --     targetData = Data.group[ Data.selectedGroupIndex[1] ].timerList[Data.selectedTimerIndex[1].timerIndex]
+
+    -- end
+
+    local timer_list = {}
+    for i, index in ipairs(Options.CopyCache.content) do
+
+        timer_list[#timer_list+1] = Group.AddTimer(Data.group[Data.selectedGroupIndex[1]], Data.group[index.groupIndex].timerList[index.timerIndex].type)
+        
+        -- Group.SortTo( Data.group[Data.selectedGroupIndex[1]], Data.group[Data.selectedGroupIndex[1]].timerList[#timer_list], targetData)
+
+    end
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Group.CutCache()
 
 end

@@ -24,18 +24,3 @@ Group.Constructor[Group.Types.LISTBOX] = function (index, data)
 
 end
 
-
-
--------------------------------------------------------------------------------------
---      Description:    returns a list of all allowed timers
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    list of all allowed timers for group listbox
--------------------------------------------------------------------------------------
-Group.GetAllowedTimer[Group.Types.LISTBOX] = function ()
-
-    return {    Timer.Types.BAR,
-                Timer.Types.ICON }
-
-end

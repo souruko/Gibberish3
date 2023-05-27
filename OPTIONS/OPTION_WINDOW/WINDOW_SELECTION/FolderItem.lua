@@ -31,7 +31,7 @@ function FolderItem:Constructor( parent, data, index, width )
 
     self.base_height                           = 40
 
-    local folder_left                       = 10
+    local folder_left                       = 3
     local name_left                       = 45
 
 
@@ -43,36 +43,27 @@ function FolderItem:Constructor( parent, data, index, width )
     self.background = Turbine.UI.Control()
     self.background:SetParent(              self )
     self.background:SetPosition(            0, 1 )
-    self.background:SetBackColor(           Defaults.Colors.AccentColor5 )
+    self.background:SetBackColor(           Defaults.Colors.FolderColor2 )
     self.background:SetBackColorBlendMode(  Turbine.UI.BlendMode.Overlay )
     self.background:SetMouseVisible(        false )
 
     
     self.collapsButton = Turbine.UI.Button()
     self.collapsButton:SetParent( self )
-    self.collapsButton:SetSize(30, 30)
-    self.collapsButton:SetPosition( folder_left, 8 )
+    self.collapsButton:SetSize(32, 32)
+    self.collapsButton:SetPosition( folder_left, 3 )
     self.collapsButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.collapsButton:SetBackground( "Gibberish3/RESOURCES/ordner_icon.tga" )
 
     self.collapsButton.MouseClick = function ()
         self.data.collapsed = not(self.data.collapsed)
         if self.data.collapsed == true then
-            self.collapsLable:SetText("-")
+            self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_right.tga" )
         else
-            self.collapsLable:SetText("+")
+            self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_down.tga" )
         end    
         self:CollapsedChanged()
         self.parent:CollapsedChanged()
     end
-
-    self.collapsLable = Turbine.UI.Label()
-    self.collapsLable:SetParent(self.collapsButton)
-    self.collapsLable:SetSize(28, 28)
-    self.collapsLable:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
-    self.collapsLable:SetFont(Defaults.Fonts.MediumFont)
-    self.collapsLable:SetFontStyle(Turbine.UI.FontStyle.Outline)
-    self.collapsLable:SetMouseVisible(false)
 
 
     self.nameLabel = Turbine.UI.Label()
@@ -136,14 +127,20 @@ function FolderItem:Constructor( parent, data, index, width )
 
     self.rightClickMenu:AddRow(             "Cut", function ()
         
+        Options.Cut( Options.CopyCache.ItemTypes.FolderAndGroup )
+          
     end)
 
     self.rightClickMenu:AddRow(             "Copy", function ()
         
+        Options.Copy( Options.CopyCache.ItemTypes.FolderAndGroup )
+
     end)
 
     self.rightClickMenu:AddRow(             "Past", function ()
         
+        Options.Paste( Options.CopyCache.ItemTypes.FolderAndGroup )
+
     end)
 
 
@@ -186,22 +183,30 @@ function FolderItem:Constructor( parent, data, index, width )
     -------------------------------------------------------------------------------------
     self.MouseClick = function ( sender, args )
 
-        if args.Button == Turbine.UI.MouseButton.Right then
 
-            self.rightClickMenu:Show(nil, nil, true)
+        if Folder.IsSelected(self.index) == false then
 
-        else
+            if self:IsControlKeyDown() == true then
 
-            if Folder.IsSelected(self.index) == false then
+                Options.AddToFolderSelection(self.index)
+
+            else
 
                 Data.selectedGroupIndex = {}
                 Data.selectedFolderIndex = {}
                 
                 Data.selectedFolderIndex[1] = self.index
-        
-                Options.SelectionChanged()
 
             end
+    
+            Options.SelectionChanged()
+
+        end
+
+            
+        if args.Button == Turbine.UI.MouseButton.Right then
+
+            self.rightClickMenu:Show(nil, nil, true)
 
         end
 
@@ -218,10 +223,10 @@ function FolderItem:Constructor( parent, data, index, width )
 
             self.data.collapsed = not(self.data.collapsed)
             if self.data.collapsed == true then
-                self.collapsLable:SetText("-")
+                self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_right.tga" )
             else
-                self.collapsLable:SetText("+")
-            end    
+                self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_down.tga" )
+            end   
             self:CollapsedChanged()
             self.parent:CollapsedChanged()
 
@@ -280,6 +285,32 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
+function FolderItem:MatchesSearch( text )
+
+    if string.find( string.lower( self.data.name ) , text ) then
+        return true
+    end
+
+    for index, child in ipairs(self.children) do
+
+        if child:MatchesSearch(text) == true then
+            return true
+        end
+
+    end
+
+    return false
+
+end
+    
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
 function FolderItem:CollapsedChanged( collapsed )
     
     if collapsed == nil then
@@ -288,7 +319,7 @@ function FolderItem:CollapsedChanged( collapsed )
 
     if collapsed == true then
 
-        self.collapsLable:SetText("+")
+        self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_right.tga" )
         self.list:SetVisible(false)
 
         self:SetHeight(self.base_height)
@@ -298,7 +329,9 @@ function FolderItem:CollapsedChanged( collapsed )
         self.height = self.base_height
 
     else
-        self.collapsLable:SetText("-")
+        
+        self.collapsButton:SetBackground( "Gibberish3/RESOURCES/arrow_down.tga" )
+   
         self.list:SetVisible(true)
 
         local height = 0
@@ -346,7 +379,7 @@ function FolderItem:ChangeWidth( width )
     self.nameLabel:SetWidth(                 name_width )
     self.list:SetWidth(width - 5)
     self.folderLevel_H:SetWidth(             width )
-    self.enabledCheckBox:SetLeft( width - 40 )
+    self.enabledCheckBox:SetLeft( width - 55 )
 
 end
 
@@ -361,7 +394,7 @@ end
 function FolderItem:MouseEnter( sender, args )
 
     if self.selected == false then
-        self.background:SetBackColor( Defaults.Colors.AccentColor4 )
+        self.background:SetBackColor( Defaults.Colors.FolderColor3 )
     end
 
 end
@@ -378,7 +411,7 @@ end
 function FolderItem:MouseLeave( sender, args )
 
     if self.selected == false then
-        self.background:SetBackColor( Defaults.Colors.AccentColor6 )
+        self.background:SetBackColor( Defaults.Colors.FolderColor1 )
     end
 	
 end
@@ -393,16 +426,15 @@ end
 -------------------------------------------------------------------------------------
 function FolderItem:SelectionChanged()
 
-    if  #Data.selectedGroupIndex == 0 and
-        Folder.IsSelected(self.index) then
+    if Folder.IsSelected(self.index) then
 
         self.selected = true
-        self.background:SetBackColor( Defaults.Colors.AccentColor5 )
+        self.background:SetBackColor( Defaults.Colors.FolderColor2 )
 
     else
         
         self.selected = false
-        self.background:SetBackColor( Defaults.Colors.AccentColor6 )
+        self.background:SetBackColor( Defaults.Colors.FolderColor1 )
 
     end
 

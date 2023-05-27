@@ -209,7 +209,7 @@ function Trigger.Skill.ProcessSkillTrigger( skill, groupIndex, timerIndex, trigg
 ---------------------------------------------
 -- group call   
 
-    if triggerData.action == Action.Add then
+    if triggerData.action == Actions.Add then
 
         Group[groupIndex]:Add(  groupData,
                                 timerData,
@@ -221,11 +221,11 @@ function Trigger.Skill.ProcessSkillTrigger( skill, groupIndex, timerIndex, trigg
                                 entity,
                                 key )
 
-    elseif triggerData.action == Action.Remove then
+    elseif triggerData.action == Actions.Remove then
 
         Group[groupIndex]:Remove(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
 
-    elseif triggerData.action == Action.Reset then
+    elseif triggerData.action == Actions.Reset then
 
         Group[groupIndex]:ResetAction(groupData, timerData, timerIndex, startTime, counter, icon, text, entity, key)
 

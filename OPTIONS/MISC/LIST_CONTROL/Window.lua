@@ -23,6 +23,8 @@ function Options.Constructor.ListControl:Constructor()
     self:SetBackColor( Defaults.Colors.BackgroundColor6 )
     self:SetMouseVisible(false)
 
+    self.children = {}
+
     self.frame_size = 2
     self.serachBox_height = 20
     self.addButton_width = 30
@@ -33,10 +35,12 @@ function Options.Constructor.ListControl:Constructor()
     self.addButton:SetParent(               self )
     self.addButton:SetPosition(             2,2 )
     self.addButton:SetBackColor(            Turbine.UI.Color.Black )
-    self.addButton:SetFont(             Defaults.Fonts.SmallFont )
+    self.addButton:SetFont(             Defaults.Fonts.MediumFont )
     self.addButton:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleCenter)
+    self.addButton:SetForeColor( Defaults.Colors.BackgroundColor6 )
+    self.addButton:SetBackColor(            Defaults.Colors.BackgroundColor1 )
 
-    self.addButton:SetText(         L[Language.Local].Button.Add )
+    self.addButton:SetText(         "+" )
     self.addButton:SetSize(                self.addButton_width, self.serachBox_height )
 
     self.searchText = ""
@@ -46,6 +50,7 @@ function Options.Constructor.ListControl:Constructor()
     self.serachBox:SetParent(           self )
     self.serachBox:SetHeight(           self.serachBox_height)
     self.serachBox:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
+    self.serachBox:SetMultiline(        false)
     self.serachBox:SetFont(             Defaults.Fonts.SmallFont )
     self.serachBox:SetForeColor(       Turbine.UI.Color.White)
     self.serachBox:SetText(             L[Language.Local].Text.SearchBoxDefault)
@@ -62,6 +67,7 @@ function Options.Constructor.ListControl:Constructor()
 	end
 	self.serachBox.TextChanged = function(sender, args)		
 		self.searchText = string.lower(self.serachBox:GetText())
+        self:FilterContent()
 	end
 
     self.list                 = Turbine.UI.ListBox()
@@ -72,6 +78,7 @@ function Options.Constructor.ListControl:Constructor()
 
     self.scroll = Turbine.UI.Lotro.ScrollBar()
     self.scroll:SetOrientation(Turbine.UI.Orientation.Vertical)
+    self.scroll:SetBackColor(Defaults.Colors.BackgroundColor6)
     self.scroll:SetTop(  2*self.frame_size + self.serachBox_height  )
     self.scroll:SetParent(self)
     self.scroll:SetWidth(10)
@@ -126,12 +133,39 @@ end
 -------------------------------------------------------------------------------------
 function Options.Constructor.ListControl:AddItem( item )
 
-    self.list:AddItem(item)
+    self.children[#self.children+1] = item
+
+    if item:MatchesSearch(self.searchText) then
+        self.list:AddItem(item)
+    end
 
     self:Sort()
   
 end
 
+
+-------------------------------------------------------------------------------------
+--      Description:    ListControl 
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.ListControl:FilterContent()
+
+    self.list:ClearItems()
+
+    for index, child in ipairs(self.children) do
+  
+        if child:MatchesSearch(self.searchText) then
+            self.list:AddItem(child)
+        end
+        
+    end
+  
+    self:Sort()
+  
+end
 
 -------------------------------------------------------------------------------------
 --      Description:    ListControl 
@@ -226,7 +260,11 @@ function Options.Constructor.ListControl:ResetSelection()
     end
 
     -- self:ItemSelected(selection)
-    self:GetParent():SelectionChanged( selection )
+    if selection == nil then
+        self:GetParent():SelectionChanged( nil, nil, nil )
+    else
+        self:GetParent():SelectionChanged( selection.data, selection.index, false )
+    end
 end
 
 

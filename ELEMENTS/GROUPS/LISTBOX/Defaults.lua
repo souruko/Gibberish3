@@ -13,6 +13,7 @@ Group.Defaults[Group.Types.LISTBOX]                         = {}
 Group.Defaults[Group.Types.LISTBOX].description             = ""
 Group.Defaults[Group.Types.LISTBOX].resetOnTargetChange     = false
 Group.Defaults[Group.Types.LISTBOX].useTargetEntity         = false
+Group.Defaults[Group.Types.LISTBOX].timerType               = 1
 
 
 Group.Defaults[Group.Types.LISTBOX].width                   = 150
@@ -35,10 +36,17 @@ Group.Defaults[Group.Types.LISTBOX].opacityActiv            = 0.5
 Group.Defaults[Group.Types.LISTBOX].opacityPassiv           = 0.5
 
 
-Group.Defaults[Group.Types.LISTBOX].font                    = 23
+Group.Defaults[Group.Types.LISTBOX].font                    = 4
+Group.Defaults[Group.Types.LISTBOX].fontSize                = 20
 Group.Defaults[Group.Types.LISTBOX].durationFormat          = NumberFormat.Minutes
 Group.Defaults[Group.Types.LISTBOX].textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
 Group.Defaults[Group.Types.LISTBOX].timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
 Group.Defaults[Group.Types.LISTBOX].showTimer               = true
 
 Group.Defaults[Group.Types.LISTBOX].counterDirection        = Direction.Descending
+
+
+Group.Defaults[Group.Types.LISTBOX].allowedTimers           = {}
+
+Group.Defaults[Group.Types.LISTBOX].allowedTimers[1]        = 1
+Group.Defaults[Group.Types.LISTBOX].allowedTimers[2]        = 2

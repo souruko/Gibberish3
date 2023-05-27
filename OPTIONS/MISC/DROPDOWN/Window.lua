@@ -73,6 +73,14 @@ function Options.Constructor.Dropdown:Constructor( parent, width )
     self.label:SetFont(                 Defaults.Fonts.TabFont )
     self.label:SetMouseVisible(false)
 
+    self.arrow                    = Turbine.UI.Control()
+    self.arrow:SetParent(           self )
+    self.arrow:SetPosition(         width - 32, 0  )
+    self.arrow:SetSize( 32, 32)
+    self.arrow:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.arrow:SetBackground("Gibberish3/Resources/arrow_down.tga")
+    self.arrow:SetMouseVisible(false)
+
     self.selectionWindow = Turbine.UI.Control()
     self.selectionWindow:SetParent(self)
     self.selectionWindow:SetTop( self.frame_height + self.spacing)
@@ -190,9 +198,22 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Dropdown:SetSelection( index )
+function Options.Constructor.Dropdown:SetSelection( value )
 
-    local item = self.list:GetItem( index )
+    local item = nil
+    for i = 1, self.list:GetItemCount() do
+
+        item = self.list:GetItem(i)
+
+        if item.value == value then
+            break
+        end
+        
+    end
+    
+    if item == nil then
+        return
+    end
 
     self:ItemClicked( item )
 
@@ -223,7 +244,7 @@ function Options.Constructor.Dropdown:SetActiv(activ)
 
     if activ == true then
         self.selectionWindow:SetVisible(true)
-        self.frame:SetBackColor( Defaults.Colors.AccentColor4 )
+        self.frame:SetBackColor( Defaults.Colors.FolderColor3 )
         self.activ = activ
 
     else

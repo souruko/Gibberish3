@@ -42,29 +42,25 @@ function Options.Constructor.OptionsWindow:Constructor(  )
  
     self:SizeChanged()
 
-    self.KeyDown = function (sender, args)
-
-        -- if args.Control == true then
-        --     Turbine.Shell.WriteLine("down")
-        -- end
-       
-    end
-
-    
-    self.KeyUp = function (sender, args)
-
-        Turbine.Shell.WriteLine(".---------------")
-        for key, value in pairs(args) do
-            Turbine.Shell.WriteLine(tostring(key).. " "..tostring(value))
-        end
-       
-    end
+    self:SelectionChanged()
 
     self:SetVisible(true)
 
 end
 
 
+-------------------------------------------------------------------------------------
+--      Description:    show tooltip
+-------------------------------------------------------------------------------------
+--        Parameter:    left, top, width, height, heading, text
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:CollapsChanged()
+
+    self.windowSelection:CollapsChanged()
+
+end
 
 -------------------------------------------------------------------------------------
 --      Description:    resize children after window size changed
@@ -99,6 +95,20 @@ function Options.Constructor.OptionsWindow:SizeChanged()
 
 
 end
+
+-------------------------------------------------------------------------------------
+--      Description:    finish things up and close window
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:Closing()
+
+    Options.MainWindow.OpenClose()
+
+end
+
 
 
 
@@ -141,6 +151,19 @@ function Options.Constructor.OptionsWindow:SelectionChanged()
 end
 
 
+-------------------------------------------------------------------------------------
+--      Description:    group selection changed
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:ResetContent()
+
+    self.windowSelection:ResetContent()
+    self.windowOptions:ResetContent()
+
+end
 
 -------------------------------------------------------------------------------------
 --      Description:    hide tooltip

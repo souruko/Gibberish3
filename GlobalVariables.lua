@@ -39,6 +39,7 @@ Timer                   = {}
 Timer.Defaults          = {}
 Timer.Types             = {}
 Timer.Constructor       = {}
+Timer.Options           = {}
 
 
 -------------------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Trigger                 = {}
 Trigger.Defaults        = {}
 Trigger.Types           = {}
 Trigger.Init            = {}
+Trigger.Options           = {}
 
 
 -------------------------------------------------------------------------------------
@@ -166,10 +168,7 @@ Options.CopyCache.ItemTypes.FolderAndGroup  = 1
 Options.CopyCache.ItemTypes.Timer           = 2
 Options.CopyCache.ItemTypes.Trigger         = 3
 
-Options.CopyCache.folderIndex   = nil
-Options.CopyCache.groupIndex    = nil
-Options.CopyCache.timerIndex    = nil
-Options.CopyCache.triggerIndex  = nil
+Options.CopyCache.content   = nil
 
 Options.CopyCache.actionType   = nil
 Options.CopyCache.itemType     = nil
@@ -177,10 +176,10 @@ Options.CopyCache.itemType     = nil
 -------------------------------------------------------------------------------------
 --      Description:    Action 
 -------------------------------------------------------------------------------------
-Action          = {}
-Action.Add      = 1
-Action.Remove   = 2
-Action.Reset    = 3
+Actions          = {}
+Actions.Add      = 1
+Actions.Remove   = 2
+Actions.Reset    = 3
 
 -------------------------------------------------------------------------------------
 --      Description:    fonts

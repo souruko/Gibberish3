@@ -39,6 +39,7 @@
         "duplicate-set-field",
         "assign-type-mismatch",
         "undefined-field",
-        "redundant-parameter"
+        "redundant-parameter",
+        "unused-local"
     ]
 }

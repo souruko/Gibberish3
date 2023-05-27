@@ -34,7 +34,7 @@ function Seperator:Constructor( parent, width, height )
 
     self.line               = Turbine.UI.Control()
     self.line:SetParent(    self )
-    self.line:SetBackColor( Defaults.Colors.AccentColor7 )
+    self.line:SetBackColor( Defaults.Colors.MenuColor2 )
     self.line:SetSize(      line_width, line_thickness )
     self.line:SetPosition(  spacing, line_top )
 

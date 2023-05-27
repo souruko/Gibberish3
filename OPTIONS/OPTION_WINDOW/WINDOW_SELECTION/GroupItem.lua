@@ -131,14 +131,20 @@ function GroupItem:Constructor( parent, data, index, width )
 
     self.rightClickMenu:AddRow( L[Language.Local].Menu.Cut, function ()
         
+        Options.Cut( Options.CopyCache.ItemTypes.FolderAndGroup )
+        
     end)
 
     self.rightClickMenu:AddRow( L[Language.Local].Menu.Copy, function ()
+
+        Options.Copy( Options.CopyCache.ItemTypes.FolderAndGroup )
         
     end)
 
     self.rightClickMenu:AddRow( L[Language.Local].Menu.Paste, function ()
-        
+  
+        Options.Paste( Options.CopyCache.ItemTypes.FolderAndGroup )
+      
     end)
 
 
@@ -148,10 +154,22 @@ function GroupItem:Constructor( parent, data, index, width )
     -------------------------------------------------------------------------------------
     self.MouseClick = function ( sender, args )
 
-        Data.selectedGroupIndex = {}
-        Data.selectedFolderIndex = {}
-        
-        Data.selectedGroupIndex[1] = self.index
+        if Group.IsSelected(self.index) == false then
+
+            if self:IsControlKeyDown() == true then
+
+                Options.AddToGroupSelection(self.index)
+
+            else
+
+                Data.selectedGroupIndex = {}
+                Data.selectedFolderIndex = {}
+                
+                Data.selectedGroupIndex[1] = self.index
+
+            end
+
+        end
 
         Options.SelectionChanged()
 
@@ -211,7 +229,6 @@ end
 -------------------------------------------------------------------------------------
 function GroupItem:ChangeWidth( width )
 
-    
     local name_left     = 55
     local name_width    = width - name_left - 15
 
@@ -219,8 +236,25 @@ function GroupItem:ChangeWidth( width )
     self.frame:SetWidth(width)
     self.background:SetWidth(                width )
     self.nameLabel:SetWidth(                 name_width )
-    self.typeLabel:SetLeft(             width - 70)
+    self.typeLabel:SetLeft(             width - 70 )
 
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function GroupItem:MatchesSearch( text )
+
+    if string.find( string.lower( self.data.name ) , text ) then
+        return true
+    end
+
+    return false
 
 end
 

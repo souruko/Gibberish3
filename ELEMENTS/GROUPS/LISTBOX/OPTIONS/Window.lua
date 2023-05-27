@@ -12,9 +12,10 @@ Group.Options[ Group.Types.LISTBOX ] = Turbine.UI.Control()
 
 local width = 706
 
+Group.Options[ Group.Types.LISTBOX ].multiselect = false
+
 Group.Options[ Group.Types.LISTBOX ]:SetWidth(width)
 Group.Options[ Group.Types.LISTBOX ]:SetBackColor( Defaults.Colors.BackgroundColor2 )
-
 
 -------------------------------------------------------------------------------------
 --      Description:    LISTBOX OPTIONS GROUP OPTIONS
@@ -54,15 +55,17 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    FillContent
 -------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].FillContent = function ( groupData, groupIndex )
+Group.Options[ Group.Types.LISTBOX ].FillContent = function ( groupData, groupIndex, multiselect )
 
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.general:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.timer:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.ui:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.color:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.text:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.enable:FillContent( groupData, groupIndex )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.misc:FillContent( groupData, groupIndex )
+    Group.Options[ Group.Types.LISTBOX ].multiselect = multiselect
+
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.general:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.timer:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.ui:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.color:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.text:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.enable:FillContent( groupData, groupIndex, multiselect )
+    Group.Options[ Group.Types.LISTBOX ].groupTabs.misc:FillContent( groupData, groupIndex, multiselect )
 
 end
 

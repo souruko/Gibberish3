@@ -110,19 +110,26 @@ self.rightClickMenu:AddSeperator()
 
 self.rightClickMenu:AddRow( L[Language.Local].Menu.Cut, function ()
     
+    Options.Cut( Options.CopyCache.ItemTypes.Timer )
+         
 end)
 
 self.rightClickMenu:AddRow( L[Language.Local].Menu.Copy, function ()
     
+    Options.Copy( Options.CopyCache.ItemTypes.Timer )
+
 end)
 
 self.rightClickMenu:AddRow( L[Language.Local].Menu.Paste, function ()
     
+    Options.Paste( Options.CopyCache.ItemTypes.Timer )
+
 end)
 
 
     
     self.MouseDown = function( sender, args )
+     
 		if args.Button == Turbine.UI.MouseButton.Left then
 			self.dragging = true	
             self.topSave = self:GetTop()
@@ -162,30 +169,30 @@ end)
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function self.MouseClick( sender, args )
+    function self.MouseClick( sender, args )
 
-    Turbine.Shell.WriteLine("mosue")
-    if self.selected == false then
-         
-        if args.Control == true then
-            -- multi select
-            Turbine.Shell.WriteLine("multi select")
-        else
-            -- select
-            self.parent:SelectionChanged(self)
+        if self.selected == false then
+
+            if self:IsControlKeyDown() == true then
+
+                self.parent:SelectionChanged(self.data, self.index, true)
+
+            else
+
+                self.parent:SelectionChanged(self.data, self.index, false)
+
+            end
+            
+        end
+
+        
+        if args.Button == Turbine.UI.MouseButton.Right then
+
+            self.rightClickMenu:Show(nil, nil, true)
 
         end
 
     end
-
-    
-    if args.Button == Turbine.UI.MouseButton.Right then
-
-        self.rightClickMenu:Show(nil, nil, true)
-
-    end
-
-end
 
 
 end
@@ -251,5 +258,22 @@ function Options.Constructor.TimerControl:Deselect( sender, args )
 
     self.selected = false
     self.background:SetBackColor( Defaults.Colors.BackgroundColor1 )
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.TimerControl:MatchesSearch( text )
+
+    if string.find( string.lower( self.data.description ) , text ) then
+        return true
+    end
+
+    return false
 
 end

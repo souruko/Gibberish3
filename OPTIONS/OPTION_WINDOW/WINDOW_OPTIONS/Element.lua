@@ -138,13 +138,31 @@ function Options.Constructor.WindowOptions:SelectionChanged()
         self.currentDisplay = Group.Options[ groupData.type ]
         self.currentDisplay:SetPosition(12, 42)
         self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay.FillContent( groupData, groupIndex )
+        self.currentDisplay.FillContent( groupData, groupIndex, false )
         self.currentDisplay:SetParent(self)
 
     -- multi group options
     elseif #Data.selectedGroupIndex + #Data.selectedFolderIndex > 1 then
 
+        self.background:SetBackColor(       Turbine.UI.Color.Red )
+        self.resetButton:SetVisible(true)
+        self.saveButton:SetVisible(true)
+        self.frame:SetVisible(true)
 
+        if self.currentDisplay ~= nil then
+            self.currentDisplay:SetParent(nil)
+        end
+
+        local groupIndex = Data.selectedGroupIndex[#Data.selectedGroupIndex]
+        local groupData = Data.group[ Data.selectedGroupIndex[#Data.selectedGroupIndex] ]
+
+        self.headingLabel:SetText( L[Language.Local].Headings.MultiGroup )
+      
+        self.currentDisplay = Group.Options[ groupData.type ]
+        self.currentDisplay:SetPosition(12, 42)
+        self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
+        self.currentDisplay.FillContent( groupData, groupIndex, true )
+        self.currentDisplay:SetParent(self)
 
     -- single folder options
     elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex == 1 then
@@ -152,7 +170,7 @@ function Options.Constructor.WindowOptions:SelectionChanged()
         self.resetButton:SetVisible(true)
         self.saveButton:SetVisible(true)
         self.frame:SetVisible(true)
-        self.background:SetBackColor(       Defaults.Colors.AccentColor5 )
+        self.background:SetBackColor(       Defaults.Colors.FolderColor1 )
       
         
         if self.currentDisplay ~= nil then
@@ -169,11 +187,6 @@ function Options.Constructor.WindowOptions:SelectionChanged()
         self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
         self.currentDisplay.FillContent( folderData, folderIndex )
         self.currentDisplay:SetParent(self)
-
-    -- multi folder options
-    elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex > 1 then
-
-
 
     -- no seletion
     else
@@ -231,4 +244,35 @@ function Options.Constructor.WindowOptions:SizeChanged()
         self.currentDisplay:SetHeight( current_height )
     end
 
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:   
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowOptions:ResetContent()
+
+    -- if #Data.selectedGroupIndex == 1 and #Data.selectedFolderIndex == 0 then
+
+    --     local groupIndex = Data.selectedGroupIndex[1]
+    --     local groupData = Data.group[ Data.selectedGroupIndex[1] ]
+        
+    --     self.currentDisplay.FillContent( groupData, groupIndex )
+
+    -- elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex > 1 then
+
+    --     local folderIndex = Data.selectedFolderIndex[1] 
+    --     local folderData = Data.folder[ Data.selectedFolderIndex[1] ]
+
+    --     self.currentDisplay.FillContent( folderData, folderIndex )
+    -- else
+
+    -- end
+
+    self:SelectionChanged()
+    
 end

@@ -42,6 +42,9 @@ function TimerTriggerTab:SizeChanged()
     height = height - 35
 
     self.triggerSelection:SetHeight(height + 2)
+    if self.triggerOptions ~= nil then
+        self.triggerOptions:SetHeight( self.triggerSelection:GetHeight() )
+    end
 
 end
 
@@ -54,16 +57,13 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function TimerTriggerTab:FillContent( selectedItem )
+function TimerTriggerTab:FillContent( timerData, timerIndex, multiselect )
 
     self.triggerSelection:ClearItems()
 
-    if selectedItem == nil then
+    if timerData == nil then
 
     else
-
-        local timerData = selectedItem.data
-        
 
         for i, triggerList in ipairs(timerData) do
 
@@ -95,7 +95,7 @@ function TimerTriggerTab:DraggingEnd( fromData )
 
     if toData ~= nil then
 
-        Timer.SortTo( Data.group[ Data.selectedGroupIndex[1] ].timerList[ Data.selectedTimerIndex[1] ], fromData, toData.data )
+        Timer.SortTo( Data.group[ Data.selectedGroupIndex[1] ].timerList[ Data.selectedTimerIndex[1].timerIndex ], fromData, toData.data )
 
         self.triggerSelection:Sort()
 
@@ -112,13 +112,50 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function TimerTriggerTab:SelectionChanged( triggerControl )
+function TimerTriggerTab:SelectionChanged( triggerData, triggerIndex, add_to_selection )
 
-    if triggerControl ~= nil then
+    if add_to_selection == true then
+
+        if triggerData ~= nil then
+
+
+            for i = #Data.selectedTriggerIndex, 1, -1 do
+
+                Data.selectedTriggerIndex[i + 1] = Data.selectedTriggerIndex[i]
+        
+            end
+        
+            Data.selectedTriggerIndex[1] = {}
+            Data.selectedTriggerIndex[1].groupIndex = Data.selectedGroupIndex[1]
+            Data.selectedTriggerIndex[1].timerIndex = Data.selectedTimerIndex[1].timerIndex
+            Data.selectedTriggerIndex[1].triggerIndex = triggerIndex
+
+        end
+        
+    else
+
         Data.selectedTriggerIndex = {}
-        Data.selectedTriggerIndex[1] = triggerControl.index
+        if triggerData ~= nil then
+            Data.selectedTriggerIndex[1] = {}
+            Data.selectedTriggerIndex[1].groupIndex = Data.selectedGroupIndex[1]
+            Data.selectedTriggerIndex[1].timerIndex = Data.selectedTimerIndex[1].timerIndex
+            Data.selectedTriggerIndex[1].triggerIndex = triggerIndex
+        end
+
     end
 
     self.triggerSelection:SelectionChanged( Trigger.IsSelected )
+
+    if self.triggerOptions ~= nil then
+        self.triggerOptions:SetParent(nil)
+    end
+    if triggerData ~= nil then
+
+        self.triggerOptions = Trigger.Options[ triggerData.type ]
+        self.triggerOptions:SetPosition(200, 35)
+        self.triggerOptions:SetHeight( self.triggerSelection:GetHeight() )
+        self.triggerOptions:FillContent( triggerData, triggerIndex, add_to_selection )
+        self.triggerOptions:SetParent(self)
+    end
 
 end

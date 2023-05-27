@@ -30,7 +30,7 @@ function Options.Constructor.RightClickMenu:Constructor( width )
     self.background             = Turbine.UI.Control()
     self.background:SetParent(  self )
     self.background:SetWidth(   self.width )
-    self.background:SetBackColor(Defaults.Colors.AccentColor6 )
+    self.background:SetBackColor(Defaults.Colors.MenuColor1 )
 
     self.list                   = Turbine.UI.ListBox()
     self.list:SetParent(        self )

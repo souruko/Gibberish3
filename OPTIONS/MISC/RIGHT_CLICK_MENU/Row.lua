@@ -67,7 +67,7 @@ end
 -------------------------------------------------------------------------------------
 function Row:MouseEnter( sender, args )
 
-    self:SetBackColor(          Defaults.Colors.AccentColor7 )
+    self:SetBackColor(          Defaults.Colors.MenuColor2 )
     self.parent:HoverChanged(   self )
 
 end

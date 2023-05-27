@@ -33,24 +33,6 @@ function GroupTimerTab:Constructor( width, name, tabwindow )
     self.timerSelection:SetWidth(202)
     self.timerSelection:SetPosition( -2, 35)
 
-    -------------------------------------------------------------------------------------
-    --      Description:    TIMER TABS
-    -------------------------------------------------------------------------------------
-    self.timerTabWindow = Options.Constructor.TabWindow(self, width - 200, 101  )
-    self.timerTabWindow:SetPosition( 200, 35)
-
-    self.timerTabs = {}
-    self.timerTabs.general = OPTIONS.TIMER_OPTIONS.TimerGeneralTab( width, L[Language.Local].Tab.General, self.timerTabWindow )
-    self.timerTabs.trigger = OPTIONS.TIMER_OPTIONS.TimerTriggerTab( width, L[Language.Local].Tab.Trigger, self.timerTabWindow )
-    self.timerTabs.timer = OPTIONS.TIMER_OPTIONS.TimerTimerTab( width, L[Language.Local].Tab.Timer, self.timerTabWindow )
-    self.timerTabs.text = OPTIONS.TIMER_OPTIONS.TimerTextTab( width, L[Language.Local].Tab.Text, self.timerTabWindow )
-    self.timerTabs.animation = OPTIONS.TIMER_OPTIONS.TimerAnimationTab( width, L[Language.Local].Tab.Animation, self.timerTabWindow )
-
-    self.timerTabWindow:AddTab( self.timerTabs.general )
-    self.timerTabWindow:AddTab( self.timerTabs.trigger )
-    self.timerTabWindow:AddTab( self.timerTabs.timer )
-    self.timerTabWindow:AddTab( self.timerTabs.text )
-    self.timerTabWindow:AddTab( self.timerTabs.animation )
 
 end
 
@@ -62,8 +44,10 @@ function GroupTimerTab:SizeChanged()
 
     self.timerSelection:SetHeight(height + 2)
 
-    self.timerTabWindow:SetSize(width, height)
-    
+
+    if self.timerOptions ~= nil then
+        self.timerOptions:SetSize(width, height)
+    end
 end
 
 
@@ -76,16 +60,23 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function GroupTimerTab:FillContent( groupData, groupIndex )
+function GroupTimerTab:FillContent( groupData, groupIndex, multiselect )
 
     self.timerSelection:ClearItems()
-    if groupData ~= nil then
-        for index, timerData in ipairs(groupData.timerList) do
-            self.timerSelection:AddItem( Options.Constructor.TimerControl(timerData, index, 202, self) )
+    
+    if multiselect == true then
+    
+    else
+        
+        if groupData ~= nil then
+            for index, timerData in ipairs(groupData.timerList) do
+                self.timerSelection:AddItem( Options.Constructor.TimerControl(timerData, index, 202, self) )
+            end
         end
-    end
 
-    self.timerSelection:ResetSelection()
+        self.timerSelection:ResetSelection()
+    
+    end
 
 end
 
@@ -119,15 +110,49 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function GroupTimerTab:SelectionChanged( timerControl )
+function GroupTimerTab:SelectionChanged( timerData, timerIndex, add_to_selection )
 
-    if timerControl ~= nil then
+    if add_to_selection == true then
+
+        if timerData ~= nil then
+
+
+            for i = #Data.selectedTimerIndex, 1, -1 do
+
+                Data.selectedTimerIndex[i + 1] = Data.selectedTimerIndex[i]
+        
+            end
+        
+            Data.selectedTimerIndex[1] = {}
+            Data.selectedTimerIndex[1].groupIndex = Data.selectedGroupIndex[1]
+            Data.selectedTimerIndex[1].timerIndex = timerIndex
+        end
+        
+    else
+
         Data.selectedTimerIndex = {}
-        Data.selectedTimerIndex[1] = timerControl.index
-    end
+        if timerData ~= nil then
+            Data.selectedTimerIndex[1] = {}
+            Data.selectedTimerIndex[1].groupIndex = Data.selectedGroupIndex[1]
+            Data.selectedTimerIndex[1].timerIndex = timerIndex
+        end
 
+    end
+    
     self.timerSelection:SelectionChanged( Timer.IsSelected )
 
-    self.timerTabs.trigger:FillContent(timerControl)
+    
+    if self.currentDisplay ~= nil then
+        self.currentDisplay:SetParent(nil)
+    end
+    if timerData ~= nil then
+        self.timerOptions = Timer.Options[ timerData.type ]
+        self.timerOptions:SetPosition(200, 35)
+        self.timerOptions:SetHeight( self.timerSelection:GetHeight() )
+        self.timerOptions.FillContent( timerData, timerIndex, add_to_selection )
+        self.timerOptions:SetParent(self)
+    end
+
+
 
 end

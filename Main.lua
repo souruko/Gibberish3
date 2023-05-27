@@ -141,8 +141,8 @@ Data.group[testIndex2].timerList[timer5in].permanent = false
 tr6  = Timer.AddTrigger(Data.group[testIndex2].timerList[timer5in], Trigger.Types.Chat)
 Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].useRegex = true
 Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].token = "pull in &1 &2"
-Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].action = Action.Add
-Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].action = Action.Reset
+Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].action = Actions.Add
+Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].action = Actions.Reset
 
 
 g3 = Group.New("Content Stuff", 1)

@@ -42,7 +42,7 @@ function Group.Enable(index, enable)
 
     Data.group[index].enabled = enable
 
-    if enable == Action.Add then
+    if enable == Actions.Add then
 
         Group.Open(index)
 

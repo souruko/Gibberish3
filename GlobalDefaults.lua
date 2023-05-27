@@ -33,11 +33,12 @@ Defaults.Colors.BackgroundColor4            = Turbine.UI.Color(0.4,0.4,0.4)
 Defaults.Colors.BackgroundColor5            = Turbine.UI.Color(0.5,0.5,0.5)
 Defaults.Colors.BackgroundColor6            = Turbine.UI.Color(0.6,0.6,0.6)
 
-Defaults.Colors.AccentColor6            = Turbine.UI.Color(0.15,0.15,0.35)
-Defaults.Colors.AccentColor5            = Turbine.UI.Color(0.25,0.25,0.45)
-Defaults.Colors.AccentColor4            = Turbine.UI.Color(0.4,0.4,0.6)
+Defaults.Colors.FolderColor1            = Turbine.UI.Color(0.15,0.15,0.35)
+Defaults.Colors.FolderColor2            = Turbine.UI.Color(0.25,0.25,0.45)
+Defaults.Colors.FolderColor3            = Turbine.UI.Color(0.4,0.4,0.6)
 
--- Defaults.Colors.AccentColor7            = Turbine.UI.Color(0.25,0.25,0.35)
+Defaults.Colors.MenuColor1            = Turbine.UI.Color(0.25,0.25,0.45)
+Defaults.Colors.MenuColor2            = Turbine.UI.Color(0.35,0.35,0.55)
 
 
 

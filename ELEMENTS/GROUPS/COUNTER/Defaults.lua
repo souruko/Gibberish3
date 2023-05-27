@@ -31,7 +31,8 @@ Group.Defaults[Group.Types.COUNTER].opacityActiv            = 0.5
 Group.Defaults[Group.Types.COUNTER].opacityPassiv           = 0.5
 
 
-Group.Defaults[Group.Types.COUNTER].font                    = 23
+Group.Defaults[Group.Types.COUNTER].font                    = 4
+Group.Defaults[Group.Types.COUNTER].fontSize                = 20
 Group.Defaults[Group.Types.COUNTER].durationFormat          = NumberFormat.Minutes
 Group.Defaults[Group.Types.COUNTER].textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
 Group.Defaults[Group.Types.COUNTER].timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
