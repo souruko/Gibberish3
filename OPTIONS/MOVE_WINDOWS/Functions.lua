@@ -15,10 +15,10 @@
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function Options.Move.UpdateMode(enabled)
+function Options.Move.UpdateMode(enabled, all)
 
     Data.moveMode = enabled
 
-    Group.MoveModeChanged()
+    Group.MoveModeChanged(all)
 
 end

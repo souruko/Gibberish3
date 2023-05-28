@@ -30,7 +30,7 @@ function Command:Execute( _, str )
     elseif cmd == "collection" then
 
     elseif cmd == "move" then
-        Options.Move.UpdateMode(not(Data.moveMode))
+        Options.Move.UpdateMode(not(Data.moveMode), true)
 
     end
 

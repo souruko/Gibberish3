@@ -1,9 +1,9 @@
 --===================================================================================
---             Name:    RightClickMenu
+--             Name:    RightClickSubMenu
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
-Options.Constructor.RightClickMenu = class( Turbine.UI.Window )
+Options.Constructor.RightClickSubMenu = class( Turbine.UI.Control )
 
 
 
@@ -11,14 +11,14 @@ Options.Constructor.RightClickMenu = class( Turbine.UI.Window )
 
 
 -------------------------------------------------------------------------------------
---      Description:    RightClickMenu constructor
+--      Description:    RightClickSubMenu constructor
 -------------------------------------------------------------------------------------
 --        Parameter:    width
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.RightClickMenu:Constructor( width )
-	Turbine.UI.Window.Constructor( self )
+function Options.Constructor.RightClickSubMenu:Constructor( width )
+	Turbine.UI.Control.Constructor( self )
 
     self.width                  = width
     self.item_height            = 24
@@ -37,13 +37,13 @@ function Options.Constructor.RightClickMenu:Constructor( width )
     self.list:SetTop(           5 )
     self.list:SetOpacity(       0.9 )
     self.list:SetMouseVisible(  false )
-    
-    
-    self:SetWidth(              2 * self.width + 5 )
+
+
+    self:SetWidth(              self.width )
     self.list:SetWidth(         self.width )
 
-        
 
+    self:SetVisible(false)
 
 end
 
@@ -51,14 +51,14 @@ end
 
 
 -------------------------------------------------------------------------------------
---      Description:    show right click window
+--      Description:    show right click Control
 -------------------------------------------------------------------------------------
 --        Parameter:    left
 --                      top
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function  Options.Constructor.RightClickMenu:Show( left, top, focus )
+function  Options.Constructor.RightClickSubMenu:Show( left, top, focus )
 
     if left == nil then
         self:SetPosition( Turbine.UI.Display.GetMousePosition() )
@@ -70,50 +70,17 @@ function  Options.Constructor.RightClickMenu:Show( left, top, focus )
 
     self:SetVisible( true )
 
-    if focus == true then
-        self:Activate()
-        self:Focus()
-    end
-
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:    show right click window
--------------------------------------------------------------------------------------
---        Parameter:    left
---                      top
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function  Options.Constructor.RightClickMenu:FocusGained()
-
-end
-
-
-    -------------------------------------------------------------------------------------
-    --      Description:    show right click window
-    -------------------------------------------------------------------------------------
-    --        Parameter:    left
-    --                      top
-    -------------------------------------------------------------------------------------
-    --           Return:    
-    -------------------------------------------------------------------------------------
-    function  Options.Constructor.RightClickMenu:FocusLost()
-        
-        self:Hide()
-    
-    end
-
-
--------------------------------------------------------------------------------------
---      Description:    hide right click window
+--      Description:    hide right click Control
 -------------------------------------------------------------------------------------
 --        Parameter:    
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function  Options.Constructor.RightClickMenu:Hide()
+function  Options.Constructor.RightClickSubMenu:Hide()
 
     self:SetVisible(            false )
   
@@ -134,7 +101,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Options.Constructor.RightClickMenu:AddRow( text, func )
+function Options.Constructor.RightClickSubMenu:AddRow( text, func )
 
     local row = Row(        self, self.width, self.item_height, text, func)
 
@@ -153,7 +120,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Options.Constructor.RightClickMenu:AddSeperator()
+function Options.Constructor.RightClickSubMenu:AddSeperator()
 
     local seperator   = Seperator(self, self.width, self.seperator_height )
 
@@ -174,7 +141,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Options.Constructor.RightClickMenu:AddSubMenuRow( text, subMenu )
+function Options.Constructor.RightClickSubMenu:AddSubMenuRow( text, subMenu )
 
     local row = SubMenuRow(self, self.width, self.item_height, text, subMenu)
 
@@ -197,7 +164,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:   
 -------------------------------------------------------------------------------------
-function Options.Constructor.RightClickMenu:HoverChanged( selected )
+function Options.Constructor.RightClickSubMenu:HoverChanged( selected )
 
     for i = 1, self.list:GetItemCount() do
  

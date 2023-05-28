@@ -220,6 +220,10 @@ function Group.IsSelected(index)
         
     end
 
+    if Data.group[index].folder ~= nil then
+        return Folder.IsSelected(Data.group[index].folder)
+    end
+
     return false
 
 end

@@ -170,33 +170,41 @@ function Options.Paste( targetType )
 
         if targetType == Options.CopyCache.ItemTypes.FolderAndGroup then
 
-            Data.CopyCache()
-
             if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
                 Data.CutCache()
                 -- change cut to copy after first paste 
                 Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
+
+            else
+                
+                Data.CopyCache()
+
             end
 
         elseif targetType == Options.CopyCache.ItemTypes.Timer then
-
-            Group.CopyCache()
 
             if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
                 Group.CutCache()
                 -- change cut to copy after first paste 
                 Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
+
+            else
+                
+                Group.CopyCache()
+
             end
 
         elseif targetType == Options.CopyCache.ItemTypes.Trigger then
-
-
-            Timer.CopyCache()
 
             if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
                 Timer.CutCache() 
                 -- change cut to copy after first paste 
                 Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
+
+            else
+                
+                Timer.CopyCache()
+
             end
 
         end
@@ -205,5 +213,64 @@ function Options.Paste( targetType )
         Options.SelectionChanged()
  
     end
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    listbox constructor
+-------------------------------------------------------------------------------------
+--        Parameter:    group data 
+-------------------------------------------------------------------------------------
+--           Return:    group listbox element
+-------------------------------------------------------------------------------------
+function Options.MoveToFolder( folderIndex )
+
+    for index, groupData in ipairs(Data.selectedGroupIndex) do
+
+        Data.group[ groupData ].folder = folderIndex
+        
+    end
+
+    for index, folderData in ipairs(Data.selectedFolderIndex) do
+
+        if index ~= folderIndex then
+            
+            Data.folder[ folderData ].folder = folderIndex
+
+        end
+        
+    end
+
+    Options.ResetContent()
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    listbox constructor
+-------------------------------------------------------------------------------------
+--        Parameter:    group data 
+-------------------------------------------------------------------------------------
+--           Return:    group listbox element
+-------------------------------------------------------------------------------------
+function Options.Delete()
+
+    for index, folderIndex in ipairs(Data.selectedFolderIndex) do
+
+        Folder.Delete(folderIndex)
+
+    end
+
+    for index, groupIndex in ipairs(Data.selectedGroupIndex) do
+
+        Group.Delete(groupIndex)
+        
+    end
+
+    Data.selectedGroupIndex = {}
+    Data.selectedFolderIndex = {}
+    Options.ResetContent()
 
 end

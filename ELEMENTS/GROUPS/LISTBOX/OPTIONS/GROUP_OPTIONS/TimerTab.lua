@@ -28,7 +28,20 @@ function GroupTimerTab:Constructor( width, name, tabwindow )
     -------------------------------------------------------------------------------------
     --      Description:    TIMER SELECTION
     -------------------------------------------------------------------------------------
-    self.timerSelection = Options.Constructor.ListControl()
+    self.timerSelection = Options.Constructor.ListControl(function ()
+        
+        local group = Data.group[ Data.selectedGroupIndex[1] ]
+        local index = Group.AddTimer(group, group.timerType)
+        self.timerSelection:AddItem( Options.Constructor.TimerControl(group.timerList[index], index, 202, self) )
+
+        Data.selectedTimerIndex = {}
+        Data.selectedTimerIndex.timerIndex = index
+        Data.selectedTimerIndex.groupIndex = Data.selectedGroupIndex[1]
+
+        self:SelectionChanged(group.timerList[index], index, false)
+
+    end)
+
     self.timerSelection:SetParent(self)
     self.timerSelection:SetWidth(202)
     self.timerSelection:SetPosition( -2, 35)
@@ -101,7 +114,6 @@ function GroupTimerTab:DraggingEnd( fromData )
 end
 
 
-
 -------------------------------------------------------------------------------------
 --      Description:    LISTBOX OPTIONS SelectionChanged
 -------------------------------------------------------------------------------------
@@ -115,7 +127,6 @@ function GroupTimerTab:SelectionChanged( timerData, timerIndex, add_to_selection
     if add_to_selection == true then
 
         if timerData ~= nil then
-
 
             for i = #Data.selectedTimerIndex, 1, -1 do
 
@@ -152,7 +163,5 @@ function GroupTimerTab:SelectionChanged( timerData, timerIndex, add_to_selection
         self.timerOptions.FillContent( timerData, timerIndex, add_to_selection )
         self.timerOptions:SetParent(self)
     end
-
-
 
 end

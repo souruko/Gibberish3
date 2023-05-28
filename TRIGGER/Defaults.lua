@@ -13,7 +13,7 @@
 --      Description:    default settings for chat trigger
 --===================================================================================
 Trigger.Defaults[Trigger.Types.Chat]                    = {}
-Trigger.Defaults[Trigger.Types.Chat].token              = ""
+Trigger.Defaults[Trigger.Types.Chat].token              = "default"
 Trigger.Defaults[Trigger.Types.Chat].useRegex           = true
 Trigger.Defaults[Trigger.Types.Chat].description        = ""
 Trigger.Defaults[Trigger.Types.Chat].listOfTargets       = {}

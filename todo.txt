@@ -1,25 +1,45 @@
-
-
-*   auto reload
-
-*   doku
-
+--------------------------------------------------------------------------------------------
 *   options
+ 
+        *   timer/trigger: cut, copy, paste, delete
 
-*   save / load
+        *   general options
+
+        *   save options
+
+        *   reset options
+
+        *   handel setting changes in activ groups#
+
+        *   group/timer/trigger/folder options
+
+
+--------------------------------------------------------------------------------------------
+*   export
+
+
+--------------------------------------------------------------------------------------------
+*   collection
+
+
+--------------------------------------------------------------------------------------------
+*   menu icon
+
+
+--------------------------------------------------------------------------------------------
+*   new stuff!
 
 
 
 
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+*   known issues
 
+    *   update timer / trigger options when switching group even when no timers exist
 
+    *   delete update activ groups indexes
 
+    *   multi delete index breaks after the first so not working right now
 
-
-
-
-/////////////////////////////////////////////////////
-
-*   Current Folder Display
-
-*   right click for copy / past / cut
+    *   ...he Rings Online\Plugins\Gibberish3\STRUCTS\Group.lua:223: attempt to index field '?' (a nil value)

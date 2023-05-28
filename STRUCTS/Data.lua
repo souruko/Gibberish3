@@ -170,4 +170,22 @@ end
 -------------------------------------------------------------------------------------
 function Data.CutCache()
 
+    local targetData = nil
+
+    if #Data.selectedGroupIndex == 0 then
+        targetData = Data.folder[ Data.selectedFolderIndex[1] ]
+    else
+        targetData = Data.group[ Data.selectedGroupIndex[1] ]
+    end
+
+    for i, index in ipairs(Options.CopyCache.content.folder) do
+        Data.folder[index].folder = targetData.folder
+        Data.SortTo( Data.folder[index], targetData )
+    end
+
+    for j, index in ipairs(Options.CopyCache.content.groups) do
+        Data.group[index].folder = targetData.folder
+        Data.SortTo( Data.group[index], targetData )
+    end
+
 end

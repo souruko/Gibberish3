@@ -38,7 +38,11 @@ function Options.Constructor.TriggerControl:Constructor( data, triggerIndex, wid
     self.background:SetSize(width, height - 2*frame_size)
     self.background:SetMouseVisible(false)
 
-    self.enabledCheckBox = Options.Constructor.CheckBox( self )
+    self.enabledCheckBox = Options.Constructor.CheckBox( self, function ()
+        
+        self.data.enabled = not(self.data.enabled)
+
+    end )
     self.enabledCheckBox:SetPosition(3, 15)
     self.enabledCheckBox:SetChecked(data.enabled)
 

@@ -47,9 +47,7 @@ function GroupItem:Constructor( parent, data, index, width )
 
     self.enabledCheckBox = Options.Constructor.CheckBox( self, function ()
 
-        data.enabled = not (data.enabled)
-        
-        Options.SaveData()
+        self:EnableChanged()
         
     end )
     self.enabledCheckBox:SetPosition( 10, 5)
@@ -79,21 +77,22 @@ function GroupItem:Constructor( parent, data, index, width )
 
 -------------------------------------------------------------------------------------
 --      export
-    self.exportMenu                       = Options.Constructor.RightClickMenu(125)
-    self.exportMenu:AddRow(                 "Group", function ()
-        Turbine.Shell.WriteLine(            "group" )
+    self.exportMenu                       = Options.Constructor.RightClickSubMenu(125)
+    self.exportMenu:AddRow(                 L[Language.Local].Menu.Groups, function ()
+
     end)
 
-    self.exportMenu:AddRow(                 "List of Timers", function ()
+    self.exportMenu:AddRow(                 L[Language.Local].Menu.ListOfTimerss, function ()
         
     end)
 
 -------------------------------------------------------------------------------------
 --      addToFolder
-    self.addToMenu                        = Options.Constructor.RightClickMenu(125)
+    self.addToMenu                        = Options.Constructor.RightClickSubMenu(125)
 
     self.addToMenu:AddRow( L[Language.Local].Menu.RemoveFromFolder, function ()
-            
+        Options.MoveToFolder( nil )
+
     end)
 
     self.addToMenu:AddSeperator()
@@ -101,7 +100,7 @@ function GroupItem:Constructor( parent, data, index, width )
     for i, folder in ipairs(Data.folder) do
 
         self.addToMenu:AddRow( folder.name, function ()
-            
+            Options.MoveToFolder( i )
         end)
         
     end
@@ -121,10 +120,14 @@ function GroupItem:Constructor( parent, data, index, width )
 
     self.rightClickMenu:AddRow( L[Language.Local].Menu.Move, function ()
 
+        Options.Move.UpdateMode(true, false)
+
     end)
 
     self.rightClickMenu:AddRow( L[Language.Local].Menu.Delete, function ()
-        
+
+        Options.Delete()
+
     end)
 
     self.rightClickMenu:AddSeperator()
@@ -259,6 +262,7 @@ function GroupItem:MatchesSearch( text )
 end
 
 
+
 -------------------------------------------------------------------------------------
 --      Description:    
 -------------------------------------------------------------------------------------
@@ -321,6 +325,35 @@ function GroupItem:SelectionChanged()
         self.background:SetBackColor(Defaults.Colors.BackgroundColor1)
 
     end
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    group data
+--                      index
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function GroupItem:EnableChanged(enabled)
+
+    if enabled == nil then
+        enabled = not( self.data.enabled )
+    end 
+
+    self.enabledCheckBox:SetChecked(enabled)
+
+    self.data.enabled = enabled
+    if self.data.enabled == true then
+        Group.Open(self.index)
+    else
+        Group.Close(self.index)
+    end
+
+    Options.SaveData()
 
 end
 

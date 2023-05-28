@@ -147,11 +147,12 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Group.MoveModeChanged()
+function Group.MoveModeChanged(all)
+
 
     for index, groupData in ipairs(Data.group) do
 
-        if groupData.enabled == true then
+        if groupData.enabled == true and (all or Group.IsSelected(index)) then
 
             Group[index]:MoveChanged()
 

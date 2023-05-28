@@ -190,7 +190,10 @@ function Options.Constructor.WindowOptions:SelectionChanged()
 
     -- no seletion
     else
-
+  
+        if self.currentDisplay ~= nil then
+            self.currentDisplay:SetParent(nil)
+        end
         self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
         self.headingLabel:SetText( "" )
         self.frame:SetVisible(false)

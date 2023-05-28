@@ -86,6 +86,7 @@ function Folder.GetFolderLevel(folderData)
 end
 
 
+
 -------------------------------------------------------------------------------------
 --      Description:     
 -------------------------------------------------------------------------------------
@@ -95,9 +96,54 @@ end
 -------------------------------------------------------------------------------------
 function Folder.Delete(index)
 
+    local list = {}
+    -- delete all groups within the group
+    for i, groupData in ipairs(Data.group) do
+
+        if groupData.folder == index then
+            list[#list+1] = i
+        end
+        
+    end
+    for j, i in ipairs(list) do
+        Group.Delete(i)
+    end
+    list = {}
+    -- delete all groups within the group
+    for i, folderData in ipairs(Data.folder) do
+
+        if folderData.folder == index then
+            list[#list+1] = i
+        end
+        
+    end
+    for j, i in ipairs(list) do
+        Folder.Delete(i)
+    end
+
+    -- delete the group and fix indexes
     for i = index, (#Data.folder - 1) do
 
-        Data.folder[i] = Data.folder[i + 1]
+        local temp = i+1
+        Data.folder[i] = Data.folder[temp]
+
+        -- fix folderIndex for all groups in this folder
+        for j, groupData in ipairs(Data.group) do
+
+            if groupData.folder == temp then
+                groupData.folder = i
+            end
+            
+        end
+         -- fix folderIndex for all groups in this folder
+         for j, folderData in ipairs(Data.folder) do
+
+            if folderData.folder == temp then
+                folderData.folder = i
+            end
+            
+        end
+
 
     end
 
@@ -341,6 +387,10 @@ function Folder.IsSelected(index)
             return true
         end
         
+    end
+
+    if Data.folder[index].folder ~= nil then
+        return Folder.IsSelected(Data.folder[index].folder)
     end
 
     return false

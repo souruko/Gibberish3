@@ -298,7 +298,7 @@ end
 -------------------------------------------------------------------------------------
 function ListBoxElement:SelectionChanged()
 
-    if Data.selectedGroupIndex == self.index then
+    if Group.IsSelected(self.index) then
         
         self.selected = true
         self.MoveWindow:SetBackColor     ( Defaults.Colors.Selected )
@@ -549,9 +549,7 @@ function ListBoxElement:Finish()
 
     end
 
-    self.MoveLabel:Close()
     self.MoveWindow:Close()
-    self.TimerListBox:Close()
     self:Close()
 
 end

@@ -520,6 +520,7 @@ function Options.Constructor.WindowSelection:ResetContent()
 
     self:CreateItems()
     self:FillContent()
+    self:SelectionChanged()
 
 end
 

@@ -76,35 +76,62 @@ function FolderItem:Constructor( parent, data, index, width )
     self.nameLabel:SetMouseVisible(         false )
 
     self.enabledCheckBox = Options.Constructor.CheckBox( self, function ()
-        
+
+        self:EnableChanged(self.enabledCheckBox:IsChecked())
+
     end )
+
     self.enabledCheckBox:SetTop(  5 )
 
 
 	-------------------------------------------------------------------------------------
 	--      export
-	self.exportMenu                       = Options.Constructor.RightClickMenu(125)
-	self.exportMenu:AddRow(                 "Folder", function ()
+	self.exportMenu                       = Options.Constructor.RightClickSubMenu(125)
+	self.exportMenu:AddRow(                 L[Language.Local].Menu.Folder, function ()
 		
 	end)
 
-	self.exportMenu:AddRow(                 "List of Groups", function ()
+	self.exportMenu:AddRow(                 L[Language.Local].Menu.ListOfGroups, function ()
 		
 	end)
 
-	self.exportMenu:AddRow(                 "List of Timer", function ()
+	self.exportMenu:AddRow(                 L[Language.Local].Menu.ListOfTimers, function ()
 		
 	end)
+
+    
+-------------------------------------------------------------------------------------
+--      addToFolder
+    self.addToMenu                        = Options.Constructor.RightClickSubMenu(125)
+
+    self.addToMenu:AddRow( L[Language.Local].Menu.RemoveFromFolder, function ()
+        Options.MoveToFolder( nil )
+    end)
+
+    self.addToMenu:AddSeperator()
+
+    for i, folder in ipairs(Data.folder) do
+
+        self.addToMenu:AddRow( folder.name, function ()
+            Options.MoveToFolder( i )
+        end)
+        
+    end
+
 
 	-------------------------------------------------------------------------------------
 	--      right click
 	self.rightClickMenu                   = Options.Constructor.RightClickMenu(125)
 
-	self.rightClickMenu:AddSubMenuRow(      "Export", self.exportMenu )
+	self.rightClickMenu:AddSubMenuRow(      L[Language.Local].Menu.Export, self.exportMenu )
 
 	self.rightClickMenu:AddSeperator()
 
-	self.rightClickMenu:AddRow(             "Edit", function ()
+    self.rightClickMenu:AddSubMenuRow(      L[Language.Local].Menu.MoveToFolder, self.addToMenu )
+
+	self.rightClickMenu:AddSeperator()
+
+	self.rightClickMenu:AddRow(             L[Language.Local].Menu.Edit, function ()
 
         Data.selectedGroupIndex = {}
         Data.selectedFolderIndex = {}
@@ -115,29 +142,33 @@ function FolderItem:Constructor( parent, data, index, width )
 		
 	end )
 
-	self.rightClickMenu:AddRow(             "Move", function ()
+	self.rightClickMenu:AddRow(             L[Language.Local].Menu.Move, function ()
 		
+        Options.Move.UpdateMode(true, false)
+
 	end)
 
-	self.rightClickMenu:AddRow(             "Delete", function ()
+	self.rightClickMenu:AddRow(             L[Language.Local].Menu.Delete, function ()
 		
+        Options.Delete()
+
 	end)
 
     self.rightClickMenu:AddSeperator()
 
-    self.rightClickMenu:AddRow(             "Cut", function ()
+    self.rightClickMenu:AddRow(             L[Language.Local].Menu.Cut, function ()
         
         Options.Cut( Options.CopyCache.ItemTypes.FolderAndGroup )
           
     end)
 
-    self.rightClickMenu:AddRow(             "Copy", function ()
+    self.rightClickMenu:AddRow(             L[Language.Local].Menu.Copy, function ()
         
         Options.Copy( Options.CopyCache.ItemTypes.FolderAndGroup )
 
     end)
 
-    self.rightClickMenu:AddRow(             "Past", function ()
+    self.rightClickMenu:AddRow(             L[Language.Local].Menu.Paste, function ()
         
         Options.Paste( Options.CopyCache.ItemTypes.FolderAndGroup )
 
@@ -302,7 +333,8 @@ function FolderItem:MatchesSearch( text )
     return false
 
 end
-    
+
+
 
 -------------------------------------------------------------------------------------
 --      Description:    
@@ -509,5 +541,24 @@ function FolderItem:ClearItems()
     self.children = {}
 
     self.list:ClearItems()
+
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function FolderItem:EnableChanged(enabled)
+         
+    for index, child in ipairs(self.children) do
+        child:EnableChanged(enabled)
+    end
+   
+    Options.SaveData()
 
 end

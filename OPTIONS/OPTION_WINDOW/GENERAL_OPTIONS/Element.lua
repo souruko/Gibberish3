@@ -1,7 +1,11 @@
 --===================================================================================
 --             Name:    General Options
 -------------------------------------------------------------------------------------
---      Description:    
+--      Description:    import button
+--                      track group
+--                      track target
+--                      auto reload
+--                      show tooltips
 --===================================================================================
 Options.Constructor.GeneralOptions = class(Turbine.UI.Control)
 

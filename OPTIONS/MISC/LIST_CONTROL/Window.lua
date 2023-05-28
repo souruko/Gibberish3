@@ -17,7 +17,7 @@ Options.Constructor.ListControl = class( Turbine.UI.Control )
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.ListControl:Constructor()
+function Options.Constructor.ListControl:Constructor( func )
 	Turbine.UI.Control.Constructor( self )
 
     self:SetBackColor( Defaults.Colors.BackgroundColor6 )
@@ -34,7 +34,7 @@ function Options.Constructor.ListControl:Constructor()
     self.addButton                        = Turbine.UI.Button()
     self.addButton:SetParent(               self )
     self.addButton:SetPosition(             2,2 )
-    self.addButton:SetBackColor(            Turbine.UI.Color.Black )
+    self.addButton:SetBackColor(            Defaults.Colors.BackgroundColor1 )
     self.addButton:SetFont(             Defaults.Fonts.MediumFont )
     self.addButton:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleCenter)
     self.addButton:SetForeColor( Defaults.Colors.BackgroundColor6 )
@@ -42,6 +42,9 @@ function Options.Constructor.ListControl:Constructor()
 
     self.addButton:SetText(         "+" )
     self.addButton:SetSize(                self.addButton_width, self.serachBox_height )
+    self.addButton.MouseClick = function ()
+        func()
+    end
 
     self.searchText = ""
 

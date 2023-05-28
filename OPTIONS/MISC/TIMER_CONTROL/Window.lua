@@ -53,7 +53,11 @@ function Options.Constructor.TimerControl:Constructor( data, timerID, width, par
     local text = L[Language.Local].Terms.TimerType[ self.data.type ]
     self.type:SetText(text)
 
-    self.enabledCheckBox = Options.Constructor.CheckBox( self )
+    self.enabledCheckBox = Options.Constructor.CheckBox( self, function ()
+        
+        self.data.enabled = not(self.data.enabled)
+
+    end )
     self.enabledCheckBox:SetPosition(3, 15)
     self.enabledCheckBox:SetChecked(data.enabled)
 

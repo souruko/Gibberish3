@@ -23,9 +23,26 @@ function TimerTriggerTab:Constructor( width, name, tabwindow )
     self:SetTabWindow( tabwindow )
 
     -------------------------------------------------------------------------------------
+    --      right click
+    self.rightClickMenu = Options.Constructor.RightClickMenu(125)
+    
+    for type, text in ipairs(L[Language.Local].Terms.TriggerType) do
+
+        self.rightClickMenu:AddRow( text, function ()
+            self:AddNewTrigger(type)
+        end)
+        
+    end
+
+    
+    -------------------------------------------------------------------------------------
     --      Description:    TIMER SELECTION
     -------------------------------------------------------------------------------------
-    self.triggerSelection = Options.Constructor.ListControl()
+    self.triggerSelection = Options.Constructor.ListControl(function ()
+        Turbine.Shell.WriteLine("d")
+        self.rightClickMenu:Show(nil, nil, true)
+
+    end)
     self.triggerSelection:SetParent(self)
     self.triggerSelection:SetWidth(200)
     self.triggerSelection:SetPosition( -2, 35)
@@ -78,6 +95,30 @@ function TimerTriggerTab:FillContent( timerData, timerIndex, multiselect )
         self.triggerSelection:ResetSelection()
 
     end
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    LISTBOX OPTIONS DraggEnd
+-------------------------------------------------------------------------------------
+--        Parameter:    data
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function TimerTriggerTab:AddNewTrigger( type )
+
+    local group = Data.group[ Data.selectedGroupIndex[1] ]
+    local timer = group.timerList[ Data.selectedTimerIndex[1].timerIndex ]
+    local index = Timer.AddTrigger(timer, type)
+    self.triggerSelection:AddItem( Options.Constructor.TriggerControl(timer[type][index], index, 202, self) )
+
+    Data.selectedTriggerIndex = {}
+    Data.selectedTriggerIndex.groupIndex = Data.selectedGroupIndex[1]
+    Data.selectedTriggerIndex.timerIndex = Data.selectedTimerIndex[1].timerIndex
+    Data.selectedTriggerIndex.triggerIndex = index
+
+    self:SelectionChanged(timer[type][index], index, false)
 
 end
 
