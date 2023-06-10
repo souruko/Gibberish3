@@ -61,9 +61,9 @@ Data.group[testIndex].timerList[timer2in].useThreshold = true
 Data.group[testIndex].timerList[timer2in].description = "bestimmt ein tollerer timer oder auch nicht"
 
 
-tr2  = Timer.AddTrigger(Data.group[testIndex].timerList[timer2in], Trigger.Types.EffectSelf)
-Data.group[testIndex].timerList[timer2in][Trigger.Types.EffectSelf][tr2].useRegex = false
-Data.group[testIndex].timerList[timer2in][Trigger.Types.EffectSelf][tr2].token = "Soliloquy of Spirit"
+tr2  = Timer.AddTrigger(Data.group[testIndex].timerList[timer2in], Trigger.Types.Chat)
+Data.group[testIndex].timerList[timer2in][Trigger.Types.Chat][tr2].useRegex = false
+Data.group[testIndex].timerList[timer2in][Trigger.Types.Chat][tr2].token = "Soliloquy of Spirit"
 Data.group[testIndex].timerList[timer2in].icon = nil
 Data.group[testIndex].timerList[timer2in].useCustomTimer = true
 Data.group[testIndex].timerList[timer2in].useAnimation = true
@@ -79,9 +79,9 @@ Data.group[testIndex].timerList[timer3in].textValue = "Text: &2"
 Data.group[testIndex].timerList[timer3in].unique = true
 Data.group[testIndex].timerList[timer3in].description = "timer ohne selbstvertrauen!"
 
-tr3  = Timer.AddTrigger(Data.group[testIndex].timerList[timer3in], Trigger.Types.Skill)
-Data.group[testIndex].timerList[timer3in][Trigger.Types.Skill][tr3].useRegex = false
-Data.group[testIndex].timerList[timer3in][Trigger.Types.Skill][tr3].token = "Chord of Salvation"
+tr3  = Timer.AddTrigger(Data.group[testIndex].timerList[timer3in], Trigger.Types.Chat)
+Data.group[testIndex].timerList[timer3in][Trigger.Types.Chat][tr3].useRegex = false
+Data.group[testIndex].timerList[timer3in][Trigger.Types.Chat][tr3].token = "Chord of Salvation"
 Data.group[testIndex].timerList[timer3in].icon = nil
 Data.group[testIndex].timerList[timer3in].permanent = true
 Data.group[testIndex].opacityPassiv = 0.3

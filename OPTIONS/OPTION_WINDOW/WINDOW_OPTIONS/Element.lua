@@ -102,7 +102,7 @@ function Options.Constructor.WindowOptions:Constructor( parent )
 -------------------------------------------------------------------------------------
 --  start
 
-    self:SelectionChanged()
+    -- self:SelectionChanged()
 
 end
 
@@ -127,7 +127,7 @@ function Options.Constructor.WindowOptions:SelectionChanged()
         self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
 
         if self.currentDisplay ~= nil then
-            self.currentDisplay:SetParent(nil)
+            self.currentDisplay:Finish()
         end
 
         local groupIndex = Data.selectedGroupIndex[1]
@@ -135,10 +135,10 @@ function Options.Constructor.WindowOptions:SelectionChanged()
 
         self.headingLabel:SetText(   "- " ..   groupData.name ..    L[Language.Local].Headings.Options )
       
-        self.currentDisplay = Group.Options[ groupData.type ]
+        self.currentDisplay = Group.Options[ groupData.type ]()
         self.currentDisplay:SetPosition(12, 42)
         self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay.FillContent( groupData, groupIndex, false )
+        self.currentDisplay:FillContent( groupData, groupIndex, false )
         self.currentDisplay:SetParent(self)
 
     -- multi group options
@@ -150,7 +150,7 @@ function Options.Constructor.WindowOptions:SelectionChanged()
         self.frame:SetVisible(true)
 
         if self.currentDisplay ~= nil then
-            self.currentDisplay:SetParent(nil)
+            self.currentDisplay:Finish()
         end
 
         local groupIndex = Data.selectedGroupIndex[#Data.selectedGroupIndex]
@@ -174,7 +174,7 @@ function Options.Constructor.WindowOptions:SelectionChanged()
       
         
         if self.currentDisplay ~= nil then
-            self.currentDisplay:SetParent(nil)
+            self.currentDisplay:Finish()
         end
 
         local folderIndex = Data.selectedFolderIndex[1] 
@@ -192,7 +192,7 @@ function Options.Constructor.WindowOptions:SelectionChanged()
     else
   
         if self.currentDisplay ~= nil then
-            self.currentDisplay:SetParent(nil)
+            self.currentDisplay:Finish()
         end
         self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
         self.headingLabel:SetText( "" )
@@ -217,6 +217,11 @@ end
 function Options.Constructor.WindowOptions:Finish()
 
     self:SetVisible(false)
+
+    if self.currentDisplay ~= nil then
+        self.currentDisplay:Finish()
+        self.currentDisplay:SetParent(nil)
+    end
 
 end
 

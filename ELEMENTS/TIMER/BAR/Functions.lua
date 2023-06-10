@@ -51,3 +51,19 @@ return BAR.BarElement(  parent,
                         activ )
 
 end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    constructor array workaround
+-------------------------------------------------------------------------------------
+--        Parameter:    index
+--                      data
+-------------------------------------------------------------------------------------
+--           Return:    group listbox element
+-------------------------------------------------------------------------------------
+Timer.Options[ Timer.Types.BAR ] = function ()
+
+    return TIMER.OPTIONS.BarOptions()
+
+end

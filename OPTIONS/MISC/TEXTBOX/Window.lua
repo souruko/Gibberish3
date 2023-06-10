@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
-Options.Constructor.TextBox = class( Turbine.UI.Window )
+Options.Constructor.TextBox = class( Turbine.UI.Control )
 
 
 
@@ -18,7 +18,7 @@ Options.Constructor.TextBox = class( Turbine.UI.Window )
 --           Return:     
 -------------------------------------------------------------------------------------
 function Options.Constructor.TextBox:Constructor( parent, width, height )
-	Turbine.UI.Window.Constructor( self )
+	Turbine.UI.Control.Constructor( self )
 
     self.activ = false
 
@@ -58,6 +58,14 @@ function Options.Constructor.TextBox:Constructor( parent, width, height )
     self.text:SetTextAlignment(        Turbine.UI.ContentAlignment.MiddleLeft )
     self.text:SetFont(                 Defaults.Fonts.TabFont )
     self.text:SetSelectable(true)
+
+    
+    self.MouseEnter = function ()
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor2)
+    end
+    self.MouseLeave = function ()
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor1)
+    end
 
     self:SetVisible(true)
 

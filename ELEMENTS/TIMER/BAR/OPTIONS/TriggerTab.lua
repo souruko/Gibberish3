@@ -189,10 +189,11 @@ function TimerTriggerTab:SelectionChanged( triggerData, triggerIndex, add_to_sel
 
     if self.triggerOptions ~= nil then
         self.triggerOptions:SetParent(nil)
+        self.triggerOptions:Finish()
     end
     if triggerData ~= nil then
 
-        self.triggerOptions = Trigger.Options[ triggerData.type ]
+        self.triggerOptions = Trigger.Options[ triggerData.type ]()
         self.triggerOptions:SetPosition(200, 35)
         self.triggerOptions:SetHeight( self.triggerSelection:GetHeight() )
         self.triggerOptions:FillContent( triggerData, triggerIndex, add_to_selection )

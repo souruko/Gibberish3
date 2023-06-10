@@ -1,11 +1,11 @@
 --===================================================================================
---             Name:    LISTBOX OPTIONS Group MiscTabs
+--             Name:    LISTBOX OPTIONS Group EnableTabs
 -------------------------------------------------------------------------------------
 --      Description:    
 --===================================================================================
 
 
-GroupMiscTab = class(  Options.Constructor.Tab )
+GroupEnableTab = class(  Options.Constructor.Tab )
 
 -------------------------------------------------------------------------------------
 --      Description:    LISTBOX OPTIONS GROUP TABWINDOW
@@ -15,7 +15,7 @@ GroupMiscTab = class(  Options.Constructor.Tab )
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function GroupMiscTab:Constructor( width, name, tabwindow )
+function GroupEnableTab:Constructor( width, name, tabwindow )
 	Options.Constructor.Tab.Constructor( self )
 
     self:SetWidth( width )
@@ -32,11 +32,21 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-function GroupMiscTab:FillContent( groupData, groupIndex )
+function GroupEnableTab:FillContent( groupData, groupIndex )
 
 end
 
 
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function GroupEnableTab:Finish()
+
+end
 
 
 

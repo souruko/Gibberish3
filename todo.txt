@@ -35,6 +35,8 @@
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
 *   known issues
+ 
+    *   schließen verbuggt ak
 
     *   update timer / trigger options when switching group even when no timers exist
 

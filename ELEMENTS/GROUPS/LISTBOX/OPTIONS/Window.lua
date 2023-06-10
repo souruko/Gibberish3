@@ -5,49 +5,54 @@
 --===================================================================================
 
 
--------------------------------------------------------------------------------------
---      Description:    LISTBOX OPTIONS Control
--------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ] = Turbine.UI.Control()
 
-local width = 706
+ListBoxOptions = class(Turbine.UI.Control)
 
-Group.Options[ Group.Types.LISTBOX ].multiselect = false
+function ListBoxOptions:Constructor()
+	Turbine.UI.Control.Constructor( self )
 
-Group.Options[ Group.Types.LISTBOX ]:SetWidth(width)
-Group.Options[ Group.Types.LISTBOX ]:SetBackColor( Defaults.Colors.BackgroundColor2 )
 
--------------------------------------------------------------------------------------
---      Description:    LISTBOX OPTIONS GROUP OPTIONS
--------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow = Options.Constructor.TabWindow( Group.Options[  Group.Types.LISTBOX ], width, 101  )
+    local width = 706
 
-Group.Options[ Group.Types.LISTBOX ].groupTabs = {}
-Group.Options[ Group.Types.LISTBOX ].groupTabs.general = OPTIONS.GROUP_OPTIONS.GroupGeneralTab( width, L[Language.Local].Tab.General, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.timer = OPTIONS.GROUP_OPTIONS.GroupTimerTab( width, L[Language.Local].Tab.Timer, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.ui = OPTIONS.GROUP_OPTIONS.GroupUITab( width, L[Language.Local].Tab.UI, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.color = OPTIONS.GROUP_OPTIONS.GroupColorTab( width, L[Language.Local].Tab.Color, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.text = OPTIONS.GROUP_OPTIONS.GroupTextTab( width, L[Language.Local].Tab.Text, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.enable = OPTIONS.GROUP_OPTIONS.GroupEnableTab( width, L[Language.Local].Tab.Enable, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
-Group.Options[ Group.Types.LISTBOX ].groupTabs.misc = OPTIONS.GROUP_OPTIONS.GroupMiscTab( width, L[Language.Local].Tab.Misc, Group.Options[ Group.Types.LISTBOX ].groupTabWindow )
+    self.multiselect = false
+    
+    self:SetWidth(width)
+    self:SetBackColor( Defaults.Colors.BackgroundColor2 )
+    
+    -------------------------------------------------------------------------------------
+    --      Description:    LISTBOX OPTIONS GROUP OPTIONS
+    -------------------------------------------------------------------------------------
+    self.groupTabWindow = Options.Constructor.TabWindow( self, width, 101  )
+    
+    self.groupTabs = {}
+    self.groupTabs.general = OPTIONS.GroupGeneralTab( width, L[Language.Local].Tab.General, self.groupTabWindow )
+    self.groupTabs.timer = OPTIONS.GroupTimerTab( width, L[Language.Local].Tab.Timer, self.groupTabWindow )
+    self.groupTabs.ui = OPTIONS.GroupUITab( width, L[Language.Local].Tab.UI, self.groupTabWindow )
+    self.groupTabs.color = OPTIONS.GroupColorTab( width, L[Language.Local].Tab.Color, self.groupTabWindow )
+    self.groupTabs.text = OPTIONS.GroupTextTab( width, L[Language.Local].Tab.Text, self.groupTabWindow )
+    self.groupTabs.enable = OPTIONS.GroupEnableTab( width, L[Language.Local].Tab.Enable, self.groupTabWindow )
+    self.groupTabs.misc = OPTIONS.GroupMiscTab( width, L[Language.Local].Tab.Misc, self.groupTabWindow )
+    
+    self.groupTabWindow:AddTab( self.groupTabs.general )
+    self.groupTabWindow:AddTab( self.groupTabs.timer )
+    self.groupTabWindow:AddTab( self.groupTabs.ui )
+    self.groupTabWindow:AddTab( self.groupTabs.color )
+    self.groupTabWindow:AddTab( self.groupTabs.text )
+    self.groupTabWindow:AddTab( self.groupTabs.enable )
+    self.groupTabWindow:AddTab( self.groupTabs.misc )
+    
+    self.groupTabWindow:ResetSelection()
+    
 
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.general )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.timer )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.ui )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.color )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.text )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.enable )
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:AddTab( Group.Options[ Group.Types.LISTBOX ].groupTabs.misc )
-
-Group.Options[ Group.Types.LISTBOX ].groupTabWindow:ResetSelection()
+end
 
 
 -------------------------------------------------------------------------------------
 --      Description:    SizeChanged
 -------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].SizeChanged = function ()
+function ListBoxOptions:SizeChanged()
 
-    Group.Options[ Group.Types.LISTBOX ].groupTabWindow:SetHeight(  Group.Options[ Group.Types.LISTBOX ]:GetHeight() )
+    self.groupTabWindow:SetHeight(  self:GetHeight() )
     
 end
 
@@ -55,25 +60,39 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    FillContent
 -------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].FillContent = function ( groupData, groupIndex, multiselect )
+function ListBoxOptions:FillContent ( groupData, groupIndex, multiselect )
 
-    Group.Options[ Group.Types.LISTBOX ].multiselect = multiselect
+    self.multiselect = multiselect
 
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.general:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.timer:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.ui:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.color:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.text:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.enable:FillContent( groupData, groupIndex, multiselect )
-    Group.Options[ Group.Types.LISTBOX ].groupTabs.misc:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.general:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.timer:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.ui:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.color:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.text:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.enable:FillContent( groupData, groupIndex, multiselect )
+    self.groupTabs.misc:FillContent( groupData, groupIndex, multiselect )
 
 end
-
 
 -------------------------------------------------------------------------------------
 --      Description:    CheckContent
 -------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].CheckContent = function ()
+function ListBoxOptions:Finish()
+
+    self.groupTabs.general:Finish()
+    self.groupTabs.timer:Finish()
+    self.groupTabs.ui:Finish()
+    self.groupTabs.color:Finish()
+    self.groupTabs.text:Finish()
+    self.groupTabs.enable:Finish()
+    self.groupTabs.misc:Finish()
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    CheckContent
+-------------------------------------------------------------------------------------
+function ListBoxOptions:CheckContent()
     
 end
 
@@ -81,6 +100,6 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    SaveContent
 -------------------------------------------------------------------------------------
-Group.Options[ Group.Types.LISTBOX ].SaveContent = function ()
+function ListBoxOptions:SaveContent()
     
 end

@@ -93,6 +93,14 @@ function Options.Constructor.Dropdown:Constructor( parent, width )
     self.list:SetTop( self.spacing )
     self.list:SetSize( width , self.selectionWindow:GetHeight() - 2*self.spacing )
 
+
+    self.MouseEnter = function ()
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor2)
+    end
+    self.MouseLeave = function ()
+        self.background:SetBackColor(Defaults.Colors.BackgroundColor1)
+    end
+    
     self:SetVisible(true)
 
 end
@@ -270,5 +278,21 @@ function Options.Constructor.Dropdown:ClearItems()
     self.list:ClearItems()
     self.selection = nil
     self.selectedValue = nil
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    Dropdown ClearItems
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.Dropdown:Finish()
+
+    self:SetParent(nil)
+    self:SetVisible(false)
+    self:Close()
 
 end

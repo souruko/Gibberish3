@@ -153,15 +153,32 @@ function GroupTimerTab:SelectionChanged( timerData, timerIndex, add_to_selection
     self.timerSelection:SelectionChanged( Timer.IsSelected )
 
     
-    if self.currentDisplay ~= nil then
-        self.currentDisplay:SetParent(nil)
+    if self.timerOptions ~= nil then
+        self.timerOptions:SetParent(nil)       
+        self.timerOptions:Finish()
     end
     if timerData ~= nil then
-        self.timerOptions = Timer.Options[ timerData.type ]
+        self.timerOptions = Timer.Options[ timerData.type ]()
         self.timerOptions:SetPosition(200, 35)
         self.timerOptions:SetHeight( self.timerSelection:GetHeight() )
-        self.timerOptions.FillContent( timerData, timerIndex, add_to_selection )
+        self.timerOptions:FillContent( timerData, timerIndex, add_to_selection )
         self.timerOptions:SetParent(self)
     end
 
 end
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function GroupTimerTab:Finish()
+
+    if self.timerOptions ~= nil then
+        self.timerOptions:Finish()
+    end
+
+end
+

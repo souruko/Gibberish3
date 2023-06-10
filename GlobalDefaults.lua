@@ -27,7 +27,7 @@ Defaults.Colors.NotSelected         = Turbine.UI.Color.White
 Defaults.Colors.BackgroundColor1            = Turbine.UI.Color.Black
 
 Defaults.Colors.BackgroundColor1            = Turbine.UI.Color(0.1,0.1,0.1)
-Defaults.Colors.BackgroundColor2            = Turbine.UI.Color(0.15,0.15,0.15)
+Defaults.Colors.BackgroundColor2            = Turbine.UI.Color(0.18,0.18,0.18)
 Defaults.Colors.BackgroundColor3            = Turbine.UI.Color(0.3,0.3,0.3)
 Defaults.Colors.BackgroundColor4            = Turbine.UI.Color(0.4,0.4,0.4)
 Defaults.Colors.BackgroundColor5            = Turbine.UI.Color(0.5,0.5,0.5)

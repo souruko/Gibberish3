@@ -211,3 +211,21 @@ end
 
 
 
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function GroupTextTab:Finish()
+
+    self.fontDropdown:Finish()
+    self.fontSizeDropdown:Finish()
+    self.numberDropdown:Finish()
+    self.textAlignmentDropdown:Finish()
+    self.timerAlignmentDropdown:Finish()
+
+end
+

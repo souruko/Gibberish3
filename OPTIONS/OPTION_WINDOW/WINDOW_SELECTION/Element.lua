@@ -119,6 +119,12 @@ function Options.Constructor.WindowSelection:Constructor( parent )
         self.newFileMenu:Show(nil, nil, true)
 
     end
+    self.newFileButton.MouseEnter = function ()
+        self.fileBack:SetBackColor(Defaults.Colors.BackgroundColor2)
+    end
+    self.newFileButton.MouseLeave = function ()
+        self.fileBack:SetBackColor(Defaults.Colors.BackgroundColor1)
+    end
 
     self.folderBack                        = Turbine.UI.Control()
     self.folderBack:SetParent(               self )
@@ -126,6 +132,7 @@ function Options.Constructor.WindowSelection:Constructor( parent )
     self.folderBack:SetBackColor(            Defaults.Colors.BackgroundColor1 )
     self.folderBack:SetMouseVisible(         false )
     self.folderBack:SetSize(                30, 30 )
+
     self.newFolderButton                    = Turbine.UI.Button()
     self.newFolderButton:SetParent(           self )
     self.newFolderButton:SetPosition(         newButton_pos + 33, serachBox_top )
@@ -136,6 +143,12 @@ function Options.Constructor.WindowSelection:Constructor( parent )
         
         self:NewFolder()
 
+    end
+    self.newFolderButton.MouseEnter = function ()
+        self.folderBack:SetBackColor(Defaults.Colors.BackgroundColor2)
+    end
+    self.newFolderButton.MouseLeave = function ()
+        self.folderBack:SetBackColor(Defaults.Colors.BackgroundColor1)
     end
 
 
@@ -192,6 +205,12 @@ function Options.Constructor.WindowSelection:Constructor( parent )
 
         Options.MainWindow.CollapsChanged()
 
+    end
+    self.collaps.MouseEnter = function ()
+        self.collapsBack:SetBackColor(Defaults.Colors.BackgroundColor2)
+    end
+    self.collaps.MouseLeave = function ()
+        self.collapsBack:SetBackColor(Defaults.Colors.BackgroundColor1)
     end
     
 -------------------------------------------------------------------------------------

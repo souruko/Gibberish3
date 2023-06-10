@@ -5,61 +5,62 @@
 --===================================================================================
 
 
--------------------------------------------------------------------------------------
---      Description:    BAR OPTIONS Control
--------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ] = Turbine.UI.Control()
+BarOptions = class(Turbine.UI.Control)
 
-local width = 506
+function BarOptions:Constructor()
+	Turbine.UI.Control.Constructor( self )
 
-Timer.Options[ Timer.Types.BAR ].multiselect = false
+    local width = 506
 
-Timer.Options[ Timer.Types.BAR ]:SetWidth(width)
-Timer.Options[ Timer.Types.BAR ]:SetBackColor( Defaults.Colors.BackgroundColor2 )
+    self.multiselect = false
 
--------------------------------------------------------------------------------------
---      Description:    BAR OPTIONS Timer OPTIONS
--------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow = Options.Constructor.TabWindow( Timer.Options[  Timer.Types.BAR ], width, 101  )
+    self:SetWidth(width)
+    self:SetBackColor( Defaults.Colors.BackgroundColor2 )
 
-Timer.Options[ Timer.Types.BAR ].TimerTabs = {}
-Timer.Options[ Timer.Types.BAR ].TimerTabs.general = OPTIONS.TIMER_OPTIONS.TimerGeneralTab( width, L[Language.Local].Tab.General, Timer.Options[ Timer.Types.BAR ].TimerTabWindow )
-Timer.Options[ Timer.Types.BAR ].TimerTabs.trigger = OPTIONS.TIMER_OPTIONS.TimerTriggerTab( width, L[Language.Local].Tab.Trigger, Timer.Options[ Timer.Types.BAR ].TimerTabWindow )
-Timer.Options[ Timer.Types.BAR ].TimerTabs.timer = OPTIONS.TIMER_OPTIONS.TimerTimerTab( width, L[Language.Local].Tab.Timer, Timer.Options[ Timer.Types.BAR ].TimerTabWindow )
-Timer.Options[ Timer.Types.BAR ].TimerTabs.text = OPTIONS.TIMER_OPTIONS.TimerTextTab( width, L[Language.Local].Tab.Text, Timer.Options[ Timer.Types.BAR ].TimerTabWindow )
-Timer.Options[ Timer.Types.BAR ].TimerTabs.animation = OPTIONS.TIMER_OPTIONS.TimerAnimationTab( width, L[Language.Local].Tab.Animation, Timer.Options[ Timer.Types.BAR ].TimerTabWindow )
+    -------------------------------------------------------------------------------------
+    --      Description:    BAR OPTIONS Timer OPTIONS
+    -------------------------------------------------------------------------------------
+    self.TimerTabWindow = Options.Constructor.TabWindow( self, width, 101  )
 
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:AddTab( Timer.Options[ Timer.Types.BAR ].TimerTabs.general )
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:AddTab( Timer.Options[ Timer.Types.BAR ].TimerTabs.trigger )
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:AddTab( Timer.Options[ Timer.Types.BAR ].TimerTabs.timer )
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:AddTab( Timer.Options[ Timer.Types.BAR ].TimerTabs.text )
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:AddTab( Timer.Options[ Timer.Types.BAR ].TimerTabs.animation )
+    self.TimerTabs = {}
+    self.TimerTabs.general = OPTIONS.TimerGeneralTab( width, L[Language.Local].Tab.General, self.TimerTabWindow )
+    self.TimerTabs.trigger = OPTIONS.TimerTriggerTab( width, L[Language.Local].Tab.Trigger, self.TimerTabWindow )
+    self.TimerTabs.timer = OPTIONS.TimerTimerTab( width, L[Language.Local].Tab.Timer, self.TimerTabWindow )
+    self.TimerTabs.text = OPTIONS.TimerTextTab( width, L[Language.Local].Tab.Text, self.TimerTabWindow )
+    self.TimerTabs.animation = OPTIONS.TimerAnimationTab( width, L[Language.Local].Tab.Animation, self.TimerTabWindow )
 
-Timer.Options[ Timer.Types.BAR ].TimerTabWindow:ResetSelection()
+    self.TimerTabWindow:AddTab( self.TimerTabs.general )
+    self.TimerTabWindow:AddTab( self.TimerTabs.trigger )
+    self.TimerTabWindow:AddTab( self.TimerTabs.timer )
+    self.TimerTabWindow:AddTab( self.TimerTabs.text )
+    self.TimerTabWindow:AddTab( self.TimerTabs.animation )
 
+    self.TimerTabWindow:ResetSelection()
+
+end
 
 -------------------------------------------------------------------------------------
 --      Description:    SizeChanged
 -------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ].SizeChanged = function ()
+function BarOptions:SizeChanged()
 
-    Timer.Options[ Timer.Types.BAR ].TimerTabWindow:SetHeight(  Timer.Options[ Timer.Types.BAR ]:GetHeight() )
-    
+    self.TimerTabWindow:SetHeight(  self:GetHeight() )
+
 end
 
 
 -------------------------------------------------------------------------------------
 --      Description:    FillContent
 -------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ].FillContent = function ( TimerData, TimerIndex, multiselect )
+function BarOptions:FillContent( TimerData, TimerIndex, multiselect )
 
-    Timer.Options[ Timer.Types.BAR ].multiselect = multiselect
+    self.multiselect = multiselect
 
-    Timer.Options[ Timer.Types.BAR ].TimerTabs.general:FillContent( TimerData, TimerIndex, multiselect )
-    Timer.Options[ Timer.Types.BAR ].TimerTabs.trigger:FillContent( TimerData, TimerIndex, multiselect )
-    Timer.Options[ Timer.Types.BAR ].TimerTabs.timer:FillContent( TimerData, TimerIndex, multiselect )
-    Timer.Options[ Timer.Types.BAR ].TimerTabs.text:FillContent( TimerData, TimerIndex, multiselect )
-    Timer.Options[ Timer.Types.BAR ].TimerTabs.animation:FillContent( TimerData, TimerIndex, multiselect )
+    self.TimerTabs.general:FillContent( TimerData, TimerIndex, multiselect )
+    self.TimerTabs.trigger:FillContent( TimerData, TimerIndex, multiselect )
+    self.TimerTabs.timer:FillContent( TimerData, TimerIndex, multiselect )
+    self.TimerTabs.text:FillContent( TimerData, TimerIndex, multiselect )
+    self.TimerTabs.animation:FillContent( TimerData, TimerIndex, multiselect )
 
 end
 
@@ -67,7 +68,7 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    CheckContent
 -------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ].CheckContent = function ()
+function BarOptions:CheckContent()
     
 end
 
@@ -75,6 +76,14 @@ end
 -------------------------------------------------------------------------------------
 --      Description:    SaveContent
 -------------------------------------------------------------------------------------
-Timer.Options[ Timer.Types.BAR ].SaveContent = function ()
+function BarOptions:SizeContent()
     
 end
+
+-------------------------------------------------------------------------------------
+--      Description:    SaveContent
+-------------------------------------------------------------------------------------
+function BarOptions:Finish()
+    
+end
+

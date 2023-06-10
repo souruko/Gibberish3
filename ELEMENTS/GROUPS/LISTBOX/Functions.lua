@@ -24,3 +24,18 @@ Group.Constructor[Group.Types.LISTBOX] = function (index, data)
 
 end
 
+
+
+-------------------------------------------------------------------------------------
+--      Description:    constructor array workaround
+-------------------------------------------------------------------------------------
+--        Parameter:    index
+--                      data
+-------------------------------------------------------------------------------------
+--           Return:    group listbox element
+-------------------------------------------------------------------------------------
+Group.Options[Group.Types.LISTBOX] = function ()
+
+    return LISTBOX.OPTIONS.ListBoxOptions()
+
+end
