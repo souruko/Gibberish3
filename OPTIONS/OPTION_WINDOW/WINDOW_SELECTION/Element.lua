@@ -12,633 +12,186 @@ Options.Constructor.WindowSelection = class( Turbine.UI.Control )
 -------------------------------------------------------------------------------------
 --      Description:    window selection constructor
 -------------------------------------------------------------------------------------
---        Parameter:    parent
---                      width
---                      height
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
 function Options.Constructor.WindowSelection:Constructor( parent )
 	Turbine.UI.Control.Constructor( self )
 
-    self.folderList = {}
-    self.groupList = {}
-
-    self.parent = parent
-    self:SetParent(     parent)
-    self:SetBackColor(  Defaults.Colors.BackgroundColor2 )
-
-    local width                 = 300
-    local background_pos        = 5
-    local newButton_pos         = 10
-    local heading_top           = 7
-    local searchButton_left     = 70
-    local collapsButton_width   = 24
-    local collapsButton_height  = 24
-    local collapsButton_top     = 12
-    local frame_left            = 10
-    local frame_top             = 40
-    local content_left          = 12
-    local serachBox_top         = 42
-    local serachBox_width       = 300 - 120
-    local serachBox_height      = 30
-    local background_width      = width - 10
-    local frame_width           = background_width - 10
-    local list_width            = frame_width - 4
-    self.content_width          = list_width
-    local searchBox_left        = content_left + 64
-
-    local list_top              = 74--64
-    local heading_height        = 25
+	self.folderList = {}
+	self.groupList = {}
 
 
--------------------------------------------------------------------------------------
---  background  
-    self.background                   = Turbine.UI.Control()
-    self.background:SetParent(          self )
-    self.background:SetPosition(        background_pos, background_pos )
-    self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
-    self.background:SetMouseVisible(    false )
-    self.background:SetWidth(           background_width )
+	-------------------------------------------------------------------------------------
+	-- dimensions
+	self.width = 300
 
+    local left = 15
+    local top   = 35
 
+	local frame_thickness = 2
 
--------------------------------------------------------------------------------------
---  heading
-    self.headingLabel                 = Turbine.UI.Label()
-    self.headingLabel:SetParent(        self )
-    self.headingLabel:SetTop(           heading_top )
-    self.headingLabel:SetWidth(         width )
-    self.headingLabel:SetHeight(        heading_height )
-    self.headingLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleCenter )
-    self.headingLabel:SetFont(          Defaults.Fonts.HeadingFont )
-    self.headingLabel:SetText(          L[Language.Local].Headings.WindowSelection )
-    self.headingLabel:SetMouseVisible(  false )
+	local left_background = 5
+	local left_frame = 5
+	local left_newFolder = 34
+	local left_searchBox = 66
+	local left_collaps = 248
 
+	local top_background  = 5
+	local top_frame = 5
+	local top_list = 34
 
--------------------------------------------------------------------------------------
---  frame  
-    self.frame                        = Turbine.UI.Control()
-    self.frame:SetParent(               self )
-    self.frame:SetPosition(             frame_left, frame_top )
-    self.frame:SetBackColor(            Defaults.Colors.BackgroundColor6 )
-    self.frame:SetMouseVisible(         false )
-    self.frame:SetWidth(                frame_width )
+	local width_background = self.width - 10
+	local width_frame = width_background - 10
+	local width_searchBox = 180
+	local width_list = self.width - 24
 
+	local height_toolbar = 30
 
-    
--------------------------------------------------------------------------------------
---  new group / fodler  
+	-------------------------------------------------------------------------------------
+	-- self
+	self:SetWidth(self.width)
+    self:SetPosition( left, top )
+	self:SetParent(parent)
+    self:SetBackColor( Defaults.Colors.BackgroundColor )
 
+	-------------------------------------------------------------------------------------
+	-- children
 
-    self.newFileMenu = Options.Constructor.RightClickMenu(100)
+	-- background
+    self.background = Turbine.UI.Control()
+    self.background:SetParent( self )
+    self.background:SetPosition( left_background, top_background )
+    self.background:SetBackColor( Defaults.Colors.BackgroundColor2 )
+    self.background:SetMouseVisible( false )
+    self.background:SetWidth( width_background )
 
-    for key, value in pairs(Group.Types) do
-            
-        self.newFileMenu:AddRow( key, function ()
-            self:NewGroup(value)
-        end)
+	--  frame  
+	self.frame                        = Turbine.UI.Control()
+	self.frame:SetParent(               self.background )
+	self.frame:SetPosition(             left_frame, top_frame )
+	self.frame:SetBackColor(            Defaults.Colors.FrameColor )
+	self.frame:SetMouseVisible(         false )
+	self.frame:SetWidth(                width_frame )
 
-    end
+	-- new file
+    self.button_NewFile                        = Turbine.UI.Button()
+    self.button_NewFile:SetParent(               self.frame )
+    self.button_NewFile:SetPosition(             frame_thickness, frame_thickness )
+    self.button_NewFile:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+    self.button_NewFile:SetMouseVisible(         false )
+    self.button_NewFile:SetSize(                height_toolbar, height_toolbar )
 
-    self.fileBack                        = Turbine.UI.Control()
-    self.fileBack:SetParent(               self )
-    self.fileBack:SetPosition(             content_left, serachBox_top )
-    self.fileBack:SetBackColor(            Defaults.Colors.BackgroundColor1 )
-    self.fileBack:SetMouseVisible(         false )
-    self.fileBack:SetSize(                30, 30 )
+	self.icon_NewFile                    = Turbine.UI.Control()
+    self.icon_NewFile:SetParent(           self.button_NewFile )
+    self.icon_NewFile:SetSize( 30, 30)
+	self.icon_NewFile:SetLeft(-1)
+    self.icon_NewFile:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.icon_NewFile:SetBackground("Gibberish3/Resources/file_new.tga")
+	self.icon_NewFile:SetMouseVisible(false)
 
-    self.newFileButton                    = Turbine.UI.Button()
-    self.newFileButton:SetParent(           self )
-    self.newFileButton:SetPosition(         newButton_pos + 1, serachBox_top )
-    self.newFileButton:SetSize( 32, 30)
-    self.newFileButton:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.newFileButton:SetBackground("Gibberish3/Resources/file_new.tga")
-    self.newFileButton.MouseClick = function ()
-        
-        self.newFileMenu:Show(nil, nil, true)
+	-- new folder
+	self.button_NewFolder                        = Turbine.UI.Button()
+	self.button_NewFolder:SetParent(               self.frame )
+	self.button_NewFolder:SetPosition(             left_newFolder, frame_thickness )
+	self.button_NewFolder:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+	self.button_NewFolder:SetMouseVisible(         false )
+	self.button_NewFolder:SetSize(                height_toolbar, height_toolbar )
 
-    end
-    self.newFileButton.MouseEnter = function ()
-        self.fileBack:SetBackColor(Defaults.Colors.BackgroundColor2)
-    end
-    self.newFileButton.MouseLeave = function ()
-        self.fileBack:SetBackColor(Defaults.Colors.BackgroundColor1)
-    end
+	self.icon_NewFolder                    = Turbine.UI.Control()
+	self.icon_NewFolder:SetParent(           self.button_NewFolder )
+	self.icon_NewFolder:SetLeft(-1)
+	self.icon_NewFolder:SetSize( 30, 30)
+	self.icon_NewFolder:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_NewFolder:SetBackground("Gibberish3/Resources/dir_new.tga")
+	self.icon_NewFolder:SetMouseVisible(false)
 
-    self.folderBack                        = Turbine.UI.Control()
-    self.folderBack:SetParent(               self )
-    self.folderBack:SetPosition(             content_left + 32, serachBox_top )
-    self.folderBack:SetBackColor(            Defaults.Colors.BackgroundColor1 )
-    self.folderBack:SetMouseVisible(         false )
-    self.folderBack:SetSize(                30, 30 )
+	--  serachBoxBox
+	self.back_Search                    = Turbine.UI.Control()
+	self.back_Search:SetParent(           self.frame )
+    self.back_Search:SetPosition(         left_searchBox, frame_thickness )
+    self.back_Search:SetSize(             width_searchBox, height_toolbar)
+    self.back_Search:SetBackColor(       Defaults.Colors.BackgroundColor2 )
+	self.back_Search:SetMouseVisible(false)
 
-    self.newFolderButton                    = Turbine.UI.Button()
-    self.newFolderButton:SetParent(           self )
-    self.newFolderButton:SetPosition(         newButton_pos + 33, serachBox_top )
-    self.newFolderButton:SetSize( 32, 30)
-    self.newFolderButton:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.newFolderButton:SetBackground("Gibberish3/Resources/dir_new.tga")
-    self.newFolderButton.MouseClick = function ()
-        
-        self:NewFolder()
-
-    end
-    self.newFolderButton.MouseEnter = function ()
-        self.folderBack:SetBackColor(Defaults.Colors.BackgroundColor2)
-    end
-    self.newFolderButton.MouseLeave = function ()
-        self.folderBack:SetBackColor(Defaults.Colors.BackgroundColor1)
-    end
-
-
--------------------------------------------------------------------------------------
---  serachBoxBox
     self.searchText = ""
 
-    self.serachBox                    = Turbine.UI.Lotro.TextBox()
-    self.serachBox:SetPosition(         searchBox_left, serachBox_top )
-    self.serachBox:SetParent(           self )
-    self.serachBox:SetSize(             serachBox_width, serachBox_height)
-    self.serachBox:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
-    self.serachBox:SetMultiline(        false)
-    self.serachBox:SetFont(             Defaults.Fonts.MediumFont )
-    self.serachBox:SetForeColor(       Turbine.UI.Color.White)
-    self.serachBox:SetText(             L[Language.Local].Text.SearchBoxDefault)
-
-    self.serachBox.FocusGained = function(sender, args)
-		if self.searchText == "" then
-			self.serachBox:SetText("")
-		end		
+    self.textBox_Search                    = Turbine.UI.TextBox()
+    self.textBox_Search:SetParent(           self.back_Search )
+	self.textBox_Search:SetPosition(4,1)
+    self.textBox_Search:SetSize(             width_searchBox - 8, 28)
+    self.textBox_Search:SetTextAlignment(    Turbine.UI.ContentAlignment.MiddleLeft)
+    self.textBox_Search:SetMultiline(        false)
+    self.textBox_Search:SetFont(             Defaults.Fonts.TabFont )
+	self.textBox_Search.FocusGained = function (sender, args)
+		self.icon_Search:SetVisible(false)
 	end
-	self.serachBox.FocusLost = function(sender, args)
-		if self.searchText == "" then
-			self.serachBox:SetText(L[Language.Local].Text.SearchBoxDefault )
-		end
-	end
-	self.serachBox.TextChanged = function(sender, args)		
-		self.searchText = string.lower(self.serachBox:GetText())
-        self:FillContent()
+	self.textBox_Search.FocusLost = function (sender, args)
+		self.icon_Search:SetVisible(true)
 	end
 
 
-    -------------------------------------------------------------------------------------
---  new group / fodler  
-
-    self.collapsBack                        = Turbine.UI.Control()
-    self.collapsBack:SetParent(               self )
-    self.collapsBack:SetPosition(             searchBox_left + serachBox_width + 2, serachBox_top )
-    self.collapsBack:SetBackColor(            Defaults.Colors.BackgroundColor1 )
-    self.collapsBack:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.collapsBack:SetMouseVisible(         false )
-    self.collapsBack:SetSize(                30, 30 )
-
-    self.collaps                    = Turbine.UI.Button()
-    self.collaps:SetParent(           self )
-    self.collaps:SetPosition(        searchBox_left + serachBox_width + 1, serachBox_top  )
-    self.collaps:SetSize( 32, 32)
-    self.collaps:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.collaps:SetBackground("Gibberish3/Resources/collaps.tga")
-    self.collaps.MouseClick = function ()
-        
-        Folder.CollapsAll()
-
-        Options.MainWindow.CollapsChanged()
-
-    end
-    self.collaps.MouseEnter = function ()
-        self.collapsBack:SetBackColor(Defaults.Colors.BackgroundColor2)
-    end
-    self.collaps.MouseLeave = function ()
-        self.collapsBack:SetBackColor(Defaults.Colors.BackgroundColor1)
-    end
-    
--------------------------------------------------------------------------------------
---      export
-self.exportMenu                       = Options.Constructor.RightClickMenu(125)
-self.exportMenu:AddRow(                 "Group", function ()
-    Turbine.Shell.WriteLine(            "group" )
-end)
-
-self.exportMenu:AddRow(                 "List of Timers", function ()
-    
-end)
-
--------------------------------------------------------------------------------------
---      addToFolder
-self.addToMenu                        = Options.Constructor.RightClickMenu(125)
-
-self.addToMenu:AddRow( L[Language.Local].Menu.RemoveFromFolder, function ()
-        
-end)
-
-self.addToMenu:AddSeperator()
-
-for i, folder in ipairs(Data.folder) do
-
-    self.addToMenu:AddRow( folder.name, function ()
-        
-    end)
-    
-end
-
--------------------------------------------------------------------------------------
---      right click
-self.rightClickMenu = Options.Constructor.RightClickMenu(125)
-
-self.rightClickMenu:AddSubMenuRow( L[Language.Local].Menu.Export, self.exportMenu )
-
-self.rightClickMenu:AddSeperator()
-
-self.rightClickMenu:AddSubMenuRow( L[Language.Local].Menu.MoveToFolder, self.addToMenu )
-
-self.rightClickMenu:AddSeperator()
-
-self.rightClickMenu:AddRow( L[Language.Local].Menu.Move, function ()
-
-end)
-
-self.rightClickMenu:AddRow( L[Language.Local].Menu.Delete, function ()
-    
-end)
-
-self.rightClickMenu:AddSeperator()
-
-self.rightClickMenu:AddRow( L[Language.Local].Menu.Cut, function ()
-    
-    Options.Cut( Options.CopyCache.ItemTypes.FolderAndGroup )
-    
-end)
-
-self.rightClickMenu:AddRow( L[Language.Local].Menu.Copy, function ()
-
-    Options.Copy( Options.CopyCache.ItemTypes.FolderAndGroup )
-    
-end)
-
-self.rightClickMenu:AddRow( L[Language.Local].Menu.Paste, function ()
-
-    Options.Paste( Options.CopyCache.ItemTypes.FolderAndGroup )
-  
-end)
-
--------------------------------------------------------------------------------------
---  listbox  
-    self.list                 = Turbine.UI.ListBox()
-    self.list:SetParent(        self)
-    self.list:SetPosition(      content_left, list_top )
-    self.list:SetBackColor(     Defaults.Colors.BackgroundColor1 )
-    self.list:SetWidth(         list_width )
-    self.list.MouseClick = function ( sender, args )
-        if args.Button == Turbine.UI.MouseButton.Right then
-
-            self.rightClickMenu:Show(nil, nil, true)
-
-        end
-
-    end
-
-    function self.list:DraggingEnd( fromData )
-
-        local left, top = self:GetMousePosition()
-
-        local toData = self:GetItemAt(left, top)
-    
-        if toData == nil then
-    
-            if top <= 0 then
-    
-                toData = self:GetItem(1)
-    
-            else
-    
-                toData = self:GetItem(self:GetItemCount())
-    
-            end
-
-        end
-
-        if toData ~= nil then
-
-            Data.SortTo( fromData, toData.data )
-
-            self:GetParent():Sort()
-
-        end
-
-    end
+	-- new file
+	self.icon_Search                    = Turbine.UI.Control()
+	self.icon_Search:SetParent(           self.textBox_Search )
+	self.icon_Search:SetSize( height_toolbar, height_toolbar)
+	self.icon_Search:SetLeft(-1)
+	self.icon_Search:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_Search:SetBackground("Gibberish3/Resources/search30.tga")
+	self.icon_Search:SetMouseVisible(false)
 
 
+	-- new folder
+	self.button_Collaps                        = Turbine.UI.Button()
+	self.button_Collaps:SetParent(               self.frame )
+	self.button_Collaps:SetPosition(             left_collaps, frame_thickness )
+	self.button_Collaps:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+	self.button_Collaps:SetMouseVisible(         false )
+	self.button_Collaps:SetSize(                height_toolbar, height_toolbar )
 
-    self.scroll = Turbine.UI.Lotro.ScrollBar()
-    self.scroll:SetBackColor(Defaults.Colors.BackgroundColor6)
-    self.scroll:SetOrientation(Turbine.UI.Orientation.Vertical)
-    self.scroll:SetPosition(content_left + list_width - 10, list_top)
-    self.scroll:SetParent(self)
-    self.scroll:SetWidth(10)
-    self.scroll:SetZOrder(50)
-    self.list:SetVerticalScrollBar(self.scroll)
+	self.icon_Collaps                    = Turbine.UI.Control()
+	self.icon_Collaps:SetParent(           self.button_Collaps )
+	self.icon_Collaps:SetLeft(-1)
+	self.icon_Collaps:SetSize( 30, 30)
+	self.icon_Collaps:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_Collaps:SetBackground("Gibberish3/Resources/collaps.tga")
+	self.icon_Collaps:SetMouseVisible(false)
 
--------------------------------------------------------------------------------------
---  getting started
-
-    self:ResetContent()
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    show tooltip
--------------------------------------------------------------------------------------
---        Parameter:    left, top, width, height, heading, text
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:NewGroup(type)
-
-    Data.selectedGroupIndex = {}
-    Data.selectedFolderIndex = {}
-    Data.selectedGroupIndex[1] = Group.New( L[Language.Local].Terms.NewGroup .. tostring(Data.group.lastID), type )
-
-    Options.ResetContent()
+	--  listbox  
+	self.list                 = Turbine.UI.ListBox()
+	self.list:SetParent(        self.frame )
+	self.list:SetPosition(      frame_thickness, top_list )
+	self.list:SetBackColor(     Defaults.Colors.BackgroundColor1 )
+	self.list:SetWidth(         width_list )
 
 end
 
 -------------------------------------------------------------------------------------
---      Description:    show tooltip
--------------------------------------------------------------------------------------
---        Parameter:    left, top, width, height, heading, text
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:NewFolder()
-
-    Data.selectedGroupIndex = {}
-    Data.selectedFolderIndex = {}
-    Data.selectedFolderIndex[1] = Folder.New( L[Language.Local].Terms.NewFolder .. tostring(Data.folder.lastID) )
- 
-    Options.ResetContent()
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    show tooltip
--------------------------------------------------------------------------------------
---        Parameter:    left, top, width, height, heading, text
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:CollapsChanged()
-
-    for index, folderItem in ipairs(self.folderList) do
-
-        folderItem:CollapsedChanged()
-        
-    end
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:CreateItems()
-
-    self.folderList = {}
-    self.groupList = {}
-
-    for j, groupData in ipairs(Data.group) do
-
-        self.groupList[j] = GroupItem( self, groupData, j, self.content_width )
-        
-    end
-
-    for i, folderData in ipairs(Data.folder) do
-
-        self.folderList[i] = FolderItem( self, folderData, i, self.content_width )
-  
-    end
-
-
-    for i, folderItem in pairs(self.folderList) do
-
-        if folderItem.data.folder ~= nil then
-            self.folderList[folderItem.data.folder]:AddItem(folderItem)
-        end
-
-        
-        for k, groupItem in pairs(self.groupList) do
-
-            if groupItem.folderIndex == i then
-                
-                self.folderList[i]:AddItem(groupItem)
-        
-            end
-            
-        end
-        
-    end
-
-    for i, folderItem in pairs(self.folderList) do
-
-       folderItem:ChangeWidth(self.content_width - 5*Folder.GetFolderLevel(folderItem.data))
-
-    end
-
-    for k, groupItem in pairs(self.groupList) do
-        groupItem:ChangeWidth(self.content_width - 5*Folder.GetFolderLevel(groupItem.data))
-    end
-
-    self:CollapsedChanged()
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:CollapsedChanged()
-
-    for key, folderItem in pairs(self.folderList) do
-
-        folderItem:CollapsedChanged()
-        
-    end
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:FillContent()
-
-    self.list:ClearItems()
-
-    for i, folder in ipairs(self.folderList) do
-
-        if folder.data.folder == nil then
-
-            if folder:MatchesSearch(self.searchText) then
-                self.list:AddItem( folder )
-            end
-        end
-
-    end
-    
-    for j, group in ipairs(self.groupList) do
-
-        if group.folderIndex == nil then
-
-            
-            if group:MatchesSearch(self.searchText) then
-                self.list:AddItem( group )
-            end
-
-        end
-    end
-
-    self:Sort()
-
-end
-
-
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:Finish()
-
-    self:SetVisible(false)
-
-end
-
--------------------------------------------------------------------------------------
---      Description:   
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:ResetContent()
-
-    self:CreateItems()
-    self:FillContent()
-    self:SelectionChanged()
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:Sort()
-
-    self.list:Sort(function (itema, itemb)
-
-        if itema.data.sortIndex < itemb.data.sortIndex then
-            return true
-        end
-        return false
-        
-    end)
-    
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:DraggingEnd( fromData )
-
-    -- local toData = self.list:GetItemAt(self.list:GetMousePosition()).data
-
-    -- Data.SortTo( fromData, toData )
-
-    -- for key, folderItem in pairs(self.folderList) do
-
-    --     folderItem:Sort()
-        
-    -- end
-    
-    -- self:Sort()
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    only for right click menu
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowSelection:Hide()
-
-end
-
-
-
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
+--      Description:    size changed
 -------------------------------------------------------------------------------------
 function Options.Constructor.WindowSelection:SizeChanged()
 
-    local height       = self:GetHeight()
+	local height = self:GetHeight()
 
-    local background_height   = height - 10
-    local frame_height        = background_height - 40
-    local list_height         = frame_height - 36
+	local height_background = height - 10
+	local height_frame = height_background - 10
+	local height_list = height_frame - 36
 
-    self.background:SetHeight(   background_height )
-    self.frame:SetHeight(        frame_height )
-    self.list:SetHeight(         list_height )
-
-    self.scroll:SetHeight(list_height)
+	self.background:SetHeight( height_background )
+	self.frame:SetHeight( height_frame )
+	self.list:SetHeight( height_list )
 
 end
 
 
 -------------------------------------------------------------------------------------
---      Description:    group selection changed
--------------------------------------------------------------------------------------
---        Parameter:     
--------------------------------------------------------------------------------------
---           Return:     
+--      Description:    selection changed
 -------------------------------------------------------------------------------------
 function Options.Constructor.WindowSelection:SelectionChanged()
 
-    for i = 1, self.list:GetItemCount() do
+end
 
-        self.list:GetItem(i):SelectionChanged()
-        
-    end
+
+-------------------------------------------------------------------------------------
+--      Description:    finish
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowSelection:Finish()
 
 end

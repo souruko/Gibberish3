@@ -1,15 +1,9 @@
 --===================================================================================
---             Name:    OPTION WINDOW
+--             Name:    
 -------------------------------------------------------------------------------------
---      Description:    init
+--      Description:    
 --===================================================================================
 
 
-
-
-
-import "Gibberish3.OPTIONS.OPTION_WINDOW.GENERAL_OPTIONS.Element"
-
-
-
+import "Gibberish3.OPTIONS.SHORTCUT_BUTTON.Window"
 

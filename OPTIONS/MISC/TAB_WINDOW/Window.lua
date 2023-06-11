@@ -89,7 +89,10 @@ function Options.Constructor.TabWindow:SelectionChanged(selected)
 
         if child ~= selected then
             child:Deselect()
+        else
+            self.parent:TabChanged(index)
         end
+
 
     end
 
@@ -97,6 +100,9 @@ function Options.Constructor.TabWindow:SelectionChanged(selected)
         self.activChild = selected
         selected:SetParent(self)
     end
+
+
+
 
 end
 
@@ -108,7 +114,7 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.TabWindow:ResetSelection()
+function Options.Constructor.TabWindow:SetTab(index)
 
     for index, child in ipairs(self.children) do
 
@@ -116,6 +122,13 @@ function Options.Constructor.TabWindow:ResetSelection()
 
     end
 
-    self.children[1]:Select()
+    if self.children[index] ~= nil then
+        self.children[index]:Select()
+
+    elseif self.children[1] ~= nil then
+        self.children[1]:Select()
+        
+    end
+
 
 end

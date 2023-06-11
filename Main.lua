@@ -169,6 +169,8 @@ Data.group[g7].folder = f3i
 
 Data.folder[f3i].folder = f1i
 
+Data.selectedGroupIndex = {}
+Data.selectedGroupIndex[1] = 1
 -------------------------------------------------------------------------------------
 --      Description:    TOBEDELETED   
 -------------------------------------------------------------------------------------
@@ -184,4 +186,4 @@ end
 
 Trigger.InitAll()
 
-
+Short = Options.Constructor.ShortcutButton()

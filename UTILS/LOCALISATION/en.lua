@@ -49,6 +49,8 @@ L[Language.English].Button.New = "New"
 L[Language.English].Button.Save = "Save"
 L[Language.English].Button.Reset = "Reset"
 L[Language.English].Button.Add = "Add"
+L[Language.English].Button.Import = "Import"
+L[Language.English].Button.Reload = "Reload"
 
 
 -------------------------------------------------------------------------------------
@@ -69,6 +71,12 @@ L[Language.English].Menu.Delete = "Delete"
 L[Language.English].Menu.Cut = "Cut"
 L[Language.English].Menu.Copy = "Copy"
 L[Language.English].Menu.Paste = "Paste"
+
+L[Language.English].Menu.Reset = "Reset"
+L[Language.English].Menu.Reload = "Reload"
+L[Language.English].Menu.Options = "Options"
+L[Language.English].Menu.Collection = "Collection"
+L[Language.English].Menu.MoveWindows = "Move Groups"
 
 
 -------------------------------------------------------------------------------------
@@ -136,6 +144,15 @@ L[Language.English].Options.Action = "Action"
 L[Language.English].Options.UseRegex = "Use Regex"
 L[Language.English].Options.Token = "Token"
 L[Language.English].Options.TargetList = "List of Targets"
+
+
+L[Language.English].Options.trackGroup = "Track Group"
+L[Language.English].Options.trackTarget = "Track Target"
+L[Language.English].Options.autoReload = "Auto Reload"
+L[Language.English].Options.showTooltips = "show Tooltips"
+
+L[Language.English].Options.effect = "Effects"
+L[Language.English].Options.chat = "Chat Messages"
 
 -------------------------------------------------------------------------------------
 --      Description:    tab headers

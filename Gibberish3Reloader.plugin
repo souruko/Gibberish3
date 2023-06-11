@@ -6,6 +6,6 @@
 		<Version>1.0.0</Version>
 		<Description>...</Description>
 	</Information>
-	<Package>Gibberish.GibberishReloader</Package>
+	<Package>Gibberish3.Gibberish3Reloader</Package>
 	<Configuration Apartment="GibberishReloader3" />
 </Plugin>

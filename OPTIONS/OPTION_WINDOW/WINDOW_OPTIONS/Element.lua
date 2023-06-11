@@ -12,275 +12,173 @@ Options.Constructor.WindowOptions = class(Turbine.UI.Control)
 -------------------------------------------------------------------------------------
 --      Description:    Window Options constructor
 -------------------------------------------------------------------------------------
---        Parameter:    parent
---                      width
---                      height
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
 function Options.Constructor.WindowOptions:Constructor( parent )
 	Turbine.UI.Control.Constructor( self )
+	
+	-------------------------------------------------------------------------------------
+	-- dimensions
+	self.width = 740
 
-    self.parent = parent
+    local left  = 325
+    local top   = 35
 
-    self.currentDisplay = nil
+	local frame_thickness = 2
+	local size_button = 30
 
-    self:SetParent(parent)
-    self:SetBackColor( Defaults.Colors.BackgroundColor2 )
+	local left_background = 5
+	local left_frame = 5
+	local left_save = 34
+	local left_import = self.width - 84
+	local left_reload = self.width - 52
+	local left_filler = 66
 
-    local width = 730
-    local background_pos        = 5
-    local heading_top           = 7
-    local frame_left            = 10
-    local frame_top             = 40
-    local background_width      = width - 10
-    local frame_width           = background_width - 10
-    local heading_height        = 25
-    local reset_left            = frame_left
-    local save_left             = width - 80
+	local top_background  = 5
+	local top_frame = 5
+	local top_content = 34
 
+	local width_background = self.width - 10
+	local width_frame = width_background - 10
+	local width_filler = width_frame - 132
+	local width_content = width_frame - 4
+
+	-------------------------------------------------------------------------------------
+	-- self
+	self:SetWidth(self.width)
+	self:SetParent(parent)
+    self:SetPosition( left, top )
+    self:SetBackColor( Defaults.Colors.BackgroundColor )
+
+	-------------------------------------------------------------------------------------
+	-- children
+
+	-- background
+    self.background = Turbine.UI.Control()
+    self.background:SetParent( self )
+    self.background:SetPosition( left_background, top_background )
+    self.background:SetBackColor( Defaults.Colors.BackgroundColor2 )
+    self.background:SetMouseVisible( false )
+    self.background:SetWidth( width_background )
+
+	--  frame  
+	self.frame                        = Turbine.UI.Control()
+	self.frame:SetParent(               self.background )
+	self.frame:SetPosition(             left_frame, top_frame )
+	self.frame:SetBackColor(            Defaults.Colors.FrameColor )
+	self.frame:SetMouseVisible(         false )
+	self.frame:SetWidth(                width_frame )
+
+	-- new file
+	self.button_Reset                        = Turbine.UI.Button()
+	self.button_Reset:SetParent(               self.frame )
+	self.button_Reset:SetPosition(             frame_thickness, frame_thickness )
+	self.button_Reset:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+	self.button_Reset:SetMouseVisible(         false )
+	self.button_Reset:SetSize(                size_button, size_button )
+
+	self.icon_Reset                    = Turbine.UI.Control()
+	self.icon_Reset:SetParent(           self.button_Reset )
+	self.icon_Reset:SetSize( size_button, size_button)
+	self.icon_Reset:SetLeft(-1)
+	self.icon_Reset:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_Reset:SetBackground("Gibberish3/Resources/back.tga")
+	self.icon_Reset:SetMouseVisible(false)
+
+	-- save
+	self.button_Save                        = Turbine.UI.Button()
+	self.button_Save:SetParent(               self.frame )
+	self.button_Save:SetPosition(             left_save, frame_thickness )
+	self.button_Save:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+	self.button_Save:SetMouseVisible(         false )
+	self.button_Save:SetSize(                size_button, size_button )
+
+	self.icon_Save                    = Turbine.UI.Control()
+	self.icon_Save:SetParent(           self.button_Save )
+	self.icon_Save:SetSize( size_button, size_button)
+	self.icon_Save:SetLeft(-1)
+	self.icon_Save:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_Save:SetBackground("Gibberish3/Resources/save.tga")
+	self.icon_Save:SetMouseVisible(false)
+
+	-- new file
+    self.button_Import                        = Turbine.UI.Button()
+    self.button_Import:SetParent(               self.frame )
+    self.button_Import:SetPosition(             left_import, frame_thickness )
+    self.button_Import:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+    self.button_Import:SetMouseVisible(         false )
+    self.button_Import:SetSize(                size_button, size_button )
+
+	self.icon_Import                    = Turbine.UI.Control()
+    self.icon_Import:SetParent(           self.button_Import )
+    self.icon_Import:SetSize( size_button, size_button)
+	self.icon_Import:SetLeft(-1)
+    self.icon_Import:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.icon_Import:SetBackground("Gibberish3/Resources/import.tga")
+	self.icon_Import:SetMouseVisible(false)
+
+	-- new file
+	self.button_Reload                        = Turbine.UI.Button()
+	self.button_Reload:SetParent(               self.frame )
+	self.button_Reload:SetPosition(             left_reload, frame_thickness )
+	self.button_Reload:SetBackColor(            Defaults.Colors.BackgroundColor2 )
+	self.button_Reload:SetMouseVisible(         false )
+	self.button_Reload:SetSize(                size_button, size_button )
+
+	self.icon_Reload                    = Turbine.UI.Control()
+	self.icon_Reload:SetParent(           self.button_Reload )
+	self.icon_Reload:SetSize( size_button, size_button)
+	self.icon_Reload:SetLeft(-1)
+	self.icon_Reload:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.icon_Reload:SetBackground("Gibberish3/Resources/reload.tga")
+	self.icon_Reload:SetMouseVisible(false)
+
+	-- background
+	self.toolbar_filler = Turbine.UI.Control()
+	self.toolbar_filler:SetParent( self.frame )
+	self.toolbar_filler:SetPosition( left_filler, frame_thickness )
+	self.toolbar_filler:SetBackColor( Defaults.Colors.BackgroundColor2 )
+	self.toolbar_filler:SetMouseVisible( false )
+	self.toolbar_filler:SetSize( width_filler, size_button )
+
+	-- background
+    self.content_Background = Turbine.UI.Control()
+    self.content_Background:SetParent( self.frame )
+    self.content_Background:SetPosition( frame_thickness, top_content )
+    self.content_Background:SetBackColor( Defaults.Colors.BackgroundColor2 )
+    self.content_Background:SetMouseVisible( false )
+    self.content_Background:SetWidth( width_content )
+
+
+end
 
 -------------------------------------------------------------------------------------
---  background  
-    self.background                   = Turbine.UI.Control()
-    self.background:SetParent(          self )
-    self.background:SetPosition(        background_pos, background_pos )
-    self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
-    self.background:SetMouseVisible(    false )
-    self.background:SetWidth(           background_width )
-
-
+--      Description:    size changed
 -------------------------------------------------------------------------------------
---  heading
-    self.headingLabel                 = Turbine.UI.Label()
-    self.headingLabel:SetParent(        self )
-    self.headingLabel:SetTop(           heading_top )
-    self.headingLabel:SetWidth(         width )
-    self.headingLabel:SetHeight(        heading_height )
-    self.headingLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleCenter )
-    self.headingLabel:SetFont(          Defaults.Fonts.HeadingFont )
-    self.headingLabel:SetMouseVisible(  false )
+function Options.Constructor.WindowOptions:SizeChanged()
 
--------------------------------------------------------------------------------------
---  frame  
-    self.frame                        = Turbine.UI.Control()
-    self.frame:SetParent(               self )
-    self.frame:SetPosition(             frame_left, frame_top )
-    self.frame:SetBackColor(            Defaults.Colors.BackgroundColor6 )
-    self.frame:SetMouseVisible(         false )
-    self.frame:SetWidth(                frame_width )
+	local height = self:GetHeight()
 
+	local height_background = height - 10
+	local height_frame = height_background - 10
+	local height_content = height_frame - 36
 
--------------------------------------------------------------------------------------
---  save button
-    self.saveButton                    = Turbine.UI.Lotro.Button()
-    self.saveButton:SetParent(           self )
-    self.saveButton:SetSize( 70, 22)
-    self.saveButton:SetFont(             Defaults.Fonts.ButtonFont )
-    self.saveButton:SetForeColor(        Turbine.UI.Color.White)
-    self.saveButton:SetText(             L[Language.Local].Button.Save )
-    self.saveButton:SetLeft(            save_left )
-
-    function self.saveButton.Click( sender, args )
-
-    end
-
-    -------------------------------------------------------------------------------------
---  reset button 
-    self.resetButton                    = Turbine.UI.Lotro.Button()
-    self.resetButton:SetParent(           self )
-    self.resetButton:SetSize( 70, 22)
-    self.resetButton:SetFont(             Defaults.Fonts.ButtonFont )
-    self.resetButton:SetForeColor(        Turbine.UI.Color.White)
-    self.resetButton:SetText(             L[Language.Local].Button.Reset )
-    self.resetButton:SetLeft(             reset_left )
-
-    function self.resetButton.Click( sender, args )
-
-    end
-
--------------------------------------------------------------------------------------
---  start
-
-    -- self:SelectionChanged()
+	self.background:SetHeight( height_background )
+	self.frame:SetHeight( height_frame )
+	self.content_Background:SetHeight( height_content )
 
 end
 
 
+-------------------------------------------------------------------------------------
+--      Description:    selection changed
+-------------------------------------------------------------------------------------
+function Options.Constructor.WindowOptions:SelectionChanged()
+
+end
 
 
 -------------------------------------------------------------------------------------
 --      Description:    finish
 -------------------------------------------------------------------------------------
---        Parameter:   
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowOptions:SelectionChanged()
-
-    -- single group options
-    if #Data.selectedGroupIndex == 1 and #Data.selectedFolderIndex == 0 then
-
-        self.resetButton:SetVisible(true)
-        self.saveButton:SetVisible(true)
-        self.frame:SetVisible(true)
-        self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
-
-        if self.currentDisplay ~= nil then
-            self.currentDisplay:Finish()
-        end
-
-        local groupIndex = Data.selectedGroupIndex[1]
-        local groupData = Data.group[ Data.selectedGroupIndex[1] ]
-
-        self.headingLabel:SetText(   "- " ..   groupData.name ..    L[Language.Local].Headings.Options )
-      
-        self.currentDisplay = Group.Options[ groupData.type ]()
-        self.currentDisplay:SetPosition(12, 42)
-        self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay:FillContent( groupData, groupIndex, false )
-        self.currentDisplay:SetParent(self)
-
-    -- multi group options
-    elseif #Data.selectedGroupIndex + #Data.selectedFolderIndex > 1 then
-
-        self.background:SetBackColor(       Turbine.UI.Color.Red )
-        self.resetButton:SetVisible(true)
-        self.saveButton:SetVisible(true)
-        self.frame:SetVisible(true)
-
-        if self.currentDisplay ~= nil then
-            self.currentDisplay:Finish()
-        end
-
-        local groupIndex = Data.selectedGroupIndex[#Data.selectedGroupIndex]
-        local groupData = Data.group[ Data.selectedGroupIndex[#Data.selectedGroupIndex] ]
-
-        self.headingLabel:SetText( L[Language.Local].Headings.MultiGroup )
-      
-        self.currentDisplay = Group.Options[ groupData.type ]
-        self.currentDisplay:SetPosition(12, 42)
-        self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay.FillContent( groupData, groupIndex, true )
-        self.currentDisplay:SetParent(self)
-
-    -- single folder options
-    elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex == 1 then
-
-        self.resetButton:SetVisible(true)
-        self.saveButton:SetVisible(true)
-        self.frame:SetVisible(true)
-        self.background:SetBackColor(       Defaults.Colors.FolderColor1 )
-      
-        
-        if self.currentDisplay ~= nil then
-            self.currentDisplay:Finish()
-        end
-
-        local folderIndex = Data.selectedFolderIndex[1] 
-        local folderData = Data.folder[ Data.selectedFolderIndex[1] ]
-      
-        self.headingLabel:SetText(   "- " ..   folderData.name ..    L[Language.Local].Headings.Options )
-      
-        self.currentDisplay = Folder.Options
-        self.currentDisplay:SetPosition(12, 42)
-        self.currentDisplay:SetHeight( self.frame:GetHeight() - 4 )
-        self.currentDisplay.FillContent( folderData, folderIndex )
-        self.currentDisplay:SetParent(self)
-
-    -- no seletion
-    else
-  
-        if self.currentDisplay ~= nil then
-            self.currentDisplay:Finish()
-        end
-        self.background:SetBackColor(       Defaults.Colors.BackgroundColor1 )
-        self.headingLabel:SetText( "" )
-        self.frame:SetVisible(false)
-        self.resetButton:SetVisible(false)
-        self.saveButton:SetVisible(false)
-        self.headingLabel:SetText(   "- " ..       L[Language.Local].Headings.Options )
-        
-
-    end
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    template constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group template element
--------------------------------------------------------------------------------------
 function Options.Constructor.WindowOptions:Finish()
 
-    self:SetVisible(false)
-
-    if self.currentDisplay ~= nil then
-        self.currentDisplay:Finish()
-        self.currentDisplay:SetParent(nil)
-    end
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    finish and close window
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowOptions:SizeChanged()
-
-    local height       = self:GetHeight()
-
-    local background_height   = height - 10
-    local frame_height        = background_height - 70
-    local current_height      = frame_height - 4
-    local button_top          = height - 32
-
-    self.background:SetHeight(   background_height )
-    self.frame:SetHeight(        frame_height )
-
-    self.saveButton:SetTop( button_top )
-    self.resetButton:SetTop( button_top )
-
-    if self.currentDisplay ~= nil then
-        self.currentDisplay:SetHeight( current_height )
-    end
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:   
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:     
--------------------------------------------------------------------------------------
-function Options.Constructor.WindowOptions:ResetContent()
-
-    -- if #Data.selectedGroupIndex == 1 and #Data.selectedFolderIndex == 0 then
-
-    --     local groupIndex = Data.selectedGroupIndex[1]
-    --     local groupData = Data.group[ Data.selectedGroupIndex[1] ]
-        
-    --     self.currentDisplay.FillContent( groupData, groupIndex )
-
-    -- elseif #Data.selectedGroupIndex == 0 and #Data.selectedFolderIndex > 1 then
-
-    --     local folderIndex = Data.selectedFolderIndex[1] 
-    --     local folderData = Data.folder[ Data.selectedFolderIndex[1] ]
-
-    --     self.currentDisplay.FillContent( folderData, folderIndex )
-    -- else
-
-    -- end
-
-    self:SelectionChanged()
-    
 end

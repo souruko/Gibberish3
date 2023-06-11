@@ -238,26 +238,6 @@ end
 -------------------------------------------------------------------------------------
 function Group.CopyCache()
 
-    if #Options.CopyCache.content == 0 then
-        return
-    end
-
-    -- local targetData = nil
-
-    -- if #Data.selectedGroupIndex ~= 0 then
-
-    --     targetData = Data.group[ Data.selectedGroupIndex[1] ].timerList[Data.selectedTimerIndex[1].timerIndex]
-
-    -- end
-
-    local timer_list = {}
-    for i, index in ipairs(Options.CopyCache.content) do
-
-        timer_list[#timer_list+1] = Group.AddTimer(Data.group[Data.selectedGroupIndex[1]], Data.group[index.groupIndex].timerList[index.timerIndex].type)
-        
-        -- Group.SortTo( Data.group[Data.selectedGroupIndex[1]], Data.group[Data.selectedGroupIndex[1]].timerList[#timer_list], targetData)
-
-    end
 
 end
 

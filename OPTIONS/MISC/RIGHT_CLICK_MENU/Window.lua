@@ -38,7 +38,7 @@ function Options.Constructor.RightClickMenu:Constructor( width )
     self.list:SetOpacity(       0.9 )
     self.list:SetMouseVisible(  false )
     
-    
+    self:SetMouseVisible(false)
     self:SetWidth(              2 * self.width + 5 )
     self.list:SetWidth(         self.width )
 

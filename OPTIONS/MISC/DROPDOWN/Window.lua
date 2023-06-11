@@ -43,7 +43,6 @@ function Options.Constructor.Dropdown:Constructor( parent, width )
     self.frame:SetSize( width, self.frame_height )
     self.frame:SetBackColor( Defaults.Colors.BackgroundColor4 )
     self.frame.MouseClick = function (sender, args)
-        
 
         self:Activate()
         self:Focus()
