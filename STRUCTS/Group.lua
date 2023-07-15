@@ -131,15 +131,44 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    
 -------------------------------------------------------------------------------------
-function Group.Delete(index)
+function Group.Delete(list)
 
-    for i = index, (#Data.group - 1) do
+    local groupMaxCount = #Data.group
 
-        Data.group[i] = Data.group[i + 1]
+    for listIndex, groupIndex in ipairs(list) do
+
+        if Data.group[groupIndex].enabled == true then
+            Group.Close(groupIndex)
+        end
+
+        Data.group[groupIndex] = nil
 
     end
 
-    Data.group[#Data.group] = nil
+    -- the distance the groupindex will  be moved
+    local distance = 0
+
+    -- resort Data.group
+    for i=1, groupMaxCount do
+
+        if Data.group[i] == nil then
+            distance = distance + 1
+        else
+            Data.group[i - distance] = Data.group[i]
+            
+            if Data.group[i].enabled == true then
+                Group[i - distance] = Group[i]
+                Group[i].index = i
+            end
+        end
+
+    end
+
+    for i=groupMaxCount, (groupMaxCount-distance+1), -1 do
+        
+        Data.group[i] = nil
+
+    end
 
 end
 
@@ -211,6 +240,10 @@ end
 --           Return:    
 -------------------------------------------------------------------------------------
 function Group.IsSelected(index)
+
+    if Data.group[index] == nil then
+        return false
+    end
 
     for i, v in ipairs(Data.selectedGroupIndex) do
 

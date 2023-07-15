@@ -30,6 +30,6 @@ end
 -------------------------------------------------------------------------------------
 function Options.Reload()
 
-    Turbine.PluginManager.LoadPlugin( "GibberishReloader3" )
+    Turbine.PluginManager.LoadPlugin( "Gibberish3Reloader" )
 
 end

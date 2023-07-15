@@ -90,64 +90,74 @@ end
 -------------------------------------------------------------------------------------
 --      Description:     
 -------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Folder.Delete(index)
+function Folder.DeleteByIndex(folderIndex)
 
-    local list = {}
-    -- delete all groups within the group
+    local listOfGroups = {}
+
+    -- collect groups to be deleted
     for i, groupData in ipairs(Data.group) do
 
-        if groupData.folder == index then
-            list[#list+1] = i
+        if groupData.folder == folderIndex then
+            listOfGroups[#listOfGroups+1] = i
         end
         
     end
-    for j, i in ipairs(list) do
-        Group.Delete(i)
-    end
-    list = {}
-    -- delete all groups within the group
+
+    -- delete folders within the folder
     for i, folderData in ipairs(Data.folder) do
 
-        if folderData.folder == index then
-            list[#list+1] = i
+        if folderData.folder == folderIndex then
+            Data.folder[i] = nil
+            Folder.DeleteByIndex(i)
         end
+
+    end
+
+    -- delete all groups that were part of the folders
+    Group.Delete(listOfGroups)
+
+    Data.folder[folderIndex] = nil
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:     
+-------------------------------------------------------------------------------------
+function Folder.Delete(list)
+
+    local folderMaxCount = #Data.folder
+
+    for listIndex, folderIndex in ipairs(list) do
+
+        if Data.folder[folderIndex] ~= nil then
+
+           Folder.DeleteByIndex(folderIndex)
+
+        end
+
+    end
+
+
+    -- the distance the folderindex will  be moved
+    local distance = 0
+
+    -- resort Data.folder
+    for i=1, folderMaxCount do
+
+        if Data.folder[i] == nil then
+            distance = distance + 1
+        else
+            Data.folder[i - distance] = Data.folder[i]
+        end
+
+    end
+
+    for i=folderMaxCount, (folderMaxCount-distance+1), -1 do
         
-    end
-    for j, i in ipairs(list) do
-        Folder.Delete(i)
-    end
-
-    -- delete the group and fix indexes
-    for i = index, (#Data.folder - 1) do
-
-        local temp = i+1
-        Data.folder[i] = Data.folder[temp]
-
-        -- fix folderIndex for all groups in this folder
-        for j, groupData in ipairs(Data.group) do
-
-            if groupData.folder == temp then
-                groupData.folder = i
-            end
-            
-        end
-         -- fix folderIndex for all groups in this folder
-         for j, folderData in ipairs(Data.folder) do
-
-            if folderData.folder == temp then
-                folderData.folder = i
-            end
-            
-        end
-
+        Data.folder[i] = nil
 
     end
 
-    Data.folder[#Data.folder] = nil
 
 end
 
@@ -194,6 +204,10 @@ end
 --           Return:    
 -------------------------------------------------------------------------------------
 function Folder.IsSelected(index)
+
+    if Data.folder[index] == nil then
+        return false
+    end
 
     for i, v in ipairs(Data.selectedFolderIndex) do
 

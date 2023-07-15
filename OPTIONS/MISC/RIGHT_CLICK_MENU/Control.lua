@@ -22,7 +22,7 @@ function Options.Constructor.RightClickSubMenu:Constructor( width )
 
     self.width                  = width
     self.item_height            = 24
-    self.seperator_height       = 12
+    self.seperator_height       = 8
     self.height                 = 10
 
     self:SetZOrder(             100 )

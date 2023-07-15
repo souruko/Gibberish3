@@ -18,14 +18,13 @@
 -------------------------------------------------------------------------------------
 function Group.SelectionChanged()
 
+    for key, group in ipairs(Data.group) do
 
-    for key, group in ipairs(Group) do
-
-        group:SelectionChanged()
+        if group.enabled == true then
+            Group[key]:SelectionChanged()
+        end
 
     end
-
-    Options.SaveData()
 
 end
 
@@ -161,3 +160,4 @@ function Group.MoveModeChanged(all)
     end
 
 end
+

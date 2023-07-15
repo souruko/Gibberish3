@@ -24,6 +24,8 @@ SubMenuRow = class(Turbine.UI.Control)
 function SubMenuRow:Constructor( parent, width, height, text, subMenu )
 	Turbine.UI.Control.Constructor( self )
 
+    local text_left = 15
+
     self.parent = parent
     self.subMenu = subMenu
 
@@ -32,8 +34,8 @@ function SubMenuRow:Constructor( parent, width, height, text, subMenu )
 
     self.text = Turbine.UI.Label()
     self.text:SetParent(self)
-    self.text:SetSize(width - 30, height)
-    self.text:SetLeft(30)
+    self.text:SetSize(width - text_left, height)
+    self.text:SetLeft(text_left)
     self.text:SetTextAlignment ( Turbine.UI.ContentAlignment.MiddleLeft )
     self.text:SetFont( Defaults.Fonts.SmallFont )
     self.text:SetText(text)

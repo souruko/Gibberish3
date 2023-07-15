@@ -34,8 +34,8 @@ end
 -------------------------------------------------------------------------------------
 --           Return:    group listbox element
 -------------------------------------------------------------------------------------
-Group.Options[Group.Types.LISTBOX] = function ()
+Group.Options[Group.Types.LISTBOX] = function (displayType, data, width, height, parent)
 
-    return LISTBOX.OPTIONS.ListBoxOptions()
+    return LISTBOX.OPTIONS.ListBoxOptions(displayType, data, width, height, parent)
 
 end

@@ -45,11 +45,7 @@ function Options.ResetContent()
 end
 
 -------------------------------------------------------------------------------------
---      Description:    listbox constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group listbox element
+--      Description:    
 -------------------------------------------------------------------------------------
 function Options.AddToGroupSelection( groupIndex )
 
@@ -64,11 +60,7 @@ function Options.AddToGroupSelection( groupIndex )
 end
 
 -------------------------------------------------------------------------------------
---      Description:    listbox constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group listbox element
+--      Description:    
 -------------------------------------------------------------------------------------
 function Options.AddToFolderSelection( folderIndex )
 
@@ -82,22 +74,81 @@ function Options.AddToFolderSelection( folderIndex )
 
 end
 
--------------------------------------------------------------------------------------
---      Description:    listbox constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group listbox element
--------------------------------------------------------------------------------------
-function Options.AddToFolderSelection( folderIndex )
 
-    for i = #Data.selectedFolderIndex, 1, -1 do
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+function Options.RemoveFromGroupSelection( index )
 
-        Data.selectedFolderIndex[i + 1] = Data.selectedFolderIndex[i]
+    if #Data.selectedGroupIndex == 1 then
+
+            Data.selectedGroupIndex = {}
+            return
+        
+    end
+
+    local pos = nil
+
+    for i, selection in ipairs(Data.selectedGroupIndex) do
+
+        if selection == index then
+            pos = i
+        end
 
     end
 
-    Data.selectedFolderIndex[1] = folderIndex
+    if pos ~= nil then
+       
+        for i=pos + 1, #Data.selectedGroupIndex do
+            
+            Data.selectedGroupIndex[i - 1] = Data.selectedGroupIndex[i] 
+
+        end
+
+        Data.selectedGroupIndex[#Data.selectedGroupIndex] = nil
+
+    end
+
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.RemoveFromFolderSelection( index )
+
+    if #Data.selectedFolderIndex == 1 then
+
+            Data.selectedFolderIndex = {}
+            return
+        
+    end
+
+    local pos = nil
+
+    for i, selection in ipairs(Data.selectedFolderIndex) do
+
+        if selection == index then
+            pos = i
+        end
+
+    end
+
+    if pos ~= nil then
+    
+        for i=pos + 1, #Data.selectedFolderIndex do
+            
+            Data.selectedFolderIndex[i - 1] = Data.selectedFolderIndex[i] 
+
+        end
+
+        Data.selectedFolderIndex[#Data.selectedFolderIndex] = nil
+
+    end
 
 end
 
@@ -165,112 +216,53 @@ end
 -------------------------------------------------------------------------------------
 function Options.Paste( targetType )
 
-    if Options.CopyCache.itemType ~= nil and targetType == Options.CopyCache.itemType then
+    if targetType ~= Options.CopyCache.itemType or targetType == nil then
+        return
+    end
 
+    if targetType == Options.CopyCache.ItemTypes.FolderAndGroup then
 
-        if targetType == Options.CopyCache.ItemTypes.FolderAndGroup then
+        if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
+            Data.CutCache()
+            Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
 
-            if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
-                Data.CutCache()
-                -- change cut to copy after first paste 
-                Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
-
-            else
-                
-                Data.CopyCache()
-
-            end
-
-        elseif targetType == Options.CopyCache.ItemTypes.Timer then
-
-            if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
-                Group.CutCache()
-                -- change cut to copy after first paste 
-                Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
-
-            else
-                
-                Group.CopyCache()
-
-            end
-
-        elseif targetType == Options.CopyCache.ItemTypes.Trigger then
-
-            if Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Cut then
-                Timer.CutCache() 
-                -- change cut to copy after first paste 
-                Options.CopyCache.actionType    = Options.CopyCache.ActionTypes.Copy
-
-            else
-                
-                Timer.CopyCache()
-
-            end
+        elseif Options.CopyCache.actionType == Options.CopyCache.ActionTypes.Copy then
+            Data.CopyCache()
 
         end
+        
+    end
+    Options.ResetContent()
 
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    delete from Data.group
+--                      fix index for all data groups
+--                      delete activ group
+--                      fix index for all activ groups
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:    
+-------------------------------------------------------------------------------------
+function Options.Delete( itemType )
+
+    if itemType == Options.CopyCache.ItemTypes.FolderAndGroup then
+
+        Folder.Delete(Data.selectedFolderIndex)
+        Group.Delete(Data.selectedGroupIndex)
+
+        Data.selectedGroupIndex = {}
+        Data.selectedFolderIndex = {}
         Options.ResetContent()
-        Options.SelectionChanged()
- 
-    end
 
-end
+    elseif itemType == Options.CopyCache.ItemTypes.Timer then
 
-
--------------------------------------------------------------------------------------
---      Description:    listbox constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group listbox element
--------------------------------------------------------------------------------------
-function Options.MoveToFolder( folderIndex )
-
-    for index, groupData in ipairs(Data.selectedGroupIndex) do
-
-        Data.group[ groupData ].folder = folderIndex
-        
-    end
-
-    for index, folderData in ipairs(Data.selectedFolderIndex) do
-
-        if index ~= folderIndex then
-            
-            Data.folder[ folderData ].folder = folderIndex
-
-        end
-        
-    end
-
-    Options.ResetContent()
-
-end
-
-
-
--------------------------------------------------------------------------------------
---      Description:    listbox constructor
--------------------------------------------------------------------------------------
---        Parameter:    group data 
--------------------------------------------------------------------------------------
---           Return:    group listbox element
--------------------------------------------------------------------------------------
-function Options.Delete()
-
-    for index, folderIndex in ipairs(Data.selectedFolderIndex) do
-
-        Folder.Delete(folderIndex)
+    elseif itemType == Options.CopyCache.ItemTypes.Trigger then
 
     end
-
-    for index, groupIndex in ipairs(Data.selectedGroupIndex) do
-
-        Group.Delete(groupIndex)
-        
-    end
-
-    Data.selectedGroupIndex = {}
-    Data.selectedFolderIndex = {}
-    Options.ResetContent()
 
 end

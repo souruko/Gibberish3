@@ -24,6 +24,8 @@ Row = class(Turbine.UI.Control)
 function Row:Constructor(parent, width, height, text, func )
 	Turbine.UI.Control.Constructor( self )
 
+    local text_left = 15
+
     self.parent               = parent
     self.func                 = func
 
@@ -32,8 +34,8 @@ function Row:Constructor(parent, width, height, text, func )
 
     self.text                 = Turbine.UI.Label()
     self.text:SetParent(        self )
-    self.text:SetSize(          width - 30, height )
-    self.text:SetLeft(          30 )
+    self.text:SetSize(          width - text_left, height )
+    self.text:SetLeft(          text_left )
     self.text:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
     self.text:SetFont(          Defaults.Fonts.SmallFont )
     self.text:SetText(          text )

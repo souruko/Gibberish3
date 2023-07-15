@@ -21,13 +21,13 @@ function Options.Constructor.Tooltip:Constructor()
 	Turbine.UI.Window.Constructor( self )
 
     self:SetMouseVisible(false)
-    self:SetBackColor( Defaults.Colors.FolderColor1 )
+    self:SetBackColor( Defaults.Colors.Tooltip )
     self:SetZOrder(200)
 
     self.background = Turbine.UI.Control()
     self.background:SetParent(self)
     self.background:SetPosition( 2, 2)
-    self.background:SetBackColor( Defaults.Colors.FolderColor2 )
+    self.background:SetBackColor( Defaults.Colors.Tooltip2 )
     self.background:SetMouseVisible(         false )
     
     self.text = Turbine.UI.Label()
@@ -54,6 +54,8 @@ function Options.Constructor.Tooltip:Show( left, top, text )
 
     local height = (math.floor(string.len(text) /35) + 2) * 14
 
+    left = left - 70
+
     self:SetPosition(left, top)
     self:SetSize(width, height)
 
@@ -62,9 +64,32 @@ function Options.Constructor.Tooltip:Show( left, top, text )
 
     self.text:SetText(text)
 
-    self:SetVisible(true)
+    self.activationTime = Turbine.Engine.GetGameTime() + Data.options.window.tooltipActivationDelay
+    self:SetWantsUpdates(true)
 
 end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+--        Parameter:    
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.Tooltip:Update()
+
+    local currentTime = Turbine.Engine.GetGameTime()
+
+    if self.activationTime <= currentTime then
+
+        self:SetWantsUpdates(false)
+        self:SetVisible(true)
+
+    end
+
+end
+
 
 
 -------------------------------------------------------------------------------------
@@ -77,6 +102,7 @@ end
 function Options.Constructor.Tooltip:Hide()
 
     self:SetVisible(false)
+    self:SetWantsUpdates(false)
 
 end
 
@@ -88,13 +114,17 @@ end
 -------------------------------------------------------------------------------------
 --           Return:     
 -------------------------------------------------------------------------------------
-function Options.Constructor.Tooltip.AddTooltip( control, text )
+function Options.Constructor.Tooltip.AddTooltip( control, text, always )
 
     control.MouseEnter = function ()
 
-        local left, top = control:PointToScreen( control:GetWidth()/-2 ,30)
-    
-        Options.MainWindow.ShowTooltip( left, top, text )
+        if always == true or Data.showTooltips == true then
+
+            local left, top = control:PointToScreen( control:GetWidth()/-2 ,40)
+        
+            Options.MainWindow.ShowTooltip( left, top, text )
+
+        end
         
     end
 

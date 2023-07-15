@@ -51,7 +51,7 @@ function Options.Constructor.TextBox:Constructor( parent, width, height )
     self.background:SetBackColor( Defaults.Colors.BackgroundColor1 )
     self.background:SetMouseVisible(false)
 
-    self.text = Turbine.UI.TextBox()
+    self.text = Turbine.UI.Lotro.TextBox()
     self.text:SetParent(self)
     self.text:SetSize( self.background:GetWidth() - left_spacing, self.background:GetHeight() )
     self.text:SetPosition(self.background:GetLeft() + left_spacing, self.background:GetTop() )

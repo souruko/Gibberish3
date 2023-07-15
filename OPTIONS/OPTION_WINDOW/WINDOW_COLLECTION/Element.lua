@@ -40,15 +40,9 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	local height_search = 30
 
 	-------------------------------------------------------------------------------------
-	-- self
-	self:SetWidth(self.width)
-	self:SetParent(parent)
-    self:SetPosition( left, top )
-    self:SetBackColor( Defaults.Colors.BackgroundColor )
-
-	-------------------------------------------------------------------------------------
 	-- children
 
+	-------------------------------------------------------------------------------------
 	-- background
     self.background = Turbine.UI.Control()
     self.background:SetParent( self )
@@ -57,6 +51,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
     self.background:SetMouseVisible( false )
     self.background:SetWidth( width_background )
 
+	-------------------------------------------------------------------------------------
 	--  frame  
 	self.frame                        = Turbine.UI.Control()
 	self.frame:SetParent(               self.background )
@@ -65,6 +60,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.frame:SetMouseVisible(         false )
 	self.frame:SetWidth(                width_frame )
 
+	-------------------------------------------------------------------------------------
 	--  serachBoxBox
 	self.back_Search                    = Turbine.UI.Control()
 	self.back_Search:SetParent(           self.frame )
@@ -73,6 +69,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.back_Search:SetBackColor(       Defaults.Colors.BackgroundColor2 )
 	self.back_Search:SetMouseVisible(false)
 
+	-------------------------------------------------------------------------------------
 	self.searchText = ""
 
 	self.textBox_Search                    = Turbine.UI.TextBox()
@@ -90,6 +87,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	end
 
 
+	-------------------------------------------------------------------------------------
 	-- new file
 	self.icon_Search                    = Turbine.UI.Control()
 	self.icon_Search:SetParent(           self.textBox_Search )
@@ -99,6 +97,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.icon_Search:SetBackground("Gibberish3/Resources/search30.tga")
 	self.icon_Search:SetMouseVisible(false)
 
+	-------------------------------------------------------------------------------------
 	--  listbox  
 	self.list                 = Turbine.UI.ListBox()
 	self.list:SetParent(        self.frame )
@@ -106,6 +105,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.list:SetBackColor(     Defaults.Colors.BackgroundColor1 )
 	self.list:SetWidth(         width_content )
 
+	-------------------------------------------------------------------------------------
 	--  listbox  
 	self.back_Effect                 = Turbine.UI.Control()
 	self.back_Effect:SetParent(        self.frame )
@@ -113,6 +113,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.back_Effect:SetBackColor(     Defaults.Colors.BackgroundColor1 )
 	self.back_Effect:SetSize(         width_content, height_search )
 
+	-------------------------------------------------------------------------------------
 	self.button_Effect = Turbine.UI.Button()
 	self.button_Effect:SetParent(        self.back_Effect )
 	self.button_Effect:SetLeft( 0 )
@@ -121,6 +122,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.button_Effect:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
 	self.button_Effect:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 	self.button_Effect:SetBackground("Gibberish3/RESOURCES/play.tga")
+    Options.Constructor.Tooltip.AddTooltip(self.button_Effect, L[Language.Local].Tooltip.CollectEffects, true)
 	self.button_Effect.MouseClick = function (sender, args)
 		Options.Collection.CollectEffects = not(Options.Collection.CollectEffects)
 
@@ -134,6 +136,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 		end
 	end
 
+	-------------------------------------------------------------------------------------
 	self.label_Effect = Turbine.UI.Label()
 	self.label_Effect:SetParent(        self.back_Effect )
 	self.label_Effect:SetLeft( left_label )
@@ -148,7 +151,9 @@ function Options.Constructor.WindowCollection:Constructor( parent )
     end )
 
 	self.checkBox_Effect:SetLeft(left_checkBox)
+    Options.Constructor.Tooltip.AddTooltip(self.checkBox_Effect, L[Language.Local].Tooltip.OnlyDebuffs, true)
 
+	-------------------------------------------------------------------------------------
 	--  listbox  
 	self.back_Chat                 = Turbine.UI.Control()
 	self.back_Chat:SetParent(        self.frame )
@@ -156,6 +161,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.back_Chat:SetBackColor(    Defaults.Colors.BackgroundColor1 )
 	self.back_Chat:SetSize(         width_content, height_search )
 
+	-------------------------------------------------------------------------------------
 	self.button_Chat = Turbine.UI.Button()
 	self.button_Chat:SetParent(        self.back_Chat )
 	self.button_Chat:SetLeft( 0 )
@@ -164,6 +170,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 	self.button_Chat:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
 	self.button_Chat:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 	self.button_Chat:SetBackground("Gibberish3/RESOURCES/play.tga")
+    Options.Constructor.Tooltip.AddTooltip(self.button_Chat, L[Language.Local].Tooltip.CollectChat, true)
 	self.button_Chat.MouseClick = function (sender, args)
 		Options.Collection.CollectChat = not(Options.Collection.CollectChat)
 
@@ -177,6 +184,7 @@ function Options.Constructor.WindowCollection:Constructor( parent )
 		end
 	end
 
+	-------------------------------------------------------------------------------------
 	self.label_Chat = Turbine.UI.Label()
 	self.label_Chat:SetParent(        self.back_Chat )
 	self.label_Chat:SetLeft( left_label )
@@ -192,6 +200,15 @@ function Options.Constructor.WindowCollection:Constructor( parent )
     end )
 
 	self.checkBox_Chat:SetLeft(left_checkBox)
+    Options.Constructor.Tooltip.AddTooltip(self.checkBox_Chat, L[Language.Local].Tooltip.OnlySay, true)
+
+	
+	-------------------------------------------------------------------------------------
+	-- self
+	self:SetWidth(self.width)
+	self:SetParent(parent)
+    self:SetPosition( left, top )
+    self:SetBackColor( Defaults.Colors.BackgroundColor )
 
 end
 

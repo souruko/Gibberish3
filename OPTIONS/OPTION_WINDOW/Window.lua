@@ -21,13 +21,6 @@ function Options.Constructor.OptionsWindow:Constructor(  )
     local max_min_width = 1300
     local min_height = 700
 
-    --self constuct
-    self:SetText(           "Gibberish" )
-    self:SetSize(           self.width,     self.height )
-    self:SetPosition(       Utils.ScreenRatioToPixel( Data.options.window.left, Data.options.window.top ) )
-    self:SetMinimumSize(    max_min_width,  min_height )
-    self:SetMaximumWidth(   max_min_width )
-    self:SetResizable(      true )
 
     --children construction
     self.windowSelection  = Options.Constructor.WindowSelection ( self )
@@ -36,8 +29,18 @@ function Options.Constructor.OptionsWindow:Constructor(  )
 
     self.windowCollection = Options.Constructor.WindowCollection( self )
 
+    
+    self.tooltip          = Options.Constructor.Tooltip()
+
+    --self constuct
+    self:SetText(           "Gibberish" )
+    self:SetPosition(       Utils.ScreenRatioToPixel( Data.options.window.left, Data.options.window.top ) )
+    self:SetMinimumSize(    max_min_width,  min_height )
+    self:SetMaximumWidth(   max_min_width )
+    self:SetResizable(      true )
+    self:SetSize(           self.width,     self.height )
+
     --startup
-    self:SizeChanged()
     self:SelectionChanged()
     self:SetVisible(true)
 
@@ -65,6 +68,9 @@ end
 -------------------------------------------------------------------------------------
 function Options.Constructor.OptionsWindow:SelectionChanged()
 
+    self.windowSelection:   SelectionChanged()
+    self.windowOptions:     SelectionChanged()
+
 end
 
 
@@ -77,9 +83,57 @@ function Options.Constructor.OptionsWindow:Finish()
 
     self.windowSelection:   Finish()
     self.windowOptions:     Finish()
-    self.generalOptions:    Finish()
     self.windowCollection:  Finish()
 
     self:Close()
     
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:Closed()
+
+    Options.MainWindow.OpenClose()
+    
+end
+
+
+-------------------------------------------------------------------------------------
+--      Description:    hide tooltip
+-------------------------------------------------------------------------------------
+--        Parameter:     left, top, width, height, heading, text
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:ShowTooltip( left, top, width, height, heading, text )
+
+    self.tooltip:Show( left, top, width, height, heading, text )
+    
+end
+
+
+
+-------------------------------------------------------------------------------------
+--      Description:    group selection changed
+-------------------------------------------------------------------------------------
+--        Parameter:     
+-------------------------------------------------------------------------------------
+--           Return:     
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:HideTooltip()
+
+    self.tooltip:Hide()
+
+end
+
+-------------------------------------------------------------------------------------
+--      Description:    
+-------------------------------------------------------------------------------------
+function Options.Constructor.OptionsWindow:ResetContent()
+
+    self.windowSelection:   ResetContent()
+    self.windowOptions:     ResetContent()
+
 end

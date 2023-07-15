@@ -103,9 +103,13 @@ function Options.Constructor.ShortcutButton:Constructor()
 
     self.MouseClick = function (sender, args)
 
-        local left, top = self:CalcMenuPos()
-        
-        self.rightClickMenu:Show(left, top, true)
+        if args.Button == Turbine.UI.MouseButton.Right then
+
+            local left, top = self:CalcMenuPos()
+            
+            self.rightClickMenu:Show(left, top, true)
+
+        end
 
     end
 

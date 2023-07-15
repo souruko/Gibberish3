@@ -148,16 +148,26 @@ Data.group[testIndex2].timerList[timer5in][Trigger.Types.Chat][tr6].action = Act
 g3 = Group.New("Content Stuff", 1)
 g4 = Group.New("Hello there", 1)
 g5 = Group.New("Wulfs group", 1)
-g6 = Group.New("of timers", 1)
+g6 = Group.New("ok i will test it", 1)
 g7 = Group.New("with special needs", 1)
 g8 = Group.New("yeahhaaha", 1)
+Data.group[g8].enabled = false
 g9 = Group.New("of timers", 1)
 g10 = Group.New("with special needs", 1)
 g11 = Group.New("yeahhaaha", 1)
+g12 = Group.New("Content Stuff", 1)
+g13 = Group.New("Hello there", 1)
+g14 = Group.New("Wulfs group", 1)
+g15 = Group.New("of timers", 1)
+g16 = Group.New("with special needs", 1)
+g17 = Group.New("yeahhaaha", 1)
+g18 = Group.New("of timers", 1)
+g19 = Group.New("with special needs", 1)
+g20 = Group.New("Faraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 1)
 
 f1i = Folder.New("Folder of Life")
 f2i = Folder.New("Other Folder")
-f3i = Folder.New("Nethe in a Box")
+f3i = Folder.New("Bigihansisoni")
 f4i = Folder.New("Other Folder")
 f5i = Folder.New("Nethe in a Box")
 
@@ -168,6 +178,8 @@ Data.group[g6].folder = f3i
 Data.group[g7].folder = f3i
 
 Data.folder[f3i].folder = f1i
+
+Data.SortTo(Data.folder[f4i], Data.group[g3])
 
 Data.selectedGroupIndex = {}
 Data.selectedGroupIndex[1] = 1
@@ -187,3 +199,5 @@ end
 Trigger.InitAll()
 
 Short = Options.Constructor.ShortcutButton()
+
+Options.MainWindow.OpenClose()

@@ -251,7 +251,7 @@ function Options.Constructor.Dropdown:SetActiv(activ)
 
     if activ == true then
         self.selectionWindow:SetVisible(true)
-        self.frame:SetBackColor( Defaults.Colors.FolderColor3 )
+        self.frame:SetBackColor( Defaults.Colors.DropDown )
         self.activ = activ
 
     else

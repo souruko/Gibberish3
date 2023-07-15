@@ -290,3 +290,11 @@ IconID.Type.NewDottedBorder = 5
 --      Description:    Defaults
 -------------------------------------------------------------------------------------
 Defaults = {}
+
+-------------------------------------------------------------------------------------
+--      Description:    Defaults
+-------------------------------------------------------------------------------------
+DisplayTypes = {}
+DisplayTypes.Group = 1
+DisplayTypes.Folder = 2
+DisplayTypes.Multi = 3
