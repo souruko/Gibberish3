@@ -1,20 +1,13 @@
 --=================================================================================================
---= Trigger Functions        
+--= Chat        
 --= ===============================================================================================
---= general trigger functions
+--= chat events lotro interface
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- init all triggers
-function Trigger.InitAll()
-
-    for index, trigger in ipairs(Trigger) do
-
-        trigger.Init()
-
-    end
-
-end
+import "Gibberish3.TRIGGER.CHAT.Functions"
+import "Gibberish3.TRIGGER.CHAT.Defaults"
+import "Gibberish3.TRIGGER.CHAT.Options"
 ---------------------------------------------------------------------------------------------------

@@ -1,32 +1,44 @@
---===================================================================================
---             Name:    UTILS
--------------------------------------------------------------------------------------
---      Description:    init
---===================================================================================
+--=================================================================================================
+--= Utils        
+--= ===============================================================================================
+--= collection of utilitys
+--=================================================================================================
 
-
-
-
-
-
+---------------------------------------------------------------------------------------------------
+-- required for class-struct definitions 
 import "Gibberish3.UTILS.Class"
 import "Gibberish3.UTILS.Type"
+---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- global variables and constants
+import "Gibberish3.UTILS.Constants"
+import "Gibberish3.UTILS.Variables"
+---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- localisation and combatChatParse (stolen from combat analyses)
 if Language.Local == Language.German then
-
-    import "Gibberish3.UTILS.CombatChatParseDE"
+    import "Gibberish3.UTILS.COMBATCHATPARSE.de"
+    import "Gibberish3.UTILS.LOCALISATION.de"
 
 elseif Language.Local == Language.French then
+    import "Gibberish3.UTILS.COMBATCHATPARSE.fr"
+    import "Gibberish3.UTILS.LOCALISATION.fr"
 
-    import "Gibberish3.UTILS.CombatChatParseFR"
-
-else
-
-    import "Gibberish3.UTILS.CombatChatParseEN"
+else -- english
+    import "Gibberish3.UTILS.COMBATCHATPARSE.en"
+    import "Gibberish3.UTILS.LOCALISATION.en"
 
 end
+---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- utils function library
+import "Gibberish3.UTILS.Functions"
+---------------------------------------------------------------------------------------------------
 
-import "Gibberish3.UTILS.LOCALISATION"
-import "Gibberish3.UTILS.Utils"
+---------------------------------------------------------------------------------------------------
+-- icon id collection
+import "Gibberish3.UTILS.IconIDs"
+---------------------------------------------------------------------------------------------------

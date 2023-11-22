@@ -1,4 +1,0 @@
-
-windowselection
-
-    copy
