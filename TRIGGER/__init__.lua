@@ -35,8 +35,14 @@ Trigger[ Trigger.Types.TimerThreshold ] = {}
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+import "Gibberish3.TRIGGER.EFFECT.SELF"
+import "Gibberish3.TRIGGER.EFFECT.GROUP"
+import "Gibberish3.TRIGGER.EFFECT.TARGET"
 import "Gibberish3.TRIGGER.CHAT"
 import "Gibberish3.TRIGGER.SKILL"
+import "Gibberish3.TRIGGER.TIMER.END"
+import "Gibberish3.TRIGGER.TIMER.START"
+import "Gibberish3.TRIGGER.TIMER.THRESHOLD"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

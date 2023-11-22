@@ -1,14 +1,13 @@
 --=================================================================================================
---= Skill         
+--= Effect Self        
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= self effect events lotro interface
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+import "Gibberish3.TRIGGER.EFFECT.SELF.Functions"
+import "Gibberish3.TRIGGER.EFFECT.SELF.Defaults"
+import "Gibberish3.TRIGGER.EFFECT.SELF.Options"
 ---------------------------------------------------------------------------------------------------

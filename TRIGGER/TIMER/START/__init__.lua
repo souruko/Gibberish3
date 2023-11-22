@@ -1,14 +1,13 @@
 --=================================================================================================
---= Skill         
+--= Timer start   
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= timer start events lotro interface
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+import "Gibberish3.TRIGGER.TIMER.START.Functions"
+import "Gibberish3.TRIGGER.TIMER.START.Defaults"
+import "Gibberish3.TRIGGER.TIMER.START.Options"
 ---------------------------------------------------------------------------------------------------

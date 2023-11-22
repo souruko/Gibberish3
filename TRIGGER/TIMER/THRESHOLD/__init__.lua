@@ -1,14 +1,13 @@
 --=================================================================================================
---= Skill         
+--= Timer threshold   
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= timer threshold events lotro interface
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+import "Gibberish3.TRIGGER.TIMER.THRESHOLD.Functions"
+import "Gibberish3.TRIGGER.TIMER.THRESHOLD.Defaults"
+import "Gibberish3.TRIGGER.TIMER.THRESHOLD.Options"
 ---------------------------------------------------------------------------------------------------

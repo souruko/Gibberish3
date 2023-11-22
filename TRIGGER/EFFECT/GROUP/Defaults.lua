@@ -1,14 +1,16 @@
 --=================================================================================================
---= Skill         
+--= Effect Group Defaults      
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= effect group trigger option defaults
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+Trigger[ Trigger.Types.EffectGroup ].Defaults                    = {}
+Trigger[ Trigger.Types.EffectGroup ].Defaults.token              = ""
+Trigger[ Trigger.Types.EffectGroup ].Defaults.useRegex           = false
+Trigger[ Trigger.Types.EffectGroup ].Defaults.description        = ""
+Trigger[ Trigger.Types.EffectGroup ].Defaults.listOfTargets      = {}
 ---------------------------------------------------------------------------------------------------
+

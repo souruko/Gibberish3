@@ -1,14 +1,16 @@
 --=================================================================================================
---= Skill         
+--= Timer start Defaults      
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= timer start trigger option defaults
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+Trigger[ Trigger.Types.TimerStart ].Defaults                    = {}
+Trigger[ Trigger.Types.TimerStart ].Defaults.token              = ""
+Trigger[ Trigger.Types.TimerStart ].Defaults.useRegex           = false
+Trigger[ Trigger.Types.TimerStart ].Defaults.description        = ""
+Trigger[ Trigger.Types.TimerStart ].Defaults.listOfTargets      = {}
 ---------------------------------------------------------------------------------------------------
+

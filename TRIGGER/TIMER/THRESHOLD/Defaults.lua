@@ -1,14 +1,16 @@
 --=================================================================================================
---= Skill         
+--= Timer threshold Defaults      
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= timer threshold trigger option defaults
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+Trigger[ Trigger.Types.TimerThreshold ].Defaults                    = {}
+Trigger[ Trigger.Types.TimerThreshold ].Defaults.token              = ""
+Trigger[ Trigger.Types.TimerThreshold ].Defaults.useRegex           = false
+Trigger[ Trigger.Types.TimerThreshold ].Defaults.description        = ""
+Trigger[ Trigger.Types.TimerThreshold ].Defaults.listOfTargets      = {}
 ---------------------------------------------------------------------------------------------------
+

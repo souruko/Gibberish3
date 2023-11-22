@@ -1,14 +1,13 @@
 --=================================================================================================
---= Skill         
+--= Effect Group        
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= group effect events lotro interface
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+import "Gibberish3.TRIGGER.EFFECT.GROUP.Functions"
+import "Gibberish3.TRIGGER.EFFECT.GROUP.Defaults"
+import "Gibberish3.TRIGGER.EFFECT.GROUP.Options"
 ---------------------------------------------------------------------------------------------------

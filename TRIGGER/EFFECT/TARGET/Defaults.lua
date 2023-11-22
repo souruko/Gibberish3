@@ -1,14 +1,16 @@
 --=================================================================================================
---= Skill         
+--= Effect Target Defaults      
 --= ===============================================================================================
---= trigger from skill reset time changed
+--= effect target trigger option defaults
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
-Trigger[Trigger.Types.Skill].Init = function ()
-
-end
+Trigger[ Trigger.Types.EffectTarget ].Defaults                    = {}
+Trigger[ Trigger.Types.EffectTarget ].Defaults.token              = ""
+Trigger[ Trigger.Types.EffectTarget ].Defaults.useRegex           = false
+Trigger[ Trigger.Types.EffectTarget ].Defaults.description        = ""
+Trigger[ Trigger.Types.EffectTarget ].Defaults.listOfTargets      = {}
 ---------------------------------------------------------------------------------------------------
+
