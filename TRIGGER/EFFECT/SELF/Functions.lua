@@ -7,7 +7,8 @@
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
+-- effect self event processing start up
+---------------------------------------------------------------------------------------------------
 Trigger[Trigger.Types.EffectSelf].Init = function ()
 
 end

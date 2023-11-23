@@ -1,22 +1,15 @@
-
---===================================================================================
---             Name:    STRUCTS - Timer
--------------------------------------------------------------------------------------
---      Description:    Timer structure and functions
---===================================================================================
-
+--=================================================================================================
+--= Timer Struct        
+--= ===============================================================================================
+--= timer struct construction and functions
+--=================================================================================================
 
 
 
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.GetStruct(type)
+---------------------------------------------------------------------------------------------------
+-- create new timer struct and return it
+---------------------------------------------------------------------------------------------------
+function Timer.New(type)
 
     local timer = {}
 
@@ -26,32 +19,32 @@ function Timer.GetStruct(type)
     timer.enabled               = true
     timer.sortIndex             = 0
     timer.type                  = type
-    timer.description           = Timer.Defaults[type].description
-    timer.permanent             = Timer.Defaults[type].permanent
+    timer.description           = Timer[type].Defaults.description
+    timer.permanent             = Timer[type].Defaults.permanent
 
     -- timer
-    timer.unique                = Timer.Defaults[type].unique
-    timer.removable             = Timer.Defaults[type].removable
-    timer.loop                  = Timer.Defaults[type].loop
-    timer.reset                 = Timer.Defaults[type].reset
-    timer.useCustomTimer        = Timer.Defaults[type].useCustomTimer
-    timer.timerValue            = Timer.Defaults[type].timerValue
-    timer.direction             = Timer.Defaults[type].direction
+    timer.unique                = Timer[type].Defaults.unique
+    timer.removable             = Timer[type].Defaults.removable
+    timer.loop                  = Timer[type].Defaults.loop
+    timer.reset                 = Timer[type].Defaults.reset
+    timer.useCustomTimer        = Timer[type].Defaults.useCustomTimer
+    timer.timerValue            = Timer[type].Defaults.timerValue
+    timer.direction             = Timer[type].Defaults.direction
     
     -- text / icon
-    timer.icon                  = Timer.Defaults[type].icon
-    timer.textValue             = Timer.Defaults[type].textValue
-    timer.textOption            = Timer.Defaults[type].textOption
+    timer.icon                  = Timer[type].Defaults.icon
+    timer.textValue             = Timer[type].Defaults.textValue
+    timer.textOption            = Timer[type].Defaults.textOption
 
     -- animation
-    timer.thresholdValue        = Timer.Defaults[type].thresholdValue
-    timer.useThreshold          = Timer.Defaults[type].useThreshold
-    timer.useAnimation          = Timer.Defaults[type].useAnimation
-    timer.animationSpeed        = Timer.Defaults[type].animationSpeed
-    timer.animationType         = Timer.Defaults[type].animationType
-    timer.useShadow             = Timer.Defaults[type].useShadow
+    timer.thresholdValue        = Timer[type].Defaults.thresholdValue
+    timer.useThreshold          = Timer[type].Defaults.useThreshold
+    timer.useAnimation          = Timer[type].Defaults.useAnimation
+    timer.animationSpeed        = Timer[type].Defaults.animationSpeed
+    timer.animationType         = Timer[type].Defaults.animationType
+    timer.useShadow             = Timer[type].Defaults.useShadow
 
-    timer.counterValue          = Timer.Defaults[type].counterValue
+    timer.counterValue          = Timer[type].Defaults.counterValue
 
     timer[Trigger.Types.EffectSelf]     = {}
     timer[Trigger.Types.EffectGroup]    = {}
@@ -65,148 +58,4 @@ function Timer.GetStruct(type)
     return timer
 
 end
-
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.New(type)
-
-    return Timer.GetStruct(type)
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.Delete()
-
-
-end
-
-
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.AddTrigger(timer, type)
-
-    local triggerIndex = #timer[type]+1
-
-    timer[type][ triggerIndex ] = Trigger.New(type)
-    timer[type][ triggerIndex ].sortIndex = timer.nextTriggerSortIndex
-
-    timer.nextTriggerSortIndex = timer.nextTriggerSortIndex + 1
-    
-    return triggerIndex
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    fromData, toData
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.SortTo(timerData, fromData, toData)
-
-    local fromSortIndex = fromData.sortIndex
-    local toSortIndex = toData.sortIndex
-
-    if fromSortIndex > toSortIndex then
-
-        for i, triggerList in ipairs(timerData) do
-
-            for j, triggerData in ipairs(triggerList) do
-
-                if triggerData.sortIndex >= toSortIndex and triggerData.sortIndex <= fromSortIndex then
-
-                    triggerData.sortIndex = triggerData.sortIndex + 1
-
-                end
-
-            end
-        
-        end
-
-    else
-
-        for i, triggerList in ipairs(timerData) do
-
-            for j, triggerData in ipairs(triggerList) do
-
-                if triggerData.sortIndex <= toSortIndex and triggerData.sortIndex >= fromSortIndex then
-
-                    triggerData.sortIndex = triggerData.sortIndex - 1
-
-                end
-
-            end
-    
-        end
-
-      
-    end
-
-    fromData.sortIndex = toSortIndex
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    fromData, toData
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.IsSelected(index)
-
-    for i, v in ipairs(Data.selectedTimerIndex) do
-
-        if v.timerIndex == index then
-            return true
-        end
-        
-    end
-
-    return false
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:   
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.CopyCache()
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Timer.CutCache()
-
-end
+---------------------------------------------------------------------------------------------------

@@ -11,12 +11,6 @@ import "Gibberish3.UTILS.Type"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- global variables and constants
-import "Gibberish3.UTILS.Constants"
-import "Gibberish3.UTILS.Variables"
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
 -- localisation and combatChatParse (stolen from combat analyses)
 if Language.Local == Language.German then
     import "Gibberish3.UTILS.COMBATCHATPARSE.de"

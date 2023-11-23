@@ -1,22 +1,15 @@
-
---===================================================================================
---             Name:    STRUCTS - Trigger
--------------------------------------------------------------------------------------
---      Description:    Trigger structure and functions
---===================================================================================
-
+--=================================================================================================
+--= Trigger Struct        
+--= ===============================================================================================
+--= trigger struct construction and functions
+--=================================================================================================
 
 
 
-
--------------------------------------------------------------------------------------
---      Description:     return the base structure for creating a new trigger 
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    trigger struct
--------------------------------------------------------------------------------------
-function Trigger.GetStruct(type)
+---------------------------------------------------------------------------------------------------
+-- create new trigger struct and return it
+---------------------------------------------------------------------------------------------------
+function Trigger.New(type)
 
     local trigger = {}
 
@@ -24,60 +17,13 @@ function Trigger.GetStruct(type)
     trigger.enabled         = true
     trigger.sortIndex       = 0
     trigger.type            = type
-    trigger.token           = Trigger.Defaults[type].token
-    trigger.useRegex        = Trigger.Defaults[type].useRegex
-    trigger.description     = Trigger.Defaults[type].description
-    trigger.action          = Actions.Add
-    trigger.listOfTargets   = Trigger.Defaults[type].listOfTargets
+    trigger.token           = Trigger[type].Defaults.token
+    trigger.useRegex        = Trigger[type].Defaults.useRegex
+    trigger.description     = Trigger[type].Defaults.description
+    trigger.action          = Trigger[type].Defaults.action
+    trigger.listOfTargets   = Trigger[type].Defaults.listOfTargets
 
     return trigger
 
 end
-
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Trigger.New(type)
-
-    return Trigger.GetStruct(type)
-
-end
-
-
--------------------------------------------------------------------------------------
---      Description:     
--------------------------------------------------------------------------------------
---        Parameter:    
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Trigger.Delete()
-
-
-end
-
--------------------------------------------------------------------------------------
---      Description:    
--------------------------------------------------------------------------------------
---        Parameter:    fromData, toData
--------------------------------------------------------------------------------------
---           Return:    
--------------------------------------------------------------------------------------
-function Trigger.IsSelected(index)
-
-    for i, v in ipairs(Data.selectedTriggerIndex) do
-
-        if v.triggerIndex == index then
-            return true
-        end
-        
-    end
-
-    return false
-
-end
+---------------------------------------------------------------------------------------------------
