@@ -7,11 +7,7 @@
 
 
 ---------------------------------------------------------------------------------------------------
--- trigger table
-Trigger                        = {}
-
 -- trigger types
-Trigger.Types                  = {}
 Trigger.Types.EffectSelf       = 1
 Trigger.Types.EffectGroup      = 2
 Trigger.Types.EffectTarget     = 3
@@ -24,14 +20,11 @@ Trigger.Types.TimerThreshold   = 8
 
 ---------------------------------------------------------------------------------------------------
 -- trigger specific tables
-Trigger[ Trigger.Types.EffectSelf ]     = {}
-Trigger[ Trigger.Types.EffectGroup ]    = {}
-Trigger[ Trigger.Types.EffectTarget ]   = {}
-Trigger[ Trigger.Types.Chat ]           = {}
-Trigger[ Trigger.Types.Skill ]          = {}
-Trigger[ Trigger.Types.TimerEnd ]       = {}
-Trigger[ Trigger.Types.TimerStart ]     = {}
-Trigger[ Trigger.Types.TimerThreshold ] = {}
+for index, triggerType in pairs( Trigger.Types ) do
+
+    Trigger[triggerType] = {}
+
+end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

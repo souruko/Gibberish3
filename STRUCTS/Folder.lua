@@ -22,7 +22,7 @@ function Folder.New(name)
     folder.folder       = nil
 
     -- create trigger tables
-    for index, triggerType in ipairs( Trigger.Types ) do
+    for index, triggerType in pairs( Trigger.Types ) do
 
         folder[triggerType] = {}
 

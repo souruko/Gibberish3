@@ -59,7 +59,7 @@ function Window.New(name, type)
     window.counterDirection      = Window[type].Defaults.counterDirection
 
     -- create trigger tables
-    for index, triggerType in ipairs( Trigger.Types ) do
+    for index, triggerType in pairs( Trigger.Types ) do
 
         window[triggerType]      = {}
 
