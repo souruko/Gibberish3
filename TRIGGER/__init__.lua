@@ -16,6 +16,7 @@ Trigger.Types.Skill            = 5
 Trigger.Types.TimerEnd         = 6
 Trigger.Types.TimerStart       = 7
 Trigger.Types.TimerThreshold   = 8
+Trigger.Types.Combat           = 9
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -33,9 +34,8 @@ import "Gibberish3.TRIGGER.EFFECT.GROUP"
 import "Gibberish3.TRIGGER.EFFECT.TARGET"
 import "Gibberish3.TRIGGER.CHAT"
 import "Gibberish3.TRIGGER.SKILL"
-import "Gibberish3.TRIGGER.TIMER.END"
-import "Gibberish3.TRIGGER.TIMER.START"
-import "Gibberish3.TRIGGER.TIMER.THRESHOLD"
+import "Gibberish3.TRIGGER.TIMER"
+import "Gibberish3.TRIGGER.COMBAT"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

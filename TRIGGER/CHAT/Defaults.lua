@@ -10,7 +10,9 @@
 Trigger[ Trigger.Types.Chat ].Defaults                    = {}
 Trigger[ Trigger.Types.Chat ].Defaults.token              = ""
 Trigger[ Trigger.Types.Chat ].Defaults.useRegex           = true
+Trigger[ Trigger.Types.Chat ].Defaults.action             = Actions.Add
 Trigger[ Trigger.Types.Chat ].Defaults.description        = ""
-Trigger[ Trigger.Types.Chat ].Defaults.listOfTargets       = {}
+Trigger[ Trigger.Types.Chat ].Defaults.source             = Source.Any
+Trigger[ Trigger.Types.Chat ].Defaults.listOfTargets      = {}
 ---------------------------------------------------------------------------------------------------
 

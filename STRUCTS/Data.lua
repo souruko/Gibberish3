@@ -11,9 +11,9 @@
 ---------------------------------------------------------------------------------------------------
 function Data.New()
 
-    -- list of group data
-    Data.group                      = {}
-    Data.group.lastID = 0
+    -- list of window data
+    Data.window                      = {}
+    Data.window.lastID = 0
 
     -- list of folder data
     Data.folder                     = {}

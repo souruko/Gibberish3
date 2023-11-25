@@ -8,13 +8,13 @@
 
 ---------------------------------------------------------------------------------------------------
 -- import elements
-import "Gibberish3.ELEMENTS.CheckBox"
-import "Gibberish3.ELEMENTS.Tooltip"
+import "Gibberish3.OPTIONS.ELEMENTS.CheckBox"
+import "Gibberish3.OPTIONS.ELEMENTS.Tooltip"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- import the rest
-import "Gibberish3.ELEMENTS.SHORTCUT.Window"
-import "Gibberish3.ELEMENTS.WINDOW"
-import "Gibberish3.ELEMENTS.MOVE.Window"
+import "Gibberish3.OPTIONS.SHORTCUT.Window"
+import "Gibberish3.OPTIONS.WINDOW"
+import "Gibberish3.OPTIONS.MOVE.Window"
 ---------------------------------------------------------------------------------------------------

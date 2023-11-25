@@ -22,6 +22,7 @@ function Trigger.New(type)
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
     trigger.listOfTargets   = Trigger[type].Defaults.listOfTargets
+    trigger.source          = Trigger[type].Defaults.source
 
     return trigger
 
