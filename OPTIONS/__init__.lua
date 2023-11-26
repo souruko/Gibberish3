@@ -18,3 +18,8 @@ import "Gibberish3.OPTIONS.SHORTCUT.Window"
 import "Gibberish3.OPTIONS.WINDOW"
 import "Gibberish3.OPTIONS.MOVE.Window"
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- import option functions
+import "Gibberish3.OPTIONS.Functions"
+---------------------------------------------------------------------------------------------------

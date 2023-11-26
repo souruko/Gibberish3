@@ -20,7 +20,6 @@ function Window.New(name, type)
     window.name                  = name
     window.folder                = nil
     window.type                  = type
-    window.timerType             = Window[type].Defaults.timerType
     window.enabled               = true
     window.saveGlobaly           = true
     window.description           = Window[type].Defaults.description
@@ -56,7 +55,7 @@ function Window.New(name, type)
     window.timerAlignment        = Window[type].Defaults.timerAlignment
     window.showTimer             = Window[type].Defaults.showTimer
 
-    window.counterDirection      = Window[type].Defaults.counterDirection
+    window.timerList             = {}
 
     -- create trigger tables
     for index, triggerType in pairs( Trigger.Types ) do

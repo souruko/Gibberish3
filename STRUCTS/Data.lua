@@ -21,10 +21,9 @@ function Data.New()
 
     Data.lastSortIndex              = 0
 
-    Data.selectedGroupIndex         = {}
-    Data.selectedFolderIndex        = {}
-    Data.selectedTimerIndex         = {}
-    Data.selectedTriggerIndex       = {}
+    Data.selectedIndex              = 0
+    Data.selectedTimerIndex         = 0
+    Data.selectedTriggerIndex       = 0
 
     -- 
     Data.moveMode                   = false
