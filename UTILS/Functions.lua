@@ -24,3 +24,32 @@ function PixelToScreenRatio( left, top )
     return (left / Options.ScreenWidth), (top / Options.ScreenHeight)
 
 end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- fix get tourbine color from data
+---------------------------------------------------------------------------------------------------
+function ColorFix( color )
+
+    return Turbine.UI.Color(color.R, color.G, color.B)
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- fix get tourbine color from data
+---------------------------------------------------------------------------------------------------
+local size_item = Turbine.UI.Control()
+function GetImageSize( image )
+
+    if image == nil then
+        return 32, 32
+    end
+
+	size_item:SetBackground(image)
+	size_item:SetStretchMode(2)
+
+	return size_item:GetSize()
+    
+end
+---------------------------------------------------------------------------------------------------

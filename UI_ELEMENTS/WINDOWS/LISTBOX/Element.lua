@@ -127,14 +127,14 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] listbox action call from trigger
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Action(windowData, timerData, timerIndex, action, startTime, duration, icon, text, entity, key)
+function ListBoxElement:Action( action, timerData, timerIndex, startTime, duration, icon, text, entity, key)
 
     -- split the call into the relevant actions
     if action == Actions.Add then
-        self:Add( windowData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
+        self:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
     elseif action == Action.Remove then
-        self:Remove( windowData, timerData, timerIndex, key )
+        self:Remove( timerIndex, key )
 
     else
         -- error!
@@ -263,9 +263,25 @@ end
 ---------------------------------------------------------------------------------------------------
 -- listbox add timer
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Add(windowData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+function ListBoxElement:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
+    local child = self:CheckForRunningTimer( timerIndex, key )
 
+    -- create new timer
+    if child == nil then
+
+        local index = #self.children + 1
+        self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, timerIndex, startTime, duration, icon, text, entity, key, true )
+        self.timerListBox:AddItem( self.children[ index ] )
+
+    -- update running timer
+    else
+
+        child:UpdateContent( startTime, duration, icon, text, entity, key, true )
+
+    end
+
+    self:SortChildren()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -273,9 +289,22 @@ end
 ---------------------------------------------------------------------------------------------------
 -- listbox remove timer
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Remove(windowData, timerData, timerIndex, key)
+function ListBoxElement:Remove( timerIndex, key )
 
+    -- iterrate from the back because the table can change from remove
+    for i = #self.children, 1, -1 do
 
+        if self.children[i].index == timerIndex then
+
+            if key == nil or self.children[i].key == key then
+
+                self.children[i]:Remove()
+
+            end
+
+        end
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -316,7 +345,106 @@ end
 ---------------------------------------------------------------------------------------------------
 function ListBoxElement:FillPermanentTimers()
 
+    -- kill all permanent children!
+    for i, child in pairs(self.children) do                 
 
+        if child.timerData.permanent == true then
+            child:Finish()
+        end
+
+    end
+
+    -- iterrate all timers and create the permanent ones
+    for j, timerData in ipairs(self.data.timerList) do
+
+        if timerData.permanent == true then
+
+            local index = #self.children + 1
+
+            local icon = timerData.icon
+            local text = ""
+            if timerData.textOption == TimerTextOptions.CustomText then
+                text = timerData.textValue
+            end
+
+            self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, j, 0, 0, icon, text, nil, nil, false )
+            self.timerListBox:AddItem( self.children[ index ] )
+
+        end
+
+    end
+
+    self:SortChildren()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- sort timerListBox
+---------------------------------------------------------------------------------------------------
+function ListBoxElement:SortChildren()
+
+    self.timerListBox:Sort(
+        function (child1, child2)
+
+            -- both permanent > sort by index > child2 first
+            if child1.timerData.permanent == true and
+            child1.timerData.permanent == true and
+            child1.index > child2.index then
+
+                return false
+
+            -- both permanent > sort by index > child1 first
+            elseif child1.timerData.permanent == true and
+            child1.timerData.permanent == true and
+            child1.index < child2.index then
+
+                return true
+
+            -- child1 permanent = first
+            elseif child1.timerData.permanent == true then
+
+                return true
+                
+            -- child2 permanent = first
+            elseif child2.timerData.permanent == true then
+
+                return false
+
+            -- both not permanent sort ty endTime > child2 first
+            elseif child1.endTime > child2.endTime then
+
+                return false
+
+            -- both not permanent sort ty endTime > child1 first
+            else
+
+                return true
+
+            end
+            
+        end
+    )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check if timer is running and return control
+---------------------------------------------------------------------------------------------------
+function ListBoxElement:CheckForRunningTimer( timerIndex, key )
+
+    for index, child in pairs(self.children) do
+
+        if child.index == timerIndex and child.key == key then
+
+            return child
+            
+        end
+        
+    end
+
+    return nil
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 ---------------------------------------------------------------------------------------------------
 Window[ Window.Types.LISTBOX ].Defaults                         = {}
 
+-- default settings
 Window[ Window.Types.LISTBOX ].Defaults.description             = ""
 Window[ Window.Types.LISTBOX ].Defaults.resetOnTargetChange     = false
 Window[ Window.Types.LISTBOX ].Defaults.useTargetEntity         = false
@@ -39,6 +40,7 @@ Window[ Window.Types.LISTBOX ].Defaults.textAlignment           = Turbine.UI.Con
 Window[ Window.Types.LISTBOX ].Defaults.timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
 Window[ Window.Types.LISTBOX ].Defaults.showTimer               = true
 
+-- allowed timer
 Window[ Window.Types.LISTBOX ].Defaults.allowedTimers           = {}
 Window[ Window.Types.LISTBOX ].Defaults.allowedTimers[1]        = Timer.Types.BAR
 ---------------------------------------------------------------------------------------------------

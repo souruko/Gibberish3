@@ -80,19 +80,7 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
 
     end
 
-    -- window call   
-    if triggerData.action == Actions.Add then
-
-        Windows[windowIndex]:Add(windowData, timerData, timerIndex, startTime, duration, icon, text, entity, key)
-
-    elseif triggerData.action == Actions.Remove then
-
-        Windows[windowIndex]:Remove(windowData, timerData, timerIndex, startTime, icon, text, entity, key)
-
-    elseif triggerData.action == Actions.Reset then
-
-        Windows[windowIndex]:ResetAction(windowData, timerData, timerIndex, startTime, icon, text, entity, key)
-                        
-    end
+    -- window call  
+    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
 
 end
