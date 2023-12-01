@@ -29,7 +29,7 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
     -- remove 
     function effects.EffectRemoved(sender, args)
 
-        Trigger[ Trigger.Types.EffectSelf ].EffectRemoved( args.Effect )
+        Trigger[ Trigger.Types.EffectRemoveSelf ].EffectRemoved( args.Effect )
 
     end
 
@@ -46,7 +46,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckAllActivEffects = function ()
     for index = 1, effects:GetCount(), 1 do
         
         local effect = effects:Get(index)
-    
+
         Trigger[ Trigger.Types.EffectSelf ].EffectAdded( effect )
         Trigger[ Trigger.Types.EffectGroup ].EffectAdded( effect, LocalPlayer )
 
@@ -137,7 +137,78 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check if removed effect is tracked
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].EffectRemoved = function ( effect )
+Trigger[ Trigger.Types.EffectRemoveSelf ].EffectRemoved = function ( effect )
+
+    local name = effect:GetName()
+    local icon = effect:GetIcon()
+
+    -- all groups
+    for windowIndex, windowData in ipairs(Data.window) do                                      
+
+        -- check if group is enabled
+        if windowData.enabled == true then                                                   
+
+            -- all timer of the group
+            for timerIndex, timerData in ipairs(windowData.timerList) do                     
+
+                -- check if timer is enabled
+                if timerData.enabled == true then                                           
+                
+                    -- all effect self of the timer
+                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.EffectRemoveSelf]) do 
+
+                        -- check if trigger is enabled
+                        if triggerData.enabled == true then                                 
+
+                            -- fix token
+                            local token = Trigger.ReplacePlaceholder(triggerData.token)       
+
+                            if triggerData.useRegex == true then
+
+                                local pos1 = string.find( name, token )
+
+                                if pos1 ~= nil then
+
+                                    Trigger.ProcessEffectTrigger(   
+                                                                    effect,
+                                                                    LocalPlayer,
+                                                                    windowIndex,
+                                                                    timerIndex,
+                                                                    triggerData,
+                                                                    (pos1 - 1)
+                                                                )
+
+                                end
+
+                            else
+
+                                if name == token then
+
+                                    Trigger.ProcessEffectTrigger(       
+                                                                    effect,
+                                                                    LocalPlayer,
+                                                                    windowIndex,
+                                                                    timerIndex,
+                                                                    triggerData,
+                                                                    0
+                                                                )
+                                    
+                                end
+                                   
+                               
+                            end
+
+                        end
+
+                    end
+                    
+                end
+
+            end
+
+        end
+        
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -221,7 +292,7 @@ Trigger.ProcessEffectTrigger = function ( effect, player, windowIndex, timerInde
     end
 
     -- group call  
-    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
+    Windows[ windowIndex ]:Action( triggerData.action, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
 end
 ---------------------------------------------------------------------------------------------------

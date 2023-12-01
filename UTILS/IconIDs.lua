@@ -17,11 +17,12 @@ IconID.Type.DottedBorder        = 2
 IconID.Type.ActivationBorder    = 3
 IconID.Type.NewActivationBorder = 4
 IconID.Type.NewDottedBorder     = 5
+IconID.Type.Circel              = 6
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- blank icon
-IconID.NoAnimation = Turbine.UI.Graphic (1090551585)
+IconID.Blank = Turbine.UI.Graphic (1090551585)
 
 
 ---------------------------------------------------------------------------------------------------
@@ -159,3 +160,11 @@ IconID [ IconID.Type.NewDottedBorder ] [10] = Turbine.UI.Graphic( 1092554679 )
 IconID [ IconID.Type.NewDottedBorder ] [11] = Turbine.UI.Graphic( 1092554680 )
 IconID [ IconID.Type.NewDottedBorder ] [12] = Turbine.UI.Graphic( 1092554681 )
 ---------------------------------------------------------------------------------------------------
+-- circel images
+IconID[ IconID.Type.Circel ] = {}
+
+for i = 0, 100 do
+
+    IconID[ IconID.Type.Circel ][ i ] = Turbine.UI.Graphic( "Gibberish3/RESOURCES/CIRCEL/circel_" .. i .. ".tga" )
+
+end

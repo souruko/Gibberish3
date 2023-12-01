@@ -8,7 +8,10 @@
 
 ---------------------------------------------------------------------------------------------------
 -- timer types
-Timer.Types.BAR = 1
+Timer.Types.BAR         = 1
+Timer.Types.CIRCEL      = 2
+Timer.Types.ICON        = 3
+Timer.Types.TEXT        = 4
 
 -- timer specific tables
 for index, timerType in pairs( Timer.Types ) do
@@ -19,6 +22,9 @@ end
 
 -- timer imports
 import "Gibberish3.UI_ELEMENTS.TIMER.BAR"
+import "Gibberish3.UI_ELEMENTS.TIMER.CIRCEL"
+import "Gibberish3.UI_ELEMENTS.TIMER.ICON"
+import "Gibberish3.UI_ELEMENTS.TIMER.TEXT"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

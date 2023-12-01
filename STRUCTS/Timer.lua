@@ -33,8 +33,9 @@ function Timer.New(type)
     
     -- text / icon
     timer.icon                  = Timer[type].Defaults.icon
-    timer.textValue             = Timer[type].Defaults.textValue
+    timer.showIcon              = Timer[type].Defaults.showIcon
     timer.textOption            = Timer[type].Defaults.textOption
+    timer.textValue             = Timer[type].Defaults.textValue
 
     -- animation
     timer.thresholdValue        = Timer[type].Defaults.thresholdValue
@@ -44,16 +45,11 @@ function Timer.New(type)
     timer.animationType         = Timer[type].Defaults.animationType
     timer.useShadow             = Timer[type].Defaults.useShadow
 
-    timer.counterValue          = Timer[type].Defaults.counterValue
+    for index, triggerType in pairs( Trigger.Types ) do
 
-    timer[Trigger.Types.EffectSelf]     = {}
-    timer[Trigger.Types.EffectGroup]    = {}
-    timer[Trigger.Types.EffectTarget]   = {}
-    timer[Trigger.Types.Skill]          = {}
-    timer[Trigger.Types.Chat]           = {}
-    timer[Trigger.Types.TimerEnd]       = {}
-    timer[Trigger.Types.TimerStart]     = {}
-    timer[Trigger.Types.TimerThreshold] = {}
+        timer[triggerType] = {}
+    
+    end
 
     return timer
 

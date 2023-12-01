@@ -39,6 +39,7 @@ Window[ Window.Types.LISTBOX ].Defaults.durationFormat          = NumberFormat.M
 Window[ Window.Types.LISTBOX ].Defaults.textAlignment           = Turbine.UI.ContentAlignment.MiddleLeft
 Window[ Window.Types.LISTBOX ].Defaults.timerAlignment          = Turbine.UI.ContentAlignment.MiddleRight
 Window[ Window.Types.LISTBOX ].Defaults.showTimer               = true
+Window[ Window.Types.LISTBOX ].Defaults.showIcon                = false
 
 -- allowed timer
 Window[ Window.Types.LISTBOX ].Defaults.allowedTimers           = {}

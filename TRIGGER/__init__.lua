@@ -17,6 +17,7 @@ Trigger.Types.TimerEnd         = 6
 Trigger.Types.TimerStart       = 7
 Trigger.Types.TimerThreshold   = 8
 Trigger.Types.Combat           = 9
+Trigger.Types.EffectRemoveSelf = 10
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

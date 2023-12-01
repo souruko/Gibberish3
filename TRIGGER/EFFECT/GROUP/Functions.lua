@@ -42,7 +42,7 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
 
 
                     -- check all activ effects
-                    Trigger[ Trigger.Types.EffectGroup ].InitActivEffect()
+                    Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects()
 
                 end
 

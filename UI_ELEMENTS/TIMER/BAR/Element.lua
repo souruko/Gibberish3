@@ -33,6 +33,8 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     -- key
     self.key = key
 
+    -- for threshold timer event
+    self.firstThreshold = true
 
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
@@ -79,14 +81,13 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     -- load settings
     self:DataChanged()
 
-
     -- start up
     self:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- timer started trigger event
     Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
 
-    self:Visibility( true )
+    self:SetVisibility( true )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -125,6 +126,10 @@ function BarElement:DataChanged()
     self:SetMouseVisible( parentData.useTargetEntity )
     self.entityControl:SetMouseVisible( parentData.useTargetEntity )
 
+    -- set barWidth
+    self.barWidth  = parentData.width
+    self.backColor = UTILS.ColorFix( parentData.color2 )
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -145,14 +150,39 @@ function BarElement:UpdateContent( startTime, duration, icon, text, entity, key,
     self.entityControl:SetEntity( entity )
 
     -- reset icon
-    self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
-    self.iconControl:SetStretchMode( 1 )
-    self.iconControl:SetBackground( icon )
-    self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+    if self.parent.data.showIcon == true then
 
-     -- reset text/timer
-    self.textLabel:SetText( text )
-    self.timerLabel:SetText( "" )
+        self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
+        self.iconControl:SetStretchMode( 1 )
+        self.iconControl:SetBackground( icon )
+        self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+
+    else
+
+        self.iconControl:SetBackground( UTILS.IconID.Blank )
+        self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+
+    end
+    
+    -- reset text/timer
+    if text ~= nil then
+        self.textLabel:SetText( text )
+        self.timerLabel:SetText( "" )
+    end
+
+    -- check if firstThreshold has to be reset
+    if self.data.useThreshold and
+    self.firstThreshold == false then
+
+        local timeLeft = self.endTime - Turbine.Engine.GetGameTime()
+
+        if timeLeft > self.data.thresholdValue then
+
+            self.firstThreshold = true
+
+        end
+
+    end
 
     self:Activ( activ )
     
@@ -164,6 +194,17 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Finish()
 
+    -- stop updates and set visibility to false
+    self:SetWantsUpdates( false )
+    self:SetVisibility( false )
+
+    self.parent:ChildFinished( self )
+
+    -- close all windows
+    self.labelBack:Close()
+    self.barBack:Close()
+    self:Close()
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -171,6 +212,153 @@ end
 -- update element ( called every frame )
 ---------------------------------------------------------------------------------------------------
 function BarElement:Update()
+    
+    -- calculate the timeLeft until timer ends
+    local timeLeft = self.endTime - Turbine.Engine.GetGameTime()
+
+    -- timer ended
+    if timeLeft <= 0 then
+        
+        -- if loop attribute is set reset timer
+        if self.data.loop == true then
+            
+            self:Loop()
+        
+        -- natural end
+        else
+
+            self:Ended()
+
+        end
+
+    -- running timer
+    elseif timeLeft < 99999 then
+
+        self:UpdateBar( timeLeft )
+        self:UpdateTime( timeLeft )
+        self:UpdateThreshold( timeLeft )
+
+    -- permanent timers without running time
+    else
+
+        self.timerLabel:SetText( "" )
+        self.bar:SetWidth( 0 )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- update bar
+---------------------------------------------------------------------------------------------------
+function BarElement:UpdateBar( timeLeft )
+
+    -- update bar size depending on direction and orientation
+    -- descending horizontal
+    if self.parent.data.direction == Direction.Descending and
+    self.parent.data.orientation == Orientation.Vertical then
+
+        self.bar:SetWidth( timeLeft / self.duration * self.barWidth )
+
+    -- descending vertical
+    elseif self.parent.data.direction == Direction.Descending and
+    self.parent.data.orientation == Orientation.Horizontal then
+
+        self.bar:SetHeight( timeLeft / self.duration * self.barWidth )
+
+    -- ascending horizontal
+    elseif self.parent.data.direction == Direction.Ascending and
+    self.parent.data.orientation == Orientation.Vertical then
+
+        local timePast = self.duration - timeLeft
+        self.bar:SetWidth( timePast / self.duration * self.barWidth )
+
+    -- ascending vertical
+    else
+
+        local timePast = self.duration - timeLeft
+        self.bar:SetWidth( timePast / self.duration * self.barWidth )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- update timer
+---------------------------------------------------------------------------------------------------
+function BarElement:UpdateTime( timeLeft )
+
+    -- update time depending on the direction
+    if self.parent.data.direction == Direction.Ascending then
+
+        local timePast = self.duration - timeLeft
+        self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )
+
+    else
+        
+        self.timerLabel:SetText( UTILS.TimerFormat( timeLeft, self.parent.data.durationFormat ) )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- update threshold
+---------------------------------------------------------------------------------------------------
+function BarElement:UpdateThreshold( timeLeft )
+
+    -- return if not using threshold
+    if self.data.useThreshold == false then
+        return
+    end
+
+    -- not in the threshold
+    if timeLeft > self.data.thresholdValue then
+
+        -- use backColor
+        self.barBack:SetBackColor( self.backColor )
+
+    -- in the threshold
+    else
+
+        -- threshold timer event
+        if self.firstThreshold == true then
+
+            self.firstThreshold = false
+            Trigger.TimerEvent( self.data.id, Trigger.Types.TimerThreshold )
+
+        end
+
+        -- flashing
+        if self.data.useAnimation == true and
+        self.data.animationType == AnimationType.Flashing then
+
+            local value
+            local flashValue = timeLeft * self.data.animationSpeed
+            
+            if math.floor( flashValue ) % 2 == 0 then
+            
+                value = 1 - ( flashValue - math.floor( flashValue ) )
+
+            else
+
+                value = ( flashValue - math.floor( flashValue ) )
+
+            end
+
+            self.barBack:SetBackColor( Turbine.UI.Color( 1, value, value ) )
+
+        -- no animation only red background
+        else
+            
+            self.barBack:SetBackColor( Turbine.UI.Color.Red )
+
+        end
+        
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -179,6 +367,19 @@ end
 -- timer is done
 ---------------------------------------------------------------------------------------------------
 function BarElement:Ended()
+
+    -- timer ended trigger event
+    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
+
+    if self.data.permanent == true then
+        
+        self:Activ( false )
+
+    else
+
+        self:Finish()
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -191,16 +392,16 @@ function BarElement:Activ( value )
     -- change opacity and text/timer visiblilty depending on activ
     if value == true then
 
-        self:SetOpacity( self.parent.opacityActiv )
-        self.barBack:SetOpacity( self.parent.opacityActiv )
+        self:SetOpacity( self.parent.data.opacityActiv )
+        self.barBack:SetOpacity( self.parent.data.opacityActiv )
 
         self.textLabel:SetVisible( true )
-        self.timerLabel:SetVisible( self.parent.showTimer )
+        self.timerLabel:SetVisible( self.parent.data.showTimer )
 
     else
 
-        self:SetOpacity( self.parent.opacityPassiv )
-        self.barBack:SetOpacity( self.parent.opacityPassiv )
+        self:SetOpacity( self.parent.data.opacityPassiv )
+        self.barBack:SetOpacity( self.parent.data.opacityPassiv )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
@@ -218,6 +419,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Loop()
 
+    -- reset timer with current time as start time
+    local startTime = Turbine.Engine.GetGameTime()
+
+    self:UpdateContent( startTime, self.duration, nil, nil, nil, self.key )
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -226,6 +432,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Reset()
 
+    -- if reset attribute is set call the timer end
+    if self.data.reset == true then
+        
+        self:Ended()
+
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -233,6 +446,11 @@ end
 -- update visibility
 ---------------------------------------------------------------------------------------------------
 function BarElement:SetVisibility( value )
+
+    -- change visiblility for all windows
+    self:SetVisible( value )
+    self.barBack:SetVisible( value )
+    self.labelBack:SetVisible( value )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -244,7 +462,18 @@ function BarElement:Resize()
 
     -- declarations
     local frame = self.parent.data.frame
-    local width, height, maxHeight, maxWidth, selfWidth, selfHeight, labelWidth, labelHeight, barBackLeft, labelBackLeft, barBackTop, labelBackTop
+    local iconSize, width, height, maxHeight, maxWidth, selfWidth, selfHeight, labelWidth, labelHeight, barBackLeft, labelBackLeft, barBackTop, labelBackTop
+
+    -- set iconsize depeding if icon is shown
+    if self.parent.data.showIcon == true then
+
+        iconSize = self.parent.data.height
+    
+    else
+
+        iconSize = 0
+
+    end
 
     -- set values depending on orientation
     if self.parent.data.orientation == Orientation.Vertical then
@@ -254,19 +483,19 @@ function BarElement:Resize()
         height          = self.parent.data.height
 
         -- timer max sizze
-        maxWidth        = width + ( 2 * frame ) + height
+        maxWidth        = width + ( 2 * frame ) + iconSize
         maxHeight       = height + ( 2 * frame)
 
         -- max size + spacing between timers
-        selfWidth      = maxWidth
+        selfWidth       = maxWidth
         selfHeight      = maxHeight + self.parent.data.spacing
 
         -- subtract labelSpacing so the text/timer dont sit on the edges
-        labelWidth = width - 2 * Options.Defaults.timer.labelSpacing
-        labelHeight = height
+        labelWidth      = width - 2 * Options.Defaults.timer.labelSpacing
+        labelHeight     = height
 
         -- bar staring position
-        barBackLeft     = frame + height
+        barBackLeft     = frame + iconSize
         barBackTop      = frame
 
         -- label starting position
@@ -279,14 +508,17 @@ function BarElement:Resize()
         width           = self.parent.data.height
         height          = self.parent.data.width
 
-        maxWidth        = height + ( 2 * frame )
-        maxHeight       = width + ( 2 * frame) + height
+        maxWidth        = width + ( 2 * frame )
+        maxHeight       = height + ( 2 * frame) + iconSize
 
-        selfWidth      = maxHeight + self.parent.data.spacing
+        selfWidth       = maxHeight + self.parent.data.spacing
         selfHeight      = maxWidth
 
+        labelWidth      = width 
+        labelHeight     = height - 2 * Options.Defaults.timer.labelSpacing
+
         barBackLeft     = frame
-        barBackTop      = frame + height
+        barBackTop      = frame + iconSize
 
         labelBackLeft   = frame
         labelBackTop    = barBackLeft + Options.Defaults.timer.labelSpacing
@@ -305,7 +537,7 @@ function BarElement:Resize()
     self.textLabel:SetSize( labelWidth, labelHeight )
     self.timerLabel:SetSize( labelWidth, labelHeight )
 
-    self.iconControl:SetSize( height, height )
+    self.iconControl:SetSize( iconSize, iconSize )
 
     self.barBack:SetPosition( barBackLeft, barBackTop )
     self.labelBack:SetPosition( labelBackLeft, labelBackTop )

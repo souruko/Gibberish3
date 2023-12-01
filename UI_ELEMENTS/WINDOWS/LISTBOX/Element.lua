@@ -54,7 +54,6 @@ function ListBoxElement:Constructor( index )
     self.timerListBox:SetMouseVisible( false )
     self.timerListBox:SetZOrder( 3 )
 
-
     -- move functions
     self.dragging = false
     self.dragStartX = 0
@@ -130,7 +129,7 @@ end
 function ListBoxElement:Action( action, timerData, timerIndex, startTime, duration, icon, text, entity, key)
 
     -- split the call into the relevant actions
-    if action == Actions.Add then
+    if action == Action.Add then
         self:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
     elseif action == Action.Remove then
@@ -261,6 +260,30 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- [required] remove finishing child
+---------------------------------------------------------------------------------------------------
+function ListBoxElement:ChildFinished( child )
+
+    -- get child index
+    local index = self:GetChildIndex( child )
+
+    if index ~= nil then
+        
+        -- remove child from table
+        self.children[ index ] = self.children[ #self.children ]
+        self.children[ #self.children ] = nil
+
+    end
+
+    -- remove child from timerListBox
+    self.timerListBox:RemoveItem( child )
+
+    self:Resize()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- listbox add timer
 ---------------------------------------------------------------------------------------------------
 function ListBoxElement:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
@@ -273,6 +296,7 @@ function ListBoxElement:Add( timerData, timerIndex, startTime, duration, icon, t
         local index = #self.children + 1
         self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, timerIndex, startTime, duration, icon, text, entity, key, true )
         self.timerListBox:AddItem( self.children[ index ] )
+        self:Resize()
 
     -- update running timer
     else
@@ -296,15 +320,18 @@ function ListBoxElement:Remove( timerIndex, key )
 
         if self.children[i].index == timerIndex then
 
-            if key == nil or self.children[i].key == key then
+            -- key problem from diffrent trigger not sure what to do so not used for now
+            -- if key == nil or self.children[i].key == key then
 
-                self.children[i]:Remove()
+                self.children[i]:Finish()
 
-            end
+            -- end
 
         end
 
     end
+
+    self:Resize()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -388,26 +415,26 @@ function ListBoxElement:SortChildren()
         function (child1, child2)
 
             -- both permanent > sort by index > child2 first
-            if child1.timerData.permanent == true and
-            child1.timerData.permanent == true and
+            if child1.data.permanent == true and
+            child1.data.permanent == true and
             child1.index > child2.index then
 
                 return false
 
             -- both permanent > sort by index > child1 first
-            elseif child1.timerData.permanent == true and
-            child1.timerData.permanent == true and
+            elseif child1.data.permanent == true and
+            child1.data.permanent == true and
             child1.index < child2.index then
 
                 return true
 
             -- child1 permanent = first
-            elseif child1.timerData.permanent == true then
+            elseif child1.data.permanent == true then
 
                 return true
                 
             -- child2 permanent = first
-            elseif child2.timerData.permanent == true then
+            elseif child2.data.permanent == true then
 
                 return false
 
@@ -442,6 +469,26 @@ function ListBoxElement:CheckForRunningTimer( timerIndex, key )
             
         end
         
+    end
+
+    return nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- 
+---------------------------------------------------------------------------------------------------
+function ListBoxElement:GetChildIndex( child )
+
+    for index, control in ipairs(self.children) do
+
+        if child == control then
+
+            return index
+
+        end
+
     end
 
     return nil

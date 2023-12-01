@@ -53,3 +53,38 @@ function GetImageSize( image )
     
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- format timer 
+---------------------------------------------------------------------------------------------------
+function TimerFormat( seconds, format )
+
+    -- plain seconds
+    if format == NumberFormat.Seconds then
+
+        return tostring( math.floor(seconds) )
+
+    -- minutes and seconds
+    elseif format == NumberFormat.Minutes then
+
+        if seconds <= 0 then
+            return "00:00";
+        else
+
+            local mins = string.format("%02.f", math.floor(seconds/60));
+            local secs = string.format("%02.f", math.floor(seconds - mins *60));
+            return mins..":"..secs
+        end
+
+    -- one decimal place
+    elseif format == NumberFormat.OneDecimal then
+
+        -- local value =  tostring( math.floor(seconds * 10) / 10)
+        local value = string.format("%.1f", seconds)
+
+        return value
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
