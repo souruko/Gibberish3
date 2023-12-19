@@ -15,12 +15,74 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         -- filter nil massages
         if  (args.Message  == nil) then
-
             return
 
         end
 
-        Trigger[ Trigger.Types.Chat ].CheckChat(args.Message, args.ChatType)
+        
+        -- iterate all window data
+        for windowIndex, windowData in ipairs(Data.window) do
+            Trigger[ Trigger.Types.Chat ].CheckWindows(args.Message, args.ChatType, windowIndex, windowData)
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check windows
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Chat ].CheckWindows = function(message, chatType, windowIndex, windowData)
+
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Chat ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.WindowAction( windowIndex, windowData, triggerData )
+
+        end
+
+    end
+
+    
+    -- check the timers of the window
+    for timerIndex, timerData in ipairs( windowData.timerList ) do
+        Trigger[ Trigger.Types.Chat ].CheckTimer(message, chatType, windowIndex, timerIndex, timerData)
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check timers
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Chat ].CheckTimer = function(message, chatType, windowIndex, timerIndex, timerData)
+
+    -- only check for enabled timers
+    if timerData.enabled == false then
+        return
+    end
+
+    -- check timer triggers
+    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Chat ]) do
+        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
+
+        if posAdjustment ~= nil then
+            Trigger[ Trigger.Types.Chat ].ProcessTrigger( message, chatType, posAdjustment, windowIndex, timerIndex, triggerIndex )
+
+        end
 
     end
 
@@ -30,88 +92,30 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check message for trigger
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].CheckChat = function(message, chatType)
+Trigger[ Trigger.Types.Chat ].CheckTrigger = function( message, chatType, triggerData )
 
-    -- all groups
-    for windowIndex, windowData in ipairs(Data.window) do                                      
-
-         -- check if group is enabled
-        if windowData.enabled == true then                                                  
-
-            -- all timer of the group
-            for timerIndex, timerData in ipairs(windowData.timerList) do
-
-                -- check if timer is enabled
-                if timerData.enabled == true then                                           
-                
-                    -- all chatTrigger of the timer
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.Chat]) do       
-
-                        -- check if trigger is enabled
-                        if triggerData.enabled == true then                                 
-
-                            -- check chatType vs source
-                            if triggerData.source == Source.Any 
-                            or triggerData.source == chatType then
-                            
-                                -- useRegex
-                                if triggerData.useRegex == true then                            
-
-                                    -- fix token if placeholders where used
-                                    local token = Trigger.ReplacePlaceholder(triggerData.token)
-
-                                    local pos1 = string.find( message, token )
-
-                                    if pos1 ~= nil then
-
-                                        Trigger[ Trigger.Types.Chat ].ProcessTrigger(
-                                                                                        message,
-                                                                                        chatType,
-                                                                                        windowIndex,
-                                                                                        timerIndex,
-                                                                                        triggerIndex,
-                                                                                        (pos1 - 1) 
-                                                                                    )
-
-                                    end
-
-                                else
-
-                                    if message == triggerData.token then
-
-                                        Trigger[ Trigger.Types.Chat ].ProcessTrigger(
-                                                                                        message,
-                                                                                        chatType,
-                                                                                        windowIndex,
-                                                                                        timerIndex,
-                                                                                        triggerIndex,
-                                                                                        0
-                                                                                    )
-                                    end
-
-                                end
-
-                            end
-
-                        end
-
-                    end
-                    
-                end
-
-            end
-
-        end
-
+    -- only check for enabled trigger
+    if triggerData.enabled == false then
+        return nil
     end
 
+    -- check chatType vs source
+    if triggerData.source ~= Source.Any
+    and triggerData.source ~= chatType then
+        return nil
+    end
+
+    -- find match with message and token
+    return string.find( message, Trigger.ReplacePlaceholder( triggerData.token ) )
+
+  
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- process chat trigger
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].ProcessTrigger = function(message, chatType, windowIndex, timerIndex, triggerIndex, posAdjustment)
+Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posAdjustment, windowIndex, timerIndex, triggerIndex )
 
     -- declarations
     local windowData = Data.window[windowIndex]
@@ -125,17 +129,10 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function(message, chatType, windo
     local icon      = timerData.icon
     local entity    = nil
     local key       = nil
+    local timer     = nil
 
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
-
-    -- key
-    if timerData.unique == false then
-
-        key              = ChatTriggerID
-        ChatTriggerID    = ChatTriggerID + 1
-        
-    end
 
     -- text
     if timerData.textOption == TimerTextOptions.Target and
@@ -144,55 +141,68 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function(message, chatType, windo
 
        text, target = Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat(message, chatType)
 
+       -- check target against listOfTargets
        if Trigger.CheckListForName(target, triggerData.listOfTargets) == false  then
            return
        end
 
        if text == "" then
-
            text = target
 
        else
-
            text = text .. " - " .. target
 
        end
 
 
    elseif timerData.textOption == TimerTextOptions.Token then
-
        text = message
 
 
    elseif timerData.textOption == TimerTextOptions.CustomText then
-
        text = timerData.textValue
 
        for index, value in pairs(placeholder) do
-
            text = string.gsub ( text, index, value)
 
        end
 
    end
 
+    -- key
+    -- every trigger = new timer
+    if timerData.stacking == Stacking.Multi then
+
+        key              = ChatTriggerID
+        ChatTriggerID    = ChatTriggerID + 1
+
+    -- one timer per target
+    elseif timerData.stacking == Stacking.PerTarget and
+        ( chatType        == Turbine.ChatType.PlayerCombat or
+          chatType        == Turbine.ChatType.EnemyCombat ) then
+
+        key = target
+
+    else
+
+        key = nil
+        
+    end
+
    -- duration
    if timerData.useCustomTimer == true then
-        
         duration = timerData.timerValue
 
         for index, value in pairs(placeholder) do
-
             duration = string.gsub ( duration, index, value)
 
         end
-
         duration = tonumber( duration )
 
     end
 
     -- window call
-    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
+    Windows[ windowIndex ]:TimerAction( triggerData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
 end
 ---------------------------------------------------------------------------------------------------

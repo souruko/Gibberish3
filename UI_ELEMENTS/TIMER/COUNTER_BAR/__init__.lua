@@ -1,5 +1,5 @@
 --=================================================================================================
---= Localisation English        
+--= Bar UI Element
 --= ===============================================================================================
 --= 
 --=================================================================================================
@@ -7,14 +7,7 @@
 
 
 ---------------------------------------------------------------------------------------------------
-L[ Language.English ] = {}
+import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.Element"
+import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.Defaults"
+--import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.OPTIONS"
 ---------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- shortcut
-
-L[ Language.English ].shortcut = {}
-L[ Language.English ].shortcut.reset   = "Reset All"
-L[ Language.English ].shortcut.reload  = "Reload Plugin"
-L[ Language.English ].shortcut.options = "Open Options"
-L[ Language.English ].shortcut.move    = "Move Windows"

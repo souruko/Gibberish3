@@ -49,7 +49,7 @@ import "Gibberish3.UTILS.Load"
 
 -- placeholder for load/save
 Data.New()
-Data.moveMode = false
+Data.moveMode = true
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -60,16 +60,20 @@ import "Gibberish3.TRIGGER"
 ---------------------------------------------------------------------------------------------------
 -- options
 import "Gibberish3.OPTIONS"
----------------------------------------------------------------------------------------------------
+----
 
-Window.New("test", Window.Types.LISTBOX)
+Window.New("test", Window.Types.COUNTER_WINDOW)
 Data.window[ 1 ].durationFormat = NumberFormat.OneDecimal
 Data.window[ 1 ].height = 150
 Data.window[ 1 ].showIcon = true
 Data.window[ 1 ].showTimer = true
 Data.window[ 1 ].orientation =Orientation.Vertical
 
-Data.window[ 1 ].timerList[ 1 ] = Timer.New( Timer.Types.ICON )
+Data.window[ 1 ][ Trigger.Types.EffectSelf ][ 1 ] = Trigger.New( Trigger.Types.EffectSelf )
+Data.window[ 1 ][ Trigger.Types.EffectSelf ][ 1 ].token = "Blade Shield"
+Data.window[ 1 ][ Trigger.Types.EffectSelf ][ 1 ].action = Action.Reset
+
+Data.window[ 1 ].timerList[ 1 ] = Timer.New( Timer.Types.COUNTER_BAR )
 Data.window[ 1 ].timerList[ 1 ].textOption = TimerTextOptions.NoText
 Data.window[ 1 ].timerList[ 1 ].useCustomTimer = true
 Data.window[ 1 ].timerList[ 1 ].timerValue = 5
@@ -77,15 +81,18 @@ Data.window[ 1 ].timerList[ 1 ].useThreshold = true
 Data.window[ 1 ].timerList[ 1 ].useAnimation = true
 Data.window[ 1 ].timerList[ 1 ].animationType = AnimationType.New_Dotted_Border
 Data.window[ 1 ].timerList[ 1 ].useShadow = true
+Data.window[ 1 ].timerList[ 1 ].counterEND = 5
+Data.window[ 1 ].timerList[ 1 ].counterSTART = 0
 
-Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.EffectSelf ][ 1 ] = Trigger.New( Trigger.Types.EffectSelf )
-Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.EffectSelf ][ 1 ].token = "Dodge"
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 1 ] = Trigger.New( Trigger.Types.Chat )
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 1 ].token = "Dodge"
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 1 ].value = 1
 
-Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.EffectSelf ][ 2 ] = Trigger.New( Trigger.Types.EffectSelf )
-Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.EffectSelf ][ 2 ].token = "Step Back"
-Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.EffectSelf ][ 2 ].action = Action.Remove
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 2 ] = Trigger.New( Trigger.Types.Chat )
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 2 ].token = "Hi Fara"
+Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 2 ].value = -2
 
-Window.New("test 2", Window.Types.LISTBOX)
+Window.New("test 2", Window.Types.TIMER_WINDOW)
 
 
 

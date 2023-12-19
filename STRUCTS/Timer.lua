@@ -23,13 +23,14 @@ function Timer.New(type)
     timer.permanent             = Timer[type].Defaults.permanent
 
     -- timer
-    timer.unique                = Timer[type].Defaults.unique
-    timer.removable             = Timer[type].Defaults.removable
+    timer.stacking                = Timer[type].Defaults.stacking
     timer.loop                  = Timer[type].Defaults.loop
     timer.reset                 = Timer[type].Defaults.reset
     timer.useCustomTimer        = Timer[type].Defaults.useCustomTimer
     timer.timerValue            = Timer[type].Defaults.timerValue
     timer.direction             = Timer[type].Defaults.direction
+    timer.counterEND            = Timer[type].Defaults.counterEND
+    timer.counterSTART          = Timer[type].Defaults.counterSTART
     
     -- text / icon
     timer.icon                  = Timer[type].Defaults.icon

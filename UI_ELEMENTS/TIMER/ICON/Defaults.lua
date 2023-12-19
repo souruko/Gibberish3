@@ -12,13 +12,13 @@ Timer[Timer.Types.ICON].Defaults                     = {}
 
 Timer[Timer.Types.ICON].Defaults.description         = ""
 
-
-Timer[Timer.Types.ICON].Defaults.unique              = false
-Timer[Timer.Types.ICON].Defaults.removable           = true
+Timer[Timer.Types.ICON].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.ICON].Defaults.reset               = false
 Timer[Timer.Types.ICON].Defaults.loop                = false
 Timer[Timer.Types.ICON].Defaults.permanent           = false
 
+Timer[Timer.Types.ICON].Defaults.counterEND          = 0
+Timer[Timer.Types.ICON].Defaults.counterSTART        = 10
 Timer[Timer.Types.ICON].Defaults.timerValue          = 10
 Timer[Timer.Types.ICON].Defaults.useCustomTimer      = false
 Timer[Timer.Types.ICON].Defaults.direction           = Direction.Descending
@@ -34,5 +34,3 @@ Timer[Timer.Types.ICON].Defaults.useAnimation        = false
 Timer[Timer.Types.ICON].Defaults.animationSpeed      = 2
 Timer[Timer.Types.ICON].Defaults.animationType       = AnimationType.Flashing
 Timer[Timer.Types.ICON].Defaults.useShadow           = false
-
-Timer[Timer.Types.ICON].Defaults.counterValue         = nil

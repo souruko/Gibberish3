@@ -12,14 +12,19 @@
 Trigger[Trigger.Types.Combat].Init = function ()
 
     function LocalPlayer.InCombatChanged( sender, args)
-        
-        if LocalPlayer:IsInCombat() == true then
+      
+        -- all groups
+        for windowIndex, windowData in ipairs(Data.window) do
+            
+            if LocalPlayer:IsInCombat() == true then
 
-            Trigger.CheckCombat( Source.CombatStart )
+                Trigger[Trigger.Types.Combat].CheckWindows( Source.CombatStart, windowIndex, windowData )
 
-        else
+            else
 
-            Trigger.CheckCombat( Source.CombatEnd )
+                Trigger[Trigger.Types.Combat].CheckWindows( Source.CombatEnd, windowIndex, windowData )
+
+            end
 
         end
 
@@ -31,50 +36,73 @@ end
 ---------------------------------------------------------------------------------------------------
 -- skill event processing start up
 ---------------------------------------------------------------------------------------------------
-Trigger[Trigger.Types.Combat].Check = function ( combatState )
+Trigger[Trigger.Types.Combat].CheckWindows = function ( combatState, windowIndex, windowData )
 
-    -- all groups
-    for windowIndex, windowData in ipairs(Data.window) do                                                     
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
 
-        -- check if group is enabled
-        if windowData.enabled == true then                                                                   
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Combat ]) do
 
-            -- all timer of the group
-            for timerIndex, timerData in ipairs(windowData.timerList) do                                     
-
-                -- check if timer is enabled
-                if timerData.enabled == true then                                                           
-                
-                    -- all effect self of the timer
-                    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Combat ]) do                 
-
-                        -- check if trigger is enabled
-                        if triggerData.enabled == true then
-
-                            -- check if combatState matches
-                            if triggerData.source == Source.Any
-                            or triggerData.source == combatState then
-
-                                Trigger[Trigger.Types.Combat].ProcessTrigger(
-                                                                                combatState,
-                                                                                windowIndex,
-                                                                                timerIndex,
-                                                                                triggerIndex
-                                                                            )
-                                
-                            end
-
-                        end
-                                    
-                    end
-                   
-                end
-
-            end
+        if Trigger[ Trigger.Types.Combat ].CheckTrigger(combatState, triggerData) ~= false then
+            Windows.WindowAction( windowIndex, windowData, triggerData )
 
         end
-        
+
     end
+
+    
+    -- check the timers of the window
+    for timerIndex, timerData in ipairs( windowData.timerList ) do
+        Trigger[ Trigger.Types.Combat ].CheckTimer(combatState, windowIndex, timerIndex, timerData)
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- skill event processing start up
+---------------------------------------------------------------------------------------------------
+Trigger[Trigger.Types.Combat].CheckTimer = function ( combatState, windowIndex, timerIndex, timerData )
+
+    -- only check for enabled timers
+    if timerData.enabled == false then
+        return
+    end
+
+    -- check timer triggers
+    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Combat ]) do
+
+        if Trigger[ Trigger.Types.Combat ].CheckTrigger( combatState, triggerData ) ~= false then
+            Trigger[ Trigger.Types.Combat ].ProcessTrigger( combatState, windowIndex, timerIndex, triggerIndex )
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- skill event processing start up
+---------------------------------------------------------------------------------------------------
+Trigger[Trigger.Types.Combat].CheckTrigger = function ( combatState, triggerData )
+
+    -- only check for enabled trigger
+    if triggerData.enabled == false then
+        return false
+    end
+
+    -- check if combatState matches
+    if triggerData.source == Source.Any
+    or triggerData.source == combatState then
+        return true
+    end
+
+    return false
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -87,7 +115,7 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     -- declarations
     local windowData = Data.window[windowIndex]
     local timerData = windowData.timerList[timerIndex]
-    local triggerData = timerData[Trigger.Types.Skill][triggerIndex]
+    local triggerData = timerData[Trigger.Types.Combat][triggerIndex]
 
     
     local startTime = Turbine.Engine.GetGameTime()
@@ -100,11 +128,16 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     local token = triggerData.token
 
     -- key
-    if timerData.unique == false then
+    -- every trigger = new timer
+    if timerData.stacking == Stacking.Multi then
 
         key              = CombatTriggerID
         CombatTriggerID  = CombatTriggerID + 1
-        
+
+    else
+
+        key = nil
+
     end
 
     -- text
@@ -134,7 +167,7 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     end
 
     -- window call
-    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
+    Windows[ windowIndex ]:TimerAction( triggerData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
 
 end

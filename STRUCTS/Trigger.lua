@@ -21,6 +21,7 @@ function Trigger.New(type)
     trigger.useRegex        = Trigger[type].Defaults.useRegex
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
+    trigger.value           = Trigger[type].Defaults.value
     trigger.listOfTargets   = Trigger[type].Defaults.listOfTargets
     trigger.source          = Trigger[type].Defaults.source
 

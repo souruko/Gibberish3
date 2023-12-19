@@ -23,6 +23,9 @@ end
 Language.English = 1
 Language.German  = 2
 Language.French  = 3
+
+-- localisation table
+L = {}
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -30,7 +33,43 @@ Language.French  = 3
 Action          = {}
 Action.Add      = 1
 Action.Remove   = 2
-Action.Reset    = 3
+Action.Subtract = 3
+Action.Reset    = 4
+Action.Clear    = 5
+Action.Enable   = 6
+Action.Disable  = 7
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- animation types
+AnimationType                       = {}
+AnimationType.Flashing              = 1
+AnimationType.Dotted_Border         = 2
+AnimationType.Activation_Border     = 3
+AnimationType.New_Activation_Border = 4
+AnimationType.New_Dotted_Border     = 5
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- direction
+Direction               = {}
+Direction.Ascending     = true
+Direction.Descending    = false
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- number format
+NumberFormat            = {}
+NumberFormat.Seconds    = 1
+NumberFormat.Minutes    = 2
+NumberFormat.OneDecimal = 3
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- orientation
+Orientation             = {}
+Orientation.Horizontal  = true
+Orientation.Vertical    = false
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -39,7 +78,14 @@ Source              = {}
 Source.Any          = 0
 Source.CombatStart  = 1
 Source.CombatEnd    = 2
+---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- trigger source
+Stacking            = {}
+Stacking.Single     = 0
+Stacking.Multi      = 1
+Stacking.PerTarget  = 2
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -52,35 +98,8 @@ TimerTextOptions.Target         = 4
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- direction
-Direction               = {}
-Direction.Ascending     = true
-Direction.Descending    = false
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- orientation
-Orientation             = {}
-Orientation.Horizontal  = true
-Orientation.Vertical    = false
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- number format
-NumberFormat            = {}
-NumberFormat.Seconds    = 1
-NumberFormat.Minutes    = 2
-NumberFormat.OneDecimal = 3
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- animation types
-AnimationType                       = {}
-AnimationType.Flashing              = 1
-AnimationType.Dotted_Border         = 2
-AnimationType.Activation_Border     = 3
-AnimationType.New_Activation_Border = 4
-AnimationType.New_Dotted_Border     = 5
+-- screen size
+Options.ScreenWidth, Options.ScreenHeight = Turbine.UI.Display:GetSize()
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -106,11 +125,22 @@ Options.Defaults.move.nbackground   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.timer               = {}
 Options.Defaults.timer.fontStyle     = Turbine.UI.FontStyle.Outline
 Options.Defaults.timer.labelSpacing  = 4
----------------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------------
--- screen size
-Options.ScreenWidth, Options.ScreenHeight = Turbine.UI.Display:GetSize()
+-- shortcut
+Options.Defaults.shortcut            = {}
+Options.Defaults.shortcut.size       = 50
+Options.Defaults.shortcut.menu_width = 125
+
+
+-- rightclick menu
+Options.Defaults.rc_menu                    = {}
+Options.Defaults.rc_menu.spacing            = 5
+Options.Defaults.rc_menu.item_height        = 24
+Options.Defaults.rc_menu.seperator_height   = 10
+Options.Defaults.rc_menu.text_left          = 15
+Options.Defaults.rc_menu.font               = Turbine.UI.Lotro.Font.Verdana12
+Options.Defaults.rc_menu.back_color         = Turbine.UI.Color( 0.15, 0.15, 0.15 )
+Options.Defaults.rc_menu.hover_color        = Turbine.UI.Color( 0.23, 0.23, 0.23)
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

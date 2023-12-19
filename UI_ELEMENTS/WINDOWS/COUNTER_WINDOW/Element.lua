@@ -1,5 +1,5 @@
 --=================================================================================================
---= ListBox Element
+--= Element
 --= ===============================================================================================
 --= 
 --=================================================================================================
@@ -8,20 +8,20 @@
 
 ---------------------------------------------------------------------------------------------------
 -- create class
-ListBoxElement = class( Turbine.UI.Window )
+CounterWindowElement = class( Turbine.UI.Window )
 
 -- function table for window constructors
-Window[ Window.Types.LISTBOX ].Constructor = function ( index )
+Window[ Window.Types.COUNTER_WINDOW ].Constructor = function ( index )
 
-    return ListBoxElement( index )
+    return CounterWindowElement( index )
 
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- ListBox Constructor
+-- Constructor
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Constructor( index )
+function CounterWindowElement:Constructor( index )
 	Turbine.UI.Window.Constructor( self )
 
     -- window data index
@@ -113,7 +113,7 @@ function ListBoxElement:Constructor( index )
     self:DataChanged()
 
     -- create all permanently displayed timers
-    self:FillPermanentTimers()
+    -- self:FillPermanentTimers() -- TODO Permanent COUNTERS
 
     -- load selection and move state
     self:SelectionChanged()
@@ -124,16 +124,47 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- [required] listbox action call from trigger
+-- [required] timer action call from trigger
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Action( action, timerData, timerIndex, startTime, duration, icon, text, entity, key)
+function CounterWindowElement:TimerAction( triggerData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
     -- split the call into the relevant actions
-    if action == Action.Add then
-        self:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
-    elseif action == Action.Remove then
-        self:Remove( timerIndex, key )
+    -- add value to counter
+    if triggerData.action == Action.Add then
+        self:ActionAdd( triggerData.value, timerData, timerIndex, icon, text, entity, key )
+
+    -- subtract value from counter
+    elseif triggerData.action == Action.Subtract then
+        self:ActionSubtract( triggerData.value, timerData, timerIndex, icon, text, entity, key )
+
+    -- remove timer
+    elseif triggerData.action == Action.Remove then
+        self:ActionRemove( timerIndex, key )
+
+    else
+        -- error!
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] window action call from trigger
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:WindowAction( triggerData )
+
+    -- split the call into the relevant actions
+
+    -- reset timer counters and display window
+    if triggerData.action == Action.Reset then
+        self:ActionReset()
+
+        Turbine.Shell.WriteLine( '2' )
+    -- remove all timer and hide window
+    elseif triggerData.action == Action.Clear then
+        self:ActionClear()
 
     else
         -- error!
@@ -146,7 +177,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] selection changed
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:SelectionChanged()
+function CounterWindowElement:SelectionChanged()
 
     if Data.selectedIndex == self.index then
 
@@ -170,7 +201,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] move changed
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:MoveChanged()
+function CounterWindowElement:MoveChanged()
 
     -- set dragWindow visibility to movemode
     self.dragWindow:SetVisible( Data.moveMode )
@@ -205,7 +236,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] data changed
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:DataChanged()
+function CounterWindowElement:DataChanged()
 
     -- window data
     -- get position from screen ratio
@@ -230,9 +261,9 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- [required] listbox reset all timer with  the reset attribute
+-- [required] reset all timer with  the reset attribute
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Reset()
+function CounterWindowElement:Reset()
 
     -- iterrate from the back because the table can change from resets
     for i = #self.children, 1, -1 do
@@ -247,7 +278,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] close everything
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Finish()
+function CounterWindowElement:Finish()
 
     -- timer finish call
     for i = #self.children, 1, -1 do
@@ -256,13 +287,17 @@ function ListBoxElement:Finish()
 
     end
 
+    self.dragWindow:Close()
+    self.timerListBox:Close()
+    self:Close()
+
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- [required] remove finishing child
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:ChildFinished( child )
+function CounterWindowElement:ChildFinished( child )
 
     -- get child index
     local index = self:GetChildIndex( child )
@@ -284,62 +319,9 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- listbox add timer
+-- resize window
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:Add( timerData, timerIndex, startTime, duration, icon, text, entity, key )
-
-    local child = self:CheckForRunningTimer( timerIndex, key )
-
-    -- create new timer
-    if child == nil then
-
-        local index = #self.children + 1
-        self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, timerIndex, startTime, duration, icon, text, entity, key, true )
-        self.timerListBox:AddItem( self.children[ index ] )
-        self:Resize()
-
-    -- update running timer
-    else
-
-        child:UpdateContent( startTime, duration, icon, text, entity, key, true )
-
-    end
-
-    self:SortChildren()
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- listbox remove timer
----------------------------------------------------------------------------------------------------
-function ListBoxElement:Remove( timerIndex, key )
-
-    -- iterrate from the back because the table can change from remove
-    for i = #self.children, 1, -1 do
-
-        if self.children[i].index == timerIndex then
-
-            -- key problem from diffrent trigger not sure what to do so not used for now
-            -- if key == nil or self.children[i].key == key then
-
-                self.children[i]:Finish()
-
-            -- end
-
-        end
-
-    end
-
-    self:Resize()
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- listbox remove timer
----------------------------------------------------------------------------------------------------
-function ListBoxElement:Resize()
+function CounterWindowElement:Resize()
 
     local childCount = self.timerListBox:GetItemCount() + 1
 
@@ -359,7 +341,7 @@ function ListBoxElement:Resize()
     end
 
     self:SetSize( width, height )
-    self.timerListBox:SetSize( width, height ) 
+    self.timerListBox:SetSize( width, height )
     self.dragWindow:SetSize( width, height )
     self.dragLabel:SetSize( width - 2 * Options.Defaults.move.FrameSize,
                             height - 2 * Options.Defaults.move.FrameSize )
@@ -368,40 +350,132 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- fill permanent timers
+-- add value to counter
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:FillPermanentTimers()
+function CounterWindowElement:ActionAdd( value, timerData, timerIndex, icon, text, entity, key )
 
-    -- kill all permanent children!
-    for i, child in pairs(self.children) do                 
+    local child = self:CheckForRunningTimer( timerIndex, key )
 
-        if child.timerData.permanent == true then
-            child:Finish()
+    -- stop when no timer is found
+    if child == nil then
+        return
+    end
+
+    child:UpdateContent( value, icon, text, entity, key, true  )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add value to counter
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionSubtract( value, timerData, timerIndex, icon, text, entity, key )
+
+    local child = self:CheckForRunningTimer( timerIndex, key )
+
+    -- stop when no timer is found
+    if child == nil then
+        return
+    end
+
+    child:UpdateContent( value, icon, text, entity, key, true  )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add value to counter
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionRemove( timerIndex, key )
+    
+    -- iterrate from the back because the table can change from remove
+    for i = #self.children, 1, -1 do
+
+        if self.children[i].index == timerIndex then
+
+            -- key problem from diffrent trigger not sure what to do so not used for now
+            -- if key == nil or self.children[i].key == key then
+
+                self.children[i]:Finish()
+                self:Resize()
+
+            -- end
+
         end
 
     end
+    
+end
+---------------------------------------------------------------------------------------------------
 
-    -- iterrate all timers and create the permanent ones
-    for j, timerData in ipairs(self.data.timerList) do
+---------------------------------------------------------------------------------------------------
+-- add value to counter
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionReset()
 
-        if timerData.permanent == true then
+    -- clear all children
+    self:ActionClear()
+
+    -- create all children
+    self:FillChildren()
+
+    -- set active
+    self:Activ( true )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add value to counter
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionClear()
+
+    -- clear all children
+    for i = #self.children, 1, -1 do
+
+        self.children[i]:Finish()
+
+    end
+
+    self:Activ( false )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- changes activ status of the window
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:Activ( value )
+
+    if value == true then
+
+        self:SetVisible( true )
+
+    else
+
+        self:SetVisible( false )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- fill window with all children
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:FillChildren()
+
+        -- iterrate all timers and create them
+        for j, timerData in ipairs(self.data.timerList) do
 
             local index = #self.children + 1
-
-            local icon = timerData.icon
-            local text = ""
-            if timerData.textOption == TimerTextOptions.CustomText then
-                text = timerData.textValue
-            end
-
-            self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, j, 0, 0, icon, text, nil, nil, false )
+            self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, index )
             self.timerListBox:AddItem( self.children[ index ] )
-
+     
         end
 
-    end
-
-    self:SortChildren()
+        self:Resize()
+        self:SortChildren()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -409,41 +483,16 @@ end
 ---------------------------------------------------------------------------------------------------
 -- sort timerListBox
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:SortChildren()
+function CounterWindowElement:SortChildren()
 
+    -- sort by sortIndex
     self.timerListBox:Sort(
         function (child1, child2)
 
-            -- both permanent > sort by index > child2 first
-            if child1.data.permanent == true and
-            child1.data.permanent == true and
-            child1.index > child2.index then
+            if child1.sortIndex > child2.sortIndex then
 
                 return false
 
-            -- both permanent > sort by index > child1 first
-            elseif child1.data.permanent == true and
-            child1.data.permanent == true and
-            child1.index < child2.index then
-
-                return true
-
-            -- child1 permanent = first
-            elseif child1.data.permanent == true then
-
-                return true
-                
-            -- child2 permanent = first
-            elseif child2.data.permanent == true then
-
-                return false
-
-            -- both not permanent sort ty endTime > child2 first
-            elseif child1.endTime > child2.endTime then
-
-                return false
-
-            -- both not permanent sort ty endTime > child1 first
             else
 
                 return true
@@ -459,7 +508,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check if timer is running and return control
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:CheckForRunningTimer( timerIndex, key )
+function CounterWindowElement:CheckForRunningTimer( timerIndex, key )
 
     for index, child in pairs(self.children) do
 
@@ -479,7 +528,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- 
 ---------------------------------------------------------------------------------------------------
-function ListBoxElement:GetChildIndex( child )
+function CounterWindowElement:GetChildIndex( child )
 
     for index, control in ipairs(self.children) do
 
@@ -491,6 +540,7 @@ function ListBoxElement:GetChildIndex( child )
 
     end
 
+    -- not found
     return nil
 
 end

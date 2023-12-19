@@ -45,6 +45,22 @@ Trigger.TimerEvent = function ( timerID, event )
             
         end
 
+        -- check window triggers
+        for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Skill ]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then
+
+                if triggerData.token == timerID then
+
+                    Windows.WindowAction( windowIndex, windowData, triggerData )
+                    
+                end
+                            
+            end
+                               
+        end
+
     end
 
 end
@@ -67,9 +83,14 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
     local key       = nil
 
     -- key
-    if timerData.unique == false then
+    -- every trigger = new timer
+    if timerData.stacking == Stacking.Multi then
 
         key = startTime
+
+    else
+
+        key = nil
         
     end
 
@@ -81,6 +102,6 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
     end
 
     -- window call  
-    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
+    Windows[ windowIndex ]:TimerAction( triggerData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
 end

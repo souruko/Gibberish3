@@ -35,7 +35,13 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
                                                         function( sender, args )
 
                                                             local effect = effects:Get( args.Index )
-                                                            Trigger[ Trigger.Types.EffectTarget ].EffectAdded(effect, target)
+
+                                                            -- all groups
+                                                            for windowIndex, windowData in ipairs(Data.window) do
+                                    
+                                                                Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effect, target, windowIndex, windowData )
+
+                                                            end
 
                                                         end )
 
@@ -66,8 +72,13 @@ Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function ()
         for i = 1, effects:GetCount(), 1 do
 
             local effect = effects:Get(i)
+     
+            -- all groups
+            for windowIndex, windowData in ipairs(Data.window) do
 
-            Trigger[ Trigger.Types.EffectTarget ].EffectAdded(effect, target)
+                Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effect, target, windowIndex, windowData )
+
+            end
 
         end
 
@@ -79,80 +90,91 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check if added effect is tracked
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectTarget ].EffectAdded = function ( effect, target )
+Trigger[ Trigger.Types.EffectTarget ].CheckWindows = function ( effect, target, windowIndex, windowData )
 
-    local name = effect:GetName()
-    local icon = effect:GetIcon()
-
-    -- all groups
-    for windowIndex, windowData in ipairs(Data.window) do                                                      
-
-        -- check if group is enabled
-        if windowData.enabled == true then                                                                   
-
-             -- all timer of the group
-            for timerIndex, timerData in ipairs(windowData.timerList) do                                    
-
-                -- check if timer is enabled
-                if timerData.enabled == true then                                                           
-                
-                    -- all effect self of the timer
-                    for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.EffectTarget]) do                 
-
-                        -- check if trigger is enabled
-                        if triggerData.enabled == true then                                                 
-
-                            -- check listOfTargets
-                            if Trigger.CheckListForName( target:GetName(), triggerData.listOfTargets ) then   
-
-                                -- fix token
-                                local token = Trigger.ReplacePlaceholder(triggerData.token)                   
-
-                                if triggerData.useRegex == true then   
-
-                                    local pos1 = string.find( name, token )
-
-                                    if pos1 ~= nil then
-
-                                        Trigger.ProcessEffectTrigger(           effect,
-                                                                                target,
-                                                                                windowIndex,
-                                                                                timerIndex,
-                                                                                triggerData,
-                                                                                (pos1 - 1) )
-
-                                    end
-
-                                else
-
-                                    if name == token then
-
-                                        Trigger.ProcessEffectTrigger(           effect,
-                                                                                target,
-                                                                                windowIndex,
-                                                                                timerIndex,
-                                                                                triggerData,
-                                                                                0 )
-                                        
-                                    end
-                                     
-
-                                end
-                               
-                            end
-
-                        end
-
-                    end
-                    
-                end
-
-            end
-
-        end
-        
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
     end
 
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectTarget ]) do
+        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effect, target, triggerData)
+
+        if posAdjustment ~= nil then
+            Windows.WindowAction( windowIndex, windowData, triggerData )
+
+        end
+
+    end
+
+    
+    -- check the timers of the window
+    for timerIndex, timerData in ipairs( windowData.timerList ) do
+        Trigger[ Trigger.Types.EffectTarget ].CheckTimer(effect, target, windowIndex, timerIndex, timerData)
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check if added effect is tracked
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectTarget ].CheckTimer = function ( effect, target, windowIndex, timerIndex, timerData )
+
+    -- only check for enabled timers
+    if timerData.enabled == false then
+        return
+    end
+
+    -- check timer triggers
+    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectTarget ]) do
+
+        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effect, target, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Trigger.ProcessEffectTrigger( effect, target, posAdjustment, windowIndex, timerIndex, triggerData )
+
+        end
+
+    end
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check if added effect is tracked
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectTarget ].CheckTrigger = function ( effect, target, triggerData )
+
+    -- only check for enabled trigger
+    if triggerData.enabled == false then
+        return nil
+    end
+
+    -- check listOfTargets
+    if Trigger.CheckListForName( target:GetName(), triggerData.listOfTargets ) == false then
+        return nil
+    end
+
+    -- check token
+    if triggerData.useRegex == true then
+
+        return string.find( effect:GetName(), Trigger.ReplacePlaceholder(triggerData.token) )
+
+    else
+
+        if effect:GetName() == triggerData.token then
+
+            return 1
+
+        end
+
+    end
+
+    return nil
 
 end
 ---------------------------------------------------------------------------------------------------

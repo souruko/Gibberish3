@@ -19,7 +19,7 @@ Trigger[Trigger.Types.Skill].Init = function ()
 
         if Trigger[ Trigger.Types.Skill ].IsSkillUsed( skill:GetSkillInfo():GetName() ) then
 
-            function skill:ResetTimeChanged( sender, args )
+            function skill.ResetTimeChanged( sender, args )
 
                 Trigger[ Trigger.Types.Skill ].SkillUsed( skill )
                 
@@ -45,12 +45,12 @@ Trigger[Trigger.Types.Skill].IsSkillUsed = function (skillName)
 
     -- all groups
     for windowIndex, windowData in ipairs(Data.window) do                                      
-
+                 
         -- check if group is enabled
         if windowData.enabled == true then                                                   
 
             -- all timer of the group
-            for timerIndex, timerData in ipairs(windowData.timerList) do                     
+            for timerIndex, timerData in ipairs(windowData.timerList) do    
 
                 -- check if timer is enabled
                 if timerData.enabled == true then                                           
@@ -60,7 +60,7 @@ Trigger[Trigger.Types.Skill].IsSkillUsed = function (skillName)
 
                         -- check if trigger is enabled
                         if triggerData.enabled == true then                                 
-                       
+
                             if triggerData.token == skillName then
 
                                 return true
@@ -71,6 +71,22 @@ Trigger[Trigger.Types.Skill].IsSkillUsed = function (skillName)
                                     
                     end
                    
+                end
+
+            end
+
+        end
+
+        -- check window triggers
+        for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Skill ]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then                                 
+                                
+                if triggerData.token == skillName then
+
+                    return true
+                    
                 end
 
             end
@@ -90,7 +106,7 @@ end
 Trigger[Trigger.Types.Skill].SkillUsed = function (skill)
 
     local name = skill:GetSkillInfo():GetName()
-
+    Turbine.Shell.WriteLine(name)
     -- all groups
     for windowIndex, windowData in ipairs(Data.window) do                                      
 
@@ -125,6 +141,22 @@ Trigger[Trigger.Types.Skill].SkillUsed = function (skill)
 
         end
 
+        -- check window triggers
+        for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Skill ]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then                                 
+                                
+                if triggerData.token == name then
+
+                    Windows.WindowAction( windowIndex, windowData, triggerData )
+                                    
+                end
+
+            end
+
+        end
+
     end
 
 
@@ -152,7 +184,19 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
     local token = triggerData.token
 
     -- key
-    if timerData.unique == false then
+    -- every trigger = new timer
+    if timerData.stacking == Stacking.Multi then
+
+        key = startTime
+
+    else
+
+        key = nil
+        
+    end
+
+    -- key
+    if timerData.useKey == false then
 
         key = startTime
         
@@ -186,7 +230,7 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
     end
 
     -- window call
-    Windows[ windowIndex ]:Action(  windowData, timerData, timerIndex, startTime, triggerData.action, duration, icon, text, entity, key )
+    Windows[ windowIndex ]:TimerAction( triggerData, timerData, timerIndex, startTime, duration, icon, text, entity, key )
 
 end
 ---------------------------------------------------------------------------------------------------

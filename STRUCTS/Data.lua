@@ -41,8 +41,6 @@ function Data.New()
     Data.options.shortcut.left      = 0.2
     Data.options.shortcut.top       = 0.2
 
-    Data.options.shortcut.moveable  = true
-
     -- options window savedata
     Data.options.window             = {}
     

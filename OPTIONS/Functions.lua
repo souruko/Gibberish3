@@ -64,3 +64,21 @@ function Options.TriggerSelectionChanged( index )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- move changed
+---------------------------------------------------------------------------------------------------
+function Options.MoveChanged( value )
+
+    -- do nothing if selection didnt change
+    if value == Data.moveMode then
+        return
+    end
+
+    -- save new selection
+    Data.moveMode = value
+
+    Windows.MoveChanged()
+    
+end
+---------------------------------------------------------------------------------------------------

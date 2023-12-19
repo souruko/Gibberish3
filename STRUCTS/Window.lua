@@ -60,7 +60,7 @@ function Window.New(name, type)
     -- create trigger tables
     for index, triggerType in pairs( Trigger.Types ) do
 
-        window[triggerType]      = {}
+        window[ triggerType ]      = {}
 
     end
 
