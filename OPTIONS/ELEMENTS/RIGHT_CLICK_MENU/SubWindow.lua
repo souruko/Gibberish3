@@ -18,7 +18,6 @@ function Options.Elements.RightClickSubMenu:Constructor( width )
     self.children = {}
 
     -- self
-    self:SetZOrder( 100 )
     self:SetMouseVisible( false )
     self:SetWidth( self.width )
     self:SetVisible( false )
@@ -63,10 +62,28 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.RightClickSubMenu:AddItem( text, func )
+function Options.Elements.RightClickSubMenu:AddRow( row )
 
-    -- add row item with text and function
-    self.list:AddItem( Row( text, func, self.width, Options.Defaults.rc_menu.item_height, self ) )
+    row:SetWidth( self.width )
+    row:SetSuper( self )
+
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
+
+    -- fix height
+    self:ChangeHeight( Options.Defaults.rc_menu.item_height )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.RightClickSubMenu:AddCheckRow( row )
+
+    row:SetWidth( self.width )
+    row:SetSuper( self )
+
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
 
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
@@ -77,18 +94,27 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.RightClickSubMenu:AddSeperator()
 
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( Options.Elements.Seperator( self.width, Options.Defaults.rc_menu.seperator_height, self ) )
+
+    -- fix height
+    self:ChangeHeight( Options.Defaults.rc_menu.seperator_height )
+
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.RightClickSubMenu:AddSubItem( text, subMenu )
+function Options.Elements.RightClickSubMenu:AddSubRow( row, subMenu )
+
+    row:SetWidth( self.width )
+    row:SetSuper( self )
 
     -- set sub menu parent
-    subMenu:SetParent( self:GetParent() )
-    self.children[ #self.children+1 ] = subMenu 
+    subMenu:SetParent( self )
+    self.children[ #self.children+1 ] = subMenu
 
-    -- add row item with text and function
-    self.list:AddItem( SubRow( text, subMenu, self.width, Options.Defaults.rc_menu.item_height, self ) )
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
 
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
@@ -146,5 +172,23 @@ function Options.Elements.RightClickSubMenu:GetPos()
 
     return self:GetPosition()
 
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.RightClickSubMenu:LanguageChanged()
+
+    for i = 1, self.list:GetItemCount() do
+
+        local row = self.list:GetItem(i)
+
+        row:LanguageChanged()
+
+    end
+
+    for key, subMenu in pairs(self.children) do
+        subMenu:LanguageChanged()
+    end
+    
 end
 ---------------------------------------------------------------------------------------------------

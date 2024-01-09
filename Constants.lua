@@ -29,6 +29,11 @@ L = {}
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- option defaults
+Options.Defaults                    = {}
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- trigger action times
 Action          = {}
 Action.Add      = 1
@@ -100,47 +105,6 @@ TimerTextOptions.Target         = 4
 ---------------------------------------------------------------------------------------------------
 -- screen size
 Options.ScreenWidth, Options.ScreenHeight = Turbine.UI.Display:GetSize()
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- option defaults
-Options.Defaults                         = {}
-
--- tooltip
-Options.Defaults.tooltip                 = {}
-Options.Defaults.tooltip.ActivationDelay = 1
-
--- moveLabel
-Options.Defaults.move               = {}
-Options.Defaults.move.TextAlignment = Turbine.UI.ContentAlignment.MiddleCenter
-Options.Defaults.move.Font          = Turbine.UI.Lotro.Font.Verdana12
-Options.Defaults.move.FontStyle     = Turbine.UI.FontStyle.Outline
-Options.Defaults.move.FrameSize     = 2
-Options.Defaults.move.seleced       = Turbine.UI.Color.LimeGreen
-Options.Defaults.move.notSeleced    = Turbine.UI.Color.White
-Options.Defaults.move.sbackground   = Turbine.UI.Color( 0.3, 0.3, 0.3 )
-Options.Defaults.move.nbackground   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
-
--- timer
-Options.Defaults.timer               = {}
-Options.Defaults.timer.fontStyle     = Turbine.UI.FontStyle.Outline
-Options.Defaults.timer.labelSpacing  = 4
-
--- shortcut
-Options.Defaults.shortcut            = {}
-Options.Defaults.shortcut.size       = 50
-Options.Defaults.shortcut.menu_width = 125
-
-
--- rightclick menu
-Options.Defaults.rc_menu                    = {}
-Options.Defaults.rc_menu.spacing            = 5
-Options.Defaults.rc_menu.item_height        = 24
-Options.Defaults.rc_menu.seperator_height   = 10
-Options.Defaults.rc_menu.text_left          = 15
-Options.Defaults.rc_menu.font               = Turbine.UI.Lotro.Font.Verdana12
-Options.Defaults.rc_menu.back_color         = Turbine.UI.Color( 0.15, 0.15, 0.15 )
-Options.Defaults.rc_menu.hover_color        = Turbine.UI.Color( 0.23, 0.23, 0.23)
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

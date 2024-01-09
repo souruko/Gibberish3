@@ -6,6 +6,7 @@
 
 
 
+
 ---------------------------------------------------------------------------------------------------
 -- elements table
 Options.Elements = {}
@@ -16,6 +17,7 @@ Options.Elements = {}
 import "Gibberish3.OPTIONS.ELEMENTS.CheckBox"
 import "Gibberish3.OPTIONS.ELEMENTS.Tooltip"
 import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU"
+import "Gibberish3.OPTIONS.ELEMENTS.DROPDOWN"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -31,6 +33,28 @@ import "Gibberish3.OPTIONS.Functions"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- create shortcut
+-- create objects
 Options.Shortcut.Object = Options.Shortcut.Constructor()
+
+if Data.moveMode == true then
+    Options.Move.Object     = Options.Move.Constructor()
+else
+    Options.Move.Object     = nil
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- create objects
+Options.Shortcut.Object = Options.Shortcut.Constructor()
+
+if Data.moveMode == true then
+    Options.Move.Object     = Options.Move.Constructor()
+else
+    Options.Move.Object     = nil
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- create objects
+Options.Elements.TooltipObject = Options.Elements.Tooltip()
 ---------------------------------------------------------------------------------------------------

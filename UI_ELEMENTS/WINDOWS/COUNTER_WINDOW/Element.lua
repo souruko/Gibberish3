@@ -88,6 +88,9 @@ function CounterWindowElement:Constructor( index )
             -- set new position
             self:SetPosition( x, y )
 
+            self.data.left, self.data.top = UTILS.PixelToScreenRatio( x, y )
+            Options.SelectionMoved()
+
         end
 
     end
@@ -98,9 +101,6 @@ function CounterWindowElement:Constructor( index )
             
             -- stop dragging
             self.dragging = false
-
-            self.data.left, self.data.top = UTILS.PixelToScreenRatio( self:GetPosition() )
-
             Options.SaveData()
 
         end
@@ -161,7 +161,6 @@ function CounterWindowElement:WindowAction( triggerData )
     if triggerData.action == Action.Reset then
         self:ActionReset()
 
-        Turbine.Shell.WriteLine( '2' )
     -- remove all timer and hide window
     elseif triggerData.action == Action.Clear then
         self:ActionClear()
@@ -288,7 +287,6 @@ function CounterWindowElement:Finish()
     end
 
     self.dragWindow:Close()
-    self.timerListBox:Close()
     self:Close()
 
 end

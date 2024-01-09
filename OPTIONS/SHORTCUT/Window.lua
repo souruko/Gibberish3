@@ -78,13 +78,61 @@ function Options.Shortcut.Constructor:Constructor()
 
     end
 
+    -- rightclick menu
     self.rightClickMenu = Options.Elements.RightClickMenu( Options.Defaults.shortcut.menu_width )
-    self.rightClickMenu:AddItem( UTILS.GetText( "shortcut", "reset"), nil)
-    self.rightClickMenu:AddItem( UTILS.GetText( "shortcut", "reload"), nil)
-    self.rightClickMenu:AddItem( UTILS.GetText( "shortcut", "options"), nil)
-    self.rightClickMenu:AddItem( UTILS.GetText( "shortcut", "move"), function ()
-        Options.MoveChanged( not( Data.moveMode ) )
-    end)
+    
+    -- right click reset
+    self.rc_reset = Options.Elements.Row( "shortcut", "reset", function ()
+            Windows.ResetAll()
+        end,
+        Options.Defaults.rc_menu.item_height)
+
+    -- right click reload
+    self.rc_reload = Options.Elements.Row( "shortcut", "reload", function ()
+            Options.Reload()
+        end,
+        Options.Defaults.rc_menu.item_height)
+
+    -- right click options
+    self.rc_options = Options.Elements.Row( "shortcut", "options", function ()
+            Options.OptionsWindow()
+        end,
+        Options.Defaults.rc_menu.item_height)
+
+    -- right click move
+    self.rc_move = Options.Elements.CheckRow( "shortcut", "move", function ()
+            Options.MoveChanged( not( Data.moveMode ) )
+        end,
+        Options.Defaults.rc_menu.item_height, Data.moveMode )
+
+    -- right click auto_reload
+    self.rc_auto = Options.Elements.CheckRow( "shortcut", "auto_reload", function ()
+            Options.AutoReloadChanged()
+        end,
+        Options.Defaults.rc_menu.item_height, Data.autoReload )
+
+    -- right click track_group
+    self.rc_group = Options.Elements.CheckRow( "shortcut", "track_group", function ()
+            Options.TrackGroupChanged()
+        end,
+        Options.Defaults.rc_menu.item_height, Data.trackGroupEffects )
+
+    -- right click track_target
+    self.rc_target = Options.Elements.CheckRow( "shortcut", "track_target", function ()
+            Options.TrackTargetChanged()
+        end,
+        Options.Defaults.rc_menu.item_height, Data.trackTargetEffects )
+
+    -- add items to rightclick menu
+    self.rightClickMenu:AddRow( self.rc_reset )
+    self.rightClickMenu:AddRow( self.rc_reload )
+    self.rightClickMenu:AddRow( self.rc_options )
+    self.rightClickMenu:AddSeperator()
+    self.rightClickMenu:AddCheckRow( self.rc_move )
+    self.rightClickMenu:AddCheckRow( self.rc_auto )
+    self.rightClickMenu:AddSeperator()
+    self.rightClickMenu:AddCheckRow( self.rc_group )
+    self.rightClickMenu:AddCheckRow( self.rc_target )
 
     self.menu_height = self.rightClickMenu.background:GetHeight()
 
@@ -126,6 +174,46 @@ function Options.Shortcut.Constructor:GetMenuPos()
     end
 
     return left, top, orientation
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:MoveChanged()
+
+    self.rc_move:SetChecked( Data.moveMode )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:AutoReloadChanged()
+
+    self.rc_auto:SetChecked( Data.autoReload )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:TrackGroupChanged()
+
+    self.rc_group:SetChecked( Data.trackGroupEffects )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:TrackTargetChanged()
+
+    self.rc_target:SetChecked( Data.trackTargetEffects )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:LanguageChanged()
+
+    self.rightClickMenu:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

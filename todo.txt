@@ -1,0 +1,2 @@
+
+movewindow > arrows add mousedown for permanent move

@@ -7,9 +7,5 @@
 
 
 ---------------------------------------------------------------------------------------------------
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.Seperator"
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.Row"
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.CheckRow"
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.SubRow"
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.SubWindow"
-import "Gibberish3.OPTIONS.ELEMENTS.RIGHT_CLICK_MENU.MainWindow"
+import "Gibberish3.OPTIONS.ELEMENTS.DROPDOWN.Item"
+import "Gibberish3.OPTIONS.ELEMENTS.DROPDOWN.Window"

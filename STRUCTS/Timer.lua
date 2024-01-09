@@ -56,3 +56,58 @@ function Timer.New(type)
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- copy timer struct and return it
+---------------------------------------------------------------------------------------------------
+function Timer.Copy( data )
+
+    local timer = {}
+
+    -- general
+    timer.id                    = Turbine.Engine.GetGameTime()
+    timer.nextTriggerSortIndex  = data.nextTriggerSortIndex
+    timer.enabled               = data.enabled
+    timer.sortIndex             = data.sortIndex
+    timer.type                  = data.type
+    timer.description           = data.description
+    timer.permanent             = data.permanent
+
+    -- timer
+    timer.stacking              = data.stacking
+    timer.loop                  = data.loop
+    timer.reset                 = data.reset
+    timer.useCustomTimer        = data.useCustomTimer
+    timer.timerValue            = data.timerValue    
+    timer.direction             = data.direction     
+    timer.counterEND            = data.counterEND    
+    timer.counterSTART          = data.counterSTART  
+    
+    -- text / icon
+    timer.icon                  = data.icon      
+    timer.showIcon              = data.showIcon  
+    timer.textOption            = data.textOption
+    timer.textValue             = data.textValue 
+
+    -- animation
+    timer.thresholdValue        = data.thresholdValue
+    timer.useThreshold          = data.useThreshold  
+    timer.useAnimation          = data.useAnimation  
+    timer.animationSpeed        = data.animationSpeed
+    timer.animationType         = data.animationType 
+    timer.useShadow             = data.useShadow     
+
+    for name, triggerType in pairs( Trigger.Types ) do
+
+        timer[triggerType] = {}
+
+        for i, triggerData in ipairs( data[ triggerType ] ) do
+            timer[ triggerType ][ i ] = Trigger.Copy( triggerData )
+        end
+    
+    end
+
+    return timer
+
+end
+---------------------------------------------------------------------------------------------------

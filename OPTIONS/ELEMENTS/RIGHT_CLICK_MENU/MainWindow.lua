@@ -1,5 +1,5 @@
 --=================================================================================================
---= Shortcut Action Button
+--= Right click menu
 --= ===============================================================================================
 --= 
 --=================================================================================================
@@ -17,7 +17,7 @@ function Options.Elements.RightClickMenu:Constructor( width )
 
     self.children = {}
 
-    -- self<
+    -- self
     self:SetMouseVisible( false )
     self:SetSize( 1000, 1000 )
 
@@ -67,6 +67,8 @@ function Options.Elements.RightClickMenu:Show( left, top, orientation )
 
     self.background:SetPosition( b_left, b_top )
 
+    self:LanguageChanged()
+
     self:SetVisible( true )
     self:Activate()
     self:Focus()
@@ -87,10 +89,28 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.RightClickMenu:AddItem( text, func )
+function Options.Elements.RightClickMenu:AddRow( row )
 
-    -- add row item with text and function
-    self.list:AddItem( Row( text, func, self.width, Options.Defaults.rc_menu.item_height, self ) )
+    row:SetWidth( self.width )
+    row:SetSuper( self )
+
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
+
+    -- fix height
+    self:ChangeHeight( Options.Defaults.rc_menu.item_height )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.RightClickMenu:AddCheckRow( row )
+
+    row:SetWidth( self.width )
+    row:SetSuper( self )
+
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
 
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
@@ -101,18 +121,27 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.RightClickMenu:AddSeperator()
 
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( Options.Elements.Seperator( self.width, Options.Defaults.rc_menu.seperator_height, self ) )
+
+    -- fix height
+    self:ChangeHeight( Options.Defaults.rc_menu.seperator_height )
+
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.RightClickMenu:AddSubItem( text, subMenu )
+function Options.Elements.RightClickMenu:AddSubRow( row, subMenu )
+
+    row:SetWidth( self.width )
+    row:SetSuper( self )
 
     -- set sub menu parent
     subMenu:SetParent( self )
-    self.children[ #self.children+1 ] = subMenu 
+    self.children[ #self.children+1 ] = subMenu
 
-    -- add row item with text and function
-    self.list:AddItem( SubRow( text, subMenu, self.width, Options.Defaults.rc_menu.item_height, self ) )
+    -- add row item with text_control, text_description and function
+    self.list:AddItem( row )
 
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
@@ -145,6 +174,7 @@ function Options.Elements.RightClickMenu:HoverChanged( selected )
         end
 
     end
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -160,6 +190,24 @@ end
 function Options.Elements.RightClickMenu:GetPos()
 
     return self.background:GetPosition()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.RightClickMenu:LanguageChanged()
+
+    for i = 1, self.list:GetItemCount() do
+
+        local row = self.list:GetItem(i)
+
+        row:LanguageChanged()
+
+    end
+
+    for key, subMenu in pairs(self.children) do
+        subMenu:LanguageChanged()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

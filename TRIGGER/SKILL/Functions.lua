@@ -106,7 +106,7 @@ end
 Trigger[Trigger.Types.Skill].SkillUsed = function (skill)
 
     local name = skill:GetSkillInfo():GetName()
-    Turbine.Shell.WriteLine(name)
+
     -- all groups
     for windowIndex, windowData in ipairs(Data.window) do                                      
 

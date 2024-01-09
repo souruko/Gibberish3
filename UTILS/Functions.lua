@@ -93,7 +93,7 @@ end
 -- get localized text
 function GetText( control, description )
 
-    return  L[ Language.Local ][ control ][ description ]
+    return  L[ Data.options.language ][ control ][ description ]
 
 end
 ---------------------------------------------------------------------------------------------------

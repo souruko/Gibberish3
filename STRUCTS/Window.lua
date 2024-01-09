@@ -72,4 +72,90 @@ function Window.New(name, type)
 end
 ---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- copy window struct and return index
+---------------------------------------------------------------------------------------------------
+function Window.Copy(index)
 
+    local window = {}
+
+    -- general
+    window.id                    = Data.GetNextWindowID()
+    window.sortIndex             = Data.GetNextSortIndex()
+    window.nextTimerSortIndex    = Data.window[index].nextTimerSortIndex
+    window.name                  = Data.window[index].name
+    window.folder                = Data.window[index].folder
+    window.type                  = Data.window[index].type
+    window.enabled               = Data.window[index].enabled
+    window.saveGlobaly           = Data.window[index].saveGlobaly
+    window.description           = Data.window[index].description
+    window.resetOnTargetChange   = Data.window[index].resetOnTargetChange
+    window.useTargetEntity       = Data.window[index].useTargetEntity
+
+    -- position / size
+    window.left                  = Data.window[index].left
+    window.top                   = Data.window[index].top
+    window.width                 = Data.window[index].width
+    window.height                = Data.window[index].height
+    window.frame                 = Data.window[index].frame
+    window.spacing               = Data.window[index].spacing
+    window.direction             = Data.window[index].direction
+    window.orientation           = Data.window[index].orientation
+    window.overlay               = Data.window[index].overlay
+
+    -- color / opacity
+    window.color1                = Data.window[index].color1
+    window.color2                = Data.window[index].color2
+    window.color3                = Data.window[index].color3
+    window.color4                = Data.window[index].color4
+    window.color5                = Data.window[index].color5
+
+    window.opacityActiv          = Data.window[index].opacityActiv
+    window.opacityPassiv         = Data.window[index].opacityPassiv
+
+    -- text
+    window.font                  = Data.window[index].font
+    window.fontSize              = Data.window[index].fontSize
+    window.durationFormat        = Data.window[index].durationFormat
+    window.textAlignment         = Data.window[index].textAlignment
+    window.timerAlignment        = Data.window[index].timerAlignment
+    window.showTimer             = Data.window[index].showTimer
+
+    window.timerList             = {}
+
+    for i, timerData in ipairs( Data.window[index].timerList ) do
+        window.timerList[ i ] = Timer.Copy( timerData )
+    end
+
+
+    -- create trigger tables
+    for name, triggerType in pairs( Trigger.Types ) do
+
+        window[ triggerType ]      = {}
+
+        for i, triggerData in ipairs( Data.window[index][ triggerType ] ) do
+            window[ triggerType ][ i ] = Trigger.Copy( triggerData )
+        end
+
+    end
+
+    local newIndex = #Data.window + 1
+    Data.window[newIndex] = window
+
+    return newIndex
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete window
+---------------------------------------------------------------------------------------------------
+function Window.Delete(index)
+
+    local window_count = #Data.window
+
+    Data.window[ index ]        = Data.window[ window_count ]
+    Data.window[ window_count ] = nil
+
+end
+---------------------------------------------------------------------------------------------------

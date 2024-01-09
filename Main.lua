@@ -21,6 +21,7 @@ import "Turbine.UI.Lotro"
 -- global variables and constants
 import "Gibberish3.Variables"
 import "Gibberish3.Constants"
+import "Gibberish3.Defaults"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -49,7 +50,6 @@ import "Gibberish3.UTILS.Load"
 
 -- placeholder for load/save
 Data.New()
-Data.moveMode = true
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -60,7 +60,6 @@ import "Gibberish3.TRIGGER"
 ---------------------------------------------------------------------------------------------------
 -- options
 import "Gibberish3.OPTIONS"
-----
 
 Window.New("test", Window.Types.COUNTER_WINDOW)
 Data.window[ 1 ].durationFormat = NumberFormat.OneDecimal
@@ -94,6 +93,55 @@ Data.window[ 1 ].timerList[ 1 ][ Trigger.Types.Chat ][ 2 ].value = -2
 
 Window.New("test 2", Window.Types.TIMER_WINDOW)
 
+Folder.New( "wulfs kiste" )
+Data.folder[ 1 ].collapsed = false
+Folder.New( "nethes tasche" )
 
+Window.New("wulf 2", Window.Types.TIMER_WINDOW)
+Data.window[ 3 ].folder = 1
+Window.New("wulf 3", Window.Types.TIMER_WINDOW)
+Data.window[ 4 ].folder = 2
+Window.New("wulf 6", Window.Types.TIMER_WINDOW)
+Data.window[ 5 ].folder = 1
+
+Folder.New( "sils steine" )
+Data.folder[ 3 ].folder = 1
+
+Window.New("wulf 4", Window.Types.TIMER_WINDOW)
+Data.window[ 6 ].folder = 1
+
+Window.New("wulf 9", Window.Types.TIMER_WINDOW)
+Data.window[ 7 ].folder = 3
+
+Folder.New( "besondere steine" )
+Data.folder[ 4 ].folder = 3
+
+Window.New("schwarzer stein", Window.Types.TIMER_WINDOW)
+Data.window[ 8 ].folder = 4
+Window.New("roter stein", Window.Types.TIMER_WINDOW)
+Data.window[ 9 ].folder = 4
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("sil muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("nethe muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("sil muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
+Window.New("wulf muss auffüllen", Window.Types.TIMER_WINDOW)
 
 Windows.StartUp()
+
+Data.options.window.left      = 0.2
+Data.options.window.top       = 0.4
+Options.OptionsWindow( true )

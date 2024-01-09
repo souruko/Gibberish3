@@ -29,3 +29,27 @@ function Trigger.New(type)
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- copy trigger struct and return it
+---------------------------------------------------------------------------------------------------
+function Trigger.Copy( data )
+
+    local trigger = {}
+
+    trigger.id              = Turbine.Engine.GetGameTime()
+    trigger.enabled         = data.enabled      
+    trigger.sortIndex       = data.sortIndex    
+    trigger.type            = data.type         
+    trigger.token           = data.token        
+    trigger.useRegex        = data.useRegex     
+    trigger.description     = data.description  
+    trigger.action          = data.action       
+    trigger.value           = data.value        
+    trigger.listOfTargets   = data.listOfTargets
+    trigger.source          = data.source       
+
+    return trigger
+
+end
+---------------------------------------------------------------------------------------------------

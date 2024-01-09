@@ -13,7 +13,7 @@ function Data.New()
 
     -- list of window data
     Data.window                      = {}
-    Data.window.lastID = 0
+    Data.window.lastID               = 0
 
     -- list of folder data
     Data.folder                     = {}
@@ -28,6 +28,7 @@ function Data.New()
     -- 
     Data.moveMode                   = false
     Data.showTooltips               = true
+    Data.autoReload                 = true
 
     Data.trackGroupEffects          = true
     Data.trackTargetEffects         = false
@@ -35,18 +36,23 @@ function Data.New()
     -- list of options data
     Data.options                    = {}
 
+    Data.options.language           = Language.Local
+
     -- options shortcut savedata
     Data.options.shortcut           = {}
-
     Data.options.shortcut.left      = 0.2
     Data.options.shortcut.top       = 0.2
 
     -- options window savedata
     Data.options.window             = {}
+    Data.options.window.left      = 0.2
+    Data.options.window.top       = 0.2
+    Data.options.window.width     = Options.Defaults.window.min_width
+    Data.options.window.height    = Options.Defaults.window.min_height
     
+    Data.options.window.open        = false
     Data.options.window.tab1        = 1
     Data.options.window.tab2        = 1
-
     Data.options.window.left        = 0
     Data.options.window.top         = 0
 

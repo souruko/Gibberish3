@@ -52,7 +52,6 @@ function Windows.SelectionChanged()
 end
 ---------------------------------------------------------------------------------------------------
 
-
 ---------------------------------------------------------------------------------------------------
 -- window selection changed
 ---------------------------------------------------------------------------------------------------
@@ -73,6 +72,25 @@ function Windows.MoveChanged()
 end
 ---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- window reset all
+---------------------------------------------------------------------------------------------------
+function Windows.ResetAll()
+
+    for index, windowData in ipairs(Data.window) do
+
+        -- if window is enabled and element exists
+        if windowData.enabled == true and
+           Windows[ index ] ~= nil then
+
+            Windows[ index ]:Reset()
+           
+        end
+        
+    end
+
+end
+---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- 
@@ -96,5 +114,57 @@ function Windows.WindowAction( windowIndex, windowData, triggerData )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Data changed
+---------------------------------------------------------------------------------------------------
+function Windows.DataChanged( windowIndex )
+
+    if Data.window[ windowIndex ].enabled == true then
+        Windows[ windowIndex ]:DataChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Data changed
+---------------------------------------------------------------------------------------------------
+function Windows.UnloadWindow( windowIndex )
+
+    if Windows[ windowIndex ] ~= nil then
+        Windows[ windowIndex ]:Finish()
+        Windows[ windowIndex ] = nil
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Data changed
+---------------------------------------------------------------------------------------------------
+function Windows.EnabledChanged( windowIndex )
+
+    local windowData = Data.window[ windowIndex ]
+
+    if windowData.enabled == true then
+    
+        if Windows[ windowIndex ] ~= nil then
+            Windows.UnloadWindow( windowIndex )
+        end
+
+        Windows[ windowIndex ] = Window[ windowData.type ].Constructor( windowIndex )
+
+    elseif Windows[ windowIndex ] ~= nil then
+
+        Windows.UnloadWindow( windowIndex )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+
+
 
 

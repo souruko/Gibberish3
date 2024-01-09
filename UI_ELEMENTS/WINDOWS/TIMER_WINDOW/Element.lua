@@ -88,6 +88,9 @@ function TimerWindowElement:Constructor( index )
             -- set new position
             self:SetPosition( x, y )
 
+            self.data.left, self.data.top = UTILS.PixelToScreenRatio( x, y )
+            Options.SelectionMoved()
+
         end
 
     end
@@ -98,9 +101,7 @@ function TimerWindowElement:Constructor( index )
             
             -- stop dragging
             self.dragging = false
-
-            self.data.left, self.data.top = UTILS.PixelToScreenRatio( self:GetPosition() )
-
+            
             Options.SaveData()
 
         end
@@ -267,7 +268,6 @@ function TimerWindowElement:Finish()
     end
 
     self.dragWindow:Close()
-    self.timerListBox:Close()
     self:Close()
 
 end
