@@ -120,6 +120,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function Windows.DataChanged( windowIndex )
 
+    if windowIndex < 1 then
+        return
+    end
+
     if Data.window[ windowIndex ].enabled == true then
         Windows[ windowIndex ]:DataChanged()
     end

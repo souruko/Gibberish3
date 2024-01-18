@@ -56,7 +56,7 @@ Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.1, 0.1, 0.1 )--Turbine.UI.Color( 0.18, 0.18, 0.18 )
 Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
-Options.Defaults.window.textcolor    = Turbine.UI.Color( 0.6, 0.6, 0.6 )
+Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.toolbar_height = 25
 
 Options.Defaults.window.g_content_top  = - 2

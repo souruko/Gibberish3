@@ -6,10 +6,10 @@
 
 
 
-Options.Elements.Dropdown = class(Turbine.UI.Window)
+Options.Elements.Dropdown = class(Turbine.UI.Control)
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.Dropdown:Constructor( width )
-	Turbine.UI.Window.Constructor( self )
+	Turbine.UI.Control.Constructor( self )
 
     self.showing = false
     self.selected_index = nil
@@ -52,12 +52,13 @@ function Options.Elements.Dropdown:Constructor( width )
     self.arrow:SetMouseVisible( false )
 
     -- dropdown
-    self.drop_down = Turbine.UI.Control()
-    self.drop_down:SetParent( self )
-    self.drop_down:SetTop( Options.Defaults.dropdown.base_height + Options.Defaults.dropdown.spacing )
+    self.drop_down = Turbine.UI.Window()
+    -- self.drop_down:SetParent( self )
+    -- self.drop_down:SetTop( Options.Defaults.dropdown.base_height + Options.Defaults.dropdown.spacing )
     self.drop_down:SetSize( width , height - Options.Defaults.dropdown.base_height - Options.Defaults.dropdown.spacing )
     self.drop_down:SetBackColor( Turbine.UI.Color(0.3,0.3,0.3) )
     self.drop_down:SetVisible( false )
+    self.drop_down:SetZOrder(1)
 
     self.listbox = Turbine.UI.ListBox()
     self.listbox:SetParent( self.drop_down )
@@ -73,8 +74,8 @@ function Options.Elements.Dropdown:Constructor( width )
             
         else
 
-            self:Activate()
-            self:Focus()
+            self.drop_down:Activate()
+            self.drop_down:Focus()
             self:Show( true )
 
         end
@@ -188,8 +189,11 @@ end
 function Options.Elements.Dropdown:Show( value )
 
     self.showing = value
+
+    local left, top = self:PointToScreen( 0, Options.Defaults.dropdown.base_height + Options.Defaults.dropdown.spacing )
+    self.drop_down:SetPosition( left, top )
     self.drop_down:SetVisible( value )
-    self:SetMouseVisible( value )
+    -- self:SetMouseVisible( value )
 
     if value == true then
         self.base:SetBackColor( Options.Defaults.dropdown.show_color )
@@ -241,6 +245,14 @@ function Options.Elements.Dropdown:ResizeDropdown()
     height = height + ( 2 * Options.Defaults.dropdown.spacing )
     self.drop_down:SetHeight( height )
     self:SetHeight( height + Options.Defaults.dropdown.spacing + Options.Defaults.dropdown.base_height )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.Dropdown:Close()
+
+    self.drop_down:Close()
 
 end
 ---------------------------------------------------------------------------------------------------

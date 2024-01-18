@@ -236,6 +236,26 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.WindowSelection:DataChanged( index )
+
+	if index > 0 then
+		for i, windowItem in ipairs( self.windowTable ) do
+			if windowItem.index == index then
+				windowItem:DataChanged()
+			end
+		end
+	else
+		for i, folderItem in ipairs( self.folderTable ) do
+			if folderItem.index == index then
+				folderItem:DataChanged()
+			end
+		end
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.WindowSelection:SelectionChanged()
 
 	for index, folderItem in ipairs( self.folderTable ) do
@@ -391,7 +411,8 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.file_button:SetBackground( "Gibberish3/RESOURCES/file_new.tga" )
 	self.file_button:SetPosition( -3, -3 )
 	self.file_button.MouseClick = function ()
-		self.file_menu:Show()
+		local left, top = self.file_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
+		self.file_menu:Show( left, top )
 	end
 	Options.Elements.Tooltip.AddTooltip( self.file_button, "tooltip", "TODO", false )
 

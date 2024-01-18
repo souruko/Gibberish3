@@ -95,6 +95,34 @@ Window.New("test 2", Window.Types.TIMER_WINDOW)
 
 Folder.New( "wulfs kiste" )
 Data.folder[ 1 ].collapsed = false
+Data.folder[ 1 ][ Trigger.Types.EffectSelf ][ 1 ] = Trigger.New( Trigger.Types.EffectSelf )
+Data.folder[ 1 ][ Trigger.Types.EffectSelf ][ 1 ].token = "Blade Shield"
+Data.folder[ 1 ][ Trigger.Types.EffectSelf ][ 1 ].action = Action.Enable
+
+Data.folder[ 1 ][ Trigger.Types.EffectGroup ][ 1 ] = Trigger.New( Trigger.Types.EffectGroup )
+Data.folder[ 1 ][ Trigger.Types.EffectGroup ][ 1 ].token = "Test EffectGroup"
+Data.folder[ 1 ][ Trigger.Types.EffectGroup ][ 1 ].action = Action.Disable
+
+Data.folder[ 1 ][ Trigger.Types.EffectTarget ][ 1 ] = Trigger.New( Trigger.Types.EffectTarget )
+Data.folder[ 1 ][ Trigger.Types.EffectTarget ][ 1 ].token = "Test EffectTarget"
+Data.folder[ 1 ][ Trigger.Types.EffectTarget ][ 1 ].action = Action.Disable
+
+Data.folder[ 1 ][ Trigger.Types.Skill ][ 1 ] = Trigger.New( Trigger.Types.Skill )
+Data.folder[ 1 ][ Trigger.Types.Skill ][ 1 ].token = "Test Skill"
+Data.folder[ 1 ][ Trigger.Types.Skill ][ 1 ].action = Action.Disable
+
+Data.folder[ 1 ][ Trigger.Types.Chat ][ 1 ] = Trigger.New( Trigger.Types.Chat )
+Data.folder[ 1 ][ Trigger.Types.Chat ][ 1 ].token = "Test Chat"
+Data.folder[ 1 ][ Trigger.Types.Chat ][ 1 ].action = Action.Disable
+
+Data.folder[ 1 ][ Trigger.Types.TimerEnd ][ 1 ] = Trigger.New( Trigger.Types.TimerEnd )
+Data.folder[ 1 ][ Trigger.Types.TimerEnd ][ 1 ].token = "Test TimerEnd"
+Data.folder[ 1 ][ Trigger.Types.TimerEnd ][ 1 ].action = Action.Disable
+
+Data.folder[ 1 ][ Trigger.Types.Combat ][ 1 ] = Trigger.New( Trigger.Types.Combat )
+Data.folder[ 1 ][ Trigger.Types.Combat ][ 1 ].token = "Test Combat"
+Data.folder[ 1 ][ Trigger.Types.Combat ][ 1 ].action = Action.Disable
+
 Folder.New( "nethes tasche" )
 
 Window.New("wulf 2", Window.Types.TIMER_WINDOW)

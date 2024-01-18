@@ -11,8 +11,12 @@ Options.Elements.SelectionOptions = class(Turbine.UI.Control)
 function Options.Elements.SelectionOptions:Constructor()
 	Turbine.UI.Control.Constructor( self )
 
+	self.selectedData = nil
+
 	self:CreatBackground()
 	self:CreateToolbar()
+
+	self.content = nil
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -24,7 +28,99 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:Save()
+
+	if self.content == nil then
+		return
+	end
+
+	self.selectedData.name = self.name_textbox:GetText()
+	self.content:Save()
+	Options.SaveData()
+	Options.DataChanged( Data.selectedIndex )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:Reset()
+
+	if self.content == nil then
+		return
+	end
+
+	self.name_textbox:SetText( self.selectedData.name )
+	self.content:Reset()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:SelectionChanged()
+
+	-- no selection
+	if Data.selectedIndex == 0 then
+		self.selectedData = nil
+	
+	-- folder
+	elseif Data.selectedIndex < 0 then
+		self.selectedData = Data.folder[ Data.selectedIndex * (-1) ]
+		self.name_back:SetBackColor( Options.Defaults.window.w_folder_base )
+		self.name_textbox:SetText( self.selectedData.name )
+		self:FillFolder()
+
+	-- window
+	else
+		self.selectedData = Data.window[ Data.selectedIndex ]
+		self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
+		self.name_textbox:SetText( self.selectedData.name )
+		self:FillWindow()
+		
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:TriggerSelectionChanged()
+
+	if self.content ~= nil then
+		self.content:TriggerSelectionChanged()
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:CloseContent()
+
+	if self.content == nil then
+		return
+	end
+
+	self.content:SetParent( nil )
+	self.content:Close()
+	self.content = nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:FillFolder()
+
+	self:CloseContent()
+
+	self.content = Options.Elements.FolderOptions( self, self.selectedData )
+	self.content:SetParent( self.background2 )
+	self.content:SetSize( self.background2:GetSize() )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:FillWindow()
+
+	self:CloseContent()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -50,13 +146,16 @@ function Options.Elements.SelectionOptions:SizeChanged()
 	self.background1:SetSize( background1_width, background1_height )
 	self.frame:SetSize( frame_width, frame_height )
 	self.background2:SetSize( background2_width, background2_height )
+	if self.content ~= nil then
+		self.content:SetSize( background2_width, background2_height )
+	end
 
 	self.reset_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.save_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.import_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.reload_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.name_back:SetSize( name_width, Options.Defaults.window.toolbar_height)
-	self.name_label:SetSize( name_width, Options.Defaults.window.toolbar_height)
+	self.name_textbox:SetSize( name_width, Options.Defaults.window.toolbar_height)
 
 	-- calclulate position
 	local background1_pos    =  Options.Defaults.window.spacing
@@ -118,6 +217,9 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.reset_button:SetBackground( "Gibberish3/RESOURCES/back.tga" )
 	self.reset_button:SetPosition( -3, -3 )
 	Options.Elements.Tooltip.AddTooltip( self.reset_button, "tooltip", "TODO", false )
+	self.reset_button.Click = function ()
+		self:Reset()
+	end
 	
 	-- save button
 	self.save_back = Turbine.UI.Control()
@@ -130,6 +232,9 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.save_button:SetBackground( "Gibberish3/RESOURCES/save.tga" )
 	self.save_button:SetPosition( -3, -3 )
 	Options.Elements.Tooltip.AddTooltip( self.save_button, "tooltip", "TODO", false )
+	self.save_button.Click = function ()
+		self:Save()
+	end
 	
 	-- import button
 	self.import_back = Turbine.UI.Control()
@@ -163,10 +268,13 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.name_back:SetParent( self.frame )
 	self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
 
-	self.name_label = Turbine.UI.Label()
-	self.name_label:SetParent( self.name_back )
-	self.name_label:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
-	self.name_label:SetFont( Options.Defaults.window.font )
+	self.name_textbox = Turbine.UI.TextBox()
+	self.name_textbox:SetParent( self.name_back )
+	self.name_textbox:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
+	self.name_textbox:SetFont( Options.Defaults.window.w_font )
+    self.name_textbox:SetForeColor( Options.Defaults.window.textcolor )
+    self.name_textbox:SetSelectable( true )
+	self.name_textbox:SetLeft( 5 )
 	
 end
 ---------------------------------------------------------------------------------------------------

@@ -24,6 +24,14 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function WindowItem:DataChanged()
+
+    self.nameLabel:SetText( self.data.name )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function WindowItem:CreateBackground()
 
     -- base background
@@ -136,7 +144,6 @@ function WindowItem:CreateRightClick()
 
     -- rightclick menu
     self.rightClickMenu = Options.Elements.RightClickMenu( Options.Defaults.window.menu_width )
-
 
         -- export subMenu
         self.rc_exportSubMenu = Options.Elements.RightClickSubMenu( Options.Defaults.window.menu_width )

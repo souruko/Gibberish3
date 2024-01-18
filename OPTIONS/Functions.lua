@@ -53,8 +53,12 @@ function Options.TimerSelectionChanged( index )
     if index == Data.selectedTimerIndex or index == nil then
         return
     end
+
+    Data.selectedTimerIndex = index
     
-    -- OptionsWindow:TimerSelectionChanged()
+    if Data.options.window.open == true then
+        Options.Window.Object:TimerSelectionChanged()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -62,14 +66,19 @@ end
 ---------------------------------------------------------------------------------------------------
 -- trigger selection changed
 ---------------------------------------------------------------------------------------------------
-function Options.TriggerSelectionChanged( index )
+function Options.TriggerSelectionChanged( index, type )
 
     -- do nothing if selection didnt change
-    if index == Data.selectedTriggerIndex or index == nil  then
+    if (index == Data.selectedTriggerIndex and type == Data.selectedTriggerType) or index == nil  then
         return
     end
 
-    -- OptionsWindow:TriggerSelectionChanged()
+    Data.selectedTriggerIndex = index
+    Data.selectedTriggerType= type
+
+    if Data.options.window.open == true then
+        Options.Window.Object:TriggerSelectionChanged()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -304,6 +313,20 @@ function Options.DeleteFolder( folderIndex )
     if Data.selectedIndex == (folderIndex*(-1)) then
         Options.SelectionChanged( nil )
     end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Data changed
+---------------------------------------------------------------------------------------------------
+function Options.DataChanged( index )
+
+    if Data.options.window.open == true then
+        Options.Window.Object:DataChanged( index )
+    end
+
+    Windows.DataChanged( index )
 
 end
 ---------------------------------------------------------------------------------------------------

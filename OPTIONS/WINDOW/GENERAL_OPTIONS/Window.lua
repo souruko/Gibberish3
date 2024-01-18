@@ -72,9 +72,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.GeneralOptions:PositionChanged()
 
-	local left, top = self.language_placeholder:PointToScreen( 0, 0)
+	-- local left, top = self.language_placeholder:PointToScreen( 0, 0)
 
-	self.language_dropdown:SetPosition( left, top )
+	-- self.language_dropdown:SetPosition( left, top )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -143,14 +143,14 @@ function Options.Elements.GeneralOptions:CreateContent()
 	self.language_label:SetFont( Options.Defaults.window.font )
 	Options.Elements.Tooltip.AddTooltip( self.language_label, "tooltip", "TODO", false )
 
-	self.language_placeholder = Turbine.UI.Control()
-	self.language_placeholder:SetParent( self.background2 )
-	self.language_placeholder:SetPosition( 173, Options.Defaults.window.g_content_top + 5 )
+	-- self.language_placeholder = Turbine.UI.Control()
+	-- self.language_placeholder:SetParent( self.background2 )
+	-- self.language_placeholder:SetPosition( 173, Options.Defaults.window.g_content_top + 5 )
 
 	self.language_dropdown = Options.Elements.Dropdown( 50 )
-	-- self.language_dropdown:SetParent( self.background2 )
+	self.language_dropdown:SetParent( self.background2 )
 	self.language_dropdown:SetPosition( 173, Options.Defaults.window.g_content_top + 5 )
-	self.language_dropdown:SetZOrder(1)
+	-- self.language_dropdown:SetZOrder(1)
 
 	self.language_dropdown:AddItem( "general", "english", Language.English )
 	self.language_dropdown:AddItem( "general", "german", Language.German )

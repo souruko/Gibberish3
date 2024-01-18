@@ -125,8 +125,6 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     local entity    = nil
     local key       = nil
 
-    local token = triggerData.token
-
     -- key
     -- every trigger = new timer
     if timerData.stacking == Stacking.Multi then

@@ -150,7 +150,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:SelectionChanged()
 
-    if Data.selectedIndex ~= 0 then
+    if Data.selectedIndex > 0 then
 
         local selected  = Data.window[ Data.selectedIndex ]
         local left, top = UTILS.ScreenRatioToPixel( selected.left, selected.top)

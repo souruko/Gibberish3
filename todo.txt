@@ -1,2 +1,4 @@
 
-movewindow > arrows add mousedown for permanent move
+filter clear button call fillcontent!
+import / reload to the right!
+delete / copy triggerlistbox
