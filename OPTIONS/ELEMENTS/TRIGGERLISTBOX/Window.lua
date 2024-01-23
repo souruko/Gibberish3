@@ -8,8 +8,10 @@
 
 Options.Elements.TriggerListbox = class(Turbine.UI.Control)
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TriggerListbox:Constructor()
+function Options.Elements.TriggerListbox:Constructor( parent )
 	Turbine.UI.Control.Constructor( self )
+
+    self.parent = parent
 
     self.filterText  = ""
     self.controls = {}
@@ -23,7 +25,7 @@ function Options.Elements.TriggerListbox:Constructor()
 
     for key, value in pairs(Trigger.Types) do
 
-        local item = Options.Elements.Row( "triggerType", key, function ()
+        local item = Options.Elements.Row( "triggerType", value, function ()
             self:NewTriggerPressed( value )
         end,
         Options.Defaults.rc_menu.item_height)
@@ -103,6 +105,7 @@ function Options.Elements.TriggerListbox:Constructor()
 		self.filterText = ""
 		self.filter_clear:SetVisible(false)
 		self:FilterFocusChanged( false )
+        self:FillContent()
 	end
 
     -- listbox
@@ -119,6 +122,18 @@ function Options.Elements.TriggerListbox:Constructor()
     self.scrollbar:SetWidth( 10 )
 
     self.listbox:SetVerticalScrollBar( self.scrollbar )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.TriggerListbox:UpdateData()
+
+    for index, item in ipairs(self.controls) do
+
+        item:UpdateData()
+        
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -203,7 +218,7 @@ function Options.Elements.TriggerListbox:ContentChanged( data )
 
         for triggerIndex, triggerData in ipairs(typeList) do
 
-            self.controls[#self.controls +1] = Item( triggerIndex, triggerData, 200 )
+            self.controls[#self.controls +1] = Item( triggerIndex, triggerData, 200, self.parent )
         
         end
 
@@ -224,18 +239,6 @@ function Options.Elements.TriggerListbox:FilterFocusChanged( value )
 		self.filter_icon:SetVisible( true )
 
 	end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
-function Options.Elements.TriggerListbox:ReloadNames()
-
-    for index, item in ipairs(self.controls) do
-
-        item:ReloadName()
-
-    end
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -16,7 +16,7 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
 
         TackingCallbacks = {}
 
-        function LocalPlayer.TargetChanged( sender, args )
+        function LocalPlayer.TargetChanged( sender1, args1 )
 
             local target = LocalPlayer:GetTarget()
 
@@ -43,6 +43,13 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
 
                                                             end
 
+                                                            -- all folder
+                                                            for folderIndex, folderData in ipairs(Data.folder) do
+                                                
+                                                                Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effect, target, folderIndex, folderData )
+                                                
+                                                            end
+
                                                         end )
 
                 Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects()
@@ -61,7 +68,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check all activ effects
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function ()
+Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function()
     
     local target = LocalPlayer:GetTarget()
 
@@ -73,12 +80,47 @@ Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function ()
 
             local effect = effects:Get(i)
      
-            -- all groups
+            -- all windows
             for windowIndex, windowData in ipairs(Data.window) do
 
                 Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effect, target, windowIndex, windowData )
 
             end
+
+
+            -- all folder
+            for folderIndex, folderData in ipairs(Data.folder) do
+
+                Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effect, target, folderIndex, folderData )
+
+            end
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check folder
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectTarget ].CheckFolder = function(effect, target, folderIndex, folderData)
+
+    -- only check for enabled windows
+    if folderData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectTarget ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effect, target, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.FolderAction( folderIndex, folderData, triggerData )
 
         end
 

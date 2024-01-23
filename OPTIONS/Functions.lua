@@ -22,10 +22,10 @@ function Options.SelectionChanged( index )
 
     -- save new selection
     Data.selectedIndex = index
-
-
+ 
     Options.TimerSelectionChanged( 0 )
-    Options.TriggerSelectionChanged( 0 )
+
+    Options.Trigger2SelectionChanged( 0, 0 )
 
     Windows.SelectionChanged()
 
@@ -56,6 +56,8 @@ function Options.TimerSelectionChanged( index )
 
     Data.selectedTimerIndex = index
     
+    Options.TriggerSelectionChanged( 0, 0 )
+
     if Data.options.window.open == true then
         Options.Window.Object:TimerSelectionChanged()
     end
@@ -74,10 +76,30 @@ function Options.TriggerSelectionChanged( index, type )
     end
 
     Data.selectedTriggerIndex = index
-    Data.selectedTriggerType= type
+    Data.selectedTriggerType  = type
 
     if Data.options.window.open == true then
         Options.Window.Object:TriggerSelectionChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- trigger selection changed
+---------------------------------------------------------------------------------------------------
+function Options.Trigger2SelectionChanged( index, type )
+
+    -- do nothing if selection didnt change
+    if (index == Data.selectedTriggerIndex2 and type == Data.selectedTriggerType2) or index == nil  then
+        return
+    end
+
+    Data.selectedTriggerIndex2 = index
+    Data.selectedTriggerType2  = type
+
+    if Data.options.window.open == true then
+        Options.Window.Object:Trigger2SelectionChanged()
     end
 
 end
@@ -297,7 +319,7 @@ function Options.DeleteWindow( windowIndex )
     Window.Delete( windowIndex )
 
     if Data.selectedIndex == windowIndex then
-        Options.SelectionChanged( nil )
+        Options.SelectionChanged( 0 )
     end
 
 end
@@ -311,7 +333,49 @@ function Options.DeleteFolder( folderIndex )
     Folder.Delete( folderIndex )
 
     if Data.selectedIndex == (folderIndex*(-1)) then
-        Options.SelectionChanged( nil )
+        Options.SelectionChanged( 0 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete timer
+---------------------------------------------------------------------------------------------------
+function Options.DeleteTimer( data, timerIndex )
+
+    Timer.Delete( data, timerIndex )
+
+    if Data.selectedTimerIndex == (timerIndex) then
+        Options.TimerSelectionChanged( 0 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete trigger
+---------------------------------------------------------------------------------------------------
+function Options.DeleteTrigger( data, triggerIndex, triggerType )
+
+    Trigger.Delete( data, triggerIndex, triggerType )
+
+    if Data.selectedTriggerIndex == (triggerIndex) and Data.selectedTriggerType == triggerType then
+        Options.TriggerSelectionChanged( 0, 0 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete folder/window trigger
+---------------------------------------------------------------------------------------------------
+function Options.DeleteTrigger2( data, triggerIndex, triggerType )
+
+    Trigger.Delete( data, triggerIndex, triggerType )
+
+    if Data.selectedTriggerIndex2 == (triggerIndex) and Data.selectedTriggerType2 == triggerType then
+        Options.Trigger2SelectionChanged( 0, 0 )
     end
 
 end

@@ -21,6 +21,44 @@ Trigger.Types.EffectRemoveSelf = 10
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+L[ Language.English ].triggerType = {}
+L[ Language.English ].triggerType[ Trigger.Types.EffectSelf ]= "Self Effect"
+L[ Language.English ].triggerType[ Trigger.Types.EffectGroup ]= "Group Effect"
+L[ Language.English ].triggerType[ Trigger.Types.EffectTarget ]= "Target Effect"
+L[ Language.English ].triggerType[ Trigger.Types.Chat ]= "Chat"
+L[ Language.English ].triggerType[ Trigger.Types.Skill ]= "Skill"
+L[ Language.English ].triggerType[ Trigger.Types.TimerEnd ]= "Timer End"
+L[ Language.English ].triggerType[ Trigger.Types.TimerStart ]= "Timer Start"
+L[ Language.English ].triggerType[ Trigger.Types.TimerThreshold ]= "Timer Threshold"
+L[ Language.English ].triggerType[ Trigger.Types.Combat ]= "Combat"
+L[ Language.English ].triggerType[ Trigger.Types.EffectRemoveSelf ]= "Self Effect Removed"
+
+L[ Language.German ].triggerType = {}
+L[ Language.German ].triggerType[ Trigger.Types.EffectSelf ]= "Self Effect"
+L[ Language.German ].triggerType[ Trigger.Types.EffectGroup ]= "Group Effect"
+L[ Language.German ].triggerType[ Trigger.Types.EffectTarget ]= "Target Effect"
+L[ Language.German ].triggerType[ Trigger.Types.Chat ]= "Chat"
+L[ Language.German ].triggerType[ Trigger.Types.Skill ]= "Skill"
+L[ Language.German ].triggerType[ Trigger.Types.TimerEnd ]= "Timer End"
+L[ Language.German ].triggerType[ Trigger.Types.TimerStart ]= "Timer Start"
+L[ Language.German ].triggerType[ Trigger.Types.TimerThreshold ]= "Timer Threshold"
+L[ Language.German ].triggerType[ Trigger.Types.Combat ]= "Combat"
+L[ Language.German ].triggerType[ Trigger.Types.EffectRemoveSelf ]= "Self Effect Removed"
+
+L[ Language.French ].triggerType = {}
+L[ Language.French ].triggerType[ Trigger.Types.EffectSelf ]= "Self Effect"
+L[ Language.French ].triggerType[ Trigger.Types.EffectGroup ]= "Group Effect"
+L[ Language.French ].triggerType[ Trigger.Types.EffectTarget ]= "Target Effect"
+L[ Language.French ].triggerType[ Trigger.Types.Chat ]= "Chat"
+L[ Language.French ].triggerType[ Trigger.Types.Skill ]= "Skill"
+L[ Language.French ].triggerType[ Trigger.Types.TimerEnd ]= "Timer End"
+L[ Language.French ].triggerType[ Trigger.Types.TimerStart ]= "Timer Start"
+L[ Language.French ].triggerType[ Trigger.Types.TimerThreshold ]= "Timer Threshold"
+L[ Language.French ].triggerType[ Trigger.Types.Combat ]= "Combat"
+L[ Language.French ].triggerType[ Trigger.Types.EffectRemoveSelf ]= "Self Effect Removed"
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- trigger specific tables
 for index, triggerType in pairs( Trigger.Types ) do
 

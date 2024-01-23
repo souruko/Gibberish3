@@ -53,34 +53,34 @@ function TimerOptions:Constructor( parent, data, parentType )
 
     -- folder
     if parentType == 0 then
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
-        self.action:AddItem( "action", "Reset", Action.Disable)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
+        self.action:AddItem( "action", Action.Reset, Action.Reset)
 
     -- window
     elseif parentType > 0 then
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
-        self.action:AddItem( "action", "Clear", Action.Clear)
-        self.action:AddItem( "action", "Reset", Action.Reset)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
+        self.action:AddItem( "action", Action.Clear, Action.Clear)
+        self.action:AddItem( "action", Action.Reset, Action.Reset)
     
     -- timer
     elseif parentType < 0 then
-        self.action:AddItem( "action", "Add", Action.Add)
+        self.action:AddItem( "action", Action.Add, Action.Add)
 
         if (parentType *(-1)) == Timer.Types.COUNTER_BAR then
-            self.action:AddItem( "action", "Subtract", Action.Subtract)
+            self.action:AddItem( "action", Action.Subtract, Action.Subtract)
         end
         
-        self.action:AddItem( "action", "Remove", Action.Remove)
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
+        self.action:AddItem( "action", Action.Remove, Action.Remove)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
 
     end
 
     top = top + 35
     
-    self.value = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "value", "TODO", 30 )
+    self.value = Options.Elements.NumberBoxRow( Options.Defaults.window.backcolor1, "options", "value", "TODO", 30 )
     if (parentType *(-1)) == Timer.Types.COUNTER_BAR then
         self.value:SetParent( self )
         self.value:SetTop( top )

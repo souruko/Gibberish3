@@ -95,6 +95,26 @@ Trigger[Trigger.Types.Skill].IsSkillUsed = function (skillName)
         
     end
 
+    
+    for folderIndex, folderData in ipairs(Data.folder) do
+           
+        for triggerIndex, triggerData in ipairs(folderData[Trigger.Types.Skill]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then                                 
+
+                if triggerData.token == skillName then
+
+                    return true
+
+                end
+
+            end
+
+        end
+
+    end
+
     return false
 
 end
@@ -158,6 +178,26 @@ Trigger[Trigger.Types.Skill].SkillUsed = function (skill)
         end
 
     end
+
+    for folderIndex, folderData in ipairs(Data.folder) do
+           
+        for triggerIndex, triggerData in ipairs(folderData[Trigger.Types.Skill]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then                                 
+
+                if triggerData.token == name then
+
+                    Window.FolderAction( folderIndex, folderData, triggerData )
+                            
+                end
+
+            end
+
+        end
+
+    end
+
 
 
 end

@@ -14,16 +14,17 @@ function Window.New(name, type)
     local window = {}
 
     -- general
-    window.id                    = Data.GetNextWindowID()
-    window.sortIndex             = Data.GetNextSortIndex()
+    window.id                    = DataFunction.GetNextWindowID()
+    window.sortIndex             = DataFunction.GetNextSortIndex()
     window.nextTimerSortIndex    = 1
     window.name                  = name
     window.folder                = nil
     window.type                  = type
+    window.timerType             = Window[type].Defaults.timerType
     window.enabled               = true
     window.saveGlobaly           = true
     window.description           = Window[type].Defaults.description
-    window.resetOnTargetChange   = Window[type].Defaults.resetOnTargetChange
+    window.resetOnTargetChanged   = Window[type].Defaults.resetOnTargetChanged
     window.useTargetEntity       = Window[type].Defaults.useTargetEntity
 
     -- position / size
@@ -55,6 +56,7 @@ function Window.New(name, type)
     window.timerAlignment        = Window[type].Defaults.timerAlignment
     window.showTimer             = Window[type].Defaults.showTimer
 
+    window.timerType             = Window[type].Defaults.allowedTimers[1]
     window.timerList             = {}
 
     -- create trigger tables
@@ -79,17 +81,19 @@ function Window.Copy(index)
 
     local window = {}
 
-    -- general
-    window.id                    = Data.GetNextWindowID()
-    window.sortIndex             = Data.GetNextSortIndex()
+    window.id                    = DataFunction.GetNextWindowID()
+    window.sortIndex             = DataFunction.GetNextSortIndex()
     window.nextTimerSortIndex    = Data.window[index].nextTimerSortIndex
-    window.name                  = Data.window[index].name
-    window.folder                = Data.window[index].folder
-    window.type                  = Data.window[index].type
+
     window.enabled               = Data.window[index].enabled
+    window.folder                = Data.window[index].folder
+    window.name                  = Data.window[index].name
+    window.type                  = Data.window[index].type
+
+    -- general
     window.saveGlobaly           = Data.window[index].saveGlobaly
     window.description           = Data.window[index].description
-    window.resetOnTargetChange   = Data.window[index].resetOnTargetChange
+    window.resetOnTargetChanged   = Data.window[index].resetOnTargetChanged
     window.useTargetEntity       = Data.window[index].useTargetEntity
 
     -- position / size
@@ -104,11 +108,30 @@ function Window.Copy(index)
     window.overlay               = Data.window[index].overlay
 
     -- color / opacity
-    window.color1                = Data.window[index].color1
-    window.color2                = Data.window[index].color2
-    window.color3                = Data.window[index].color3
-    window.color4                = Data.window[index].color4
-    window.color5                = Data.window[index].color5
+    window.color1                  = {}
+    window.color2                  = {}
+    window.color3                  = {}
+    window.color4                  = {}
+    window.color5                  = {}
+    
+    window.color1.R                = Data.window[index].color1.R
+    window.color2.R                = Data.window[index].color2.R
+    window.color3.R                = Data.window[index].color3.R
+    window.color4.R                = Data.window[index].color4.R
+    window.color5.R                = Data.window[index].color5.R
+
+    window.color1.G                = Data.window[index].color1.G
+    window.color2.G                = Data.window[index].color2.G
+    window.color3.G                = Data.window[index].color3.G
+    window.color4.G                = Data.window[index].color4.G
+    window.color5.G                = Data.window[index].color5.G
+
+    window.color1.B                = Data.window[index].color1.B
+    window.color2.B                = Data.window[index].color2.B
+    window.color3.B                = Data.window[index].color3.B
+    window.color4.B                = Data.window[index].color4.B
+    window.color5.B                = Data.window[index].color5.B
+
 
     window.opacityActiv          = Data.window[index].opacityActiv
     window.opacityPassiv         = Data.window[index].opacityPassiv
@@ -121,6 +144,7 @@ function Window.Copy(index)
     window.timerAlignment        = Data.window[index].timerAlignment
     window.showTimer             = Data.window[index].showTimer
 
+    window.timerType             = Data.window[index].timerType
     window.timerList             = {}
 
     for i, timerData in ipairs( Data.window[index].timerList ) do
@@ -156,6 +180,21 @@ function Window.Delete(index)
 
     Data.window[ index ]        = Data.window[ window_count ]
     Data.window[ window_count ] = nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete window
+---------------------------------------------------------------------------------------------------
+function Window.AddTimer( windowIndex, timerData )
+
+    local timerIndex = #Data.window[ windowIndex ].timerList+1
+
+    timerData.sortIndex = Data.window[ windowIndex ].nextTimerSortIndex
+    Data.window[ windowIndex ].nextTimerSortIndex = Data.window[ windowIndex ].nextTimerSortIndex + 1
+
+    Data.window[ windowIndex ].timerList[ timerIndex ] = timerData
 
 end
 ---------------------------------------------------------------------------------------------------

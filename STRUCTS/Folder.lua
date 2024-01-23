@@ -14,10 +14,9 @@ function Folder.New(name)
     local folder        = {}
 
     -- set default values
-    folder.id           = Data.GetNextFolderID()
-    folder.sortIndex    = Data.GetNextSortIndex()
+    folder.id           = DataFunction.GetNextSortIndex()
+    folder.sortIndex    = DataFunction.GetNextSortIndex()
     folder.name         = name
-    folder.enabled      = false
     folder.collapsed    = false
     folder.folder       = nil
 
@@ -45,8 +44,8 @@ function Folder.Copy(index)
     local folder        = {}
 
     -- set default values
-    folder.id           = Data.GetNextFolderID()
-    folder.sortIndex    = Data.GetNextSortIndex()
+    folder.id           = DataFunction.GetNextSortIndex()
+    folder.sortIndex    = DataFunction.GetNextSortIndex()
     folder.name         = Data.folder[index].name
     folder.collapsed    = Data.folder[index].collapsed
     folder.folder       = Data.folder[index].folder

@@ -156,7 +156,7 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
     self.entityControl:SetEntity( entity )
 
     -- reset icon
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
         self.iconControl:SetStretchMode( 1 )

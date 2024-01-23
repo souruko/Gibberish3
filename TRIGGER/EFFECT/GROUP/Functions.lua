@@ -38,13 +38,16 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
 
                         -- all groups
                         for windowIndex, windowData in ipairs(Data.window) do
-
                             Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, player, windowIndex, windowData )
 
                         end
 
+                        for folderIndex, folderData in ipairs(Data.folder) do
+                            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, player, folderIndex, folderData )
+    
+                        end
+    
                     end
-
 
                     -- check all activ effects
                     Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects()
@@ -94,9 +97,41 @@ Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects = function ()
 
                     end
 
+                    for folderIndex, folderData in ipairs(Data.folder) do
+
+                        Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, player, folderIndex, folderData )
+
+                    end
                 end
 
             end
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check folder
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectGroup ].CheckFolder = function(effect, player, folderIndex, folderData)
+
+    -- only check for enabled windows
+    if folderData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectGroup ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effect, player, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.FolderAction( folderIndex, folderData, triggerData )
 
         end
 

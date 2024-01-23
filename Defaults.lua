@@ -58,10 +58,16 @@ Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
 Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.toolbar_height = 25
+Options.Defaults.window.tab_height   = 25
+Options.Defaults.window.tab_width    = 131
+Options.Defaults.window.tab_c_left   = 5
+Options.Defaults.window.tab_c_top    = 20
+Options.Defaults.window.textdark     =  Turbine.UI.Color( 0.6, 0.6, 0.6 )
 
 Options.Defaults.window.g_content_top  = - 2
 
-Options.Defaults.window.w_item_height   = 22
+Options.Defaults.window.t_item_height   = 34
+Options.Defaults.window.w_item_height   = 25
 Options.Defaults.window.w_font          = Turbine.UI.Lotro.Font.Verdana16
 Options.Defaults.window.w_window_base   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.window.w_window_hover  = Turbine.UI.Color(0.3,0.3,0.3)

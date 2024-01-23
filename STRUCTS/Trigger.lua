@@ -17,6 +17,7 @@ function Trigger.New(type)
     trigger.enabled         = true
     trigger.sortIndex       = 0
     trigger.type            = type
+    
     trigger.token           = Trigger[type].Defaults.token
     trigger.useRegex        = Trigger[type].Defaults.useRegex
     trigger.description     = Trigger[type].Defaults.description
@@ -45,11 +46,32 @@ function Trigger.Copy( data )
     trigger.useRegex        = data.useRegex     
     trigger.description     = data.description  
     trigger.action          = data.action       
-    trigger.value           = data.value        
-    trigger.listOfTargets   = data.listOfTargets
-    trigger.source          = data.source       
+    trigger.value           = data.value  
+    trigger.listOfTargets   = {}
+    for index, value in ipairs(data.listOfTargets) do
+        trigger.listOfTargets[index] = value
+    end
+    trigger.source          = data.source
 
     return trigger
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete
+---------------------------------------------------------------------------------------------------
+function Trigger.Delete( data, triggerIndex, triggerType )
+
+    local maxIndex = #data[ triggerType ]
+
+    for i = triggerIndex, maxIndex-1 do
+
+        data[ triggerType ][ i ] = data[ triggerType ][ i+1 ]
+
+    end
+
+    data[ triggerType ][ maxIndex ] = nil
 
 end
 ---------------------------------------------------------------------------------------------------

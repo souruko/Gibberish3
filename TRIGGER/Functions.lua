@@ -49,7 +49,7 @@ function Trigger.GetPlaceholder(token, message, posAdjustment)
         if pos1 ~= nil then
 
             local index = string.match(token, "&%d", pos1)
-        
+            
             placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment))
 
             posAdjustment = posAdjustment - 2 + string.len(placeholder[index])

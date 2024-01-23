@@ -63,6 +63,26 @@ Trigger.TimerEvent = function ( timerID, event )
 
     end
 
+    for folderIndex, folderData in ipairs(Data.folder) do
+        
+        -- check window triggers
+        for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Skill ]) do
+
+            -- check if trigger is enabled
+            if triggerData.enabled == true then
+
+                if triggerData.token == timerID then
+
+                    Windows.FolderAction( folderIndex, folderData, triggerData )
+
+                end
+
+            end
+
+        end
+
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 

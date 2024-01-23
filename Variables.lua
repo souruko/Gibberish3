@@ -14,6 +14,7 @@ LocalPlayer = Turbine.Gameplay.LocalPlayer:GetInstance()
 ---------------------------------------------------------------------------------------------------
 -- base structures
 Data        = {}
+DataFunction= {}
 Window      = {}
 Folder      = {}
 Timer       = {}

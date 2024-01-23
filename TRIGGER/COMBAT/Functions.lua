@@ -28,6 +28,43 @@ Trigger[Trigger.Types.Combat].Init = function ()
 
         end
 
+        -- iterate folder data
+        for folderIndex, folderData in ipairs(Data.folder) do
+
+            if LocalPlayer:IsInCombat() == true then
+                Trigger[Trigger.Types.Combat].CheckFolder( Source.CombatEnd, folderIndex, folderData )
+            else
+                Trigger[Trigger.Types.Combat].CheckFolder( Source.CombatEnd, folderIndex, folderData )
+            end
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check folder
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Combat ].CheckFolder = function( combatState, folderIndex, folderData)
+
+    -- only check for enabled windows
+    if folderData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Combat ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.Combat ].CheckTrigger( combatState, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.FolderAction( folderIndex, folderData, triggerData )
+
+        end
+
     end
 
 end

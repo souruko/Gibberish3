@@ -24,6 +24,10 @@ Language.English = 1
 Language.German  = 2
 Language.French  = 3
 
+Language[ Language.English ] = "en"
+Language[ Language.German ] = "de"
+Language[ Language.French ] = "fr"
+
 -- localisation table
 L = {}
 ---------------------------------------------------------------------------------------------------
@@ -100,6 +104,62 @@ TimerTextOptions.NoText         = 1
 TimerTextOptions.Token          = 2
 TimerTextOptions.CustomText     = 3
 TimerTextOptions.Target         = 4
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Alignment
+Alignment               = {}
+Alignment.TopLeft        = Turbine.UI.ContentAlignment.TopLeft
+Alignment.TopCenter      = Turbine.UI.ContentAlignment.TopCenter
+Alignment.TopRight       = Turbine.UI.ContentAlignment.TopRight
+Alignment.MiddleLeft     = Turbine.UI.ContentAlignment.MiddleLeft
+Alignment.MiddleCenter   = Turbine.UI.ContentAlignment.MiddleCenter
+Alignment.MiddleRight    = Turbine.UI.ContentAlignment.MiddleRight
+Alignment.BottomLeft     = Turbine.UI.ContentAlignment.BottomLeft
+Alignment.BottomCenter   = Turbine.UI.ContentAlignment.BottomCenter
+Alignment.BottomRight    = Turbine.UI.ContentAlignment.BottomRight
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- ChatChannel
+ChatChannel               = {}
+-- ChatChannel.Admin       = Turbine.ChatType.Admin       
+ChatChannel.Advancement = Turbine.ChatType.Advancement 
+ChatChannel.Death	    = Turbine.ChatType.Death	    
+ChatChannel.Emote	    = Turbine.ChatType.Emote	    
+ChatChannel.EnemyCombat = Turbine.ChatType.EnemyCombat 
+ChatChannel.Error	    = Turbine.ChatType.Error	    
+ChatChannel.FellowLoot  = Turbine.ChatType.FellowLoot  
+ChatChannel.Fellowship  = Turbine.ChatType.Fellowship  
+ChatChannel.Kinship	    = Turbine.ChatType.Kinship	    
+ChatChannel.LFF         = Turbine.ChatType.LFF         
+-- ChatChannel.Localized1  = Turbine.ChatType.Localized1  
+-- ChatChannel.Localized2  = Turbine.ChatType.Localized2  
+-- ChatChannel.Narration   = Turbine.ChatType.Narration   
+ChatChannel.Officer     = Turbine.ChatType.Officer     
+ChatChannel.OOC         = Turbine.ChatType.OOC         
+ChatChannel.PlayerCombat= Turbine.ChatType.PlayerCombat
+ChatChannel.Quests      = Turbine.ChatType.Quests      
+ChatChannel.Raid	    = Turbine.ChatType.Raid	    
+ChatChannel.Regional    = Turbine.ChatType.Regional    
+-- ChatChannel.Roleplay    = Turbine.ChatType.Roleplay    
+ChatChannel.Say	        = Turbine.ChatType.Say	        
+ChatChannel.SelfLoot	= Turbine.ChatType.SelfLoot	
+ChatChannel.Standard	= Turbine.ChatType.Standard	
+ChatChannel.Tell        = Turbine.ChatType.Tell        
+ChatChannel.Trade	    = Turbine.ChatType.Trade	    
+ChatChannel.Tribe       = Turbine.ChatType.Tribe       
+-- ChatChannel.Undef	    = Turbine.ChatType.Undef	    
+ChatChannel.Unfiltered  = Turbine.ChatType.Unfiltered  
+ChatChannel.UserChat1	= Turbine.ChatType.UserChat1	
+ChatChannel.UserChat2	= Turbine.ChatType.UserChat2	
+ChatChannel.UserChat3   = Turbine.ChatType.UserChat3   
+ChatChannel.UserChat4	= Turbine.ChatType.UserChat4	
+ChatChannel.UserChat5   = Turbine.ChatType.UserChat5   
+ChatChannel.UserChat6	= Turbine.ChatType.UserChat6	
+ChatChannel.UserChat7	= Turbine.ChatType.UserChat7	
+ChatChannel.UserChat8	= Turbine.ChatType.UserChat8	
+ChatChannel.World       = Turbine.ChatType.World       
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

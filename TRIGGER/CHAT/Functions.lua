@@ -26,6 +26,39 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         end
 
+        -- iterate folder data
+        for folderIndex, folderData in ipairs(Data.folder) do
+            Trigger[ Trigger.Types.Chat ].CheckFolder(args.Message, args.ChatType, folderIndex, folderData)
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check folder
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Chat ].CheckFolder = function(message, chatType, folderIndex, folderData)
+
+    -- only check for enabled windows
+    if folderData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Chat ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.FolderAction( folderIndex, folderData, triggerData )
+
+        end
+
     end
 
 end

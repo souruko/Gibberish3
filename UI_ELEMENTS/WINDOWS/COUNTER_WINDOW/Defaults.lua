@@ -41,10 +41,8 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.timerAlignment          = Turbine
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.showTimer               = true
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.showIcon                = false
 
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.timerType               = Timer.Types.COUNTER_BAR
 -- allowed timer
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers           = {}
-Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[1]        = Timer.Types.BAR
-Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[2]        = Timer.Types.ICON
-Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[3]        = Timer.Types.TEXT
-Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[4]        = Timer.Types.CIRCEL
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[1]        = Timer.Types.COUNTER_BAR
 ---------------------------------------------------------------------------------------------------

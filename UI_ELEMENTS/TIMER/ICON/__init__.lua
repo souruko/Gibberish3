@@ -9,5 +9,5 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.Element"
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.Defaults"
---import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS"
+import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS"
 ---------------------------------------------------------------------------------------------------

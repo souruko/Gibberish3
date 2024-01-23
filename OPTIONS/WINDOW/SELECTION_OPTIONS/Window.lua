@@ -37,7 +37,7 @@ function Options.Elements.SelectionOptions:Save()
 	self.selectedData.name = self.name_textbox:GetText()
 	self.content:Save()
 	Options.SaveData()
-	Options.DataChanged( Data.selectedIndex )
+	Windows.EnabledChanged( Data.selectedIndex )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -66,6 +66,7 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 	elseif Data.selectedIndex < 0 then
 		self.selectedData = Data.folder[ Data.selectedIndex * (-1) ]
 		self.name_back:SetBackColor( Options.Defaults.window.w_folder_base )
+		-- self.background2:SetBackColor( Options.Defaults.window.w_folder_base )
 		self.name_textbox:SetText( self.selectedData.name )
 		self:FillFolder()
 
@@ -73,6 +74,7 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 	else
 		self.selectedData = Data.window[ Data.selectedIndex ]
 		self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
+		-- self.background2:SetBackColor( Options.Defaults.window.backcolor2 )
 		self.name_textbox:SetText( self.selectedData.name )
 		self:FillWindow()
 		
@@ -86,6 +88,26 @@ function Options.Elements.SelectionOptions:TriggerSelectionChanged()
 
 	if self.content ~= nil then
 		self.content:TriggerSelectionChanged()
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:Trigger2SelectionChanged()
+
+	if self.content ~= nil then
+		self.content:Trigger2SelectionChanged()
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:TimerSelectionChanged()
+
+	if self.content ~= nil then
+    	self.content:TimerSelectionChanged()
 	end
 
 end
@@ -122,6 +144,10 @@ function Options.Elements.SelectionOptions:FillWindow()
 
 	self:CloseContent()
 
+	self.content = Window[ self.selectedData.type ].Options( self, self.selectedData )
+	self.content:SetParent( self.background2 )
+	self.content:SetSize( self.background2:GetSize() )
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -154,6 +180,7 @@ function Options.Elements.SelectionOptions:SizeChanged()
 	self.save_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.import_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 	self.reload_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
+
 	self.name_back:SetSize( name_width, Options.Defaults.window.toolbar_height)
 	self.name_textbox:SetSize( name_width, Options.Defaults.window.toolbar_height)
 
@@ -164,9 +191,12 @@ function Options.Elements.SelectionOptions:SizeChanged()
 	local background2_top    = ( 2 * Options.Defaults.window.frame ) + Options.Defaults.window.toolbar_height
 	local reset_left         = Options.Defaults.window.frame
 	local save_left          = reset_left + Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
-	local import_left        = save_left + Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
-	local reload_left        = import_left + Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
-	local name_left          = reload_left + Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
+
+	local name_left          = save_left + Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
+
+	local reload_left        = frame_width - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height
+	local import_left        = reload_left - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height
+	
 
 	-- set position
 	self.background1:SetPosition( background1_pos, background1_pos )
@@ -177,6 +207,7 @@ function Options.Elements.SelectionOptions:SizeChanged()
 	self.save_back:SetPosition( save_left, Options.Defaults.window.frame )
 	self.import_back:SetPosition( import_left, Options.Defaults.window.frame )
 	self.reload_back:SetPosition( reload_left, Options.Defaults.window.frame )
+
 	self.name_back:SetPosition( name_left, Options.Defaults.window.frame)
 	
 end
@@ -216,7 +247,7 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.reset_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.reset_button:SetBackground( "Gibberish3/RESOURCES/back.tga" )
 	self.reset_button:SetPosition( -3, -3 )
-	Options.Elements.Tooltip.AddTooltip( self.reset_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.reset_button, "tooltip", "button_reset", false )
 	self.reset_button.Click = function ()
 		self:Reset()
 	end
@@ -231,7 +262,7 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.save_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.save_button:SetBackground( "Gibberish3/RESOURCES/save.tga" )
 	self.save_button:SetPosition( -3, -3 )
-	Options.Elements.Tooltip.AddTooltip( self.save_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.save_button, "tooltip", "button_save", false )
 	self.save_button.Click = function ()
 		self:Save()
 	end
@@ -246,7 +277,7 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.import_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.import_button:SetBackground( "Gibberish3/RESOURCES/import.tga" )
 	self.import_button:SetPosition( -3, -3 )
-	Options.Elements.Tooltip.AddTooltip( self.import_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.import_button, "tooltip", "button_import", false )
 	
 	-- reload button
 	self.reload_back = Turbine.UI.Control()
@@ -261,7 +292,7 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.reload_button.Click = function ()
 		Options.Reload()
 	end
-	Options.Elements.Tooltip.AddTooltip( self.reload_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.reload_button, "tooltip", "button_reload", false )
 
 	-- name
 	self.name_back = Turbine.UI.Control()

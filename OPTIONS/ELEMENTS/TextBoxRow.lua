@@ -14,9 +14,6 @@ function Options.Elements.TextBoxRow:Constructor( back_color, label_control, lab
     self.label_control = label_control
     self.label_description = label_description
 
-    self:SetHeight( height )
-    self:SetBackColor( back_color )
-
 	self.label = Turbine.UI.Label()
 	self.label:SetParent( self )
 	self.label:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
@@ -34,6 +31,9 @@ function Options.Elements.TextBoxRow:Constructor( back_color, label_control, lab
 	self.textbox:SetForeColor( Options.Defaults.window.textcolor )
 	self.textbox:SetSelectable( true )
     self.textbox:SetFont( Options.Defaults.window.font )
+
+    self:SetHeight( height )
+    self:SetBackColor( back_color )
 
     self:LanguageChanged()
 

@@ -120,7 +120,7 @@ function TextElement:UpdateContent( startTime, duration, icon, text, entity, key
     self.endTime = startTime + duration
 
     -- reset icon
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
         self.iconControl:SetStretchMode( 1 )

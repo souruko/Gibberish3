@@ -9,5 +9,5 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.UI_ELEMENTS.WINDOWS.COUNTER_WINDOW.Element"
 import "Gibberish3.UI_ELEMENTS.WINDOWS.COUNTER_WINDOW.Defaults"
---import "Gibberish3.UI_ELEMENTS.WINDOWS.COUNTER_WINDOW.OPTIONS"
+import "Gibberish3.UI_ELEMENTS.WINDOWS.COUNTER_WINDOW.OPTIONS"
 ---------------------------------------------------------------------------------------------------

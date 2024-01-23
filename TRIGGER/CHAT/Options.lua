@@ -18,7 +18,6 @@ end
 function ChatOptions:Constructor( parent, data, parentType )
 	Turbine.UI.Control.Constructor( self )
 
-    self.parent = parent
     self.data = data
 
     local top = 0
@@ -41,34 +40,34 @@ function ChatOptions:Constructor( parent, data, parentType )
 
     -- folder
     if parentType == 0 then
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
-        self.action:AddItem( "action", "Reset", Action.Disable)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
+        self.action:AddItem( "action", Action.Reset, Action.Reset)
 
     -- window
     elseif parentType > 0 then
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
-        self.action:AddItem( "action", "Clear", Action.Clear)
-        self.action:AddItem( "action", "Reset", Action.Reset)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
+        self.action:AddItem( "action", Action.Clear, Action.Clear)
+        self.action:AddItem( "action", Action.Reset, Action.Reset)
     
     -- timer
     elseif parentType < 0 then
-        self.action:AddItem( "action", "Add", Action.Add)
+        self.action:AddItem( "action", Action.Add, Action.Add)
 
         if (parentType *(-1)) == Timer.Types.COUNTER_BAR then
-            self.action:AddItem( "action", "Subtract", Action.Subtract)
+            self.action:AddItem( "action", Action.Subtract, Action.Subtract)
         end
         
-        self.action:AddItem( "action", "Remove", Action.Remove)
-        self.action:AddItem( "action", "Enable", Action.Enable)
-        self.action:AddItem( "action", "Disable", Action.Disable)
+        self.action:AddItem( "action", Action.Remove, Action.Remove)
+        self.action:AddItem( "action", Action.Enable, Action.Enable)
+        self.action:AddItem( "action", Action.Disable, Action.Disable)
 
     end
 
     top = top + 35
-    
-    self.value = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "value", "TODO", 30 )
+
+    self.value = Options.Elements.NumberBoxRow( Options.Defaults.window.backcolor1, "options", "value", "TODO", 30 )
     if (parentType *(-1)) == Timer.Types.COUNTER_BAR then
         self.value:SetParent( self )
         self.value:SetTop( top )
@@ -82,10 +81,10 @@ function ChatOptions:Constructor( parent, data, parentType )
 
     self.source:AddItem( "source", "Any", Source.Any)
 
-    for name, value in pairs(Turbine.ChatType) do
+    for name, value in pairs(ChatChannel) do
         self.source:AddItem( "source", name, value)
     end
-
+    self.source:Sort()
     top = top + 35
 
     self.listOfTargets = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "listOfTargets", "TODO", 50 )
@@ -131,7 +130,7 @@ function ChatOptions:Save()
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
     self.data.source        = self.source:GetSelectedValue()
-    self.data.listOfTargets = self.listOfTargets:GetText(  )
+    -- self.data.listOfTargets = self.listOfTargets:GetText(  )
 
 end
 ---------------------------------------------------------------------------------------------------

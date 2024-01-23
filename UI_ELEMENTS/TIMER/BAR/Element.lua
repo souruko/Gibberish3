@@ -150,7 +150,7 @@ function BarElement:UpdateContent( startTime, duration, icon, text, entity, key,
     self.entityControl:SetEntity( entity )
 
     -- reset icon
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
         self.iconControl:SetStretchMode( 1 )
@@ -465,7 +465,7 @@ function BarElement:Resize()
     local iconSize, width, height, maxHeight, maxWidth, selfWidth, selfHeight, labelWidth, labelHeight, barBackLeft, labelBackLeft, barBackTop, labelBackTop
 
     -- set iconsize depeding if icon is shown
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         iconSize = self.parent.data.height
     

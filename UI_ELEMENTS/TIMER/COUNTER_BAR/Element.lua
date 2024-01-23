@@ -152,7 +152,7 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
     self.entityControl:SetEntity( entity )
 
     -- reset icon
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
         self.iconControl:SetStretchMode( 1 )
@@ -467,7 +467,7 @@ function CounterBarElement:Resize()
     local iconSize, width, height, maxHeight, maxWidth, selfWidth, selfHeight, labelWidth, labelHeight, barBackLeft, labelBackLeft, barBackTop, labelBackTop
 
     -- set iconsize depeding if icon is shown
-    if self.parent.data.showIcon == true then
+    if self.data.showIcon == true then
 
         iconSize = self.parent.data.height
     

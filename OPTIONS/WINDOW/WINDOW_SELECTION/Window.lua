@@ -226,10 +226,13 @@ function Options.Elements.WindowSelection:NewWindowPressed( type )
 
 	local name = UTILS.GetText( "selection", "new_window" ) .. tostring( Data.window.lastID )
     local index =  Window.New( name, type )
+	Windows.EnabledChanged( index )
+
 	self:CreateWindowElements()
 	self:AsignFolder()
 	self:FillContent()
 	self:FixElementHeight()
+	
 	Options.SelectionChanged( index )
 
 end
@@ -393,7 +396,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 
     for key, value in pairs(Window.Types) do
 
-		local item = Options.Elements.Row( "type", key, function ()
+		local item = Options.Elements.Row( "windowType", value, function ()
 			self:NewWindowPressed( value )
 		end,
 		Options.Defaults.rc_menu.item_height)
@@ -414,7 +417,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 		local left, top = self.file_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
 		self.file_menu:Show( left, top )
 	end
-	Options.Elements.Tooltip.AddTooltip( self.file_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.file_button, "tooltip", "button_new_window", false )
 
 	-- new folder button
 	self.dir_back = Turbine.UI.Control()
@@ -429,7 +432,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.dir_button.MouseClick = function ()
 		self:NewFolderPressed()
 	end
-	Options.Elements.Tooltip.AddTooltip( self.dir_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.dir_button, "tooltip", "button_new_folder", false )
 
 	-- filter
 	self.filter_back = Turbine.UI.Control()
@@ -480,6 +483,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 		self.filterText = ""
 		self.filter_clear:SetVisible(false)
 		self:FilterFocusChanged( false )
+		self:FillContent()
 	end
 
 	-- collaps
@@ -495,7 +499,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.collaps_button.MouseClick = function ()
 		self:CollapsButtonPressed()
 	end
-	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "collaps", false )
+	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "button_collaps", false )
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -27,8 +27,11 @@ function Options.Elements.DropDownRow:Constructor( back_color, label_control, la
 
     self.drop_down = Options.Elements.Dropdown( 150 )
 	-- self.drop_down:SetParent( self.background2 )
-	self.drop_down:SetPosition( 173, Options.Defaults.window.g_content_top + 5 )
+	self.drop_down:SetPosition( 145, Options.Defaults.window.spacing )
     self.drop_down:SetParent( self )
+    self.drop_down.SelectionChanged = function ( sender, index, value )
+        self.SelectionChanged( sender, index, value )
+    end
 
     self:LanguageChanged()
 
@@ -71,7 +74,32 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.DropDownRow:ClearItems()
+    self.drop_down:ClearItems()
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.DropDownRow.SelectionChanged( semder, index, value )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.DropDownRow:Close()
     self.drop_down:Close()
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.DropDownRow:Sort()
+
+    self.drop_down:Sort(function (a, b)
+        if a.value < b.value then
+            return true
+        end
+        return false
+    end)
+
 end
 ---------------------------------------------------------------------------------------------------

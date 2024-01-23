@@ -29,6 +29,13 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
 
         end
 
+        for folderIndex, folderData in ipairs(Data.folder) do
+
+            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
+
+        end
+
     end
 
     -- remove 
@@ -62,6 +69,40 @@ Trigger[ Trigger.Types.EffectSelf ].CheckAllActivEffects = function ()
 
             Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData )
             Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, LocalPlayer, windowIndex, windowData )
+
+        end
+
+        for folderIndex, folderData in ipairs(Data.folder) do
+
+            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- check folder
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectSelf ].CheckFolder = function(effect, folderIndex, folderData)
+
+    -- only check for enabled windows
+    if folderData.enabled == false then
+        return
+    end
+
+    -- check window triggers
+    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectSelf ]) do
+        
+        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData)
+
+        if posAdjustment ~= nil then
+            -- fix posAdjustment
+            posAdjustment = posAdjustment - 1
+            Windows.FolderAction( folderIndex, folderData, triggerData )
 
         end
 

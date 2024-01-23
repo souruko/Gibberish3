@@ -9,52 +9,61 @@
 ---------------------------------------------------------------------------------------------------
 -- create new data struct (only relevant when no savefile is found)
 ---------------------------------------------------------------------------------------------------
-function Data.New()
+function DataFunction.New()
+
+    local data = {}
 
     -- list of window data
-    Data.window                      = {}
-    Data.window.lastID               = 0
+    data.window                      = {}
+    data.window.lastID               = 0
 
     -- list of folder data
-    Data.folder                     = {}
-    Data.folder.lastID              = 0
+    data.folder                     = {}
+    data.folder.lastID              = 0
 
-    Data.lastSortIndex              = 0
+    data.lastSortIndex              = 0
 
-    Data.selectedIndex              = 0
-    Data.selectedTimerIndex         = 0
-    Data.selectedTriggerIndex       = 0
+    data.selectedIndex              = 0
+    data.selectedTimerIndex         = 0
+    -- timer trigger
+    data.selectedTriggerIndex       = 0
+    data.selectedTriggerType       = 0
+    -- window/folder trigger
+    data.selectedTriggerIndex2      = 0
+    data.selectedTriggerType2        = 0
 
     -- 
-    Data.moveMode                   = false
-    Data.showTooltips               = true
-    Data.autoReload                 = true
+    data.moveMode                   = false
+    data.showTooltips               = true
+    data.autoReload                 = true
 
-    Data.trackGroupEffects          = true
-    Data.trackTargetEffects         = false
+    data.trackGroupEffects          = true
+    data.trackTargetEffects         = false
 
     -- list of options data
-    Data.options                    = {}
+    data.options                    = {}
 
-    Data.options.language           = Language.Local
+    data.options.language           = Language.Local
 
     -- options shortcut savedata
-    Data.options.shortcut           = {}
-    Data.options.shortcut.left      = 0.2
-    Data.options.shortcut.top       = 0.2
+    data.options.shortcut           = {}
+    data.options.shortcut.left      = 0.2
+    data.options.shortcut.top       = 0.2
 
     -- options window savedata
-    Data.options.window             = {}
-    Data.options.window.left      = 0.2
-    Data.options.window.top       = 0.2
-    Data.options.window.width     = Options.Defaults.window.min_width
-    Data.options.window.height    = Options.Defaults.window.min_height
+    data.options.window             = {}
+    data.options.window.left      = 0.2
+    data.options.window.top       = 0.2
+    data.options.window.width     = Options.Defaults.window.min_width
+    data.options.window.height    = Options.Defaults.window.min_height
     
-    Data.options.window.open        = false
-    Data.options.window.tab1        = 1
-    Data.options.window.tab2        = 1
-    Data.options.window.left        = 0
-    Data.options.window.top         = 0
+    data.options.window.open        = false
+    data.options.window.tab1        = 1
+    data.options.window.tab2        = 1
+    data.options.window.left        = 0
+    data.options.window.top         = 0
+
+    return data
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -62,7 +71,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- return next sort index
 ---------------------------------------------------------------------------------------------------
-function Data.GetNextSortIndex()
+function DataFunction.GetNextSortIndex()
 
     Data.lastSortIndex = Data.lastSortIndex + 1
     return Data.lastSortIndex
@@ -73,7 +82,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- get next folder id
 ---------------------------------------------------------------------------------------------------
-function Data.GetNextFolderID()
+function DataFunction.GetNextSortIndex()
 
     Data.folder.lastID = Data.folder.lastID + 1
 
@@ -85,7 +94,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- get next window id
 ---------------------------------------------------------------------------------------------------
-function Data.GetNextWindowID()
+function DataFunction.GetNextWindowID()
 
     Data.window.lastID = Data.window.lastID + 1
     return Data.window.lastID

@@ -9,5 +9,5 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.UI_ELEMENTS.WINDOWS.TIMER_WINDOW.Element"
 import "Gibberish3.UI_ELEMENTS.WINDOWS.TIMER_WINDOW.Defaults"
---import "Gibberish3.UI_ELEMENTS.WINDOWS.TIMER_WINDOW.OPTIONS"
+import "Gibberish3.UI_ELEMENTS.WINDOWS.TIMER_WINDOW.OPTIONS"
 ---------------------------------------------------------------------------------------------------

@@ -9,5 +9,5 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.Element"
 import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.Defaults"
---import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.OPTIONS"
+import "Gibberish3.UI_ELEMENTS.TIMER.COUNTER_BAR.OPTIONS"
 ---------------------------------------------------------------------------------------------------

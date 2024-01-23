@@ -116,6 +116,27 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- 
+---------------------------------------------------------------------------------------------------
+function Windows.FolderAction( folderIndex, folderData, triggerData )
+
+    for index, windowData in ipairs(Data.window) do
+
+        -- if window is enabled and element exists
+        if windowData.enabled == true and
+           Windows[ index ] ~= nil  and
+           windowData.folder == folderIndex then
+
+            Windows.WindowAction( index, windowData, triggerData )
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- Data changed
 ---------------------------------------------------------------------------------------------------
 function Windows.DataChanged( windowIndex )
