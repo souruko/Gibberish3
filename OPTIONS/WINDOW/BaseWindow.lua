@@ -26,6 +26,18 @@ function Options.Window.Constructor:Constructor()
     self:LanguageChanged()
     self:SelectionChanged()
 
+    if Data.options.window.width < Options.Defaults.window.min_width then
+        Data.options.window.width = Options.Defaults.window.min_width
+    end
+
+    if Data.options.window.height < Options.Defaults.window.min_height then
+        Data.options.window.height = Options.Defaults.window.min_height
+    end
+
+    if Data.options.window.width > Options.Defaults.window.max_width then
+        Data.options.window.width = Options.Defaults.window.max_width
+    end
+
     -- base window
     self:SetText( "Gibberish" )
     self:SetPosition( UTILS.ScreenRatioToPixel( Data.options.window.left, Data.options.window.top ) )
@@ -139,6 +151,10 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:PositionChanged()
+
+    local left, top = UTILS.PixelToScreenRatio( self:GetPosition() )
+    Data.options.window.left = left
+    Data.options.window.top  = top
 
     self.general_options:PositionChanged()
 

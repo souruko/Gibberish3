@@ -36,11 +36,14 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.Tooltip:Show( left, top, text_control, text_description )
 
+
     -- get localization
     local text = UTILS.GetText( text_control, text_description )
+
     self.text:SetText( text )
     -- calculate height from text length
     local height = ( math.floor( string.len( text ) / 35 ) + 2 ) * 14
+
     -- calculate child size
     local child_width  = Options.Defaults.tooltip.width - ( 2 * Options.Defaults.tooltip.frame )
     local child_height = height - ( 2 * Options.Defaults.tooltip.frame )

@@ -40,8 +40,8 @@ Options.Defaults.move.headercolor    = Turbine.UI.Color( 0.3, 0.3, 0.3 )
 
 -- optiosn window
 Options.Defaults.window              = {}
-Options.Defaults.window.min_width    = 1300
-Options.Defaults.window.max_width    = 1300
+Options.Defaults.window.min_width    = 1304
+Options.Defaults.window.max_width    = 1304
 Options.Defaults.window.min_height   = 700
 Options.Defaults.window.ws_width     = 250
 Options.Defaults.window.c_width      = 200
@@ -59,7 +59,7 @@ Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
 Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.toolbar_height = 25
 Options.Defaults.window.tab_height   = 25
-Options.Defaults.window.tab_width    = 131
+Options.Defaults.window.tab_width    = 132
 Options.Defaults.window.tab_c_left   = 5
 Options.Defaults.window.tab_c_top    = 20
 Options.Defaults.window.textdark     =  Turbine.UI.Color( 0.6, 0.6, 0.6 )

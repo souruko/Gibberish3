@@ -20,7 +20,7 @@ function OptionsWindow:Constructor( parent, data )
     -- self.background1:SetHeight( self.height + 2*Options.Defaults.window.spacing )
     -- self.background1:SetBackColor( Options.Defaults.window.basecolor )
 
-    self.tabwindow = Options.Elements.TabWindow( 131 )
+    self.tabwindow = Options.Elements.TabWindow( 130 )
     self.tabwindow:SetParent( self )
     self.tabwindow:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
 

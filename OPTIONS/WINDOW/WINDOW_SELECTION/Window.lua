@@ -519,14 +519,23 @@ end
 function Options.Elements.WindowSelection:DraggingEnd( fromData )
 
 	local left, top = self.listbox:GetMousePosition()
+
 	local toItem = self.listbox:GetItemAt(left, top)
 
+	-- mouse is over child
 	if toItem ~= nil and fromData ~= toItem.data then
 
 		toItem:DraggingEnd( fromData )
 		self:AsignFolder()
 		self:FillContent()
 
+	-- remove item from all folders
+	elseif left >= 0 and left <= self.listbox:GetWidth()
+		and top >= 0 and top <= self.listbox:GetHeight() then
+
+			fromData.folder = nil
+			self:AsignFolder()
+			self:FillContent()
 	end
 
 end

@@ -23,7 +23,7 @@ function CombatOptions:Constructor( parent, data, parentType )
 
     local top = 0
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "TODO", 50 )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "TODO", 50, true )
     self.description:SetParent( self )
     self.description:SetTop( top )
     

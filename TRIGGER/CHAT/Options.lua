@@ -22,13 +22,13 @@ function ChatOptions:Constructor( parent, data, parentType )
 
     local top = 0
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "TODO", 50 )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "TODO", 50, true )
     self.description:SetParent( self )
     self.description:SetTop( top )
     
     top = top + 55
 
-    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "TODO", 50 )
+    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "TODO", 50, true )
     self.token:SetParent( self )
     self.token:SetTop( top )
 
@@ -87,7 +87,7 @@ function ChatOptions:Constructor( parent, data, parentType )
     self.source:Sort()
     top = top + 35
 
-    self.listOfTargets = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "listOfTargets", "TODO", 50 )
+    self.listOfTargets = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "listOfTargets", "TODO", 50, true )
     self.listOfTargets:SetParent( self )
     self.listOfTargets:SetTop( top )
 

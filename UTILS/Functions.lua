@@ -93,7 +93,97 @@ end
 -- get localized text
 function GetText( control, description )
 
-    return  L[ Data.options.language ][ control ][ description ]
+    local text 
 
+    if control == nil or description == nil or Data.options.language == nil then
+        text = ""
+    else
+        text = L[ Data.options.language ][ control ][ description ]
+
+        if text == nil then
+            text = ""
+        end
+    end
+
+    return  text
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- 
+function TextToColor( text )
+
+    text = string.gsub(text, " ", "")
+
+    local list = Split(text, ",")
+
+    if #list ~= 3 then
+        return Turbine.UI.Color.Black
+
+    end
+
+    local r = tonumber( list[1] )
+    local g = tonumber( list[2] )
+    local b = tonumber( list[3] )
+
+    -- fix values
+    if r > 255 then
+        r = 255
+    end
+
+    if r < 0 then
+        r = 0
+    end
+    
+    if g > 255 then
+        g = 255
+    end
+  
+    if g < 0 then
+        g = 0
+    end
+
+    if b > 255 then
+        b = 255
+    end
+  
+    if b < 0 then
+        b = 0
+    end
+
+    local color = {}
+    color.R = r / 255
+    color.G = b / 255
+    color.B = b / 255
+
+    return color
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- 
+function ColorToText( color )
+
+    local r, g, b
+
+    r = tostring( math.floor( 255 * color.R ) )
+    g = tostring( math.floor( 255 * color.G ) )
+    b = tostring( math.floor( 255 * color.B ) )
+
+    return r .. ", " .. g .. ", " .. b
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- split a string s at delimiter
+function Split(s, delimiter)
+    local result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
 end
 ---------------------------------------------------------------------------------------------------

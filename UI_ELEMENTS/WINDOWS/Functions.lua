@@ -145,8 +145,11 @@ function Windows.DataChanged( windowIndex )
         return
     end
 
-    if Data.window[ windowIndex ].enabled == true then
+    if Data.window[ windowIndex ].enabled == true and
+        Windows[ windowIndex ] ~= nil then
+        
         Windows[ windowIndex ]:DataChanged()
+        
     end
 
 end
@@ -171,6 +174,10 @@ end
 function Windows.EnabledChanged( windowIndex )
 
     local windowData = Data.window[ windowIndex ]
+
+    if windowData == nil then
+        return
+    end
 
     if windowData.enabled == true then
     

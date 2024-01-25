@@ -111,7 +111,7 @@ end
 function Options.MoveChanged( value )
 
     -- do nothing if move didnt change
-    if value == Data.moveMode or value == nil then
+    if value == nil then
         return
     end
 

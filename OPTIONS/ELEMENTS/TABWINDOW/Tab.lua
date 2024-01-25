@@ -18,9 +18,14 @@ function Tab:Constructor( index, name_control, name_description, parent, width )
     self.name_control = name_control
     self.name_description = name_description
 
+	self.background1 = Turbine.UI.Control()
+	self.background1:SetParent( self )
+	self.background1:SetBackColor( Options.Defaults.window.backcolor1 )
+    self.background1:SetPosition( Options.Defaults.window.frame, Options.Defaults.window.frame )
+    self.background1:SetMouseVisible( false )
 
     self.label = Turbine.UI.Label()
-    self.label:SetParent( self )
+    self.label:SetParent( self.background1 )
     self.label:SetHeight( Options.Defaults.window.tab_height )
 	self.label:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleCenter )
 	self.label:SetFont( Options.Defaults.window.w_font )
@@ -39,19 +44,20 @@ function Tab:Constructor( index, name_control, name_description, parent, width )
     self.MouseEnter = function ()
 
         if self.selected == false then
-            self:SetBackColor( Options.Defaults.window.w_window_hover )
+            self.background1:SetBackColor( Options.Defaults.window.w_window_hover )
         end
         
     end
     self.MouseLeave = function ()
         
         if self.selected == false then
-            self:SetBackColor( nil )
+            self.background1:SetBackColor( nil )
         end
         
     end
 
     self:SetSize( width, Options.Defaults.window.tab_height )
+    self.background1:SetSize( width - (2*Options.Defaults.window.frame), Options.Defaults.window.tab_height - Options.Defaults.window.frame )
 
     self:LanguageChanged()
 
@@ -81,11 +87,17 @@ function Tab:Select( index )
 
     if self.index == index then
         self.selected = true
-        self:SetBackColor( Options.Defaults.window.backcolor1 )
+        self:SetBackColor( Options.Defaults.window.framecolor )
+        self.background1:SetBackColor( Options.Defaults.window.backcolor1 )
+        self:SetHeight( Options.Defaults.window.tab_height + Options.Defaults.window.frame )
+        self.background1:SetHeight( Options.Defaults.window.tab_height )
 
     else
         self.selected = false
         self:SetBackColor( nil )
+        self.background1:SetBackColor( nil )
+        self:SetHeight( Options.Defaults.window.tab_height )
+        self.background1:SetHeight( Options.Defaults.window.tab_height - Options.Defaults.window.frame )
 
     end
 

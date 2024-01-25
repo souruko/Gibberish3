@@ -24,7 +24,7 @@ function AnimationOptions:Constructor( data )
     
     top = top + 30
     
-    self.thresholdValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "thresholdValue", "TODO", 30 )
+    self.thresholdValue = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "thresholdValue", "TODO", 30 )
     self.thresholdValue:SetParent( self )
     self.thresholdValue:SetPosition( left, top )
     
@@ -45,7 +45,7 @@ function AnimationOptions:Constructor( data )
 
     top = top + 30
 
-    self.animationSpeed = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "animationSpeed", "TODO", 30 )
+    self.animationSpeed = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "animationSpeed", "TODO", 30 )
     self.animationSpeed:SetParent( self )
     self.animationSpeed:SetPosition( left, top )
     

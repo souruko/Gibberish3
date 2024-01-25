@@ -60,8 +60,6 @@ function DataFunction.New()
     data.options.window.open        = false
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
-    data.options.window.left        = 0
-    data.options.window.top         = 0
 
     return data
 

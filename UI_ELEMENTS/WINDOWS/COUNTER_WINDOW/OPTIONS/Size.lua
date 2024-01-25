@@ -19,28 +19,28 @@ function SizeOptions:Constructor( data )
     local top = Options.Defaults.window.tab_c_top
 
     -- width
-    self.width = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "width", "TODO", 30 )
+    self.width = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "width", "TODO", 30 )
     self.width:SetParent( self )
     self.width:SetPosition( left, top )
     
     top = top + 30
 
     -- height
-    self.height = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "height", "TODO", 30 )
+    self.height = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "height", "TODO", 30 )
     self.height:SetParent( self )
     self.height:SetPosition( left, top )
     
     top = top + 35
 
     -- frame
-    self.frame = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "frame", "TODO", 30 )
+    self.frame = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "frame", "TODO", 30 )
     self.frame:SetParent( self )
     self.frame:SetPosition( left, top )
     
     top = top + 30
 
     -- spacing
-    self.spacing = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "spacing", "TODO", 30 )
+    self.spacing = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "spacing", "TODO", 30 )
     self.spacing:SetParent( self )
     self.spacing:SetPosition( left, top )
     

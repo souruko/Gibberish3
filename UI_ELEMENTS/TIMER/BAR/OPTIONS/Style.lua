@@ -21,7 +21,7 @@ function StyleOptions:Constructor( data )
     self.icon = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "icon", "TODO", 30 )
     self.icon:SetParent( self )
     self.icon:SetPosition( left, top )
-    
+
     top = top + 35
 
     self.showIcon = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showIcon", "TODO", 30 )
@@ -39,7 +39,7 @@ function StyleOptions:Constructor( data )
 
     top = top + 35
 
-    self.textValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "textValue", "TODO", 30 )
+    self.textValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "textValue", "TODO", 30, false )
     self.textValue:SetParent( self )
     self.textValue:SetPosition( left, top )
     

@@ -34,10 +34,21 @@ function Options.Elements.SelectionOptions:Save()
 		return
 	end
 
-	self.selectedData.name = self.name_textbox:GetText()
+	local name = self.name_textbox:GetText()
+
+	if name ~= self.selectedData.name then
+		self.selectedData.name = name
+
+	end
+
 	self.content:Save()
 	Options.SaveData()
-	Windows.EnabledChanged( Data.selectedIndex )
+
+	Options.DataChanged( Data.selectedIndex )
+
+	if Data.selectedIndex > 0 then
+		Windows.EnabledChanged( Data.selectedIndex )
+	end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -305,6 +316,7 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.name_textbox:SetFont( Options.Defaults.window.w_font )
     self.name_textbox:SetForeColor( Options.Defaults.window.textcolor )
     self.name_textbox:SetSelectable( true )
+    self.name_textbox:SetMultiline( false )
 	self.name_textbox:SetLeft( 5 )
 	
 end

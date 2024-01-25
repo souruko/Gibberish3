@@ -32,7 +32,7 @@ function Options.Elements.NumberBoxRow:Constructor( back_color, label_control, l
 	self.textbox:SetForeColor( Options.Defaults.window.textcolor )
 	self.textbox:SetSelectable( true )
     self.textbox:SetFont( Options.Defaults.window.font )
-
+    self.textbox:SetMultiline(false)
     self:SetHeight( height )
     self:SetBackColor( back_color )
     

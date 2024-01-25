@@ -14,8 +14,9 @@ function OptionsWindow:Constructor( parent, data )
     self.parent = parent
     self.data   = data
 
-    self.tabwindow = Options.Elements.TabWindow( 140 )
+    self.tabwindow = Options.Elements.TabWindow( 137 )
     self.tabwindow:SetParent( self )
+    self.tabwindow:SetLeft( 3 )
     -- self.tabwindow:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
 
     self.tab_general = GeneralOptions( self.data )
@@ -54,7 +55,7 @@ function OptionsWindow:SizeChanged()
     local width, height = self:GetSize()
 
     -- self.tabwindow:SetSize( width - 2*Options.Defaults.window.spacing, height - 2*Options.Defaults.window.spacing )
-    self.tabwindow:SetSize( width, height )
+    self.tabwindow:SetSize( width - 3, height )
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -1,21 +1,31 @@
 
--- must
-[01/21 02:43:46 AM] ...Online\Plugins\Gibberish3\TRIGGER\CHAT\Functions.lua:79: bad argument #1 to 'ipairs' (table expected, got nil) !!!after timer copy!!!
-button tooltips
-
--- soon
-esc und co (tasten belegung)
-dropdown focus lost issues
-dropdown scrollbar
-add frame to tabwindow
-sort triggers
-color page ...
-input check
 
 
 
--- big picture
-save chat timer
+
+
+
+
+
+
+
+
+
+-- important
 collection
+
+-- next
+esc und co (tasten belegung)
+dropdown scrollbar
+opacity slider
+input check
+sort triggers
+window selection > draggin on the background should sort the item to the bottom
+
+-- some time
+save chat timer
 import
 save feedback
+
+
+

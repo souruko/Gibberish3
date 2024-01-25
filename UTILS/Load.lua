@@ -120,7 +120,7 @@ function Options.StartUp()
     end
 
     if Data.moveMode == true then
-        Options.MoveWindow()
+        Options.MoveChanged( Data.moveMode )
         
     end
 

@@ -18,7 +18,7 @@ function GeneralOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50 )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50, true )
     self.description:SetParent( self )
     self.description:SetPosition( left, top )
     

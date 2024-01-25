@@ -18,7 +18,7 @@ function GeneralOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50 )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50, true )
     self.description:SetParent( self )
     self.description:SetPosition( left, top )
     
@@ -57,7 +57,7 @@ function GeneralOptions:Constructor( data )
     
     top = top + 35
 
-    self.timerValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "timerValue", "TODO", 30 )
+    self.timerValue = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "timerValue", "TODO", 30 )
     self.timerValue:SetParent( self )
     self.timerValue:SetPosition( left, top )
     

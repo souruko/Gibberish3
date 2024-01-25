@@ -256,19 +256,19 @@ function BarElement:UpdateBar( timeLeft )
 
     -- update bar size depending on direction and orientation
     -- descending horizontal
-    if self.parent.data.direction == Direction.Descending and
+    if self.data.direction == Direction.Descending and
     self.parent.data.orientation == Orientation.Vertical then
 
         self.bar:SetWidth( timeLeft / self.duration * self.barWidth )
 
     -- descending vertical
-    elseif self.parent.data.direction == Direction.Descending and
+    elseif self.data.direction == Direction.Descending and
     self.parent.data.orientation == Orientation.Horizontal then
 
         self.bar:SetHeight( timeLeft / self.duration * self.barWidth )
 
     -- ascending horizontal
-    elseif self.parent.data.direction == Direction.Ascending and
+    elseif self.data.direction == Direction.Ascending and
     self.parent.data.orientation == Orientation.Vertical then
 
         local timePast = self.duration - timeLeft
@@ -291,7 +291,7 @@ end
 function BarElement:UpdateTime( timeLeft )
 
     -- update time depending on the direction
-    if self.parent.data.direction == Direction.Ascending then
+    if self.data.direction == Direction.Ascending then
 
         local timePast = self.duration - timeLeft
         self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )

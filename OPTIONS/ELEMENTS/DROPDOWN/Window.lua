@@ -74,9 +74,9 @@ function Options.Elements.Dropdown:Constructor( width )
             
         else
 
+            self:Show( true )
             self.drop_down:Activate()
             self.drop_down:Focus()
-            self:Show( true )
 
         end
 
@@ -90,7 +90,7 @@ function Options.Elements.Dropdown:Constructor( width )
         self.background:SetBackColor( Options.Defaults.dropdown.back_color )
     end
     -- hide on focus lost
-    self.FocusLost = function ()
+    self.drop_down.FocusLost = function ()
         self:Show( false )
     end
     

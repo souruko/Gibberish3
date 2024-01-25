@@ -261,7 +261,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:UpdateCircel( timeLeft )
 
-    if self.parent.data.direction == Direction.Ascending then
+    if self.data.direction == Direction.Ascending then
 
         local circelID = 100 - ( math.floor( timeLeft / self.duration * 100 ) )
         self.circel:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ circelID ] )
@@ -284,7 +284,7 @@ end
 function CircelElement:UpdateTime( timeLeft )
 
     -- update time depending on the direction
-    if self.parent.data.direction == Direction.Ascending then
+    if self.data.direction == Direction.Ascending then
 
         local timePast = self.duration - timeLeft
         self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )

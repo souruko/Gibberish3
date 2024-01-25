@@ -6,9 +6,9 @@
 
 
 
-Options.Elements.TextBoxRow = class(Turbine.UI.Control)
+Options.Elements.ColorBoxRow = class(Turbine.UI.Control)
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TextBoxRow:Constructor( back_color, label_control, label_description, tooltip_description, height, allow_multiline )
+function Options.Elements.ColorBoxRow:Constructor( back_color, label_control, label_description, tooltip_description, height, allow_multiline )
 	Turbine.UI.Control.Constructor( self )
 
     self.label_control = label_control
@@ -42,7 +42,7 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TextBoxRow:LanguageChanged()
+function Options.Elements.ColorBoxRow:LanguageChanged()
 
     self.label:SetText( UTILS.GetText( self.label_control, self.label_description ) )
 
@@ -50,7 +50,7 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TextBoxRow:SizeChanged()
+function Options.Elements.ColorBoxRow:SizeChanged()
 
     local width, height = self:GetSize()
 
@@ -60,13 +60,13 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TextBoxRow:SetText( value )
-    self.textbox:SetText( value )
+function Options.Elements.ColorBoxRow:SetText( value )
+    self.textbox:SetText( UTILS.ColorToText( value ) )
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.TextBoxRow:GetText()
-    return self.textbox:GetText()
+function Options.Elements.ColorBoxRow:GetText()
+    return UTILS.TextToColor( self.textbox:GetText() )
 end
 ---------------------------------------------------------------------------------------------------
