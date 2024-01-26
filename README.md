@@ -4,7 +4,10 @@
 =============================================================================================
 # CHANGELOG
 
-0.0.2
+3.0.3
+
+
+3.0.2
 counter_bar :save() wird jetzt an trigger weitergeben
 fixed timer direction used window direction value
 fixed a bug with reloading while move_windows is activ
@@ -14,5 +17,5 @@ drop_down_menu now properly hides after losing focus
 added color options
 added a frame to the tabwindows
 
-0.0.1
+3.0.1
 fixed rename folder/window

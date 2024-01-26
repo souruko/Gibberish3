@@ -12,8 +12,51 @@ function Options.Elements.CollectionWindow:Constructor()
 	Turbine.UI.Control.Constructor( self )
 
 	self:CreateBackground()
-
 	self:CreateToolbar()
+
+	self.skill_segment = SegmentItem( self.listbox:GetWidth(), "segment", "skills", self, 1 )
+	self:FillSkillSegment()
+	self.listbox:AddItem( self.skill_segment )
+
+	self.effect_segment = SegmentItem( self.listbox:GetWidth(), "segment", "effects", self, 2 )
+	self.listbox:AddItem( self.effect_segment )
+
+	self.chat_segment = SegmentItem( self.listbox:GetWidth(), "segment", "chat", self, 3 )
+	self.listbox:AddItem( self.chat_segment )
+
+	-- if Data.options.window.collection_segment == 1 then
+	-- 	self:SegmentClicked( self.skill_segment )
+
+	-- elseif Data.options.window.collection_segment == 2 then
+	-- 	self:SegmentClicked( self.effect_segment )
+		
+	-- elseif Data.options.window.collection_segment == 3 then
+	-- 	self:SegmentClicked( self.chat_segment )
+	-- end
+
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:FillSkillSegment()
+
+	local list = {}
+
+	local listOfSkills = LocalPlayer:GetTrainedSkills()
+
+    for i = 1, listOfSkills:GetCount(), 1 do
+
+		local index = #list + 1
+        local skill = listOfSkills:GetItem(i):GetSkillInfo()
+
+		list[ index ] = {}
+		list[ index ].token = skill:GetName()
+		list[ index ].icon = skill:GetIconImageID()
+
+	end
+
+	self.skill_segment:SetList( list )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -23,6 +66,22 @@ function Options.Elements.CollectionWindow:LanguageChanged()
 
 	self.chat_label:SetText( UTILS.GetText( "collection", "effects" ) )
 	self.effects_label:SetText(  UTILS.GetText( "collection", "chat" ) )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:SegmentClicked( item )
+
+	local skill_clicked  = (item == self.skill_segment)
+	local effect_clicked = (item == self.effect_segment)
+	local chat_clicked   = (item == self.chat_segment)
+
+	local height = self.listbox:GetHeight() - 2*Options.Defaults.window.segment_height
+
+	self.skill_segment:Open( skill_clicked, height )
+	self.effect_segment:Open( effect_clicked, height )
+	self.chat_segment:Open( chat_clicked, height )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -45,40 +104,40 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	local frame_width        = background1_width - ( 2 * Options.Defaults.window.spacing )
 	local frame_height       = background1_height - ( 2 * Options.Defaults.window.spacing )
 
-	local background2_width  = frame_width - ( 2 * Options.Defaults.window.frame )
-	local background2_height = frame_height - ( 5 * Options.Defaults.window.frame ) - ( 3 * Options.Defaults.window.toolbar_height )
+	local listbox_width  = frame_width - ( 2 * Options.Defaults.window.frame )
+	local listbox_height = frame_height - ( 5 * Options.Defaults.window.frame ) - ( 3 * Options.Defaults.window.toolbar_height )
 
-	local filter_width       = background2_width - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height
+	local filter_width       = listbox_width - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height
 
 	-- set size
 	self.background1:SetSize( background1_width, background1_height )
 	self.frame:SetSize( frame_width, frame_height )
-	self.background2:SetSize( background2_width, background2_height )
+	self.listbox:SetSize( listbox_width, listbox_height )
 
 	self.filter_back:SetSize( filter_width, Options.Defaults.window.toolbar_height )
     self.filter:SetSize( filter_width, Options.Defaults.window.toolbar_height )
 	self.filter_icon:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.collaps_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 
-	self.effects_back:SetSize( background2_width, Options.Defaults.window.toolbar_height )
+	self.effects_back:SetSize( listbox_width, Options.Defaults.window.toolbar_height )
 	self.effects_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.effects_label:SetHeight( Options.Defaults.window.toolbar_height )
-	self.chat_back:SetSize( background2_width, Options.Defaults.window.toolbar_height )
+	self.chat_back:SetSize( listbox_width, Options.Defaults.window.toolbar_height )
 	self.chat_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.chat_label:SetHeight( Options.Defaults.window.toolbar_height )
 
 	-- calculate position
 	local background1_pos    =  Options.Defaults.window.spacing
 	local frame_pos          =  Options.Defaults.window.spacing
-	local background2_left   = Options.Defaults.window.frame
-	local background2_top    =  2 * Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
+	local listbox_left   = Options.Defaults.window.frame
+	local listbox_top    =  2 * Options.Defaults.window.frame + Options.Defaults.window.toolbar_height
 	local filter_left        = Options.Defaults.window.frame
 	local collaps_left       = frame_width - Options.Defaults.window.toolbar_height - Options.Defaults.window.frame
 
 	-- set position
 	self.background1:SetPosition( background1_pos, background1_pos )
 	self.frame:SetPosition( frame_pos, frame_pos )
-	self.background2:SetPosition( background2_left, background2_top )
+	self.listbox:SetPosition( listbox_left, listbox_top )
 
 	self.filter_back:SetPosition( filter_left, Options.Defaults.window.frame )
 	self.filter_clear:SetPosition( filter_width - 30, -3 )
@@ -86,7 +145,11 @@ function Options.Elements.CollectionWindow:SizeChanged()
 
 	self.effects_back:SetPosition( Options.Defaults.window.frame, frame_height - 2 * ( Options.Defaults.window.frame + Options.Defaults.window.toolbar_height ) )
 	self.chat_back:SetPosition( Options.Defaults.window.frame, frame_height - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height )
-	
+
+	self.effect_segment:SetWidth( listbox_width )
+	self.chat_segment:SetWidth( listbox_width )
+	self.skill_segment:SetWidth( listbox_width )
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -117,9 +180,9 @@ function Options.Elements.CollectionWindow:CreateBackground()
 	self.frame:SetParent( self.background1 )
 	self.frame:SetBackColor( Options.Defaults.window.framecolor )
 
-	self.background2 = Turbine.UI.Control()
-	self.background2:SetParent( self.frame )
-	self.background2:SetBackColor( Options.Defaults.window.backcolor2 )
+	self.listbox = Turbine.UI.ListBox()
+	self.listbox:SetParent( self.frame )
+	self.listbox:SetBackColor( Options.Defaults.window.backcolor2 )
 
 end
 ---------------------------------------------------------------------------------------------------

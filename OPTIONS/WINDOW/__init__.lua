@@ -9,6 +9,8 @@
 Options.Window = {}
 ---------------------------------------------------------------------------------------------------
 -- partes of the options window
+import "Gibberish3.OPTIONS.WINDOW.COLLECTION_WINDOW.Item"
+import "Gibberish3.OPTIONS.WINDOW.COLLECTION_WINDOW.SegmentItem"
 import "Gibberish3.OPTIONS.WINDOW.COLLECTION_WINDOW.Window"
 
 import "Gibberish3.OPTIONS.WINDOW.GENERAL_OPTIONS.Window"

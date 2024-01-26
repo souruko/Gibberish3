@@ -243,6 +243,9 @@ L[ Language.German ].collection = {}
 L[ Language.German ].collection.effects = "Effects"
 L[ Language.German ].collection.chat = "Chat Messages"
 
+L[ Language.German ].segment = {}
+L[ Language.German ].segment.effects = "- Effects -"
+L[ Language.German ].segment.chat = "- Chat Messages -"
 --tab
 L[ Language.German ].tab = {}
 L[ Language.German ].tab.general = "General"

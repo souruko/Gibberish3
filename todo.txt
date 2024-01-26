@@ -11,7 +11,7 @@
 
 
 
--- important
+-- now
 collection
 
 -- next
@@ -21,9 +21,8 @@ opacity slider
 input check
 sort triggers
 window selection > draggin on the background should sort the item to the bottom
-
--- some time
 save chat timer
+timer_trigger selection as row_item
 import
 save feedback
 

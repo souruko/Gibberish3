@@ -14,8 +14,8 @@ function DataFunction.New()
     local data = {}
 
     -- list of window data
-    data.window                      = {}
-    data.window.lastID               = 0
+    data.window                     = {}
+    data.window.lastID              = 0
 
     -- list of folder data
     data.folder                     = {}
@@ -27,10 +27,10 @@ function DataFunction.New()
     data.selectedTimerIndex         = 0
     -- timer trigger
     data.selectedTriggerIndex       = 0
-    data.selectedTriggerType       = 0
+    data.selectedTriggerType        = 0
     -- window/folder trigger
     data.selectedTriggerIndex2      = 0
-    data.selectedTriggerType2        = 0
+    data.selectedTriggerType2       = 0
 
     -- 
     data.moveMode                   = false
@@ -60,6 +60,8 @@ function DataFunction.New()
     data.options.window.open        = false
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
+    
+    data.options.window.collection_segment = 1
 
     return data
 

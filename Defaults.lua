@@ -57,11 +57,12 @@ Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.1, 0.1, 0.1 )--Turbin
 Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
 Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
+Options.Defaults.window.segmenthover = Turbine.UI.Color( 0.15, 0.15, 0.15 )
 Options.Defaults.window.toolbar_height = 25
 Options.Defaults.window.tab_height   = 25
 Options.Defaults.window.tab_width    = 132
 Options.Defaults.window.tab_c_left   = 5
-Options.Defaults.window.tab_c_top    = 20
+Options.Defaults.window.tab_c_top    = 10
 Options.Defaults.window.textdark     =  Turbine.UI.Color( 0.6, 0.6, 0.6 )
 
 Options.Defaults.window.g_content_top  = - 2
@@ -79,6 +80,8 @@ Options.Defaults.window.w_folder_select = Turbine.UI.Color(0.25,0.25,0.45)
 Options.Defaults.window.w_folder_frame  = 1
 Options.Defaults.window.menu_width      = 140
 Options.Defaults.window.file_width      = 130
+Options.Defaults.window.segment_height  = 25
+Options.Defaults.window.segment_item_height  = 36
 
 -- rightclick menu
 Options.Defaults.rc_menu                    = {}

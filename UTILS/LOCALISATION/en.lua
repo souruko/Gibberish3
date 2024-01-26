@@ -243,6 +243,11 @@ L[ Language.English ].collection = {}
 L[ Language.English ].collection.effects = "Effects"
 L[ Language.English ].collection.chat = "Chat Messages"
 
+L[ Language.English ].segment = {}
+L[ Language.English ].segment.effects = "- Effects -"
+L[ Language.English ].segment.skills = "- Skills -"
+L[ Language.English ].segment.chat = "- Chat Messages -"
+
 --tab
 L[ Language.English ].tab = {}
 L[ Language.English ].tab.general = "General"

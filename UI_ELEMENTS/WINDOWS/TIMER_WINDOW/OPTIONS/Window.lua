@@ -76,6 +76,7 @@ function OptionsWindow:Save()
     self.tab_size:Save()
     self.tab_text:Save()
     self.tab_trigger:Save()
+    self.tab_color:Save()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -84,6 +85,12 @@ end
 function OptionsWindow:Reset()
 
     self.tab_general:Reset()
+    self.tab_timer:Reset()
+    self.tab_size:Reset()
+    self.tab_text:Reset()
+    self.tab_trigger:Reset()
+    self.tab_color:Reset()
+
 
 end
 ---------------------------------------------------------------------------------------------------
