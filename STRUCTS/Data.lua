@@ -37,9 +37,6 @@ function DataFunction.New()
     data.showTooltips               = true
     data.autoReload                 = true
 
-    data.trackGroupEffects          = true
-    data.trackTargetEffects         = false
-
     -- list of options data
     data.options                    = {}
 
@@ -52,16 +49,21 @@ function DataFunction.New()
 
     -- options window savedata
     data.options.window             = {}
-    data.options.window.left      = 0.2
-    data.options.window.top       = 0.2
-    data.options.window.width     = Options.Defaults.window.min_width
-    data.options.window.height    = Options.Defaults.window.min_height
+    data.options.window.left        = 0.2
+    data.options.window.top         = 0.2
+    data.options.window.width       = Options.Defaults.window.min_width
+    data.options.window.height      = Options.Defaults.window.min_height
     
     data.options.window.open        = false
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
     
     data.options.window.collection_segment = 1
+
+    data.persistent_collection = {}
+    data.persistent_collection.skill = {}
+    data.persistent_collection.effects = {}
+    data.persistent_collection.chat = {}
 
     return data
 

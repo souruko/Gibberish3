@@ -101,3 +101,14 @@ function OptionsWindow:TimerSelectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
+
+    menu:AddSeperator()
+
+    self.tab_style:BuildCollectionRightClickMenu( data, menu )
+    self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------

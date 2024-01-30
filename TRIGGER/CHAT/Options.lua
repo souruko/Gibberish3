@@ -151,3 +151,31 @@ function ChatOptions:Close()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ChatOptions:BuildCollectionRightClickMenu( data, menu )
+
+	local row1 =  Options.Elements.Row(
+		"collection",
+		"token",
+		function ()
+			self.token:SetText( data.token )
+		end,
+		Options.Defaults.rc_menu.item_height
+	)
+	menu:AddRow( row1 )
+
+    if data.source ~= nil then
+        local row2 =  Options.Elements.Row(
+            "collection",
+            "source",
+            function ()
+                self.source:SetSelection( data.source )
+            end,
+            Options.Defaults.rc_menu.item_height
+        )
+        menu:AddRow( row2 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------

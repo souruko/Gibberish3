@@ -20,6 +20,8 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
     function effects.EffectAdded(sender, args)
 
         local effect = effects:Get(args.Index)
+        
+        Trigger.AddToEffectCollection( effect )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do

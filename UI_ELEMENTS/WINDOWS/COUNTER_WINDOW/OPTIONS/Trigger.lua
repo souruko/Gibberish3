@@ -154,3 +154,15 @@ function TriggerOptions:CopyTrigger( triggerData )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TriggerOptions:BuildCollectionRightClickMenu( data, menu )
+
+    if self.triggerOptions == nil then
+        return
+    end
+
+    self.triggerOptions:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------

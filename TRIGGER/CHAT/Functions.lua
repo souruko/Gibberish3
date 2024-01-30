@@ -19,6 +19,7 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         end
 
+        Trigger[ Trigger.Types.Chat ].AddToCollection( args.Message, args.ChatType )
         
         -- iterate all window data
         for windowIndex, windowData in ipairs(Data.window) do
@@ -33,6 +34,40 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
         end
 
     end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add to collection
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Chat ].AddToCollection = function( message, chatType )
+
+    -- stop if not collecting
+    if Options.CollectChat == false then
+        return
+    end
+
+    -- check for duplicates
+    for index, value in ipairs(Options.Collection.Chat) do
+        if value.token == message and
+            value.source == chatType then
+
+            return
+
+        end
+    end
+
+    local index = #Options.Collection.Chat + 1
+
+    Options.Collection.Chat[ index ] = {}
+    Options.Collection.Chat[ index ].token  = message
+    Options.Collection.Chat[ index ].source = chatType
+    Options.Collection.Chat[ index ].icon = nil
+    Options.Collection.Chat[ index ].timer = nil
+    Options.Collection.Chat[ index ].persistent = false
+
+    Options.ChatCollectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

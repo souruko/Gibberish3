@@ -394,3 +394,104 @@ function Options.DataChanged( index )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Effect Collection Changed
+---------------------------------------------------------------------------------------------------
+function Options.EffectCollectionChanged()
+
+    if Data.options.window.open == true then
+        Options.Window.Object:EffectCollectionChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Chat Collection Changed
+---------------------------------------------------------------------------------------------------
+function Options.ChatCollectionChanged()
+
+    if Data.options.window.open == true then
+        Options.Window.Object:ChatCollectionChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Chat Collection Changed
+---------------------------------------------------------------------------------------------------
+function Options.KeepInCollection( data, type )
+
+    local list
+
+    if type == 1 then
+        list = Data.persistent_collection.skill
+
+    elseif type == 2 then
+        list = Data.persistent_collection.effects
+
+    elseif type == 3 then
+        list = Data.persistent_collection.chat
+
+    else
+        return
+    end
+
+    local index = #list + 1
+    list[ index ] = {}
+    list[ index ].token = data.token
+    list[ index ].source = data.source
+    list[ index ].icon = data.icon
+    list[ index ].timer = data.timer
+    list[ index ].persistent = true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Chat Collection Changed
+---------------------------------------------------------------------------------------------------
+function Options.CheckForIndexInCollection( data, type )
+
+    local list
+
+    if type == 1 then
+        list = Data.persistent_collection.skill
+
+    elseif type == 2 then
+        list = Data.persistent_collection.effects
+
+    elseif type == 3 then
+        list = Data.persistent_collection.chat
+
+    else
+        return
+    end
+
+    for index, item in ipairs(list) do
+        if item.token == data.token then
+            return  index , list
+        end
+    end
+
+    return nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Chat Collection Changed
+---------------------------------------------------------------------------------------------------
+function Options.RemoveFromCollection( index, list )
+
+    local loopEnd = #list -1
+    for i = index, loopEnd do
+        list[i] = list[i+1]
+    end
+
+    list[#list] = nil
+
+end
+---------------------------------------------------------------------------------------------------

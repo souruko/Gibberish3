@@ -36,6 +36,8 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
 
                         local effect = effects:Get(args.Index)
 
+                        Trigger.AddToEffectCollection( effect )
+
                         -- all groups
                         for windowIndex, windowData in ipairs(Data.window) do
                             Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, player, windowIndex, windowData )

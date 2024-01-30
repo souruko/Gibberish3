@@ -37,6 +37,18 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.FolderOptions:BuildCollectionRightClickMenu( data, menu )
+
+    if self.triggerOptions == nil then
+        return
+    end
+
+    self.triggerOptions:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.FolderOptions:TriggerClicked( index , type )
 
     Options.Trigger2SelectionChanged( index, type )

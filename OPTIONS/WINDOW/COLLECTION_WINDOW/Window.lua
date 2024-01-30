@@ -19,22 +19,42 @@ function Options.Elements.CollectionWindow:Constructor()
 	self.listbox:AddItem( self.skill_segment )
 
 	self.effect_segment = SegmentItem( self.listbox:GetWidth(), "segment", "effects", self, 2 )
+	self:FillEffectSegment()
 	self.listbox:AddItem( self.effect_segment )
 
 	self.chat_segment = SegmentItem( self.listbox:GetWidth(), "segment", "chat", self, 3 )
+	self:FillChatSegment()
 	self.listbox:AddItem( self.chat_segment )
 
-	-- if Data.options.window.collection_segment == 1 then
-	-- 	self:SegmentClicked( self.skill_segment )
+	if Data.options.window.collection_segment == 1 then
+		self:SegmentClicked( self.skill_segment )
 
-	-- elseif Data.options.window.collection_segment == 2 then
-	-- 	self:SegmentClicked( self.effect_segment )
+	elseif Data.options.window.collection_segment == 2 then
+		self:SegmentClicked( self.effect_segment )
 		
-	-- elseif Data.options.window.collection_segment == 3 then
-	-- 	self:SegmentClicked( self.chat_segment )
-	-- end
+	elseif Data.options.window.collection_segment == 3 then
+		self:SegmentClicked( self.chat_segment )
+	end
 
 
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:CollectionItemClicked( data )
+	self:GetParent():CollectionItemClicked( data )
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:FillChatSegment()
+	self.chat_segment:SetList( Options.Collection.Chat )
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:FillEffectSegment()
+	self.effect_segment:SetList( Options.Collection.Effects )
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -43,17 +63,29 @@ function Options.Elements.CollectionWindow:FillSkillSegment()
 
 	local list = {}
 
+	for i, value in ipairs(Data.persistent_collection.skill) do
+		local index = #list + 1
+		list[ index ] = value
+	end
+
 	local listOfSkills = LocalPlayer:GetTrainedSkills()
 
     for i = 1, listOfSkills:GetCount(), 1 do
 
 		local index = #list + 1
-        local skill = listOfSkills:GetItem(i):GetSkillInfo()
+        local skill = listOfSkills:GetItem(i)
 
-		list[ index ] = {}
-		list[ index ].token = skill:GetName()
-		list[ index ].icon = skill:GetIconImageID()
+		local data = {}
 
+		data.token = skill:GetSkillInfo():GetName()
+		data.icon = skill:GetSkillInfo():GetIconImageID()
+		data.timer = skill:GetCooldown()
+		data.source = nil
+		data.persistent = false
+
+		if Options.CheckForIndexInCollection( data, 1 ) == nil then
+			list[ index ] = data
+		end
 	end
 
 	self.skill_segment:SetList( list )
@@ -64,8 +96,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.CollectionWindow:LanguageChanged()
 
-	self.chat_label:SetText( UTILS.GetText( "collection", "effects" ) )
-	self.effects_label:SetText(  UTILS.GetText( "collection", "chat" ) )
+	self.chat_label:SetText( UTILS.GetText( "collection", "chat" ) )
+	self.effects_label:SetText(  UTILS.GetText( "collection", "effects" ) )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -108,7 +140,7 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	local listbox_height = frame_height - ( 5 * Options.Defaults.window.frame ) - ( 3 * Options.Defaults.window.toolbar_height )
 
 	local filter_width       = listbox_width - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height
-
+	local segment_height  = listbox_height - 2 *Options.Defaults.window.segment_height 
 	-- set size
 	self.background1:SetSize( background1_width, background1_height )
 	self.frame:SetSize( frame_width, frame_height )
@@ -126,6 +158,23 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	self.chat_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.chat_label:SetHeight( Options.Defaults.window.toolbar_height )
 
+
+	if Data.options.window.collection_segment == 1 then
+		self.skill_segment:SetSize( listbox_width, segment_height )
+		self.effect_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+		self.chat_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+
+	elseif Data.options.window.collection_segment == 2 then
+		self.skill_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+		self.effect_segment:SetSize( listbox_width, segment_height )
+		self.chat_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+		
+	elseif Data.options.window.collection_segment == 3 then
+		self.skill_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+		self.effect_segment:SetSize( listbox_width, Options.Defaults.window.segment_height  )
+		self.chat_segment:SetSize( listbox_width, segment_height )
+	end
+	
 	-- calculate position
 	local background1_pos    =  Options.Defaults.window.spacing
 	local frame_pos          =  Options.Defaults.window.spacing
@@ -146,10 +195,18 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	self.effects_back:SetPosition( Options.Defaults.window.frame, frame_height - 2 * ( Options.Defaults.window.frame + Options.Defaults.window.toolbar_height ) )
 	self.chat_back:SetPosition( Options.Defaults.window.frame, frame_height - Options.Defaults.window.frame - Options.Defaults.window.toolbar_height )
 
-	self.effect_segment:SetWidth( listbox_width )
-	self.chat_segment:SetWidth( listbox_width )
-	self.skill_segment:SetWidth( listbox_width )
+end
+---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:EffectCollectionChanged()
+	self:FillEffectSegment()
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:ChatCollectionChanged()
+	self:FillChatSegment()
 end
 ---------------------------------------------------------------------------------------------------
 

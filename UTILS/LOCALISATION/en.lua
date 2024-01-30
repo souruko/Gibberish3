@@ -243,6 +243,12 @@ L[ Language.English ].collection = {}
 L[ Language.English ].collection.effects = "Effects"
 L[ Language.English ].collection.chat = "Chat Messages"
 
+L[ Language.English ].collection.window_name = "Window Name"
+L[ Language.English ].collection.token = "Token"
+L[ Language.English ].collection.source = "Source"
+L[ Language.English ].collection.timer = "Timer"
+L[ Language.English ].collection.icon = "Icon"
+
 L[ Language.English ].segment = {}
 L[ Language.English ].segment.effects = "- Effects -"
 L[ Language.English ].segment.skills = "- Skills -"

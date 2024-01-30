@@ -27,7 +27,7 @@ function SegmentItem:Constructor( width, name_control, name_description, parent,
 	self.name:SetHeight( Options.Defaults.window.segment_height - 4 )
 	self.name:SetFont( Options.Defaults.window.w_font )
 	self.name:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleCenter )
-	self.name:SetMouseVisible( false )
+	-- self.name:SetMouseVisible( false )
 
 	self.listbox = Turbine.UI.ListBox()
 	self.listbox:SetParent( self )
@@ -40,20 +40,20 @@ function SegmentItem:Constructor( width, name_control, name_description, parent,
 	self.scrollbar:SetParent( self )
 	self.scrollbar:SetTop( Options.Defaults.window.segment_height )
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
-	self.scrollbar:SetBackColor( Options.Defaults.window.framecolor )
+	-- self.scrollbar:SetBackColor( Options.Defaults.window.framecolor )
   	self.scrollbar:SetWidth( 10 )
 
     self.listbox:SetVerticalScrollBar( self.scrollbar )
 
-	self.MouseEnter = function ()
+	self.name.MouseEnter = function ()
 		self.name:SetBackColor( Options.Defaults.window.w_window_hover )
 	end
 
-	self.MouseLeave = function ()
+	self.name.MouseLeave = function ()
 		self.name:SetBackColor(	Options.Defaults.window.basecolor )
 	end
 
-	self.MouseClick = function ()
+	self.name.MouseClick = function ()
 		self.parent:SegmentClicked( self )
 		Data.options.window.collection_segment = self.index
 	end
@@ -95,6 +95,10 @@ function SegmentItem:SizeChanged()
 
 	local  width, height = self:GetSize()
 
+	if self.open == false then
+		height = Options.Defaults.window.segment_height
+	end
+
 	self.name:SetWidth( width )
 	self.listbox:SetSize( width, height - Options.Defaults.window.segment_height )
 	self.scrollbar:SetLeft( width - 10 )
@@ -117,7 +121,7 @@ function SegmentItem:SetList( list )
 	self.listbox:ClearItems()
 
 	for index, data in ipairs(list) do
-		self.listbox:AddItem( Item( width, data ) )
+		self.listbox:AddItem( Item( width, data, self.index, self.parent ) )
 	end
 
 end

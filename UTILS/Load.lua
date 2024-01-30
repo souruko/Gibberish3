@@ -93,6 +93,27 @@ end
 ---------------------------------------------------------------------------------------------------
 -- get window by id
 ---------------------------------------------------------------------------------------------------
+function Options.FillPersistantCollection()
+
+    for i, data in ipairs(Data.persistent_collection.effects) do
+        local index = #Options.Collection.Effects + 1
+
+        Options.Collection.Effects[index] = data
+    end
+
+    for i, data in ipairs(Data.persistent_collection.chat) do
+        local index = #Options.Collection.Chat + 1
+
+        Options.Collection.Chat[index] = data
+    end
+
+end
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get window by id
+---------------------------------------------------------------------------------------------------
 function Options.GetWindowByID( id, char_data )
 
     for index, data in ipairs( char_data.window ) do

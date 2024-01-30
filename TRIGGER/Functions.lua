@@ -108,3 +108,41 @@ function Trigger.TextTargetParse(name, target)
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add to collection
+---------------------------------------------------------------------------------------------------
+Trigger.AddToEffectCollection = function( effect )
+
+    -- stop if not collecting
+    if Options.CollectEffects == false then
+        return
+    end
+
+    local name = effect:GetName()
+    local icon = effect:GetIcon()
+    local duration = effect:GetDuration()
+
+    -- check for duplicates
+    for index, value in ipairs(Options.Collection.Effects) do
+        if value.token == name and
+            value.icon == icon then
+
+            return
+
+        end
+    end
+
+    local index = #Options.Collection.Effects + 1
+
+    Options.Collection.Effects[ index ] = {}
+    Options.Collection.Effects[ index ].token  = name
+    Options.Collection.Effects[ index ].source = nil
+    Options.Collection.Effects[ index ].icon = icon
+    Options.Collection.Effects[ index ].timer = duration
+    Options.Collection.Effects[ index ].persistent = false
+
+    Options.EffectCollectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------

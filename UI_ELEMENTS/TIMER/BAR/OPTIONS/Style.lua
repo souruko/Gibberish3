@@ -127,3 +127,22 @@ function StyleOptions:Hide()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function StyleOptions:BuildCollectionRightClickMenu( data, menu )
+
+    
+    if data.icon ~= nil then
+        local row2 =  Options.Elements.Row(
+            "collection",
+            "icon",
+            function ()
+                self.icon:SetText( data.icon )
+            end,
+            Options.Defaults.rc_menu.item_height
+        )
+        menu:AddRow( row2 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------

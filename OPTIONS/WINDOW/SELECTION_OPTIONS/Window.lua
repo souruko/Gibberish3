@@ -17,6 +17,7 @@ function Options.Elements.SelectionOptions:Constructor()
 	self:CreateToolbar()
 
 	self.content = nil
+	self.collection_menu = nil
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -90,6 +91,40 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 		self:FillWindow()
 		
 	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:BuildCollectionRightClickMenu( data )
+
+	-- only display a menu if content is not empty
+	if self.content == nil then
+		return
+	end
+
+	-- clear old menu
+	if self.collection_menu ~= nil then
+		self.collection_menu:Close()
+		self.collection_menu = nil
+	end
+
+	self.collection_menu = Options.Elements.RightClickMenu( 150 )
+
+	local row =  Options.Elements.Row(
+		"collection",
+		"window_name",
+		function ()
+			self.name_textbox:SetText( data.token )
+		end,
+		Options.Defaults.rc_menu.item_height
+	)
+	self.collection_menu:AddRow( row )
+
+	-- build menu for children
+	self.content:BuildCollectionRightClickMenu( data, self.collection_menu )
+
+	self.collection_menu:Show( nil, nil, Turbine.UI.ContentAlignment.TopLeft )
 
 end
 ---------------------------------------------------------------------------------------------------

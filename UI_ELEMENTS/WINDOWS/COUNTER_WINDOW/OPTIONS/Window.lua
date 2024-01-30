@@ -117,3 +117,12 @@ function OptionsWindow:TimerSelectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
+
+    self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
+    self.tab_timer:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------

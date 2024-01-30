@@ -179,3 +179,15 @@ function TimerOptions:DraggingEnd( timerData )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TimerOptions:BuildCollectionRightClickMenu( data, menu )
+
+    if self.timerOptions == nil then
+        return
+    end
+
+    self.timerOptions:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------

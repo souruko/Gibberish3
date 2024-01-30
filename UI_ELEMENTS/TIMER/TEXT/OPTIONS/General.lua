@@ -142,3 +142,23 @@ function GeneralOptions:Hide()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function GeneralOptions:BuildCollectionRightClickMenu( data, menu )
+
+    
+    if data.timer ~= nil then
+        local row2 =  Options.Elements.Row(
+            "collection",
+            "timer",
+            function ()
+                self.useCustomTimer:SetChecked( true )
+                self.timerValue:SetText( data.timer )
+            end,
+            Options.Defaults.rc_menu.item_height
+        )
+        menu:AddRow( row2 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------

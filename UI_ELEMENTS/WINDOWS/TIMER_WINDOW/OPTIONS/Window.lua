@@ -91,7 +91,6 @@ function OptionsWindow:Reset()
     self.tab_trigger:Reset()
     self.tab_color:Reset()
 
-
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -115,6 +114,15 @@ end
 function OptionsWindow:TimerSelectionChanged()
 
     self.tab_timer:TimerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
+
+    self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
+    self.tab_timer:BuildCollectionRightClickMenu( data, menu )
 
 end
 ---------------------------------------------------------------------------------------------------

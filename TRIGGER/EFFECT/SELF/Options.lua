@@ -145,3 +145,19 @@ function EffectSelfOptions:Close()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function EffectSelfOptions:BuildCollectionRightClickMenu( data, menu )
+
+	local row1 =  Options.Elements.Row(
+		"collection",
+		"token",
+		function ()
+			self.token:SetText( data.token )
+		end,
+		Options.Defaults.rc_menu.item_height
+	)
+	menu:AddRow( row1 )
+
+end
+---------------------------------------------------------------------------------------------------
