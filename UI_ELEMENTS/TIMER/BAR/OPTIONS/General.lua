@@ -57,7 +57,7 @@ function GeneralOptions:Constructor( data )
     
     top = top + 35
 
-    self.timerValue = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "timerValue", "TODO", 30 )
+    self.timerValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "timerValue", "TODO", 30 )
     self.timerValue:SetParent( self )
     self.timerValue:SetPosition( left, top )
     

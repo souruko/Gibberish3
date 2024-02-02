@@ -304,6 +304,8 @@ function Options.MoveTo( fromData, toData )
 
     end
 
+    Data.lastSortIndex = Data.lastSortIndex + 1
+
     fromData.sortIndex = toSortIndex
     fromData.folder = toData.folder
  

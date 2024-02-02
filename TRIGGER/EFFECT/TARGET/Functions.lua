@@ -109,11 +109,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectTarget ].CheckFolder = function(effect, target, folderIndex, folderData)
 
-    -- only check for enabled windows
-    if folderData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectTarget ]) do
         
@@ -136,11 +131,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectTarget ].CheckWindows = function ( effect, target, windowIndex, windowData )
 
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectTarget ]) do
         local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effect, target, triggerData)
@@ -152,7 +142,11 @@ Trigger[ Trigger.Types.EffectTarget ].CheckWindows = function ( effect, target, 
 
     end
 
-    
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
+ 
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
         Trigger[ Trigger.Types.EffectTarget ].CheckTimer(effect, target, windowIndex, timerIndex, timerData)

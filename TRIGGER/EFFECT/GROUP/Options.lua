@@ -101,7 +101,7 @@ function EffectGroupOptions:ResetContent()
     self.useRegex:SetChecked( self.data.useRegex )
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.listOfTargets )
-    self.listOfTargets:SetText( self.data.value )
+    -- self.listOfTargets:SetText( self.data.value )
 
 end
 ---------------------------------------------------------------------------------------------------

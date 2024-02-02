@@ -158,12 +158,12 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
         self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
-        self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+        self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
     
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
-        self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+        self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
 
     end
 
@@ -428,6 +428,7 @@ function IconElement:Activ( value )
     if value == true then
 
         self:SetOpacity( self.parent.data.opacityActiv )
+        self.iconControl:SetOpacity( self.parent.data.opacityActiv )
 
         self.textLabel:SetVisible( true )
         self.timerLabel:SetVisible( self.parent.data.showTimer )
@@ -435,6 +436,7 @@ function IconElement:Activ( value )
     else
 
         self:SetOpacity( self.parent.data.opacityPassiv )
+        self.iconControl:SetOpacity( self.parent.data.opacityPassiv )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
@@ -512,12 +514,12 @@ function IconElement:Resize()
         selfHeight      = maxHeight + self.parent.data.spacing
 
         -- subtract labelSpacing so the text/timer dont sit on the edges
-        labelWidth      = width - 2 * Options.Defaults.timer.labelSpacing
-        labelHeight     = height - 2 * Options.Defaults.timer.labelSpacing
+        labelWidth      = width -- 2 * Options.Defaults.timer.labelSpacing
+        labelHeight     = height -- 2 * Options.Defaults.timer.labelSpacing
 
         -- label starting position
-        labelBackLeft   = frame + Options.Defaults.timer.labelSpacing
-        labelBackTop    = frame + Options.Defaults.timer.labelSpacing
+        labelBackLeft   = frame --+ Options.Defaults.timer.labelSpacing
+        labelBackTop    = frame --+ Options.Defaults.timer.labelSpacing
 
     else
 
@@ -531,11 +533,11 @@ function IconElement:Resize()
         selfWidth       = maxHeight + self.parent.data.spacing
         selfHeight      = maxWidth
 
-        labelWidth      = width - 2 * Options.Defaults.timer.labelSpacing
-        labelHeight     = height - 2 * Options.Defaults.timer.labelSpacing
+        labelWidth      = width -- 2 * Options.Defaults.timer.labelSpacing
+        labelHeight     = height -- 2 * Options.Defaults.timer.labelSpacing
 
-        labelBackLeft   = frame + Options.Defaults.timer.labelSpacing
-        labelBackTop    = frame + Options.Defaults.timer.labelSpacing
+        labelBackLeft   = frame --+ Options.Defaults.timer.labelSpacing
+        labelBackTop    = frame --+ Options.Defaults.timer.labelSpacing
 
     end
 

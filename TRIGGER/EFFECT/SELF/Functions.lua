@@ -91,11 +91,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectSelf ].CheckFolder = function(effect, folderIndex, folderData)
 
-    -- only check for enabled windows
-    if folderData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectSelf ]) do
         
@@ -118,11 +113,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effect, windowIndex, windowData  )
 
-      -- only check for enabled windows
-      if windowData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectSelf ]) do
 
@@ -135,6 +125,10 @@ Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effect, windowInde
 
     end
 
+      -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
 
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
@@ -318,10 +312,14 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
     end
 
     -- key
-    if timerData.useKey == false then
-
-        key = effect:GetID()
+    if timerData.stacking == Stacking.Multi then
         
+        key = effect:GetID()
+    
+    elseif timerData.stacking == Stacking.PerTarget then
+
+        key = player:GetName()
+
     end
 
     -- icon

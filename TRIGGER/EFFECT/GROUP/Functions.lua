@@ -120,11 +120,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].CheckFolder = function(effect, player, folderIndex, folderData)
 
-    -- only check for enabled windows
-    if folderData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectGroup ]) do
         
@@ -147,11 +142,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].CheckWindows = function ( effect, player, windowIndex, windowData )
 
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectGroup ]) do
         local posAdjustment = Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effect, player, triggerData)
@@ -161,6 +151,11 @@ Trigger[ Trigger.Types.EffectGroup ].CheckWindows = function ( effect, player, w
 
         end
 
+    end
+
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
     end
 
     

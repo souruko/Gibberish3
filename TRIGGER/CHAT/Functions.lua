@@ -77,11 +77,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Chat ].CheckFolder = function(message, chatType, folderIndex, folderData)
 
-    -- only check for enabled windows
-    if folderData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Chat ]) do
         
@@ -104,10 +99,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Chat ].CheckWindows = function(message, chatType, windowIndex, windowData)
 
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
 
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Chat ]) do
@@ -117,12 +108,17 @@ Trigger[ Trigger.Types.Chat ].CheckWindows = function(message, chatType, windowI
         if posAdjustment ~= nil then
             -- fix posAdjustment
             posAdjustment = posAdjustment - 1
+
             Windows.WindowAction( windowIndex, windowData, triggerData )
 
         end
 
     end
 
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
     
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
@@ -202,6 +198,7 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
+
     -- text
     if timerData.textOption == TimerTextOptions.Target and
     ( chatType             == Turbine.ChatType.PlayerCombat or
@@ -232,7 +229,6 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
 
        for index, value in pairs(placeholder) do
            text = string.gsub ( text, index, value)
-
        end
 
    end
@@ -262,7 +258,9 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
         duration = timerData.timerValue
 
         for index, value in pairs(placeholder) do
-            duration = string.gsub ( duration, index, value)
+            if index == duration then
+                duration = value
+            end
 
         end
         duration = tonumber( duration )

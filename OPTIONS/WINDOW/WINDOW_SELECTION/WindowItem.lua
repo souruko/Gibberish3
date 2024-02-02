@@ -27,6 +27,7 @@ end
 function WindowItem:DataChanged()
 
     self.nameLabel:SetText( self.data.name )
+    self.enabledCheckbox:SetChecked( self.data.enabled )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -209,7 +210,7 @@ function WindowItem:CreateContent()
     -- enable checkbox
     self.enabledCheckbox = Options.Elements.CheckBox()
     self.enabledCheckbox:SetParent( self.background )
-    self.enabledCheckbox:SetTop( -3 )
+    self.enabledCheckbox:SetTop( 0 )
     self.enabledCheckbox:SetChecked( self.data.enabled )
 
 	self.enabledCheckbox.CheckedChanged = function( value )

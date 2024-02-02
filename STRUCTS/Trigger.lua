@@ -23,7 +23,7 @@ function Trigger.New(type)
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
     trigger.value           = Trigger[type].Defaults.value
-    trigger.listOfTargets   = Trigger[type].Defaults.listOfTargets
+    trigger.listOfTargets   = {}
     trigger.source          = Trigger[type].Defaults.source
 
     return trigger
@@ -48,6 +48,7 @@ function Trigger.Copy( data )
     trigger.action          = data.action       
     trigger.value           = data.value  
     trigger.listOfTargets   = {}
+Turbine.Shell.WriteLine(data.token)
     for index, value in ipairs(data.listOfTargets) do
         trigger.listOfTargets[index] = value
     end

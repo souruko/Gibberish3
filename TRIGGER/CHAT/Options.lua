@@ -104,7 +104,7 @@ function ChatOptions:ResetContent()
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.value )
     self.source:SetSelection( self.data.source )
-    self.listOfTargets:SetText( self.data.listOfTargets )
+    -- self.listOfTargets:SetText( self.data.listOfTargets )
 
 end
 ---------------------------------------------------------------------------------------------------

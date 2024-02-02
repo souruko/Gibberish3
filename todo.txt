@@ -12,19 +12,18 @@
 
 
 -- now
-collection
+
 
 -- next
+folder/window name should have 2 rows
 esc und co (tasten belegung)
 dropdown scrollbar
 opacity slider
 input check
 sort triggers
-window selection > draggin on the background should sort the item to the bottom
 save chat timer
 timer_trigger selection as row_item
-import
 save feedback
 icon options row
-
-
+collection filter timers for permanent effects
+import

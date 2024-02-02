@@ -100,13 +100,17 @@ function Windows.WindowAction( windowIndex, windowData, triggerData )
     if triggerData.action == Action.Enable and windowData.enabled == false then
     
         windowData.enabled = true
-        Windows[ windowIndex ] = Window[ windowData.type ].Constructor( windowIndex )
+        Windows.EnabledChanged( windowIndex )
+        Options.DataChanged( windowIndex )
 
     elseif triggerData.action == Action.Disable and windowData.enabled == true then
 
-        --TODO disable window
+        windowData.enabled = false
+        Windows.EnabledChanged( windowIndex )
+        Options.DataChanged( windowIndex )
 
-    elseif  windowData.enabled == true then
+    elseif windowData.enabled == true 
+           and Windows[ windowIndex ] ~= nil then
 
         Windows[ windowIndex ]:WindowAction( triggerData )
 
@@ -123,14 +127,20 @@ function Windows.FolderAction( folderIndex, folderData, triggerData )
     for index, windowData in ipairs(Data.window) do
 
         -- if window is enabled and element exists
-        if windowData.enabled == true and
-           Windows[ index ] ~= nil  and
-           windowData.folder == folderIndex then
+        if windowData.folder == folderIndex then
 
             Windows.WindowAction( index, windowData, triggerData )
 
         end
 
+    end
+
+    for index, data in ipairs(Data.folder) do
+
+        if data.folder == folderIndex then
+            Windows.FolderAction( folderIndex, folderData, triggerData )
+        end
+        
     end
 
 end

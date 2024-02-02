@@ -333,14 +333,13 @@ function TimerWindowElement:ActionRemove( timerIndex, key )
     for i = #self.children, 1, -1 do
 
         if self.children[i].index == timerIndex then
-
-            -- key problem from diffrent trigger not sure what to do so not used for now
-            -- if key == nil or self.children[i].key == key then
+            
+            if self.children[i].key == nil or self.children[i].key == key then
 
                 self.children[i]:Finish()
                 self:Resize()
 
-            -- end
+            end
 
         end
 

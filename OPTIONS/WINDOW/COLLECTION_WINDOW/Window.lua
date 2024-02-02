@@ -11,6 +11,8 @@ Options.Elements.CollectionWindow = class(Turbine.UI.Control)
 function Options.Elements.CollectionWindow:Constructor()
 	Turbine.UI.Control.Constructor( self )
 
+	self.filterText = ""
+
 	self:CreateBackground()
 	self:CreateToolbar()
 
@@ -48,13 +50,13 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.CollectionWindow:FillChatSegment()
-	self.chat_segment:SetList( Options.Collection.Chat )
+	self.chat_segment:SetList( Options.Collection.Chat, self.filterText )
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.CollectionWindow:FillEffectSegment()
-	self.effect_segment:SetList( Options.Collection.Effects )
+	self.effect_segment:SetList( Options.Collection.Effects, self.filterText )
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -88,7 +90,7 @@ function Options.Elements.CollectionWindow:FillSkillSegment()
 		end
 	end
 
-	self.skill_segment:SetList( list )
+	self.skill_segment:SetList( list, self.filterText )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -199,6 +201,16 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.CollectionWindow:FilterContent()
+
+	self.chat_segment:Filter( self.filterText )
+	self.skill_segment:Filter( self.filterText )
+	self.effect_segment:Filter( self.filterText )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.CollectionWindow:EffectCollectionChanged()
 	self:FillEffectSegment()
 end
@@ -274,6 +286,8 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 		else
 			self.filter_clear:SetVisible(true)
 		end
+
+		self:FilterContent()
 	end
 
 	self.filter_icon = Turbine.UI.Control()

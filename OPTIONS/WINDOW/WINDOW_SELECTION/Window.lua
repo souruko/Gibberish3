@@ -530,10 +530,13 @@ function Options.Elements.WindowSelection:DraggingEnd( fromData )
 		self:FillContent()
 
 	-- remove item from all folders
-	elseif left >= 0 and left <= self.listbox:GetWidth()
+	elseif fromData ~= toItem.data
+		and left >= 0 and left <= self.listbox:GetWidth()
 		and top >= 0 and top <= self.listbox:GetHeight() then
 
 			fromData.folder = nil
+			Data.lastSortIndex = Data.lastSortIndex + 1
+			fromData.sortIndex = Data.lastSortIndex
 			self:AsignFolder()
 			self:FillContent()
 	end

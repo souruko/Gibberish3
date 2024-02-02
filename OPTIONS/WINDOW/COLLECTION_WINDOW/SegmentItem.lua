@@ -11,6 +11,7 @@ SegmentItem = class(Turbine.UI.Control)
 function SegmentItem:Constructor( width, name_control, name_description, parent, index )
 	Turbine.UI.Control.Constructor( self )
 
+	self.controls = {}
 	self.index = index
 	self.parent = parent
 	self.open = false
@@ -114,15 +115,39 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function SegmentItem:SetList( list )
+function SegmentItem:SetList( list, filter )
 
 	local width = self.listbox:GetWidth()
 
+	self.controls = {}
 	self.listbox:ClearItems()
 
 	for index, data in ipairs(list) do
-		self.listbox:AddItem( Item( width, data, self.index, self.parent ) )
+		self.controls[ index ] = Item( width, data, self.index, self.parent )
 	end
 
+	self:FillContent( filter )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function SegmentItem:FillContent( text )
+
+	self.listbox:ClearItems()
+
+	for index, control in ipairs(self.controls) do
+
+		if string.find( string.lower( control.data.token ) , text ) then
+			self.listbox:AddItem( control )
+		end
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function SegmentItem:Filter( text )
+	self:FillContent( text )
 end
 ---------------------------------------------------------------------------------------------------

@@ -48,11 +48,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Combat ].CheckFolder = function( combatState, folderIndex, folderData)
 
-    -- only check for enabled windows
-    if folderData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Combat ]) do
         
@@ -75,11 +70,6 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[Trigger.Types.Combat].CheckWindows = function ( combatState, windowIndex, windowData )
 
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Combat ]) do
 
@@ -90,6 +80,10 @@ Trigger[Trigger.Types.Combat].CheckWindows = function ( combatState, windowIndex
 
     end
 
+    -- only check for enabled windows
+    if windowData.enabled == false then
+        return
+    end
     
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
