@@ -18,25 +18,25 @@ function AnimationOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.useThreshold = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useThreshold", "TODO", 30 )
+    self.useThreshold = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useThreshold", "tim_use_threshold", 30 )
     self.useThreshold:SetParent( self )
     self.useThreshold:SetPosition( left, top )
     
     top = top + 30
     
-    self.thresholdValue = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "thresholdValue", "TODO", 30 )
+    self.thresholdValue = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "thresholdValue", "tim_theshold_value", 30 )
     self.thresholdValue:SetParent( self )
     self.thresholdValue:SetPosition( left, top )
     
     top = top + 35
 
-    self.useAnimation = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useAnimation", "TODO", 30 )
+    self.useAnimation = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useAnimation", "tim_use_animation", 30 )
     self.useAnimation:SetParent( self )
     self.useAnimation:SetPosition( left, top )
     
     top = top + 30
 
-    self.animationType = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "animationType", "TODO", 30 )
+    self.animationType = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "animationType", "tim_animation_type", 30 )
     self.animationType:SetParent( self )
     self.animationType:SetPosition( left, top )
     for name, value in pairs(AnimationType) do
@@ -45,13 +45,13 @@ function AnimationOptions:Constructor( data )
 
     top = top + 30
 
-    self.animationSpeed = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "animationSpeed", "TODO", 30 )
+    self.animationSpeed = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "animationSpeed", "tim_animation_speed", 30 )
     self.animationSpeed:SetParent( self )
     self.animationSpeed:SetPosition( left, top )
     
     top = top + 35
 
-    self.useShadow = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useShadow", "TODO", 30 )
+    self.useShadow = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useShadow", "tim_use_shadow", 30 )
     self.useShadow:SetParent( self )
     self.useShadow:SetPosition( left, top )
     

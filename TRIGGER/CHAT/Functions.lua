@@ -19,6 +19,15 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         end
 
+        -- auto reload
+        if Data.autoReload == true and
+            args.ChatType == Turbine.ChatType.Standard then
+            
+                Trigger[ Trigger.Types.Chat ].CheckForReload( args.Message )
+            
+        end
+
+        -- collection
         Trigger[ Trigger.Types.Chat ].AddToCollection( args.Message, args.ChatType )
         
         -- iterate all window data
@@ -45,6 +54,13 @@ Trigger[ Trigger.Types.Chat ].AddToCollection = function( message, chatType )
 
     -- stop if not collecting
     if Options.CollectChat == false then
+        return
+    end
+
+    -- check for only say
+    if Options.OnlySay == true and
+        chatType ~= Turbine.ChatType.Say then
+
         return
     end
 
@@ -278,7 +294,7 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat = function(message, chatType)
 
-    local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 =  UTILS.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
+    local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 = Trigger.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
    
     local text = Trigger[ Trigger.Types.Chat ].CheckingNameForNumber(skillName)
   
@@ -309,6 +325,21 @@ Trigger[ Trigger.Types.Chat ].CheckingNameForNumber = function(name)
         return string.sub(name, start_tier, end_tier)
     else
         return ""
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.Chat ].CheckForReload = function (message)
+
+    for key, text in pairs(L[ Language.Local ].ReloadMessages) do
+        
+        if string.find( message, text ) then
+            Options.Reload()
+            return
+        end
+
     end
 
 end

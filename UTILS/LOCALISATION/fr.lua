@@ -1,5 +1,5 @@
 --=================================================================================================
---= Localisation French        
+--= Localisation English        
 --= ===============================================================================================
 --= 
 --=================================================================================================
@@ -243,6 +243,17 @@ L[ Language.French ].collection = {}
 L[ Language.French ].collection.effects = "Effects"
 L[ Language.French ].collection.chat = "Chat Messages"
 
+L[ Language.French ].collection.window_name = "Window Name"
+L[ Language.French ].collection.token = "Token"
+L[ Language.French ].collection.source = "Source"
+L[ Language.French ].collection.timer = "Timer"
+L[ Language.French ].collection.icon = "Icon"
+
+L[ Language.French ].segment = {}
+L[ Language.French ].segment.effects = "- Effects -"
+L[ Language.French ].segment.skills = "- Skills -"
+L[ Language.French ].segment.chat = "- Chat Messages -"
+
 --tab
 L[ Language.French ].tab = {}
 L[ Language.French ].tab.general = "General"
@@ -260,11 +271,75 @@ L[ Language.French ].tab.animation = "Animation"
 -- tooltips
 L[ Language.French ].tooltip = {}
 L[ Language.French ].tooltip.button_collaps = "Collaps all Folders."
-L[ Language.French ].tooltip.button_new_window = "Create new window."
-L[ Language.French ].tooltip.button_new_folder = "Create new folder."
+L[ Language.French ].tooltip.button_new_window = "Create a new window."
+L[ Language.French ].tooltip.button_new_folder = "Create a new folder."
 L[ Language.French ].tooltip.button_reset = "Reset changes."
 L[ Language.French ].tooltip.button_save = "Save changes."
-L[ Language.French ].tooltip.button_import = "Import TODO."
-L[ Language.French ].tooltip.button_reload = "Reload plugin."
-L[ Language.French ].tooltip.TODO = "TODO."
+L[ Language.French ].tooltip.button_import = "Import TODO"
+L[ Language.French ].tooltip.button_reload = "Reload the plugin."
+L[ Language.French ].tooltip.button_new_timer = "Create a new timer."
+L[ Language.French ].tooltip.button_new_trigger = "Create a new trigger."
+L[ Language.French ].tooltip.button_collect_effects = "Collect effects for the collection."
+L[ Language.French ].tooltip.button_collect_chat = "Collect chat messages for the collection."
+
+L[ Language.French ].tooltip.cb_only_debuffs = "Only collect debuffs."
+L[ Language.French ].tooltip.cb_only_say = "Only collect messages from the say chat channel."
+L[ Language.French ].tooltip.cb_show_tooltips = "Toggle Tooltips."
+
+L[ Language.French ].tooltip.dd_language = "Select the options language."
+
+L[ Language.French ].tooltip.trg_description = "Trigger description."
+L[ Language.French ].tooltip.trg_token = "The token."
+L[ Language.French ].tooltip.trg_action = "The triggered action."
+L[ Language.French ].tooltip.trg_value = "Depending on action, you might need action value."
+L[ Language.French ].tooltip.trg_source = "Source."
+L[ Language.French ].tooltip.trg_use_regex = "Do you want to use regular expressions in the token."
+L[ Language.French ].tooltip.trg_list_of_targets = "List of targets for this trigger."
+
+L[ Language.French ].tooltip.tim_use_threshold = "Should the timer display a threshold?"
+L[ Language.French ].tooltip.tim_theshold_value = "From what value should the threshold be displayed?"
+L[ Language.French ].tooltip.tim_use_animation = "Should the timer use an animation while within the threshold?"
+L[ Language.French ].tooltip.tim_animation_type = "What type of animation should be used?"
+L[ Language.French ].tooltip.tim_animation_speed = "How fast should the animation be?"
+L[ Language.French ].tooltip.tim_use_shadow = "Should the timer be displayed on the icon as a 'clock' shadow?"
+L[ Language.French ].tooltip.tim_description = "Timer description."
+L[ Language.French ].tooltip.tim_permanent2 = "Display the timer even if inactiv."
+L[ Language.French ].tooltip.tim_stacking = "How should the plugin handle multiple occurrences of the trigger?"
+L[ Language.French ].tooltip.tim_loop = "Permanently repeat the timer instead of ending. Can be stoped with reset."
+L[ Language.French ].tooltip.tim_reset = "Should the timer be stopable with reset?"
+L[ Language.French ].tooltip.tim_use_custom_timer = "Use trigger timer or custome timer value."
+L[ Language.French ].tooltip.tim_timer_value = "Custome timer value. Only used if use custom timer is enabled."
+L[ Language.French ].tooltip.tim_icon = "The displayed icon of the timer."
+L[ Language.French ].tooltip.tim_show_icon = "Should the icon be displayed?"
+L[ Language.French ].tooltip.tim_text_option = "What text should be displayed on the timer."
+L[ Language.French ].tooltip.tim_text_value = "Text value for custom text."
+L[ Language.French ].tooltip.tim_direction = "Should the timer increase or decrease."
+L[ Language.French ].tooltip.tim_counter_end = "The value where the counter ends."
+L[ Language.French ].tooltip.tim_counter_start = "The value where the counter starts."
+
+L[ Language.French ].tooltip.win_color_frame = "Color of the timer frame."
+L[ Language.French ].tooltip.win_color_back = "Color of the timer back."
+L[ Language.French ].tooltip.win_color_bar = "Color of the timer bar."
+L[ Language.French ].tooltip.win_color_timer = "Font color of the timer."
+L[ Language.French ].tooltip.win_color_text = "Font color of the text."
+L[ Language.French ].tooltip.win_opacity_activ = "Opacity while the timer is activ."
+L[ Language.French ].tooltip.win_opacity_passiv = "Opacity while the timer is passiv."
+L[ Language.French ].tooltip.win_description = "Window description."
+L[ Language.French ].tooltip.win_save_globaly = "Saves the following options for all Characters: Position, Size"
+L[ Language.French ].tooltip.win_reset_on_target_change = "Reset the window everytime the target changes."
+L[ Language.French ].tooltip.win_use_target_entity = "Add the target entity to the timer. Only works with effect triggers."
+L[ Language.French ].tooltip.win_overlay = "Should the timer overlay LOTRO ui elements."
+L[ Language.French ].tooltip.win_width = "Timer width."
+L[ Language.French ].tooltip.win_height = "Timer height."
+L[ Language.French ].tooltip.win_frame = "Timer frame thickness."
+L[ Language.French ].tooltip.win_spacing = "Spacing between multiple timers in the same window."
+L[ Language.French ].tooltip.win_orientation = "Should the window fill timers horizontal or vertical?"
+L[ Language.French ].tooltip.win_direction = "Should the timers sort ascending or descending."
+L[ Language.French ].tooltip.win_font = "The used font for the window."
+L[ Language.French ].tooltip.win_font_size = "Font size."
+L[ Language.French ].tooltip.win_number_format = "[Seconds 7] [Minutes 00:07] [One Decimal 7,4]"
+L[ Language.French ].tooltip.win_text_align = "Position of the text on the timer."
+L[ Language.French ].tooltip.win_timer_align = "Position of the timer on the timer."
+L[ Language.French ].tooltip.win_show_timer = "Should the timer be displayed?"
+L[ Language.French ].tooltip.win_timer_type = "What type of timer should the window use."
 ---------------------------------------------------------------------------------------------------

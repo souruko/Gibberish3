@@ -9,7 +9,7 @@ function trim_articles(name)
 end
 
 
-function ParseCombatChat(line)
+function Trigger.ParseCombatChat(line)
 
 	-- 1) Damage line ---
 	

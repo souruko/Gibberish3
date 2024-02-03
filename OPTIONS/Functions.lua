@@ -221,11 +221,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.MoveWindow()
 
-    if Data.moveMode == true then
+    if Data.moveMode == true and Options.Move.Object == nil then
 
         Options.Move.Object = Options.Move.Constructor()
         
-    else
+    elseif Options.Move.Object ~= nil then
 
         Options.Move.Object:Close()
         Options.Move.Object = nil

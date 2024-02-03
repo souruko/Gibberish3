@@ -29,25 +29,25 @@ function EffectSelfOptions:Constructor( parent, data, parentType )
 
     local top = 0
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "TODO", 50, true )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "description", "trg_description", 50, true )
     self.description:SetParent( self )
     self.description:SetTop( top )
     
     top = top + 55
 
-    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "TODO", 50, true )
+    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 50, true )
     self.token:SetParent( self )
     self.token:SetTop( top )
 
     top = top + 55
 
-    self.useRegex = Options.Elements.CheckBoxRow( Options.Defaults.window.backcolor1, "options", "useRegex", "TODO", 30 )
+    self.useRegex = Options.Elements.CheckBoxRow( Options.Defaults.window.backcolor1, "options", "useRegex", "trg_use_regex", 30 )
     self.useRegex:SetParent( self )
     self.useRegex:SetTop( top )
 
     top = top + 35
 
-    self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "TODO", 30 )
+    self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "trg_action", 30 )
     self.action:SetParent( self )
     self.action:SetTop( top )
 
@@ -80,7 +80,7 @@ function EffectSelfOptions:Constructor( parent, data, parentType )
 
     top = top + 35
     
-    self.value = Options.Elements.NumberBoxRow( Options.Defaults.window.backcolor1, "options", "value", "TODO", 30 )
+    self.value = Options.Elements.NumberBoxRow( Options.Defaults.window.backcolor1, "options", "value", "trg_value", 30 )
     if (parentType *(-1)) == Timer.Types.COUNTER_BAR then
         self.value:SetParent( self )
         self.value:SetTop( top )

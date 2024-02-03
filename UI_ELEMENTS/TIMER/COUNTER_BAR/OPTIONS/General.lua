@@ -18,31 +18,31 @@ function GeneralOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50, true )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "tim_description", 50, true )
     self.description:SetParent( self )
     self.description:SetPosition( left, top )
     
     top = top + 55
 
-    self.loop = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "loop", "TODO", 30 )
+    self.loop = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "loop", "tim_loop", 30 )
     self.loop:SetParent( self )
     self.loop:SetPosition( left, top )
     
     top = top + 35
     
-    self.reset = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "reset", "TODO", 30 )
+    self.reset = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "reset", "tim_reset", 30 )
     self.reset:SetParent( self )
     self.reset:SetPosition( left, top )
     
     top = top + 35
        
-    self.counterEND = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "counterEND", "TODO", 30 )
+    self.counterEND = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "counterEND", "tim_counter_end", 30 )
     self.counterEND:SetParent( self )
     self.counterEND:SetPosition( left, top )
     
     top = top + 30
   
-    self.counterSTART = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "counterSTART", "TODO", 30 )
+    self.counterSTART = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "counterSTART", "tim_counter_start", 30 )
     self.counterSTART:SetParent( self )
     self.counterSTART:SetPosition( left, top )
     

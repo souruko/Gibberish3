@@ -49,7 +49,7 @@ function Options.Elements.TriggerListbox:Constructor( parent )
         local left, top = self.add_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
 		self.add_menu:Show( left, top )
 	end
-	Options.Elements.Tooltip.AddTooltip( self.add_button, "tooltip", "TODO", false )
+	Options.Elements.Tooltip.AddTooltip( self.add_button, "tooltip", "button_new_trigger", false )
 
     -- filter listbox
     self.filter_back = Turbine.UI.Control()

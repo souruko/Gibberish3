@@ -73,11 +73,11 @@ function Item:Constructor( index, data, width, parent )
         if args.Button == Turbine.UI.MouseButton.Left then
 
             -- set state to dragging and save start positions
-            self.dragging = true
-            self.leftSave, self.topSave = self:GetPosition()
-            self.dragStartX = args.X
-            self.dragStartY = args.Y
-            self:SetZOrder(200)
+            -- self.dragging = true
+            -- self.leftSave, self.topSave = self:GetPosition()
+            -- self.dragStartX = args.X
+            -- self.dragStartY = args.Y
+            -- self:SetZOrder(200)
 
         end
 
@@ -87,14 +87,14 @@ function Item:Constructor( index, data, width, parent )
 
         if self.dragging then
 
-			local x, y = self:GetPosition()
-            local x_offset = args.X - self.dragStartX
-            local y_offset = args.Y - self.dragStartY
-            x = x + x_offset
-            y = y + y_offset
-            self.dragWindow:SetVisible( true )
-            self.background:SetParent( self.dragWindow )
-            self:SetPosition( x, y )
+			-- local x, y = self:GetPosition()
+            -- local x_offset = args.X - self.dragStartX
+            -- local y_offset = args.Y - self.dragStartY
+            -- x = x + x_offset
+            -- y = y + y_offset
+            -- self.dragWindow:SetVisible( true )
+            -- self.background:SetParent( self.dragWindow )
+            -- self:SetPosition( x, y )
 
 		end
 
@@ -104,12 +104,12 @@ function Item:Constructor( index, data, width, parent )
      
         if args.Button == Turbine.UI.MouseButton.Left then
 
-			self.dragging = false
-            self:SetPosition( self.leftSave, self.topSave )
-            -- self.parent:DraggingEnd(self.data)
-            self:SetZOrder(nil)
-            self.dragWindow:SetVisible(false)
-            self.background:SetParent(self)
+			-- self.dragging = false
+            -- self:SetPosition( self.leftSave, self.topSave )
+            -- -- self.parent:DraggingEnd(self.data)
+            -- self:SetZOrder(nil)
+            -- self.dragWindow:SetVisible(false)
+            -- self.background:SetParent(self)
             
 		end
            

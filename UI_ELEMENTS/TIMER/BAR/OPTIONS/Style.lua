@@ -18,19 +18,19 @@ function StyleOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.icon = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "icon", "TODO", 30 )
+    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.basecolor, "options", "icon", "tim_icon", 42 )
     self.icon:SetParent( self )
     self.icon:SetPosition( left, top )
 
     top = top + 35
 
-    self.showIcon = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showIcon", "TODO", 30 )
+    self.showIcon = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showIcon", "tim_show_icon", 30 )
     self.showIcon:SetParent( self )
     self.showIcon:SetPosition( left, top )
     
     top = top + 35
     
-    self.textOption = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "textOption", "TODO", 30 )
+    self.textOption = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "textOption", "tim_text_option", 30 )
     self.textOption:SetParent( self )
     self.textOption:SetPosition( left, top )
     for name, value in pairs(TimerTextOptions) do
@@ -39,13 +39,13 @@ function StyleOptions:Constructor( data )
 
     top = top + 35
 
-    self.textValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "textValue", "TODO", 30, false )
+    self.textValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "textValue", "tim_text_value", 30, false )
     self.textValue:SetParent( self )
     self.textValue:SetPosition( left, top )
     
     top = top + 35
 
-    self.direction = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "direction", "TODO", 30 )
+    self.direction = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "direction", "tim_direction", 30 )
     self.direction:SetParent( self )
     self.direction:SetPosition( left, top )
     for name, value in pairs(Direction) do

@@ -18,7 +18,7 @@ function TimerOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.timerType = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "timerType", "TODO", 30 )
+    self.timerType = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "timerType", "win_timer_type", 30 )
     self.timerType:SetParent( self )
     self.timerType:SetPosition( left, top )
 

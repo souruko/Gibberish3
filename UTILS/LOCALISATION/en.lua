@@ -265,17 +265,106 @@ L[ Language.English ].tab.text = "Text"
 
 L[ Language.English ].tab.style = "Style"
 L[ Language.English ].tab.animation = "Animation"
+
+L[ Language.English ].resetPhrase = {}
+
+L[ Language.English ].ReloadMessages = {
+
+    [ "raid_convert" ] = "You have joined the chat room for your raid, raid chat is now available.",
+    [ "fellowship_join" ] = " has joined your Fellowship.",
+    [ "raid_join" ] = " has joined your Raid.",
+    [ "fellowship_join_self" ] = "You have joined a Fellowship.",
+    [ "raid_join_self" ] = "You have joined a Raid.",
+    [ "fellowship_leave" ] = " has left your Fellowship.",
+    [ "raid_leave" ] = " has left your Raid.",
+    [ "fellowship_leave_self" ] = "You leave your Fellowship.",
+    [ "raid_leave_self" ] = "You leave your Raid.",
+    [ "self_dismiss_start" ] = "You dismiss ",
+    [ "fellowship_dismiss_end" ] = " from the fellowship.",
+    [ "raid_dismiss_end" ] = " from the Raid.",
+    [ "fellowship_dismiss" ] = " has been dismissed from your Fellowship.",
+    [ "raid_dismiss" ] = " has been dismissed from your Raid.",
+    [ "fellowship_dismiss_self" ] = "You have been dismissed from your Fellowship.",
+    [ "raid_dismiss_self" ] = "You have been dismissed from your Raid.",
+    [ "fellowship_disband" ] = "Your Fellowship has been disbanded.",
+    [ "raid_disband" ] = "Your Raid has been disbanded."
+}
+
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 -- tooltips
 L[ Language.English ].tooltip = {}
 L[ Language.English ].tooltip.button_collaps = "Collaps all Folders."
-L[ Language.English ].tooltip.button_new_window = "Create new window."
-L[ Language.English ].tooltip.button_new_folder = "Create new folder."
+L[ Language.English ].tooltip.button_new_window = "Create a new window."
+L[ Language.English ].tooltip.button_new_folder = "Create a new folder."
 L[ Language.English ].tooltip.button_reset = "Reset changes."
 L[ Language.English ].tooltip.button_save = "Save changes."
-L[ Language.English ].tooltip.button_import = "Import TODO."
-L[ Language.English ].tooltip.button_reload = "Reload plugin."
-L[ Language.English ].tooltip.TODO = "TODO."
+L[ Language.English ].tooltip.button_import = "Import TODO"
+L[ Language.English ].tooltip.button_reload = "Reload the plugin."
+L[ Language.English ].tooltip.button_new_timer = "Create a new timer."
+L[ Language.English ].tooltip.button_new_trigger = "Create a new trigger."
+L[ Language.English ].tooltip.button_collect_effects = "Collect effects for the collection."
+L[ Language.English ].tooltip.button_collect_chat = "Collect chat messages for the collection."
+
+L[ Language.English ].tooltip.cb_only_debuffs = "Only collect debuffs."
+L[ Language.English ].tooltip.cb_only_say = "Only collect messages from the say chat channel."
+L[ Language.English ].tooltip.cb_show_tooltips = "Toggle Tooltips."
+
+L[ Language.English ].tooltip.dd_language = "Select the options language."
+
+L[ Language.English ].tooltip.trg_description = "Trigger description."
+L[ Language.English ].tooltip.trg_token = "The token."
+L[ Language.English ].tooltip.trg_action = "The triggered action."
+L[ Language.English ].tooltip.trg_value = "Depending on action, you might need action value."
+L[ Language.English ].tooltip.trg_source = "Source."
+L[ Language.English ].tooltip.trg_use_regex = "Do you want to use regular expressions in the token."
+L[ Language.English ].tooltip.trg_list_of_targets = "List of targets for this trigger."
+
+L[ Language.English ].tooltip.tim_use_threshold = "Should the timer display a threshold?"
+L[ Language.English ].tooltip.tim_theshold_value = "From what value should the threshold be displayed?"
+L[ Language.English ].tooltip.tim_use_animation = "Should the timer use an animation while within the threshold?"
+L[ Language.English ].tooltip.tim_animation_type = "What type of animation should be used?"
+L[ Language.English ].tooltip.tim_animation_speed = "How fast should the animation be?"
+L[ Language.English ].tooltip.tim_use_shadow = "Should the timer be displayed on the icon as a 'clock' shadow?"
+L[ Language.English ].tooltip.tim_description = "Timer description."
+L[ Language.English ].tooltip.tim_permanent2 = "Display the timer even if inactiv."
+L[ Language.English ].tooltip.tim_stacking = "How should the plugin handle multiple occurrences of the trigger?"
+L[ Language.English ].tooltip.tim_loop = "Permanently repeat the timer instead of ending. Can be stoped with reset."
+L[ Language.English ].tooltip.tim_reset = "Should the timer be stopable with reset?"
+L[ Language.English ].tooltip.tim_use_custom_timer = "Use trigger timer or custome timer value."
+L[ Language.English ].tooltip.tim_timer_value = "Custome timer value. Only used if use custom timer is enabled."
+L[ Language.English ].tooltip.tim_icon = "The displayed icon of the timer."
+L[ Language.English ].tooltip.tim_show_icon = "Should the icon be displayed?"
+L[ Language.English ].tooltip.tim_text_option = "What text should be displayed on the timer."
+L[ Language.English ].tooltip.tim_text_value = "Text value for custom text."
+L[ Language.English ].tooltip.tim_direction = "Should the timer increase or decrease."
+L[ Language.English ].tooltip.tim_counter_end = "The value where the counter ends."
+L[ Language.English ].tooltip.tim_counter_start = "The value where the counter starts."
+
+L[ Language.English ].tooltip.win_color_frame = "Color of the timer frame."
+L[ Language.English ].tooltip.win_color_back = "Color of the timer back."
+L[ Language.English ].tooltip.win_color_bar = "Color of the timer bar."
+L[ Language.English ].tooltip.win_color_timer = "Font color of the timer."
+L[ Language.English ].tooltip.win_color_text = "Font color of the text."
+L[ Language.English ].tooltip.win_opacity_activ = "Opacity while the timer is activ."
+L[ Language.English ].tooltip.win_opacity_passiv = "Opacity while the timer is passiv."
+L[ Language.English ].tooltip.win_description = "Window description."
+L[ Language.English ].tooltip.win_save_globaly = "Saves the following options for all Characters: Position, Size"
+L[ Language.English ].tooltip.win_reset_on_target_change = "Reset the window everytime the target changes."
+L[ Language.English ].tooltip.win_use_target_entity = "Add the target entity to the timer. Only works with effect triggers."
+L[ Language.English ].tooltip.win_overlay = "Should the timer overlay LOTRO ui elements."
+L[ Language.English ].tooltip.win_width = "Timer width."
+L[ Language.English ].tooltip.win_height = "Timer height."
+L[ Language.English ].tooltip.win_frame = "Timer frame thickness."
+L[ Language.English ].tooltip.win_spacing = "Spacing between multiple timers in the same window."
+L[ Language.English ].tooltip.win_orientation = "Should the window fill timers horizontal or vertical?"
+L[ Language.English ].tooltip.win_direction = "Should the timers sort ascending or descending."
+L[ Language.English ].tooltip.win_font = "The used font for the window."
+L[ Language.English ].tooltip.win_font_size = "Font size."
+L[ Language.English ].tooltip.win_number_format = "[Seconds 7] [Minutes 00:07] [One Decimal 7,4]"
+L[ Language.English ].tooltip.win_text_align = "Position of the text on the timer."
+L[ Language.English ].tooltip.win_timer_align = "Position of the timer on the timer."
+L[ Language.English ].tooltip.win_show_timer = "Should the timer be displayed?"
+L[ Language.English ].tooltip.win_timer_type = "What type of timer should the window use."
 ---------------------------------------------------------------------------------------------------

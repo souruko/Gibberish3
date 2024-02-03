@@ -55,6 +55,16 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
                                                         end )
 
                 Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects()
+
+                -- reset on target changed
+                for windowIndex, windowData in ipairs(Data.window) do
+                    if windowData.resetOnTargetChanged == true
+                       and Windows[ windowIndex ] ~= nil then
+                 
+                        Windows[ windowIndex ]:Reset()
+
+                    end
+                end
             
             end
 

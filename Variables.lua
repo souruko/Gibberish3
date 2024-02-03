@@ -45,6 +45,8 @@ Options.CollectChat    = false
 Options     = {}
 Options.CollectEffects = false
 Options.CollectChat    = false
+Options.OnlyDebuffs    = false
+Options.OnlySay        = false
 
 Options.Collection          = {}
 Options.Collection.Chat     = {}

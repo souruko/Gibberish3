@@ -35,7 +35,7 @@ function DataFunction.New()
     -- 
     data.moveMode                   = false
     data.showTooltips               = true
-    data.autoReload                 = true
+    data.autoReload                 = false
 
     -- list of options data
     data.options                    = {}

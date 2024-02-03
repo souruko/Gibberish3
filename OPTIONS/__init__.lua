@@ -21,11 +21,13 @@ import "Gibberish3.OPTIONS.ELEMENTS.DROPDOWN"
 import "Gibberish3.OPTIONS.ELEMENTS.TABWINDOW"
 import "Gibberish3.OPTIONS.ELEMENTS.TRIGGERLISTBOX"
 import "Gibberish3.OPTIONS.ELEMENTS.TIMERLISTBOX"
-import "Gibberish3.Options.Elements.TextBoxRow"
-import "Gibberish3.Options.Elements.NumberBoxRow"
-import "Gibberish3.Options.Elements.ColorBoxRow"
-import "Gibberish3.Options.Elements.CheckBoxRow"
-import "Gibberish3.Options.Elements.DropDownRow"
+
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.TextBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.NumberBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.IconBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.ColorBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.CheckBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.DropDownRow"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

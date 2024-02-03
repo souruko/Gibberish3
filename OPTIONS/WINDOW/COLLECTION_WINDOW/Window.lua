@@ -82,6 +82,13 @@ function Options.Elements.CollectionWindow:FillSkillSegment()
 		data.token = skill:GetSkillInfo():GetName()
 		data.icon = skill:GetSkillInfo():GetIconImageID()
 		data.timer = skill:GetCooldown()
+
+		
+		-- filter permanent effect timers
+		if data.timer > 999999 then
+			data.timer = nil
+		end
+
 		data.source = nil
 		data.persistent = false
 
@@ -308,6 +315,8 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 		self.filterText = ""
 		self.filter_clear:SetVisible(false)
 		self:FilterFocusChanged( false )
+		
+		self:FilterContent()
 	end
 
 	-- collaps
@@ -337,13 +346,20 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 		if  Options.CollectEffects then
 			self.effects_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
 			self.effects_back:SetBackColor( Options.Defaults.window.collecting )
+
+			local effects = LocalPlayer:GetEffects()
+
+			for index=1, effects:GetCount(), 1 do
+				Trigger.AddToEffectCollection( effects:Get(index) )
+			end
+
 		else
 			self.effects_button:SetBackground("Gibberish3/RESOURCES/play.tga")
 			self.effects_back:SetBackColor( Options.Defaults.window.backcolor1 )
 
 		end
 	end
-	Options.Elements.Tooltip.AddTooltip( self.effects_button, "tooltip", "TODO", true )
+	Options.Elements.Tooltip.AddTooltip( self.effects_button, "tooltip", "button_collect_effects", true )
 
 	self.effects_label = Turbine.UI.Label()
 	self.effects_label:SetParent( self.effects_back )
@@ -355,7 +371,11 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.effects_checkbox = Options.Elements.CheckBox()
 	self.effects_checkbox:SetParent( self.effects_back )
 	self.effects_checkbox:SetPosition( 143 , - 3 )
-	Options.Elements.Tooltip.AddTooltip( self.effects_checkbox, "tooltip", "TODO", true )
+	self.effects_checkbox:SetChecked( Options.OnlyDebuffs )
+	Options.Elements.Tooltip.AddTooltip( self.effects_checkbox, "tooltip", "cb_only_debuffs", true )
+	function self.effects_checkbox.CheckedChanged( value )
+		Options.OnlyDebuffs = value
+	end
 
 	-- chat
 	self.chat_back = Turbine.UI.Control()
@@ -378,7 +398,7 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 
 		end
 	end
-	Options.Elements.Tooltip.AddTooltip( self.chat_button, "tooltip", "TODO", true )
+	Options.Elements.Tooltip.AddTooltip( self.chat_button, "tooltip", "button_collect_chat", true )
 
 	self.chat_label = Turbine.UI.Label()
 	self.chat_label:SetParent( self.chat_back )
@@ -390,7 +410,11 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.chat_checkbox = Options.Elements.CheckBox()
 	self.chat_checkbox:SetParent( self.chat_back )
 	self.chat_checkbox:SetPosition( 143 , - 3 )
-	Options.Elements.Tooltip.AddTooltip( self.chat_checkbox, "tooltip", "TODO", true )
+	self.chat_checkbox:SetChecked( Options.OnlySay )
+	Options.Elements.Tooltip.AddTooltip( self.chat_checkbox, "tooltip", "cb_only_say", true )
+	function self.chat_checkbox.CheckedChanged( value )
+		Options.OnlySay = value
+	end
 
 end
 ---------------------------------------------------------------------------------------------------

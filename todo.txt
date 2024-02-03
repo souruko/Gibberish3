@@ -1,29 +1,20 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
 -- now
 
-
 -- next
-folder/window name should have 2 rows
-esc und co (tasten belegung)
-dropdown scrollbar
-opacity slider
-input check
-sort triggers
+
+options elements
+    opacity slider
+    input check
+    timer_trigger selection as row_item
+    dropdown scrollbar
+    save data feedback
+
 save chat timer
-timer_trigger selection as row_item
-save feedback
-icon options row
-collection filter timers for permanent effects
+
+permanent counter bars
+new folder counter skips numbers
+add center lines to movewindows
 import
+sort triggers

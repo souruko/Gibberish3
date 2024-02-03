@@ -1,7 +1,7 @@
 
-function ParseCombatChat(line)
+function Trigger.ParseCombatChat(line)
 	-- 1) Damage line ---
-	
+
 	local initiatorName,avoidAndCrit,skillName,targetNameAmountAndType = string.match(line,"^(.*) scored a (.*)hit(.*) on (.*)%.$"); -- (updated in v4.1.0)
 	
 	if (initiatorName ~= nil) then

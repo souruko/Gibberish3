@@ -46,12 +46,12 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     self.frame:SetMouseVisible( false )
     self.frame:SetZOrder( 2 )
 
-    self.barBack = Turbine.UI.Window()
+    self.barBack = Turbine.UI.Control()
     self.barBack:SetParent( self )
     self.barBack:SetMouseVisible( false )
     self.barBack:SetZOrder( 3 )
 
-    self.bar = Turbine.UI.Control()
+    self.bar = Turbine.UI.Window()
     self.bar:SetParent( self.barBack )
     self.bar:SetMouseVisible( false )
     self.bar:SetZOrder( 4 )
@@ -202,7 +202,7 @@ function BarElement:Finish()
 
     -- close all windows
     self.labelBack:Close()
-    self.barBack:Close()
+    self.bar:Close()
     self:Close()
 
 end
@@ -449,7 +449,7 @@ function BarElement:SetVisibility( value )
 
     -- change visiblility for all windows
     self:SetVisible( value )
-    self.barBack:SetVisible( value )
+    self.bar:SetVisible( value )
     self.labelBack:SetVisible( value )
 
 end

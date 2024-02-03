@@ -136,6 +136,7 @@ function Options.Shortcut.Constructor:Constructor()
 
     self.menu_height = self.rightClickMenu.background:GetHeight()
 
+    self:SetWantsKeyEvents(true)
     self:SetVisible( true )
 
 end
@@ -214,6 +215,17 @@ end
 function Options.Shortcut.Constructor:LanguageChanged()
 
     self.rightClickMenu:LanguageChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor.KeyDown( sender, args )
+
+    if args.Action == Turbine.UI.Lotro.Action.Escape then
+        Options.OptionsWindow( false )
+        Options.MoveChanged( false )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

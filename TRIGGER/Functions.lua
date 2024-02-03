@@ -119,6 +119,13 @@ Trigger.AddToEffectCollection = function( effect )
         return
     end
 
+    -- check for onlydebuffs
+    if Options.OnlyDebuffs == true and
+        effect:IsDebuff() == false then
+
+        return
+    end
+
     local name = effect:GetName()
     local icon = effect:GetIcon()
     local duration = effect:GetDuration()
@@ -131,6 +138,11 @@ Trigger.AddToEffectCollection = function( effect )
             return
 
         end
+    end
+
+    -- filter permanent effect timers
+    if duration > 999999 then
+        duration = nil
     end
 
     local index = #Options.Collection.Effects + 1

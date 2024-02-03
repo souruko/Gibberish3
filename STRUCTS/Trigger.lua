@@ -48,7 +48,7 @@ function Trigger.Copy( data )
     trigger.action          = data.action       
     trigger.value           = data.value  
     trigger.listOfTargets   = {}
-Turbine.Shell.WriteLine(data.token)
+
     for index, value in ipairs(data.listOfTargets) do
         trigger.listOfTargets[index] = value
     end

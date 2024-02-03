@@ -235,13 +235,6 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
         
     end
 
-    -- key
-    if timerData.useKey == false then
-
-        key = startTime
-        
-    end
-
     -- icon
     if icon == nil then
         icon = skill:GetSkillInfo():GetIconImageID()

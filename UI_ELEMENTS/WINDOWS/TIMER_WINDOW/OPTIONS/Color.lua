@@ -19,44 +19,44 @@ function ColorOptions:Constructor( data )
     local top = Options.Defaults.window.tab_c_top
 
     --color
-    self.color1 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color1", "TODO", 30, false )
+    self.color1 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color1", "win_color_frame", 30, false )
     self.color1:SetParent( self )
     self.color1:SetPosition( left, top )
     
     top = top + 30
 
-    self.color2 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color2", "TODO", 30, false )
+    self.color2 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color2", "win_color_back", 30, false )
     self.color2:SetParent( self )
     self.color2:SetPosition( left, top )
     
     top = top + 30
 
-    self.color3 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color3", "TODO", 30, false )
+    self.color3 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color3", "win_color_bar", 30, false )
     self.color3:SetParent( self )
     self.color3:SetPosition( left, top )
     
     top = top + 30
 
-    self.color4 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color4", "TODO", 30, false )
+    self.color4 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color4", "win_color_timer", 30, false )
     self.color4:SetParent( self )
     self.color4:SetPosition( left, top )
     
     top = top + 30
 
-    self.color5 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color5", "TODO", 30, false )
+    self.color5 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color5", "win_color_text", 30, false )
     self.color5:SetParent( self )
     self.color5:SetPosition( left, top )
     
     top = top + 35
 
     -- opacity
-    self.opacityActiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityActiv", "TODO", 30 )
+    self.opacityActiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityActiv", "win_opacity_activ", 30 )
     self.opacityActiv:SetParent( self )
     self.opacityActiv:SetPosition( left, top )
     
     top = top + 30
     
-    self.opacityPassiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityPassiv", "TODO", 30 )
+    self.opacityPassiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityPassiv", "win_opacity_passiv", 30 )
     self.opacityPassiv:SetParent( self )
     self.opacityPassiv:SetPosition( left, top )
     

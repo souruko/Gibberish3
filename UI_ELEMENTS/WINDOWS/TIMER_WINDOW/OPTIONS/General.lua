@@ -18,31 +18,31 @@ function GeneralOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "TODO", 50, true )
+    self.description = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "description", "win_description", 50, true )
     self.description:SetParent( self )
     self.description:SetPosition( left, top )
     
     top = top + 55
 
-    self.saveGlobaly = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "saveGlobaly", "TODO", 30 )
+    self.saveGlobaly = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "saveGlobaly", "win_save_globaly", 30 )
     self.saveGlobaly:SetParent( self )
     self.saveGlobaly:SetPosition( left, top )
     
     top = top + 35
     
-    self.resetOnTargetChanged = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "resetOnTargetChanged", "TODO", 30 )
+    self.resetOnTargetChanged = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "resetOnTargetChanged", "win_reset_on_target_change", 30 )
     self.resetOnTargetChanged:SetParent( self )
     self.resetOnTargetChanged:SetPosition( left, top )
     
     top = top + 35
         
-    self.useTargetEntity = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useTargetEntity", "TODO", 30 )
+    self.useTargetEntity = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useTargetEntity", "win_use_target_entity", 30 )
     self.useTargetEntity:SetParent( self )
     self.useTargetEntity:SetPosition( left, top )
     
     top = top + 35
 
-    self.overlay = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "overlay", "TODO", 30 )
+    self.overlay = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "overlay", "win_overlay", 30 )
     self.overlay:SetParent( self )
     self.overlay:SetPosition( left, top )
 

@@ -4,6 +4,19 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.4
+clear collection filter button works now
+collection nolonger shows gibberish as time for permanent effects
+collection now collects all activ effects after starting to collect effects
+collection checkboxes onlySay/onlyDebuffs work now
+added key event esc to close options
+added reset on target changed option
+added auto reload
+added a color control to the color row
+added a icon row options element
+fixed parse combat chat
+
+
 3.0.3
 added collection
 fixed collection filter
@@ -27,6 +40,7 @@ you nolonger need to reload before skilltrigger are caught
 drop_down_menu now properly hides after losing focus
 added color options
 added a frame to the tabwindows
+
 
 3.0.1
 fixed rename folder/window

@@ -18,7 +18,7 @@ function TextOptions:Constructor( data )
     local left = Options.Defaults.window.tab_c_left
     local top = Options.Defaults.window.tab_c_top
 
-    self.font = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "font", "TODO", 30 )
+    self.font = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "font", "win_font", 30 )
     self.font:SetParent( self )
     self.font:SetPosition( left, top )
     for name, value in pairs(Font.Type) do
@@ -31,13 +31,13 @@ function TextOptions:Constructor( data )
 
     top = top + 30
 
-    self.fontSize = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "fontSize", "TODO", 30 )
+    self.fontSize = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "fontSize", "win_font_size", 30 )
     self.fontSize:SetParent( self )
     self.fontSize:SetPosition( left, top )
 
     top = top + 35
     
-    self.numberFormat = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "numberFormat", "TODO", 30 )
+    self.numberFormat = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "numberFormat", "win_number_format", 30 )
     self.numberFormat:SetParent( self )
     self.numberFormat:SetPosition( left, top )
     for name, value in pairs(NumberFormat) do
@@ -46,7 +46,7 @@ function TextOptions:Constructor( data )
     self.numberFormat:Sort()
     top = top + 35
     
-    self.textAlignment = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "textAlignment", "TODO", 30 )
+    self.textAlignment = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "textAlignment", "win_text_align", 30 )
     self.textAlignment:SetParent( self )
     self.textAlignment:SetPosition( left, top )
     for name, value in pairs(Alignment) do
@@ -56,7 +56,7 @@ function TextOptions:Constructor( data )
 
     top = top + 30
     
-    self.timerAlignment = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "timerAlignment", "TODO", 30 )
+    self.timerAlignment = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "timerAlignment", "win_timer_align", 30 )
     self.timerAlignment:SetParent( self )
     self.timerAlignment:SetPosition( left, top )
     for name, value in pairs(Alignment) do
@@ -66,7 +66,7 @@ function TextOptions:Constructor( data )
 
     top = top + 35
 
-    self.showTimer = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showTimer", "TODO", 30 )
+    self.showTimer = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showTimer", "win_show_timer", 30 )
     self.showTimer:SetParent( self )
     self.showTimer:SetPosition( left, top )
 
