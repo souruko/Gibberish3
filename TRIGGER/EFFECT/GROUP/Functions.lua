@@ -205,6 +205,11 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
         return nil
     end
 
+    -- icon
+    if triggerData.icon ~= nil and triggerData.icon ~= effect:GetIcon() then
+        return nil
+    end
+
     -- check listOfTargets
     if Trigger.CheckListForName( player:GetName(), triggerData.listOfTargets ) == false then
         return nil

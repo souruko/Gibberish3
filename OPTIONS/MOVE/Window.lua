@@ -15,6 +15,7 @@ function Options.Move.Constructor:Constructor()
     self:SetSize( Options.Defaults.move.width,  Options.Defaults.move.height )
     self:SetPosition( 0, ( ( Options.ScreenHeight - Options.Defaults.move.height ) / 2 ) )
     self:SetBackColor( Options.Defaults.move.backcolor )
+    self:SetZOrder(1)
 
     -- shows the name of the selected window
     self.header = Turbine.UI.Label()
@@ -98,11 +99,18 @@ function Options.Move.Constructor:Constructor()
         self:SetWantsUpdates( false )
     end
 
+    self.right_back = Turbine.UI.Control()
+    self.right_back:SetParent( self )
+    self.right_back:SetPosition( 90, 175 )
+    self.right_back:SetSize( 30,  20 )
+    self.right_back:SetBackColor( Options.Defaults.move.headercolor )
+
     self.right_button = Turbine.UI.Button()
-    self.right_button:SetParent( self )
-    self.right_button:SetPosition( 90, 175 )
-    self.right_button:SetSize( 30,  20 )
-    self.right_button:SetBackColor( Options.Defaults.move.headercolor )
+    self.right_button:SetParent( self.right_back )
+    self.right_button:SetPosition( 0, -5 )
+    self.right_button:SetSize( 30,  30 )
+    self.right_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
+    self.right_button:SetBackground( "Gibberish3/RESOURCES/arrow_right.tga" )
     self.right_button.Click = function ()
         self:ArrowClicked( 1, 0 )
     end
@@ -113,11 +121,18 @@ function Options.Move.Constructor:Constructor()
         self:SetWantsUpdates( false )
     end
     
+    self.down_back = Turbine.UI.Control()
+    self.down_back:SetParent( self )
+    self.down_back:SetPosition( 60, 200 )
+    self.down_back:SetSize( 30,  20 )
+    self.down_back:SetBackColor( Options.Defaults.move.headercolor )
+
     self.down_button = Turbine.UI.Button()
-    self.down_button:SetParent( self )
-    self.down_button:SetPosition( 60, 200 )
+    self.down_button:SetParent( self.down_back )
+    self.down_button:SetPosition( 0, -5 )
     self.down_button:SetSize( 30,  20 )
-    self.down_button:SetBackColor( Options.Defaults.move.headercolor )
+    self.down_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
+    self.down_button:SetBackground( "Gibberish3/RESOURCES/arrow_down.tga" )
     self.down_button.Click = function ()
         self:ArrowClicked( 0, 1 )
     end
@@ -139,6 +154,18 @@ function Options.Move.Constructor:Constructor()
     self.close_button.Click = function ()
         Options.MoveChanged( false )
     end
+
+    self.x_line = Turbine.UI.Window()
+    self.x_line:SetSize( Options.ScreenWidth, 4 )
+    self.x_line:SetBackColor( Turbine.UI.Color.Black )
+    self.x_line:SetPosition( 0, (Options.ScreenHeight/2) - 2)
+    self.x_line:SetVisible(true)
+
+    self.y_line = Turbine.UI.Window()
+    self.y_line:SetSize( 4,Options.ScreenWidth )
+    self.y_line:SetBackColor( Turbine.UI.Color.Black )
+    self.y_line:SetPosition( (Options.ScreenWidth/2) - 2, 0)
+    self.y_line:SetVisible(true)
 
     self:LanguageChanged()
     self:SelectionChanged()
@@ -273,6 +300,15 @@ function Options.Move.Constructor:LanguageChanged()
     self.top_label:SetText( UTILS.GetText( "move", "top"))
     self.update_button:SetText( UTILS.GetText( "move", "update"))
     self.close_button:SetText( UTILS.GetText( "move", "close"))
+
+end
+---------------------------------------------------------------------------------------------------
+    
+---------------------------------------------------------------------------------------------------
+function Options.Move.Constructor:Closing()
+
+    self.x_line:Close()
+    self.y_line:Close()
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -1,20 +1,17 @@
 
 
 -- now
+permanent counter bars / counter generell testen
+save counter on reload
+import
 
 -- next
-
-options elements
-    opacity slider
-    input check
-    timer_trigger selection as row_item
-    dropdown scrollbar
-    save data feedback
-
-save chat timer
-
-permanent counter bars
-new folder counter skips numbers
-add center lines to movewindows
-import
 sort triggers
+timer enable/disable trigger action
+delete check window
+timer_trigger selection better text then description to display in dropdown
+opacity slider
+options input check
+dropdown scrollbar
+options save data feedback
+save window selections per char

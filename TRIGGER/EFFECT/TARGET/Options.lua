@@ -36,17 +36,23 @@ function EffectTargetOptions:Constructor( parent, data, parentType )
     
     top = top + 55
 
-    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 50, true )
+    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 90, true )
     self.token:SetParent( self )
     self.token:SetTop( top )
 
-    top = top + 55
+    top = top + 95
 
     self.useRegex = Options.Elements.CheckBoxRow( Options.Defaults.window.backcolor1, "options", "useRegex", "trg_use_regex", 30 )
     self.useRegex:SetParent( self )
     self.useRegex:SetTop( top )
 
     top = top + 35
+
+    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.backcolor1, "options", "icon", "tim_icon", 42 )
+    self.icon:SetParent( self )
+    self.icon:SetTop( top )
+
+    top = top + 47
 
     self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "trg_action", 30 )
     self.action:SetParent( self )
@@ -110,6 +116,7 @@ function EffectTargetOptions:ResetContent()
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.value )
     -- self.listOfTargets:SetText( self.data.value )
+    self.icon:SetText( self.data.icon )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -123,6 +130,7 @@ function EffectTargetOptions:SizeChanged()
     self.value:SetWidth( self:GetWidth() )
     self.useRegex:SetWidth( self:GetWidth() )
     self.listOfTargets:SetWidth( self:GetWidth() )
+    self.icon:SetWidth( self:GetWidth() )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -136,6 +144,7 @@ function EffectTargetOptions:Save()
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
     -- self.data.listOfTargets         = self.listOfTargets:GetText(  )
+    self.data.icon         = self.icon:GetText(  )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -167,6 +176,18 @@ function EffectTargetOptions:BuildCollectionRightClickMenu( data, menu )
 		Options.Defaults.rc_menu.item_height
 	)
 	menu:AddRow( row1 )
+
+    if data.icon ~= nil then
+        local row2 =  Options.Elements.Row(
+            "collection",
+            "icon",
+            function ()
+                self.icon:SetText( data.icon )
+            end,
+            Options.Defaults.rc_menu.item_height
+        )
+        menu:AddRow( row2 )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

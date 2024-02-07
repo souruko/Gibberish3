@@ -4,6 +4,20 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.5
+fixed a bug with targetname text option
+fixed a bug where permanent timers got removed with remove action
+added feature to save timers on reload
+fixed a bug where deleting did not deselect the trigger
+window/folder sorting now saves per character
+preselected folder/window trigger are now properly displayed
+fixed a bug in window selection where folder/window would move when clicked
+added a dropdown selection for timer_triggers(start/end/threshold)
+added icon as trigger requirement for effects
+fixed a folder id issue where id's where skiped
+added a center line(crosshair) to movewindows
+
+
 3.0.4
 clear collection filter button works now
 collection nolonger shows gibberish as time for permanent effects

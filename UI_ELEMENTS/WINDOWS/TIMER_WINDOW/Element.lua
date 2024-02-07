@@ -336,8 +336,8 @@ function TimerWindowElement:ActionRemove( timerIndex, key )
             
             if self.children[i].key == nil or self.children[i].key == key then
 
-                self.children[i]:Finish()
-                self:Resize()
+                self.children[i]:Ended()
+                -- self:Resize()
 
             end
 
@@ -505,6 +505,23 @@ function TimerWindowElement:GetChildIndex( child )
 
     -- not found
     return nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- 
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:GetRunningTimer()
+
+    local running_window_data = {}
+    
+    for i, control in ipairs(self.children) do
+        local index = #running_window_data+1
+        running_window_data[ index ] = control:GetRunningInformation()
+    end
+
+    return running_window_data
 
 end
 ---------------------------------------------------------------------------------------------------

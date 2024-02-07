@@ -84,10 +84,9 @@ end
 ---------------------------------------------------------------------------------------------------
 -- get next folder id
 ---------------------------------------------------------------------------------------------------
-function DataFunction.GetNextSortIndex()
+function DataFunction.GetNextFolderID()
 
     Data.folder.lastID = Data.folder.lastID + 1
-
     return Data.folder.lastID
 
 end

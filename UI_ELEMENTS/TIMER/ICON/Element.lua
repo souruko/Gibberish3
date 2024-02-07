@@ -91,7 +91,9 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
     self:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- timer started trigger event
-    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    if Trigger.TimerEvent ~= nil then
+        Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    end
 
     self:SetVisibility( true )
 

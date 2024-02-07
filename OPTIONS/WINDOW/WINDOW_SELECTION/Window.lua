@@ -412,7 +412,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.file_button:SetParent( self.file_back )
 	self.file_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.file_button:SetBackground( "Gibberish3/RESOURCES/file_new.tga" )
-	self.file_button:SetPosition( -3, -3 )
+	self.file_button:SetPosition( 0, 0 )
 	self.file_button.MouseClick = function ()
 		local left, top = self.file_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
 		self.file_menu:Show( left, top )
@@ -428,7 +428,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.dir_button:SetParent( self.dir_back )
 	self.dir_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.dir_button:SetBackground( "Gibberish3/RESOURCES/dir_new.tga" )
-	self.dir_button:SetPosition( -3, -3 )
+	self.dir_button:SetPosition( 0, 1 )
 	self.dir_button.MouseClick = function ()
 		self:NewFolderPressed()
 	end
@@ -495,7 +495,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.collaps_button:SetParent( self.collaps_back )
 	self.collaps_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.collaps_button:SetBackground( "Gibberish3/RESOURCES/collaps.tga" )
-	self.collaps_button:SetPosition( -3, -3 )
+	self.collaps_button:SetPosition( 0, 0 )
 	self.collaps_button.MouseClick = function ()
 		self:CollapsButtonPressed()
 	end
@@ -530,8 +530,8 @@ function Options.Elements.WindowSelection:DraggingEnd( fromData )
 		self:FillContent()
 
 	-- remove item from all folders
-	elseif fromData ~= toItem.data
-		and left >= 0 and left <= self.listbox:GetWidth()
+	elseif toItem == nil
+	    and left >= 0 and left <= self.listbox:GetWidth()
 		and top >= 0 and top <= self.listbox:GetHeight() then
 
 			fromData.folder = nil

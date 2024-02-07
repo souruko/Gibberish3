@@ -69,6 +69,7 @@ function Options.OverwriteCharData( global_data, char_data )
         -- char data found
         if data ~= nil then
             window_data.enabled = data.enabled
+            window_data.sortIndex = data.sortIndex
 
             -- use char position if saveGlobaly == false
             if window_data.saveGlobaly == false then
@@ -83,6 +84,24 @@ function Options.OverwriteCharData( global_data, char_data )
 
         end
        
+    end
+
+    -- folder
+    for index, folder_data in ipairs( global_data.folder ) do
+
+        local data = Options.GetFolderByID( folder_data.id, char_data )
+
+        if data ~= nil then
+
+            folder_data.collapsed = data.collapsed
+            folder_data.sortIndex = data.sortIndex
+        
+        else
+
+            folder_data.collapsed = true
+
+        end
+
     end
 
     return global_data
@@ -117,6 +136,25 @@ end
 function Options.GetWindowByID( id, char_data )
 
     for index, data in ipairs( char_data.window ) do
+
+        if data.id == id then
+            return data
+        end
+        
+    end
+
+    return nil
+
+end
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get window by id
+---------------------------------------------------------------------------------------------------
+function Options.GetFolderByID( id, char_data )
+
+    for index, data in ipairs( char_data.folder ) do
 
         if data.id == id then
             return data
@@ -176,4 +214,69 @@ function Options.ConvertFromEuro(dataRaw)
 	
 end
 
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- startup options if the were saved as open
+---------------------------------------------------------------------------------------------------
+function Options.LoadRunningTimer()
+
+    local running_data = Turbine.PluginData.Load( Turbine.DataScope.Character, "gibberish_running_timer_" .. Language[ Language.Local ], nil)
+    local gameTime = Turbine.Engine.GetGameTime()
+
+    if running_data == nil then
+        return
+
+    end
+
+    -- fake trigger data for add action
+    local fake_trigger_data = {}
+    fake_trigger_data.action = Action.Add
+
+    for i, windowData in ipairs(Data.window) do
+
+        -- check if window is ok for timer
+        if windowData.enabled == true and
+            Windows[ i ] ~= nil and
+            running_data[ i ] ~= nil and
+            #running_data[ i ] > 0 then
+
+            -- add timer
+            for j, data in ipairs(running_data[ i ]) do
+
+                local timerData = windowData.timerList[ data.index ]
+
+                -- check if timer should get started again
+                if gameTime < data.startTime + data.duration or
+                    timerData.loop == true then
+
+                    -- fix loop start time
+                    if timerData.loop == true then
+                        local time_past = gameTime - data.startTime
+                        local time_left = math.fmod(time_past, data.duration)
+                        data.startTime = gameTime - time_left
+                    end
+                    
+                    -- action call
+                    Windows[ i ]:TimerAction(
+                        fake_trigger_data,
+                        timerData,
+                        data.index,
+                        data.startTime,
+                        data.duration,
+                        data.icon,
+                        data.text,
+                        nil,
+                        data.key
+                    )
+
+                end
+
+            end
+
+        end
+        
+    end
+
+end
 ---------------------------------------------------------------------------------------------------

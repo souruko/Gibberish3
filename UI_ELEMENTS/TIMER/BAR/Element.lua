@@ -33,6 +33,8 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     -- key
     self.key = key
 
+    self.icon = icon
+
     -- for threshold timer event
     self.firstThreshold = true
 
@@ -85,7 +87,9 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     self:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- timer started trigger event
-    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    if Trigger.TimerEvent ~= nil then
+        Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    end
 
     self:SetVisibility( true )
 
@@ -145,6 +149,7 @@ function BarElement:UpdateContent( startTime, duration, icon, text, entity, key,
     self.startTime = startTime
     self.duration = duration
     self.endTime = startTime + duration
+    self.icon = icon
 
     -- reset target entity
     self.entityControl:SetEntity( entity )
@@ -218,7 +223,7 @@ function BarElement:Update()
 
     -- timer ended
     if timeLeft <= 0 then
-        
+
         -- if loop attribute is set reset timer
         if self.data.loop == true then
             
@@ -542,6 +547,30 @@ function BarElement:Resize()
     self.barBack:SetPosition( barBackLeft, barBackTop )
     self.labelBack:SetPosition( labelBackLeft, labelBackTop )
     self.iconControl:SetPosition( frame, frame )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+function BarElement:GetRunningInformation()
+
+    -- permanent inactiv timer
+    if self:GetWantsUpdates() == false then
+        return nil
+    end
+
+    local running_timer_data = {}
+
+    running_timer_data.index = self.index
+    running_timer_data.key = self.key
+    running_timer_data.startTime = self.startTime
+    running_timer_data.duration = self.duration
+    running_timer_data.icon = self.icon
+    running_timer_data.text = self.textLabel:GetText()
+
+    return running_timer_data
 
 end
 ---------------------------------------------------------------------------------------------------

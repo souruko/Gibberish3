@@ -58,7 +58,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function Item:LanguageChanged()
 
-    self.label:SetText( UTILS.GetText( self.text_control, self.text_description ) )
+    if self.text_control == nil then
+        self.label:SetText( self.text_description )
+
+    else
+        self.label:SetText( UTILS.GetText( self.text_control, self.text_description ) )
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

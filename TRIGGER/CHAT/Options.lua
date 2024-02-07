@@ -28,11 +28,11 @@ function ChatOptions:Constructor( parent, data, parentType )
     
     top = top + 55
 
-    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 50, true )
+    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 90, true )
     self.token:SetParent( self )
     self.token:SetTop( top )
 
-    top = top + 55
+    top = top + 95
 
     self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "trg_action", 30 )
     self.action:SetParent( self )

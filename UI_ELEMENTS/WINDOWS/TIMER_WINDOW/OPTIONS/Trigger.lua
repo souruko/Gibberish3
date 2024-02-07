@@ -57,6 +57,7 @@ function TriggerOptions:SizeChanged()
 
     if self.triggerOptions ~= nil then
         self.triggerOptions:SetWidth( width - 200 - (5*Options.Defaults.window.spacing) )
+        self.triggerOptions:SetHeight( self.listbox:GetHeight() )
     end
 
 end

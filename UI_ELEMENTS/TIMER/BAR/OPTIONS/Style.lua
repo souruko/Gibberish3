@@ -22,7 +22,7 @@ function StyleOptions:Constructor( data )
     self.icon:SetParent( self )
     self.icon:SetPosition( left, top )
 
-    top = top + 35
+    top = top + 47
 
     self.showIcon = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "showIcon", "tim_show_icon", 30 )
     self.showIcon:SetParent( self )

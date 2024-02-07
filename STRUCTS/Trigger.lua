@@ -19,6 +19,7 @@ function Trigger.New(type)
     trigger.type            = type
     
     trigger.token           = Trigger[type].Defaults.token
+    trigger.icon            = Trigger[type].Defaults.icon
     trigger.useRegex        = Trigger[type].Defaults.useRegex
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
@@ -39,10 +40,11 @@ function Trigger.Copy( data )
     local trigger = {}
 
     trigger.id              = Turbine.Engine.GetGameTime()
-    trigger.enabled         = data.enabled      
+    trigger.enabled         = data.enabled  
     trigger.sortIndex       = data.sortIndex    
     trigger.type            = data.type         
     trigger.token           = data.token        
+    trigger.icon            = data.icon
     trigger.useRegex        = data.useRegex     
     trigger.description     = data.description  
     trigger.action          = data.action       

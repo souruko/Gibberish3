@@ -90,7 +90,9 @@ function CounterBarElement:Constructor( parent, data, index )
     self:UpdateContent( 0, data.icon, data.text, nil, nil, true )
 
     -- timer started trigger event
-    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    if Trigger.TimerEvent ~= nil then
+        Trigger.TimerEvent( self.data.id, Trigger.Types.TimerStart )
+    end
 
     self:SetVisibility( true )
 

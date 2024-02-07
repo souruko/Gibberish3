@@ -41,11 +41,27 @@ function TimerOptions:Constructor( parent, data, parentType )
     
     top = top + 55
 
-    self.token = Options.Elements.TextBoxRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 50, true )
+    self.token = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "token", "trg_token", 30, true )
     self.token:SetParent( self )
     self.token:SetTop( top )
 
-    top = top + 55
+    for i, window_data in ipairs(Data.window) do
+        
+        for j, timer_data in ipairs(window_data.timerList) do
+
+            local text =  timer_data.description
+            if text == "" then
+                text = timer_data.textValue
+            end
+            if text ~= "" then
+                self.token:AddItem( nil, text, timer_data.id)
+            end
+
+        end
+
+    end
+
+    top = top + 35
 
     self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "trg_action", 30 )
     self.action:SetParent( self )
@@ -98,7 +114,7 @@ end
 function TimerOptions:ResetContent()
 
     self.description:SetText( self.data.description )
-    self.token:SetText( self.data.token )
+    self.token:SetSelection( self.data.token )
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.value )
 
@@ -120,7 +136,14 @@ end
 function TimerOptions:Save()
 
     self.data.description   = self.description:GetText(  )
-    self.data.token         = self.token:GetText(  )
+    Turbine.Shell.WriteLine(self.token:GetSelectedValue(  ))
+    local token = self.token:GetSelectedValue(  )
+    if token == nil then
+        self.data.token = ""
+    else
+        self.data.token = token
+    end
+    -- self.data.token         = self.token:GetSelectedValue(  )
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
 

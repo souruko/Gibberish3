@@ -31,7 +31,7 @@ function Options.Elements.FolderOptions:Constructor( parent, data )
     self.listbox:ContentChanged( self.data )
     self.triggerOptions = nil
     
-    self:TriggerSelectionChanged()
+    self:Trigger2SelectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -74,6 +74,7 @@ function Options.Elements.FolderOptions:SizeChanged()
 
     if self.triggerOptions ~= nil then
         self.triggerOptions:SetWidth( width - 200 - (5*Options.Defaults.window.spacing) )
+        self.triggerOptions:SetHeight( self.listbox:GetHeight() )
     end
 
 end

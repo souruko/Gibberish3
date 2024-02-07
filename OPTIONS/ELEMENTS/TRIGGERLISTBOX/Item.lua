@@ -217,7 +217,7 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function Item:Filter( filter )
-
+    
     if string.find( string.lower( self.data.token ) , filter ) then
         return true
     end

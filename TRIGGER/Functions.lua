@@ -158,3 +158,19 @@ Trigger.AddToEffectCollection = function( effect )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns name and tier from combat chat message
+---------------------------------------------------------------------------------------------------
+Trigger.CheckingNameForNumber = function(name)
+
+    local start_tier, end_tier = string.find(name, "%d+")
+    
+    if start_tier ~= nil then
+        return string.sub(name, start_tier, end_tier)
+    else
+        return ""
+    end
+
+end
+---------------------------------------------------------------------------------------------------

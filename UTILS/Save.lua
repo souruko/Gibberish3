@@ -41,11 +41,38 @@ end
 function Turbine.Plugin.Unload()
 
     Options.SaveData()
+	Options.SaveRunningTimer()
 
 end
 ---------------------------------------------------------------------------------------------------
 
+---------------------------------------------------------------------------------------------------
+-- save running timer
+---------------------------------------------------------------------------------------------------
+function Options.SaveRunningTimer()
 
+	local running_data = {}
+
+	for index, data in ipairs(Data.window) do
+
+		if data.enabled == true and Windows[ index ] ~= nil then
+			running_data[ index ] = Windows[ index ]:GetRunningTimer()
+		end
+
+	end
+
+
+    if Language.Local == Language.English then
+        Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_running_timer_" .. Language[ Language.English ], running_data, nil)
+
+    else
+        local converted = Options.ConvertToEuro(running_data)
+        Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_running_timer_" .. Language[ Language.Local ], converted, nil)
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
 
 
 

@@ -296,7 +296,7 @@ Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat = function(message, ch
 
     local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 = Trigger.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
    
-    local text = Trigger[ Trigger.Types.Chat ].CheckingNameForNumber(skillName)
+    local text = Trigger.CheckingNameForNumber(skillName)
   
     local target = nil
 
@@ -310,22 +310,6 @@ Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat = function(message, ch
     end
 
     return text, target
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- returns name and tier from combat chat message
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].CheckingNameForNumber = function(name)
-
-    local start_tier, end_tier = string.find(name, "%d+")
-    
-    if start_tier ~= nil then
-        return string.sub(name, start_tier, end_tier)
-    else
-        return ""
-    end
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -176,6 +176,11 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerDat
         return nil
     end
 
+    -- icon
+    if triggerData.icon ~= nil and triggerData.icon ~= effect:GetIcon() then
+        return nil
+    end
+
     -- check token
     if triggerData.useRegex == true then
 
