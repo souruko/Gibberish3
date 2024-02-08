@@ -108,7 +108,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.FolderOptions:Trigger2SelectionChanged()
 
-    self.listbox:TriggerSelectionChanged()
+    self.listbox:Trigger2SelectionChanged()
 
     -- close old
     if self.triggerOptions ~= nil then
@@ -160,6 +160,14 @@ function Options.Elements.FolderOptions:CopyTrigger( triggerData )
 
     self.data[ triggerData.type ][ index ] = trigger
     self.listbox:ContentChanged( self.data )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.FolderOptions:TriggerSelected( index, type )
+
+    Options.Trigger2SelectionChanged( index, type )
 
 end
 ---------------------------------------------------------------------------------------------------

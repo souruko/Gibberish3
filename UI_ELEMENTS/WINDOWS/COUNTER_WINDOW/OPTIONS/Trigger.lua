@@ -113,7 +113,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function TriggerOptions:Trigger2SelectionChanged()
 
-    self.listbox:TriggerSelectionChanged()
+    self.listbox:Trigger2SelectionChanged()
 
     -- close old
     if self.triggerOptions ~= nil then
@@ -125,7 +125,7 @@ function TriggerOptions:Trigger2SelectionChanged()
     if Data.selectedTriggerIndex2 ~= 0 then
         local triggerData = self.data[ Data.selectedTriggerType2 ][ Data.selectedTriggerIndex2 ]
 
-        self.triggerOptions = Trigger[ Data.selectedTriggerType2 ].Options( self, triggerData, 0 )
+        self.triggerOptions = Trigger[ Data.selectedTriggerType2 ].Options( self, triggerData, self.data.type )
         self.triggerOptions:SetParent( self.background1 )
         self.triggerOptions:SetPosition( 200 + (2*Options.Defaults.window.spacing), Options.Defaults.window.spacing )
         self.triggerOptions:SetHeight( self.listbox:GetHeight() )
@@ -164,6 +164,14 @@ function TriggerOptions:BuildCollectionRightClickMenu( data, menu )
     end
 
     self.triggerOptions:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TriggerOptions:TriggerSelected( index, type )
+
+    Options.Trigger2SelectionChanged( index, type )
 
 end
 ---------------------------------------------------------------------------------------------------

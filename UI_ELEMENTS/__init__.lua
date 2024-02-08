@@ -56,16 +56,16 @@ Window.Types.TIMER_WINDOW = 1
 Window.Types.COUNTER_WINDOW = 2
 
 L[ Language.English ].windowType = {}
-L[ Language.English ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer Window"
-L[ Language.English ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter Window"
+L[ Language.English ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer"
+L[ Language.English ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter"
 
 L[ Language.French ].windowType = {}
-L[ Language.French ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer Window"
-L[ Language.French ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter Window"
+L[ Language.French ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer"
+L[ Language.French ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter"
 
 L[ Language.German ].windowType = {}
-L[ Language.German ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer Window"
-L[ Language.German ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter Window"
+L[ Language.German ].windowType[ Window.Types.TIMER_WINDOW ] = "Timer"
+L[ Language.German ].windowType[ Window.Types.COUNTER_WINDOW ] = "Counter"
 
 -- window specific tables
 for index, windowType in pairs( Window.Types ) do

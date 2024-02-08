@@ -371,6 +371,8 @@ function CounterWindowElement:ActionSubtract( value, timerData, timerIndex, icon
 
     local child = self:CheckForRunningTimer( timerIndex, key )
 
+    value = value * (-1)
+
     -- stop when no timer is found
     if child == nil then
         return

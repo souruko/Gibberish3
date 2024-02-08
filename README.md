@@ -4,6 +4,12 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.6
+icon update
+fixed a bug where counter did not start with the start value
+added window type to window selection item
+
+
 3.0.5
 fixed a bug with targetname text option
 fixed a bug where permanent timers got removed with remove action

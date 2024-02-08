@@ -39,7 +39,7 @@ function CounterBarElement:Constructor( parent, data, index )
     -- counter values
     self.counterEND = 0
     self.counterSPAN = 0
-    self.counterCURRENT = 0
+    self.counterCURRENT = data.counterSTART
 
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
@@ -224,7 +224,7 @@ function CounterBarElement:UpdateElement( value )
     local counterLeft = math.abs( self.counterSPAN - self.counterCURRENT )
 
     -- counter ended
-    if counterLeft == 0 then
+    if self.counterCURRENT == self.counterEND then
         
         -- if loop attribute is set reset timer
         if self.data.loop == true then
@@ -438,7 +438,7 @@ function CounterBarElement:Reset()
 
     -- if reset attribute is set call the timer end
     if self.data.reset == true then
-        
+
         self:Ended()
 
     end

@@ -168,3 +168,11 @@ function TriggerOptions:BuildCollectionRightClickMenu( data, menu )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TriggerOptions:TriggerSelected( index, type )
+
+    Options.TriggerSelectionChanged( index, type )
+
+end
+---------------------------------------------------------------------------------------------------

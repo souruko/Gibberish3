@@ -210,9 +210,21 @@ function WindowItem:CreateContent()
     -- enable checkbox
     self.enabledCheckbox = Options.Elements.CheckBox()
     self.enabledCheckbox:SetParent( self.background )
-    self.enabledCheckbox:SetTop( 0 )
+    self.enabledCheckbox:SetTop( -5 )
     self.enabledCheckbox:SetChecked( self.data.enabled )
 
+    -- type label
+    self.typeLabel = Turbine.UI.Label()
+    self.typeLabel:SetParent( self.background )
+    self.typeLabel:SetMultiline( false )
+    self.typeLabel:SetTop( 15 )
+    self.typeLabel:SetHeight(20)
+    self.typeLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleRight )
+    self.typeLabel:SetFont( Turbine.UI.Lotro.Font.Verdana12 )
+    self.typeLabel:SetForeColor( Options.Defaults.window.textdark )
+    self.typeLabel:SetMouseVisible( false )
+    self.typeLabel:SetText( UTILS.GetText( "windowType", self.data.type ) )
+    
 	self.enabledCheckbox.CheckedChanged = function( value )
         self.data.enabled = value
 		Windows.EnabledChanged( self.index )
@@ -241,7 +253,7 @@ function WindowItem:Width( value )
     self.background:SetWidth( value )
     self.nameLabel:SetWidth( value - 55)
     self.enabledCheckbox:SetLeft( value - 40 )
-
+    self.typeLabel:SetWidth( value - 14)
 end
 ---------------------------------------------------------------------------------------------------
 

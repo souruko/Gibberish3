@@ -113,7 +113,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function TriggerOptions:Trigger2SelectionChanged()
 
-    self.listbox:TriggerSelectionChanged()
+    self.listbox:Trigger2SelectionChanged()
 
     -- close old
     if self.triggerOptions ~= nil then
@@ -164,6 +164,14 @@ function TriggerOptions:BuildCollectionRightClickMenu( data, menu )
     end
 
     self.triggerOptions:BuildCollectionRightClickMenu( data, menu )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TriggerOptions:TriggerSelected( index, type )
+
+    Options.Trigger2SelectionChanged( index, type )
 
 end
 ---------------------------------------------------------------------------------------------------

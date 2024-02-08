@@ -136,7 +136,7 @@ end
 function TimerOptions:Save()
 
     self.data.description   = self.description:GetText(  )
-    Turbine.Shell.WriteLine(self.token:GetSelectedValue(  ))
+
     local token = self.token:GetSelectedValue(  )
     if token == nil then
         self.data.token = ""

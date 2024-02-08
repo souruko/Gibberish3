@@ -242,7 +242,7 @@ function FolderItem:CreateContent()
 	self.collapsButton = Turbine.UI.Button()
     self.collapsButton:SetParent( self.background )
     self.collapsButton:SetSize(32, 32)
-    self.collapsButton:SetPosition( 0, -3 )
+    self.collapsButton:SetPosition( 0, 3 )
     self.collapsButton:SetBlendMode( Turbine.UI.BlendMode.Overlay )
     self.collapsButton.MouseClick = function ()
 

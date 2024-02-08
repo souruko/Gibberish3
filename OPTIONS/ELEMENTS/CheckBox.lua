@@ -13,7 +13,7 @@ function Options.Elements.CheckBox:Constructor()
 
     self.checked = false
 
-    self:SetSize( 32 , 32 )
+    self:SetSize( 32, 32 )
     self:SetBlendMode( Turbine.UI.BlendMode.Overlay )
     self:SetBackground( "Gibberish3/RESOURCES/switch_off.tga" )
     self.MouseClick = function ()

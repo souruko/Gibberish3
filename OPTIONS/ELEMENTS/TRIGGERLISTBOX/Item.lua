@@ -37,19 +37,19 @@ function Item:Constructor( index, data, width, parent )
     -- mouse actions
     self.MouseEnter = function ()
 
-        if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
-            return
-        end
-        self:SetBackColor( Options.Defaults.window.w_window_hover )
+        -- if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
+        --     return
+        -- end
+        -- self:SetBackColor( Options.Defaults.window.w_window_hover )
 
     end
 
     self.MouseLeave = function ()
 
-        if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
-            return
-        end
-        self:SetBackColor( Options.Defaults.window.w_window_base )
+        -- if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
+        --     return
+        -- end
+        -- self:SetBackColor( Options.Defaults.window.w_window_base )
 
     end
 
@@ -231,6 +231,22 @@ end
 function Item:TriggerSelectionChanged()
 
     if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
+
+        self:SetBackColor( Options.Defaults.window.w_window_select )
+
+    else
+
+        self:SetBackColor( Options.Defaults.window.w_window_base )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Item:Trigger2SelectionChanged()
+
+    if self.index == Data.selectedTriggerIndex2 and self.data.type == Data.selectedTriggerType2 then
 
         self:SetBackColor( Options.Defaults.window.w_window_select )
 

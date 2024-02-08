@@ -198,7 +198,7 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	self.listbox:SetPosition( listbox_left, listbox_top )
 
 	self.filter_back:SetPosition( filter_left, Options.Defaults.window.frame )
-	self.filter_clear:SetPosition( filter_width - 30, -3 )
+	self.filter_clear:SetPosition( filter_width - 30, 0 )
 	self.collaps_back:SetPosition( collaps_left, Options.Defaults.window.frame )
 
 	self.effects_back:SetPosition( Options.Defaults.window.frame, frame_height - 2 * ( Options.Defaults.window.frame + Options.Defaults.window.toolbar_height ) )
@@ -299,9 +299,9 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 
 	self.filter_icon = Turbine.UI.Control()
 	self.filter_icon:SetParent( self.filter )
-	self.filter_icon:SetPosition( -4, -3 )
+	self.filter_icon:SetPosition( -2, 0 )
 	self.filter_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	self.filter_icon:SetBackground("Gibberish3/Resources/search30.tga")
+	self.filter_icon:SetBackground("Gibberish3/Resources/search.tga")
 	self.filter_icon:SetMouseVisible(false)
 
 	self.filter_clear = Turbine.UI.Button()
@@ -338,9 +338,15 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 
 	self.effects_button = Turbine.UI.Button()
 	self.effects_button:SetParent( self.effects_back )
-	self.effects_button:SetPosition( 0, 0 )
+	self.effects_button:SetPosition( -1, -3 )
 	self.effects_button:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	self.effects_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+	if Options.CollectEffects == false then
+		self.effects_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+		self.effects_back:SetBackColor( Options.Defaults.window.backcolor1 )
+	else
+		self.effects_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
+		self.effects_back:SetBackColor( Options.Defaults.window.collecting )
+	end
 	self.effects_button.MouseClick = function (sender, args)
 		Options.CollectEffects = not( Options.CollectEffects )
 		if  Options.CollectEffects then
@@ -384,9 +390,15 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 
 	self.chat_button = Turbine.UI.Button()
 	self.chat_button:SetParent( self.chat_back )
-	self.chat_button:SetPosition( 0, 0 )
+	self.chat_button:SetPosition( -1, -3 )
 	self.chat_button:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	self.chat_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+	if Options.CollectChat == false then
+		self.chat_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+		self.chat_back:SetBackColor( Options.Defaults.window.backcolor1 )
+	else
+		self.chat_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
+		self.chat_back:SetBackColor( Options.Defaults.window.collecting )
+	end
 	self.chat_button.MouseClick = function (sender, args)
 		Options.CollectChat = not( Options.CollectChat )
 		if Options.CollectChat then

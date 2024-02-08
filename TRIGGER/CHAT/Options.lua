@@ -50,7 +50,7 @@ function ChatOptions:Constructor( parent, data, parentType )
         self.action:AddItem( "action", Action.Disable, Action.Disable)
         self.action:AddItem( "action", Action.Clear, Action.Clear)
         self.action:AddItem( "action", Action.Reset, Action.Reset)
-    
+
     -- timer
     elseif parentType < 0 then
         self.action:AddItem( "action", Action.Add, Action.Add)

@@ -87,16 +87,16 @@ function Options.Elements.TriggerListbox:Constructor( parent )
 
 	self.filter_icon = Turbine.UI.Control()
 	self.filter_icon:SetParent( self.filter )
-	self.filter_icon:SetPosition( -4, -3 )
-	self.filter_icon:SetSize( 32, 32 )
+	self.filter_icon:SetPosition( -2, 0 )
+	self.filter_icon:SetSize( 20, 20 )
 	self.filter_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	self.filter_icon:SetBackground("Gibberish3/Resources/search30.tga")
+	self.filter_icon:SetBackground("Gibberish3/Resources/search.tga")
 	self.filter_icon:SetMouseVisible(false)
 
 	self.filter_clear = Turbine.UI.Button()
-	self.filter_clear:SetSize( 32, 32 )
+	self.filter_clear:SetSize( 20, 20 )
 	self.filter_clear:SetParent( self.filter )
-    self.filter_clear:SetTop( -3 )
+    self.filter_clear:SetTop( 0 )
 	self.filter_clear:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 	self.filter_clear:SetBackground("Gibberish3/Resources/cross.tga")
 	self.filter_clear:SetVisible(false)
@@ -188,7 +188,7 @@ function Options.Elements.TriggerListbox:NewTriggerPressed( type )
     local triggerIndex = #self.data[ type ] + 1
 
     self.data[ type ][ triggerIndex ] = triggerData
-	Options.TriggerSelectionChanged( triggerIndex, type )
+	self.parent:TriggerSelected( triggerIndex, type )
 
     self:ContentChanged( self.data )
 
@@ -202,6 +202,19 @@ function Options.Elements.TriggerListbox:TriggerSelectionChanged()
         
         local item = self.listbox:GetItem(i)
         item:TriggerSelectionChanged()
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.TriggerListbox:Trigger2SelectionChanged()
+
+    for i = 1, self.listbox:GetItemCount(), 1 do
+        
+        local item = self.listbox:GetItem(i)
+        item:Trigger2SelectionChanged()
 
     end
 
