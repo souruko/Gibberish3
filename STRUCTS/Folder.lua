@@ -106,3 +106,33 @@ function Folder.Delete(index)
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete folder
+---------------------------------------------------------------------------------------------------
+function Folder.GetListOfWindows( folder_index )
+
+    local list = {}
+
+    -- find windows
+    for index, window_data in ipairs(Data.window) do
+        if window_data.folder == folder_index then
+            list[#list+1] = window_data
+        end
+    end
+
+    -- find folders / recursive ...
+    for index, folder_data in ipairs(Data.folder) do
+        if folder_data.folder == folder_index then
+            local list2 = Folder.GetListOfWindows( index )
+
+            for key, value in pairs(list2) do
+                list[#list+1] = value
+            end
+        end
+    end
+
+    return list
+
+end
+---------------------------------------------------------------------------------------------------

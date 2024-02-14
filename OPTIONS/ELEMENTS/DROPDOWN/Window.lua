@@ -65,6 +65,15 @@ function Options.Elements.Dropdown:Constructor( width )
     self.listbox:SetTop( Options.Defaults.dropdown.spacing )
     self.listbox:SetSize( width , self.drop_down:GetHeight() - ( 2 * Options.Defaults.dropdown.spacing ) )
 
+	self.scrollbar = Turbine.UI.Lotro.ScrollBar()
+	self.scrollbar:SetParent( self.listbox )
+    self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
+	self.scrollbar:SetBackColor( Options.Defaults.window.framecolor )
+    self.scrollbar:SetPosition( width-10 ,0 )
+    self.scrollbar:SetWidth( 10 )
+
+    self.listbox:SetVerticalScrollBar( self.scrollbar )
+
     -- show on click
     self.base.MouseClick = function ()
 
@@ -130,7 +139,13 @@ function Options.Elements.Dropdown:ChangeSelection( child )
     end
 
     -- change selection text
-    self.label:SetText( UTILS.GetText( child.text_control, child.text_description ) )
+    if child.text_control == nil then
+        self.label:SetText( child.text_description )
+
+    else
+        self.label:SetText( UTILS.GetText( child.text_control, child.text_description ) )
+
+    end
     -- call event
     self.SelectionChanged( self, self.selected_index, self.selected_value )
     -- hide dropdown
@@ -142,7 +157,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.Dropdown:AddItem( text_control, text_description, value )
 
-    local item = Item( self, self.width, text_control, text_description, value )
+    local width = self.width-10
+    local item = Item( self, width, text_control, text_description, value )
 
     self.listbox:AddItem( item )
     self:ResizeDropdown()
@@ -247,9 +263,18 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.Dropdown:ResizeDropdown()
 
-    local height = self.listbox:GetItemCount() * Options.Defaults.dropdown.item_height
+    local item_count = self.listbox:GetItemCount()
+    local height
+    if item_count < 11 then
+        height = item_count * Options.Defaults.dropdown.item_height
+
+    else
+        height = 10 * Options.Defaults.dropdown.item_height
+
+    end
 
     self.listbox:SetHeight( height )
+    self.scrollbar:SetHeight( height )
     height = height + ( 2 * Options.Defaults.dropdown.spacing )
     self.drop_down:SetHeight( height )
     self:SetHeight( height + Options.Defaults.dropdown.spacing + Options.Defaults.dropdown.base_height )

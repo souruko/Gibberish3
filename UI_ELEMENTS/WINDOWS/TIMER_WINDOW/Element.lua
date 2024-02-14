@@ -429,14 +429,14 @@ function TimerWindowElement:SortChildren()
             -- both permanent > sort by index > child2 first
             if child1.data.permanent == true and
             child1.data.permanent == true and
-            child1.sortIndex > child2.sortIndex then
+            child1.data.sortIndex > child2.data.sortIndex then
 
                 return false
 
             -- both permanent > sort by index > child1 first
             elseif child1.data.permanent == true and
             child1.data.permanent == true and
-            child1.sortIndex < child2.sortIndex then
+            child1.data.sortIndex < child2.data.sortIndex then
 
                 return true
 

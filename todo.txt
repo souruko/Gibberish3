@@ -1,17 +1,19 @@
 
 
 -- now
-permanent counter bars / counter generell testen
-save counter on reload
-import
+hymnen timer haben nicht funktioniert? + additional hängt als bar fest?
 
 -- next
+import fix timer type if insert into with timers
+create window after import 
+save counter on reload
+permanent counter bars / counter generell testen
 sort triggers
 timer enable/disable trigger action
 delete check window
-timer_trigger selection better text then description to display in dropdown
 opacity slider
 options input check
-dropdown scrollbar
 options save data feedback
 save window selections per char
+window direction/orientation besser umsetzen / sort
+protect timer from actions as an option

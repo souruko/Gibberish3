@@ -98,6 +98,18 @@ Stacking.PerTarget  = 2
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- trigger source
+ImportType            = {}
+ImportType.Window     = 1
+ImportType.Timer      = 2
+ImportType.Trigger    = 3
+ImportType.Folder     = 4
+ImportType.WindowList = 5
+ImportType.TimerList  = 6
+ImportType.TriggerList= 7
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- timer text options
 TimerTextOptions                = {}
 TimerTextOptions.NoText         = 1

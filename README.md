@@ -4,10 +4,19 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.7
+self effect remove as timer add trigger now uses the correct starting time
+
+
 3.0.6
 icon update
 fixed a bug where counter did not start with the start value
 added window type to window selection item
+more options are saved per character now
+fixed a bug where only bar timer where saved on reload
+added a scrollbar to the dropdown element
+added export / import
+fixed listOfTargets in options
 
 
 3.0.5

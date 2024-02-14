@@ -186,25 +186,20 @@ function FolderItem:CreateRightClick()
 
         -- export folder
         self.rc_ex_folder = Options.Elements.Row( "selection", "ex_folder", function ()
-
+            self.parent:ShowExport( self.data, ImportType.Folder )
         end,
         Options.Defaults.rc_menu.item_height)
 
         -- export list of window
         self.rc_ex_low = Options.Elements.Row( "selection", "ex_low", function ()
+            local data = Folder.GetListOfWindows( self.index*(-1) )
 
+            self.parent:ShowExport( data, ImportType.WindowList )
         end,
         Options.Defaults.rc_menu.item_height)
  
-        -- export list of timer
-        self.rc_ex_lot = Options.Elements.Row( "selection", "ex_lot", function ()
-
-        end,
-        Options.Defaults.rc_menu.item_height)
-
         self.rc_exportSubMenu:AddRow( self.rc_ex_folder )
         self.rc_exportSubMenu:AddRow( self.rc_ex_low )
-        self.rc_exportSubMenu:AddRow( self.rc_ex_lot )
 
     -- export
     self.rc_export = Options.Elements.SubRow( "selection", "export", self.rc_exportSubMenu,

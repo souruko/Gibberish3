@@ -74,7 +74,7 @@ function Trigger.CheckListForName(name, list)
 
     end
 
-    for key, value in pairs(list) do
+    for key, value in ipairs(list) do
 
         if value == name then
 

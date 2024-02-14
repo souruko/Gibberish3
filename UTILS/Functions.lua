@@ -191,3 +191,45 @@ function Split(s, delimiter)
     return result;
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- convert string to bool
+function ToBool( string )
+    return (string == "true")
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns string with targets
+function ListOfTargetsToString( list )
+
+    local string = ""
+
+    for index, value in ipairs(list) do
+        string = string .. value .. ";"
+    end
+
+    return string
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns list of targets
+function StringOfTargetsToList( text )
+
+    text = string.gsub(text, "%s*;%s*", ";")
+
+    local list = Split( text, ";" )
+    local return_list = {}
+
+    for index, value in ipairs(list) do
+        if value ~= "" then
+            return_list[#return_list+1] = value
+        end
+    end
+   
+    return return_list
+
+end
+---------------------------------------------------------------------------------------------------

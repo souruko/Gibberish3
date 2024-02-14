@@ -11,10 +11,16 @@ Options.Elements.SelectionOptions = class(Turbine.UI.Control)
 function Options.Elements.SelectionOptions:Constructor()
 	Turbine.UI.Control.Constructor( self )
 
+	self.import = false
+
 	self.selectedData = nil
 
 	self:CreatBackground()
 	self:CreateToolbar()
+
+	self.import_window = Options.Elements.ImportWindow( self )
+	self.import_window:SetVisible(false)
+	self.import_window:SetParent( self.background2 )
 
 	self.content = nil
 	self.collection_menu = nil
@@ -24,6 +30,15 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:LanguageChanged()
+	self.import_window:LanguageChanged()
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:CloseImport()
+
+	self.import = false
+	self.import_window:SetVisible(false)
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -70,6 +85,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:SelectionChanged()
 
+	self:CloseContent()
+
 	-- no selection
 	if Data.selectedIndex == 0 then
 		self.selectedData = nil
@@ -90,6 +107,10 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 		self.name_textbox:SetText( self.selectedData.name )
 		self:FillWindow()
 		
+	end
+
+	if self.import == true then
+		self:ImportClicked()
 	end
 
 end
@@ -176,8 +197,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:FillFolder()
 
-	self:CloseContent()
-
 	self.content = Options.Elements.FolderOptions( self, self.selectedData )
 	self.content:SetParent( self.background2 )
 	self.content:SetSize( self.background2:GetSize() )
@@ -187,8 +206,6 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:FillWindow()
-
-	self:CloseContent()
 
 	self.content = Window[ self.selectedData.type ].Options( self, self.selectedData )
 	self.content:SetParent( self.background2 )
@@ -256,6 +273,9 @@ function Options.Elements.SelectionOptions:SizeChanged()
 
 	self.name_back:SetPosition( name_left, Options.Defaults.window.frame)
 	
+	
+	self.import_window:SetSize( self.background2:GetSize() )
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -323,6 +343,9 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.import_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.import_button:SetBackground( "Gibberish3/RESOURCES/import.tga" )
 	self.import_button:SetPosition( 0, 0 )
+	self.import_button.Click = function ()
+		self:ImportClicked()
+	end
 	Options.Elements.Tooltip.AddTooltip( self.import_button, "tooltip", "button_import", false )
 	
 	-- reload button
@@ -354,5 +377,25 @@ function Options.Elements.SelectionOptions:CreateToolbar()
     self.name_textbox:SetMultiline( false )
 	self.name_textbox:SetLeft( 5 )
 	
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:ImportClicked()
+
+	self.import = not(self.import)
+	self.import_window:ShowImport()
+	self.import_window:SetVisible(self.import)
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:ShowExport( data, type )
+
+	self.import = true
+	self.import_window:ShowExport( data, type )
+	self.import_window:SetVisible( self.import )
+
 end
 ---------------------------------------------------------------------------------------------------

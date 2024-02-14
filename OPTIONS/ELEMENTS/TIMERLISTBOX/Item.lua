@@ -119,7 +119,7 @@ function Item:Constructor( index, data, width, parent )
 
     -- export
     self.rc_export = Options.Elements.Row( "selection", "export", function ()
-        
+        Options.Window.Object:ShowExport( self.data, ImportType.Timer )
     end,
     Options.Defaults.rc_menu.item_height )
 
@@ -146,6 +146,7 @@ function Item:Constructor( index, data, width, parent )
     self.icon:SetParent( self.background )
     self.icon:SetPosition( 1, 1 )
     self.icon:SetSize( 32, 32 )
+    self.icon:SetMouseVisible( false )
 
 
     self.textLabel = Turbine.UI.Label()

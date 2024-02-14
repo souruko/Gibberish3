@@ -485,3 +485,27 @@ function CircelElement:Resize()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+function CircelElement:GetRunningInformation()
+
+    -- permanent inactiv timer
+    if self:GetWantsUpdates() == false then
+        return nil
+    end
+
+    local running_timer_data = {}
+
+    running_timer_data.index = self.index
+    running_timer_data.key = self.key
+    running_timer_data.startTime = self.startTime
+    running_timer_data.duration = self.duration
+    running_timer_data.icon = self.icon
+    running_timer_data.text = self.textLabel:GetText()
+
+    return running_timer_data
+
+end
+---------------------------------------------------------------------------------------------------

@@ -120,7 +120,7 @@ function Item:Constructor( index, data, width, parent )
 
     -- export
     self.rc_export = Options.Elements.Row( "selection", "export", function ()
-        
+        Options.Window.Object:ShowExport( self.data, ImportType.Trigger )
     end,
     Options.Defaults.rc_menu.item_height )
 

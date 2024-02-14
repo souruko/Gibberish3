@@ -536,7 +536,7 @@ function BarElement:Resize()
     self.entityControl:SetSize( maxWidth, maxHeight )
 
     self.barBack:SetSize( width, height)
-    self.bar:SetSize( width, height)
+    self.bar:SetSize( 0, height)
 
     self.labelBack:SetSize( labelWidth, labelHeight )
     self.textLabel:SetSize( labelWidth, labelHeight )

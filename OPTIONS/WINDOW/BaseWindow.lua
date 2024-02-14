@@ -114,6 +114,16 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:ResetSelectedContent()
+
+    self.window_selection:ReFill()
+    self.window_selection:SelectionChanged()
+    self.selection_options:SelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:SizeChanged()
 
     local width, height = self:GetSize()
@@ -188,5 +198,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:CollectionItemClicked( data )
     self.selection_options:BuildCollectionRightClickMenu( data )
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:ShowExport( data, type )
+
+    self.selection_options:ShowExport( data, type )
+
 end
 ---------------------------------------------------------------------------------------------------

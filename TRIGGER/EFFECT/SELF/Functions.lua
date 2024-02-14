@@ -251,7 +251,7 @@ Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTimer = function ( effect, window
         if posAdjustment ~= nil then
             -- fix posAdjustment
             posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effect, LocalPlayer, posAdjustment, windowIndex, timerIndex, triggerData )
+            Trigger.ProcessEffectTrigger( effect, LocalPlayer, posAdjustment, windowIndex, timerIndex, triggerData, true )
 
         end
 
@@ -293,14 +293,19 @@ end
 ---------------------------------------------------------------------------------------------------
 -- process effect trigger
 ---------------------------------------------------------------------------------------------------
-Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowIndex, timerIndex, triggerData )
+Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowIndex, timerIndex, triggerData, remove )
 
     -- declarations
     local windowData = Data.window[windowIndex]
     local timerData = windowData.timerList[timerIndex]
     local name = effect:GetName()
     
-    local startTime = effect:GetStartTime()
+    local startTime
+    if remove == true then
+        startTime= Turbine.Engine.GetGameTime()
+    else
+        startTime= effect:GetStartTime()
+    end
     local text      = ""
     local target    = player:GetName()
     local duration  = 10

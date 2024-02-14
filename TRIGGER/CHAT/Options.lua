@@ -104,8 +104,8 @@ function ChatOptions:ResetContent()
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.value )
     self.source:SetSelection( self.data.source )
-    -- self.listOfTargets:SetText( self.data.listOfTargets )
-
+    self.listOfTargets:SetText( UTILS.ListOfTargetsToString( self.data.listOfTargets ) )
+    
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -131,6 +131,8 @@ function ChatOptions:Save()
     self.data.value         = self.value:GetText(  )
     self.data.source        = self.source:GetSelectedValue()
     -- self.data.listOfTargets = self.listOfTargets:GetText(  )
+    local text = self.listOfTargets:GetText()
+    self.data.listOfTargets = UTILS.StringOfTargetsToList( text )
 
 end
 ---------------------------------------------------------------------------------------------------

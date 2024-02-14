@@ -266,6 +266,12 @@ L[ Language.English ].tab.text = "Text"
 L[ Language.English ].tab.style = "Style"
 L[ Language.English ].tab.animation = "Animation"
 
+L[ Language.English ].import = {}
+L[ Language.English ].import.import = "Import"
+L[ Language.English ].import.export = "Export"
+L[ Language.English ].import.create_new = "Create new"
+L[ Language.English ].import.insert_into = "Insert into selection"
+
 L[ Language.English ].resetPhrase = {}
 
 L[ Language.English ].ReloadMessages = {

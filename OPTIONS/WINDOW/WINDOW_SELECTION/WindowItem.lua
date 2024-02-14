@@ -151,13 +151,17 @@ function WindowItem:CreateRightClick()
 
         -- export window
         self.rc_ex_window = Options.Elements.Row( "selection", "ex_window", function ()
-
+            self.parent:ShowExport( self.data, ImportType.Window )
         end,
         Options.Defaults.rc_menu.item_height)
  
         -- export list of timer
         self.rc_ex_lot = Options.Elements.Row( "selection", "ex_lot", function ()
-
+            local data = {}
+            for index, timer in ipairs(self.data.timerList) do
+                data[#data+1] = timer
+            end
+            self.parent:ShowExport( data, ImportType.TimerList )
         end,
         Options.Defaults.rc_menu.item_height)
 
@@ -171,7 +175,7 @@ function WindowItem:CreateRightClick()
     -- delete
     self.rc_delete = Options.Elements.Row( "selection", "delete", function ()
         Options.DeleteWindow( self.index )
-        self.parent:ReFill()
+        Options.Window.Object:ResetSelectedContent()
     end,
     Options.Defaults.rc_menu.item_height)
 
