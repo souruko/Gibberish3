@@ -31,6 +31,9 @@ function TimerWindowElement:Constructor( index )
     -- timer table
     self.children   = {}
 
+    self.base_left, self.base_top = UTILS.ScreenRatioToPixel( self.data.left, self.data.top )
+    self.left_shift = 0
+    self.top_shift = 0
 
     -- build elements
     self:SetMouseVisible( false )
@@ -46,7 +49,7 @@ function TimerWindowElement:Constructor( index )
     self.dragLabel:SetTextAlignment( Options.Defaults.move.TextAlignment )
     self.dragLabel:SetFont( Options.Defaults.move.Font )
     self.dragLabel:SetFontStyle( Options.Defaults.move.FontStyle )
-    self.dragLabel:SetPosition( Options.Defaults.move.FrameSize, Options.Defaults.move.FrameSize )
+    self.dragLabel:SetPosition( self.data.frame, self.data.frame )
     self.dragLabel:SetZOrder( 4 )
 
     self.timerListBox = Turbine.UI.ListBox()
@@ -88,6 +91,10 @@ function TimerWindowElement:Constructor( index )
             -- set new position
             self:SetPosition( x, y )
 
+            x = x - self.left_shift
+            y = y - self.top_shift
+            self.base_left = x
+            self.base_top = y
             self.data.left, self.data.top = UTILS.PixelToScreenRatio( x, y )
             Options.SelectionMoved()
 
@@ -220,15 +227,21 @@ function TimerWindowElement:DataChanged()
 
     -- window data
     -- get position from screen ratio
-    self:SetPosition( UTILS.ScreenRatioToPixel( self.data.left, self.data.top ) )
+    self.base_left, self.base_top = UTILS.ScreenRatioToPixel( self.data.left, self.data.top )
 
     -- resize depending from children
     self:Resize()
 
     -- set the fill direction for children
+    -- self.timerListBox:SetReverseFill    (self.data.direction)
+    -- self.timerListBox:SetFlippedLayout  (self.data.direction)
     self.timerListBox:SetReverseFill    (self.data.direction)
-    self.timerListBox:SetFlippedLayout  (self.data.direction)
-
+    if self.data.orientation == Orientation.Horizontal then
+        self.timerListBox:SetOrientation(Turbine.UI.Orientation.Horizontal)
+    else
+        self.timerListBox:SetOrientation(Turbine.UI.Orientation.Vertical)
+    end
+    
     -- set dragLabel text to name
     self.dragLabel:SetText( self.data.name )
 
@@ -337,7 +350,7 @@ function TimerWindowElement:ActionRemove( timerIndex, key )
             if self.children[i].key == nil or self.children[i].key == key then
 
                 self.children[i]:Ended()
-                -- self:Resize()
+                self:Resize()
 
             end
 
@@ -353,28 +366,77 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerWindowElement:Resize()
 
-    local childCount = self.timerListBox:GetItemCount() + 1
+    local width, height, left, top
+    local childCount  = self.timerListBox:GetItemCount()
+    local childWidth, childHeight = Timer[ self.data.timerType ].GetItemSize( self.data )
 
-    local width, height
+    -- base size 1 element
+    if childCount == 0 then
+        childCount = 1
+    end
 
-    -- calculate width and heights depending on orientation
-    if self.data.orientation == Orientation.Horizontal then
+    -- right
+    if self.data.orientation == Orientation.Horizontal
+        and self.data.direction == Direction.Ascending then
 
-        width   = childCount * ( self.data.height + ( 2 * self.data.frame ) ) + ( ( childCount - 1) * self.data.spacing )
-        height  = self.data.width + ( 2 * self.data.frame )
+        width   = childCount * (childWidth + self.data.spacing)
+        height  = childHeight
 
-    else
+        left = self.base_left
+        top = self.base_top
 
-        width   = self.data.width + ( 2 * self.data.frame )
-        height  = childCount * ( self.data.height + ( 2 * self.data.frame ) ) + ( ( childCount - 1) * self.data.spacing )
+    -- left
+    elseif self.data.orientation == Orientation.Horizontal
+    and self.data.direction == Direction.Descending then
+
+        width   = childCount * (childWidth + self.data.spacing)
+        height  = childHeight
+
+        left = self.base_left - width + (childWidth + self.data.spacing)
+        top = self.base_top
+
+    -- down
+    elseif self.data.orientation == Orientation.Vertical
+    and self.data.direction == Direction.Ascending then
+
+        width   = childWidth
+        height  = childCount * (childHeight + self.data.spacing)
+
+        left = self.base_left
+        top = self.base_top
+
+    -- up
+    elseif self.data.orientation == Orientation.Vertical
+    and self.data.direction == Direction.Descending then
+
+        width   = childWidth
+        height  = childCount * (childHeight + self.data.spacing)
+
+        left = self.base_left
+        top = self.base_top - height + (childHeight + self.data.spacing)
 
     end
 
+    self.left_shift =  left - self.base_left
+    self.top_shift =  top - self.base_top
+
     self:SetSize( width, height )
-    self.timerListBox:SetSize( width, height ) 
+    self:SetPosition( left, top )
+    self.timerListBox:SetSize( width, height )
     self.dragWindow:SetSize( width, height )
-    self.dragLabel:SetSize( width - 2 * Options.Defaults.move.FrameSize,
-                            height - 2 * Options.Defaults.move.FrameSize )
+    self.dragLabel:SetSize( childWidth - 2 * self.data.frame,
+                            childHeight - 2 * self.data.frame )
+
+    if self.data.direction == Direction.Ascending then
+        self.dragLabel:SetPosition( self.data.frame, self.data.frame )
+
+    elseif self.data.orientation == Orientation.Horizontal then
+        self.dragLabel:SetPosition( width -self.dragLabel:GetWidth() - self.data.frame , self.data.frame )
+
+    elseif self.data.orientation == Orientation.Vertical then
+        self.dragLabel:SetPosition( self.data.frame, height -self.dragLabel:GetHeight() - self.data.frame )
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -385,7 +447,7 @@ end
 function TimerWindowElement:FillPermanentChildren()
 
     -- kill all permanent children!
-    for i, child in pairs(self.children) do                 
+    for i, child in pairs(self.children) do
 
         if child.timerData.permanent == true then
             child:Finish()
@@ -423,47 +485,95 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerWindowElement:SortChildren()
 
-    self.timerListBox:Sort(
-        function (child1, child2)
+    if self.data.sort_direction == Direction.Descending then
 
-            -- both permanent > sort by index > child2 first
-            if child1.data.permanent == true and
-            child1.data.permanent == true and
-            child1.data.sortIndex > child2.data.sortIndex then
+        self.timerListBox:Sort(
+            function (child1, child2)
 
-                return false
+                -- both permanent > sort by index > child2 first
+                if child1.data.permanent == true and
+                child1.data.permanent == true and
+                child1.data.sortIndex > child2.data.sortIndex then
 
-            -- both permanent > sort by index > child1 first
-            elseif child1.data.permanent == true and
-            child1.data.permanent == true and
-            child1.data.sortIndex < child2.data.sortIndex then
+                    return true
 
-                return true
+                -- both permanent > sort by index > child1 first
+                elseif child1.data.permanent == true and
+                child1.data.permanent == true and
+                child1.data.sortIndex < child2.data.sortIndex then
 
-            -- child1 permanent = first
-            elseif child1.data.permanent == true then
+                    return false
 
-                return true
+                -- child1 permanent = first
+                elseif child1.data.permanent == true then
+
+                    return false
+                    
+                -- child2 permanent = first
+                elseif child2.data.permanent == true then
+
+                    return true
+
+                -- both not permanent sort ty endTime > child2 first
+                elseif child1.endTime > child2.endTime then
+
+                    return true
+
+                -- both not permanent sort ty endTime > child1 first
+                else
+
+                    return false
+
+                end
                 
-            -- child2 permanent = first
-            elseif child2.data.permanent == true then
-
-                return false
-
-            -- both not permanent sort ty endTime > child2 first
-            elseif child1.endTime > child2.endTime then
-
-                return false
-
-            -- both not permanent sort ty endTime > child1 first
-            else
-
-                return true
-
             end
-            
-        end
-    )
+        )
+
+    else
+
+        self.timerListBox:Sort(
+            function (child1, child2)
+
+                -- both permanent > sort by index > child2 first
+                if child1.data.permanent == true and
+                child1.data.permanent == true and
+                child1.data.sortIndex > child2.data.sortIndex then
+
+                    return false
+
+                -- both permanent > sort by index > child1 first
+                elseif child1.data.permanent == true and
+                child1.data.permanent == true and
+                child1.data.sortIndex < child2.data.sortIndex then
+
+                    return true
+
+                -- child1 permanent = first
+                elseif child1.data.permanent == true then
+
+                    return true
+                    
+                -- child2 permanent = first
+                elseif child2.data.permanent == true then
+
+                    return false
+
+                -- both not permanent sort ty endTime > child2 first
+                elseif child1.endTime > child2.endTime then
+
+                    return false
+
+                -- both not permanent sort ty endTime > child1 first
+                else
+
+                    return true
+
+                end
+                
+            end
+        )
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

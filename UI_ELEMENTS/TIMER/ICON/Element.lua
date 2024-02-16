@@ -512,7 +512,7 @@ function IconElement:Resize()
         maxHeight       = height + ( 2 * frame)
 
         -- max size + spacing between timers
-        selfWidth       = maxWidth
+        selfWidth       = maxWidth 
         selfHeight      = maxHeight + self.parent.data.spacing
 
         -- subtract labelSpacing so the text/timer dont sit on the edges
@@ -526,14 +526,14 @@ function IconElement:Resize()
     else
 
         -- everything reversed
-        width           = self.parent.data.height
-        height          = self.parent.data.width
+        width           = self.parent.data.width
+        height          = self.parent.data.height
 
         maxWidth        = width + ( 2 * frame )
         maxHeight       = height + ( 2 * frame)
 
-        selfWidth       = maxHeight + self.parent.data.spacing
-        selfHeight      = maxWidth
+        selfWidth       = maxWidth + self.parent.data.spacing
+        selfHeight      = maxHeight 
 
         labelWidth      = width -- 2 * Options.Defaults.timer.labelSpacing
         labelHeight     = height -- 2 * Options.Defaults.timer.labelSpacing
@@ -586,6 +586,19 @@ function IconElement:GetRunningInformation()
     running_timer_data.text = self.textLabel:GetText()
 
     return running_timer_data
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+Timer[ Timer.Types.ICON ].GetItemSize = function ( parent_data )
+
+    local width = parent_data.width + ( 2 * parent_data.frame )
+    local height = parent_data.height + ( 2 * parent_data.frame)
+
+    return width, height
 
 end
 ---------------------------------------------------------------------------------------------------

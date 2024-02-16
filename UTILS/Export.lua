@@ -7,7 +7,7 @@
 ---------------------------------------------------------------------------------------------------
 function DataToString( data, type )
 
-    local text = "Gibberish3/" .. tostring(type)
+    local text = "```Gibberish3/" .. tostring(type)
 
     if type == ImportType.Window then
         text = text .. WindowToString( data )
@@ -38,7 +38,7 @@ function DataToString( data, type )
 
     end
 
-    text = text .. "\n"
+    text = text .. "```\n"
 
     return text
 
@@ -61,16 +61,16 @@ function WindowToString( data )
                 key == "color4" or
                 key == "color5" then
                 
-                text = text  .. key .. "_{"
+                text = text  .. key .. ":{"
                 for k, v in pairs(value) do
-                    text = text .. k .. "_<" .. v .. ">_"
+                    text = text .. k .. ":<" .. v .. ">:"
                 end
-                text = text .. "}_"
+                text = text .. "}:"
             end
 
         else
 
-            text = text  .. key .. "_{" .. tostring(value) .. "}_"
+            text = text  .. key .. ":{" .. tostring(value) .. "}:"
         
         end
 
@@ -105,7 +105,7 @@ function TimerToString( data )
 
         else
 
-            text = text  .. key .. "_{" .. tostring(value) .. "}_"
+            text = text  .. key .. ":{" .. tostring(value) .. "}:"
         
         end
 
@@ -136,13 +136,13 @@ function TriggerToString( data )
             -- list of Targets
             if key == "listOfTargets" then
                 
-                text = text  .. key .. "_{" .. tostring( ListOfTargetsToString( value ) ) .. "}_"
+                text = text  .. key .. ":{" .. tostring( ListOfTargetsToString( value ) ) .. "}:"
 
             end
 
         else
 
-            text = text  .. key .. "_{" .. tostring(value) .. "}_"
+            text = text  .. key .. ":{" .. tostring(value) .. "}:"
         
         end
 
@@ -164,7 +164,7 @@ function FolderToString( data )
 
         else
 
-            text = text  .. key .. "_{" .. tostring(value) .. "}_"
+            text = text  .. key .. ":{" .. tostring(value) .. "}:"
         
         end
 

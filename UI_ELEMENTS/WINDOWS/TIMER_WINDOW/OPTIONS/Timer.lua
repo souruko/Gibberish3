@@ -87,10 +87,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerOptions:Save()
 
-    if self.timerOptions == nil  then
-        return
-    end
-
     local timerType = self.timerType:GetSelectedValue(  )
 
     if timerType ~= self.data.timerType then
@@ -103,6 +99,9 @@ function TimerOptions:Save()
 
     end
 
+    if self.timerOptions == nil  then
+        return
+    end
 
     self.timerOptions:Save()
     self.listbox:UpdateData()

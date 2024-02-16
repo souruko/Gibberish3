@@ -261,26 +261,12 @@ function BarElement:UpdateBar( timeLeft )
 
     -- update bar size depending on direction and orientation
     -- descending horizontal
-    if self.data.direction == Direction.Descending and
-    self.parent.data.orientation == Orientation.Vertical then
+    if self.data.direction == Direction.Descending then
 
         self.bar:SetWidth( timeLeft / self.duration * self.barWidth )
 
-    -- descending vertical
-    elseif self.data.direction == Direction.Descending and
-    self.parent.data.orientation == Orientation.Horizontal then
-
-        self.bar:SetHeight( timeLeft / self.duration * self.barWidth )
-
     -- ascending horizontal
-    elseif self.data.direction == Direction.Ascending and
-    self.parent.data.orientation == Orientation.Vertical then
-
-        local timePast = self.duration - timeLeft
-        self.bar:SetWidth( timePast / self.duration * self.barWidth )
-
-    -- ascending vertical
-    else
+    elseif self.data.direction == Direction.Ascending then
 
         local timePast = self.duration - timeLeft
         self.bar:SetWidth( timePast / self.duration * self.barWidth )
@@ -480,55 +466,29 @@ function BarElement:Resize()
 
     end
 
-    -- set values depending on orientation
-    if self.parent.data.orientation == Orientation.Vertical then
+    -- bar width / height
+    width           = self.parent.data.width
+    height          = self.parent.data.height
 
-        -- bar width / height
-        width           = self.parent.data.width
-        height          = self.parent.data.height
+    -- timer max sizze
+    maxWidth        = width + ( 2 * frame ) + iconSize
+    maxHeight       = height + ( 2 * frame)
 
-        -- timer max sizze
-        maxWidth        = width + ( 2 * frame ) + iconSize
-        maxHeight       = height + ( 2 * frame)
+    -- max size + spacing between timers
+    selfWidth       = maxWidth
+    selfHeight      = maxHeight + self.parent.data.spacing
 
-        -- max size + spacing between timers
-        selfWidth       = maxWidth
-        selfHeight      = maxHeight + self.parent.data.spacing
+    -- subtract labelSpacing so the text/timer dont sit on the edges
+    labelWidth      = width - 2 * Options.Defaults.timer.labelSpacing
+    labelHeight     = height
 
-        -- subtract labelSpacing so the text/timer dont sit on the edges
-        labelWidth      = width - 2 * Options.Defaults.timer.labelSpacing
-        labelHeight     = height
+    -- bar staring position
+    barBackLeft     = frame + iconSize
+    barBackTop      = frame
 
-        -- bar staring position
-        barBackLeft     = frame + iconSize
-        barBackTop      = frame
-
-        -- label starting position
-        labelBackLeft   = barBackLeft + Options.Defaults.timer.labelSpacing
-        labelBackTop    = frame
-
-    else
-
-        -- everything reversed
-        width           = self.parent.data.height
-        height          = self.parent.data.width
-
-        maxWidth        = width + ( 2 * frame )
-        maxHeight       = height + ( 2 * frame) + iconSize
-
-        selfWidth       = maxHeight + self.parent.data.spacing
-        selfHeight      = maxWidth
-
-        labelWidth      = width 
-        labelHeight     = height - 2 * Options.Defaults.timer.labelSpacing
-
-        barBackLeft     = frame
-        barBackTop      = frame + iconSize
-
-        labelBackLeft   = frame
-        labelBackTop    = barBackLeft + Options.Defaults.timer.labelSpacing
-
-    end
+    -- label starting position
+    labelBackLeft   = barBackLeft + Options.Defaults.timer.labelSpacing
+    labelBackTop    = frame
 
     self:SetSize( selfWidth, selfHeight )
 
@@ -571,6 +531,19 @@ function BarElement:GetRunningInformation()
     running_timer_data.text = self.textLabel:GetText()
 
     return running_timer_data
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+Timer[ Timer.Types.BAR ].GetItemSize = function ( parent_data )
+
+    local width = parent_data.width + ( 2 * parent_data.frame ) + parent_data.height
+    local height = parent_data.height + ( 2 * parent_data.frame)
+
+    return width, height
 
 end
 ---------------------------------------------------------------------------------------------------

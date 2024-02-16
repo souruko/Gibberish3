@@ -56,6 +56,16 @@ function SizeOptions:Constructor( data )
 
     top = top + 30
 
+    -- direction
+    self.sort_direction = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "sort_direction", "win_direction", 30 )
+    self.sort_direction:SetParent( self )
+    self.sort_direction:SetPosition( left, top )
+    for name, value in pairs(Direction) do
+        self.sort_direction:AddItem( "direction", name, value)
+    end
+
+    top = top + 30
+
     -- orientation
     self.orientation = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "orientation", "win_orientation", 30 )
     self.orientation:SetParent( self )
@@ -80,6 +90,7 @@ function SizeOptions:ResetContent()
     self.spacing:SetText( self.data.spacing )
 
     self.direction:SetSelection( self.data.direction )
+    self.sort_direction:SetSelection( self.data.sort_direction )
     self.orientation:SetSelection( self.data.orientation )
 
 end
@@ -96,6 +107,7 @@ function SizeOptions:SizeChanged()
     self.frame:SetWidth( width )
     self.spacing:SetWidth( width )
     self.direction:SetWidth( width )
+    self.sort_direction:SetWidth( width )
     self.orientation:SetWidth( width )
 
 end
@@ -109,6 +121,7 @@ function SizeOptions:Save()
     self.data.frame   = self.frame:GetText(  )
     self.data.spacing   = self.spacing:GetText(  )
     self.data.direction        = self.direction:GetSelectedValue(  )
+    self.data.sort_direction        = self.sort_direction:GetSelectedValue(  )
     self.data.orientation        = self.orientation:GetSelectedValue(  )
 
 end

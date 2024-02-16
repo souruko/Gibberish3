@@ -21,6 +21,7 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.top                     = 0.1
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.frame                   = 1
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.spacing                 = 4
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.direction               = Direction.Descending
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.sort_direction          = Direction.Descending
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.orientation             = Orientation.Vertical
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.overlay                 = false
 

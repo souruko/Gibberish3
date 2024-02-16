@@ -29,7 +29,8 @@ function StringToData( text, insert )
         end
         -- remove <window> tags
         text = string.gsub( text, "<window>", "")
-        StringToWindow( text, folder )
+        local windowIndex = StringToWindow( text, folder )
+        Windows.EnabledChanged( windowIndex )
 
     elseif type_number == ImportType.Timer then
         local window_data
@@ -63,7 +64,8 @@ function StringToData( text, insert )
         end
         local list = Split( text, "<window>")
         for index, value in ipairs(list) do
-            StringToWindow( value, folder )
+            local windowIndex = StringToWindow( value, folder )
+            Windows.EnabledChanged( windowIndex )
         end
 
     elseif type_number == ImportType.TimerList then
@@ -122,7 +124,7 @@ function StringToWindow( text, folder )
         trigger_strings[#trigger_strings+1] = list2[i]
     end
 
-    local window_attribut_strings = Split( window_string, "}_")
+    local window_attribut_strings = Split( window_string, "}:")
 
     -- text can not be processed
     if #window_attribut_strings == 0 then
@@ -132,7 +134,7 @@ function StringToWindow( text, folder )
     -- split attributes in key and value
     local window_attributes = {}
     for index, value in ipairs(window_attribut_strings) do
-        local tmp_list = Split(value, "_{")
+        local tmp_list = Split(value, ":{")
 
         -- should always be 2 key and value
         if #tmp_list == 2 then
@@ -209,6 +211,10 @@ function StringToWindow( text, folder )
         data.direction             = ToBool(window_attributes["direction"])
     end
 
+    if window_attributes["sort_direction"] ~= nil then
+        data.sort_direction             = ToBool(window_attributes["sort_direction"])
+    end
+
     if window_attributes["orientation"] ~= nil then
         data.orientation           = ToBool(window_attributes["orientation"])
     end
@@ -278,6 +284,9 @@ function StringToWindow( text, folder )
     for i, timer_string in ipairs(timer_strings) do
         StringToTimer( timer_string, data )
     end
+
+    return index
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -300,7 +309,7 @@ function StringToTimer( text, parent )
         trigger_strings[#trigger_strings+1] = list2[i]
     end
 
-    local timer_attribut_strings = Split( timer_string, "}_")
+    local timer_attribut_strings = Split( timer_string, "}:")
 
     -- text can not be processed
     if #timer_attribut_strings == 0 then
@@ -310,7 +319,7 @@ function StringToTimer( text, parent )
     -- split attributes in key and value
     local timer_attributes = {}
     for index, value in ipairs(timer_attribut_strings) do
-        local tmp_list = Split(value, "_{")
+        local tmp_list = Split(value, ":{")
 
         -- should always be 2 key and value
         if #tmp_list == 2 then
@@ -324,7 +333,7 @@ function StringToTimer( text, parent )
         return
     end
 
-    local type = tonumber( timer_attributes["type"] )
+    local type = parent.timerType
     local data = Timer.New( type )
 
     if timer_attributes["id"] ~= nil then
@@ -439,7 +448,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function StringToTrigger( text, parent )
 
-    local trigger_attribut_strings = Split( text, "}_")
+    local trigger_attribut_strings = Split( text, "}:")
 
     -- text can not be processed
     if #trigger_attribut_strings == 0 then
@@ -449,7 +458,7 @@ function StringToTrigger( text, parent )
     -- split attributes in key and value
     local trigger_attributes = {}
     for index, value in ipairs(trigger_attribut_strings) do
-        local tmp_list = Split(value, "_{")
+        local tmp_list = Split(value, ":{")
 
         -- should always be 2 key and value
         if #tmp_list == 2 then
@@ -520,6 +529,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function GetStringType( text )
 
+    text = string.gsub( text, "```", "" )
+
     local i, j = string.find( text, "Gibberish3/%d")
     if i == nil then
         return nil
@@ -538,7 +549,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function StringToColor( text )
 
-    local rows = Split( text, ">_" )
+    local rows = Split( text, ">:" )
 
     if #rows ~= 4 then
         return {R=1, G=1, B=1}
@@ -547,7 +558,7 @@ function StringToColor( text )
     local color = {}
 
     for i, v in ipairs(rows) do
-        local tmp_list = Split( v, "_<")
+        local tmp_list = Split( v, ":<")
         if #tmp_list == 2 then
             color[tmp_list[1] ] = tonumber( tmp_list[2] )
         end

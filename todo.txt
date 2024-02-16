@@ -1,13 +1,15 @@
 
 
 -- now
-hymnen timer haben nicht funktioniert? + additional hängt als bar fest?
 
 -- next
-import fix timer type if insert into with timers
-create window after import 
+
+-- later
+single timer stacking option > self remove gets triggered after add so updating will remove ...
 save counter on reload
 permanent counter bars / counter generell testen
+fix counter direction/orientation
+protect timer from actions as an option
 sort triggers
 timer enable/disable trigger action
 delete check window
@@ -15,5 +17,3 @@ opacity slider
 options input check
 options save data feedback
 save window selections per char
-window direction/orientation besser umsetzen / sort
-protect timer from actions as an option

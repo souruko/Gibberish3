@@ -193,6 +193,7 @@ L[ Language.English ].options.height     = "Height"
 L[ Language.English ].options.frame     = "Frame"
 L[ Language.English ].options.spacing     = "Spacing"
 L[ Language.English ].options.direction     = "Direction"
+L[ Language.English ].options.sort_direction     = "Sort Direction"
 L[ Language.English ].options.orientation     = "Orientation"
 L[ Language.English ].options.font     = "Font"
 L[ Language.English ].options.fontSize     = "Font Size"
@@ -272,7 +273,7 @@ L[ Language.English ].import.export = "Export"
 L[ Language.English ].import.create_new = "Create new"
 L[ Language.English ].import.insert_into = "Insert into selection"
 
-L[ Language.English ].resetPhrase = {}
+L[ Language.English ].traitline_changed = "You have acquired the Class Specialization Bonus Trait:"
 
 L[ Language.English ].ReloadMessages = {
 

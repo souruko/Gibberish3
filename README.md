@@ -6,6 +6,15 @@
 
 3.0.7
 self effect remove as timer add trigger now uses the correct starting time
+export now autoselects the text
+improved export strings
+fixed a bug where timer type changes did not take effect
+fixed window orientation/direction
+changed move window ui
+added sort direction to window options
+added tracking new skills after traitline changed
+fixed timertype on import
+fixed window will now be created on import
 
 
 3.0.6

@@ -514,3 +514,16 @@ function TextElement:GetRunningInformation()
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+Timer[ Timer.Types.TEXT ].GetItemSize = function ( parent_data )
+
+    local width = parent_data.width + ( 2 * parent_data.frame ) + parent_data.height
+    local height = parent_data.height + ( 2 * parent_data.frame)
+    
+    return width, height
+
+end
+---------------------------------------------------------------------------------------------------

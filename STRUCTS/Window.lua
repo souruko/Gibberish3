@@ -36,6 +36,7 @@ function Window.New(name, type)
     window.spacing               = Window[type].Defaults.spacing
     window.direction             = Window[type].Defaults.direction
     window.orientation           = Window[type].Defaults.orientation
+    window.sort_direction        = Window[type].Defaults.sort_direction
     window.overlay               = Window[type].Defaults.overlay
 
     -- color / opacity

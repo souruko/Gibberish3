@@ -267,3 +267,28 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+SkillTreeChanged = class( Turbine.UI.Control )
+
+function SkillTreeChanged:Constructor(parent, data)
+	Turbine.UI.Control.Constructor( self )
+    self.sleepEnd = 0
+end
+
+function SkillTreeChanged:Go()
+    self.sleepEnd = Turbine.Engine.GetGameTime() + 3
+    self:SetWantsUpdates(true)
+end
+
+function SkillTreeChanged:Update()
+    if Turbine.Engine.GetGameTime() > self.sleepEnd then
+        self:SetWantsUpdates(false)
+        -- Windows.SkillTreeChanged()
+        Trigger[Trigger.Types.Skill].Init()
+    end
+end
+
+
+Trigger.SkillTreeChanged_control = SkillTreeChanged()
+---------------------------------------------------------------------------------------------------
