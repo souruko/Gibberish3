@@ -26,6 +26,7 @@ function Timer.New(type)
     timer.stacking              = Timer[type].Defaults.stacking
     timer.loop                  = Timer[type].Defaults.loop
     timer.reset                 = Timer[type].Defaults.reset
+    timer.protect               = Timer[type].Defaults.protect
     timer.useCustomTimer        = Timer[type].Defaults.useCustomTimer
     timer.timerValue            = Timer[type].Defaults.timerValue
 
@@ -80,6 +81,7 @@ function Timer.Copy( data )
     timer.stacking              = data.stacking
     timer.loop                  = data.loop
     timer.reset                 = data.reset
+    timer.protect               = data.protect
     timer.useCustomTimer        = data.useCustomTimer
     timer.timerValue            = data.timerValue    
     timer.direction             = data.direction     

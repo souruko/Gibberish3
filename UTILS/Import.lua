@@ -17,74 +17,140 @@ function StringToData( text, insert )
     local type_number = tonumber(type)
 
     if type_number == ImportType.Window then
-        local folder = nil
-        if insert == true then
-            if Data.selectedIndex > 0 then
-                -- insert into the same folder as the selected window
-                folder = Data.window[ Data.selectedIndex ].folder
-            elseif Data.selectedIndex < 0 then
-                -- insert into the selected folder
-                folder = Data.selectedIndex *(-1)
-            end
-        end
-        -- remove <window> tags
-        text = string.gsub( text, "<window>", "")
-        local windowIndex = StringToWindow( text, folder )
-        Windows.EnabledChanged( windowIndex )
+        ConvertWindow( text, insert )
 
     elseif type_number == ImportType.Timer then
-        local window_data
-        if insert == true and Data.selectedIndex > 0 then
-            window_data = Data.window[ Data.selectedIndex ]
-        else
-            window_data = Window.New("Imported Timers " .. (Data.window.lastID + 1) )
-        end
-        text = string.gsub( text, "<timer>", "")
-        StringToTimer( text, window_data )
+        ConvertTimer( text, insert )
 
     elseif type_number == ImportType.Trigger then
-        if insert == false or Data.selectedIndex < 1 or Data.selectedTimerIndex < 1 then
-            return
-        end
-        text = string.gsub( text, "<trigger>", "")
-        StringToTrigger( text, Data.window[ Data.selectedIndex ].timerList[ Data.selectedTimerIndex ] )
-
+        ConvertTrigger( text, insert )
+        
     elseif type_number == ImportType.Folder then
+        ConvertFolder( text, insert )
 
     elseif type_number == ImportType.WindowList then
-        local folder = nil
-        if insert == true then
-            if Data.selectedIndex > 0 then
-                -- insert into the same folder as the selected window
-                folder = Data.window[ Data.selectedIndex ].folder
-            elseif Data.selectedIndex < 0 then
-                -- insert into the selected folder
-                folder = Data.selectedIndex *(-1)
-            end
-        end
-        local list = Split( text, "<window>")
-        for index, value in ipairs(list) do
-            local windowIndex = StringToWindow( value, folder )
-            Windows.EnabledChanged( windowIndex )
-        end
-
+        ConvertfWindowList( text, insert )
+        
     elseif type_number == ImportType.TimerList then
-        local window_data
-        if insert == true and Data.selectedIndex > 0 then
-            window_data = Data.window[ Data.selectedIndex ]
-        else
-            window_data = Window.New("Imported Timers " .. (Data.window.lastID + 1) )
-        end
-        local list = Split( text, "<timer>")
-        for index, value in ipairs(list) do
-            StringToTimer( value, window_data )
-        end
+        ConvertTimerList( text, insert )
 
     elseif type_number == ImportType.TriggerList then
 
     end
 
 	Options.Window.Object:ResetSelectedContent()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertWindow( text, insert )
+
+    local folder = nil
+
+    if insert == true then
+        if Data.selectedIndex > 0 then
+            -- insert into the same folder as the selected window
+            folder = Data.window[ Data.selectedIndex ].folder
+        elseif Data.selectedIndex < 0 then
+            -- insert into the selected folder
+            folder = Data.selectedIndex *(-1)
+        end
+    end
+
+    -- remove <window> tags
+    text = string.gsub( text, "<window>", "")
+
+    local windowIndex = StringToWindow( text, folder )
+    Windows.EnabledChanged( windowIndex )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertTimer( text, insert )
+
+    local window_data
+    local window_index
+
+    if insert == true and Data.selectedIndex > 0 then
+        window_index = Data.selectedIndex
+        window_data = Data.window[ Data.selectedIndex ]
+
+    else
+        window_index = Window.New("Imported Timers " .. (Data.window.lastID + 1), Window.Types.TIMER_WINDOW )
+        window_data = Data.window[ window_index ]
+
+    end
+
+    text = string.gsub( text, "<timer>", "")
+    StringToTimer( text, window_data )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertTrigger( text, insert )
+
+    if insert == false or Data.selectedIndex < 1 or Data.selectedTimerIndex < 1 then
+        return
+    end
+    text = string.gsub( text, "<trigger>", "")
+    StringToTrigger( text, Data.window[ Data.selectedIndex ].timerList[ Data.selectedTimerIndex ] )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertFolder( text, insert )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertfWindowList( text, insert )
+
+    local folder = nil
+
+    if insert == true then
+        if Data.selectedIndex > 0 then
+            -- insert into the same folder as the selected window
+            folder = Data.window[ Data.selectedIndex ].folder
+        elseif Data.selectedIndex < 0 then
+            -- insert into the selected folder
+            folder = Data.selectedIndex *(-1)
+        end
+    end
+
+    local list = Split( text, "<window>")
+    for index, value in ipairs(list) do
+        local windowIndex = StringToWindow( value, folder )
+        Windows.EnabledChanged( windowIndex )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertTimerList( text, insert )
+
+    local window_data
+    local window_index
+
+    if insert == true and Data.selectedIndex > 0 then
+        window_index = Data.selectedIndex
+        window_data = Data.window[ Data.selectedIndex ]
+
+    else
+        window_index = Window.New("Imported Timers " .. (Data.window.lastID + 1), Window.Types.TIMER_WINDOW )
+        window_data = Data.window[ window_index ]
+
+    end
+
+    local list = Split( text, "<timer>")
+    for index, value in ipairs(list) do
+        StringToTimer( value, window_data )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -375,12 +441,21 @@ function StringToTimer( text, parent )
         data.reset              = ToBool(timer_attributes["reset"])
     end
     
-    if timer_attributes["unsCustomTimer"] ~= nil then
-        data.unsCustomTimer              = ToBool(timer_attributes["unsCustomTimer"])
+    if timer_attributes["protect"] ~= nil then
+        data.protect              = ToBool(timer_attributes["protect"])
+    end
+
+    if timer_attributes["useCustomTimer"] ~= nil then
+        data.useCustomTimer              = ToBool(timer_attributes["useCustomTimer"])
     end
     
-    if timer_attributes["timerValue"] ~= nil then
-        data.timerValue              = tonumber(timer_attributes["timerValue"])
+    local timerValue = timer_attributes["timerValue"]
+    if timerValue ~= nil then
+        if string.find(timerValue, "&") then
+            data.timerValue              = timerValue
+        else
+            data.timerValue              = timerValue
+        end
     end
     
     if timer_attributes["counterEND"] ~= nil then
@@ -484,7 +559,15 @@ function StringToTrigger( text, parent )
     end
 
     if trigger_attributes["token"] ~= nil then
-        data.token           = trigger_attributes["token"]
+        if type == Trigger.Types.TimerEnd or
+        type == Trigger.Types.TimerStart or
+        type == Trigger.Types.TimerThreshold then
+
+            data.token           = tonumber(trigger_attributes["token"])
+
+        else
+            data.token           = trigger_attributes["token"]
+        end
     end
     
     if trigger_attributes["icon"] ~= nil then

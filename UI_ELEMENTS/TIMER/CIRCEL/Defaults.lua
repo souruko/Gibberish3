@@ -16,6 +16,7 @@ Timer[Timer.Types.CIRCEL].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.CIRCEL].Defaults.reset               = false
 Timer[Timer.Types.CIRCEL].Defaults.loop                = false
 Timer[Timer.Types.CIRCEL].Defaults.permanent           = false
+Timer[Timer.Types.CIRCEL].Defaults.protect             = false
 
 Timer[Timer.Types.CIRCEL].Defaults.counterEND          = 0
 Timer[Timer.Types.CIRCEL].Defaults.counterSTART        = 10

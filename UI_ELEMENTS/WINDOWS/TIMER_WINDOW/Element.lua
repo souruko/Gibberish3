@@ -476,6 +476,7 @@ function TimerWindowElement:FillPermanentChildren()
     end
 
     self:SortChildren()
+    self:Resize()
 
 end
 ---------------------------------------------------------------------------------------------------

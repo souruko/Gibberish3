@@ -2,14 +2,20 @@
 
 -- now
 
--- next
 
--- later
-single timer stacking option > self remove gets triggered after add so updating will remove ...
+-- next
+folder ui in window selection
+loop an reset binden
+import triggers into window/folder 
+import folder
 save counter on reload
 permanent counter bars / counter generell testen
 fix counter direction/orientation
-protect timer from actions as an option
+
+single timer stacking option > self remove gets triggered after add so updating will remove ...
+
+
+-- later
 sort triggers
 timer enable/disable trigger action
 delete check window
@@ -17,3 +23,4 @@ opacity slider
 options input check
 options save data feedback
 save window selections per char
+threshold color?

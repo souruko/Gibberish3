@@ -193,6 +193,7 @@ L[ Language.French ].options.height     = "Height"
 L[ Language.French ].options.frame     = "Frame"
 L[ Language.French ].options.spacing     = "Spacing"
 L[ Language.French ].options.direction     = "Direction"
+L[ Language.French ].options.sort_direction     = "Sort Direction"
 L[ Language.French ].options.orientation     = "Orientation"
 L[ Language.French ].options.font     = "Font"
 L[ Language.French ].options.fontSize     = "Font Size"
@@ -204,6 +205,7 @@ L[ Language.French ].options.permanent2     = "Display Permanently"
 L[ Language.French ].options.stacking     = "Stacking"
 L[ Language.French ].options.loop     = "Loop"
 L[ Language.French ].options.reset     = "Reset"
+L[ Language.French ].options.proctect     = "Protect"
 L[ Language.French ].options.useCustomTimer     = "Use Custom Timer"
 L[ Language.French ].options.timerValue     = "Timer Value"
 L[ Language.French ].options.icon     = "Icon"
@@ -265,6 +267,37 @@ L[ Language.French ].tab.text = "Text"
 
 L[ Language.French ].tab.style = "Style"
 L[ Language.French ].tab.animation = "Animation"
+
+L[ Language.French ].import = {}
+L[ Language.French ].import.import = "Import"
+L[ Language.French ].import.export = "Export"
+L[ Language.French ].import.create_new = "Create new"
+L[ Language.French ].import.insert_into = "Insert into selection"
+
+L[ Language.French ].traitline_changed = "You have acquired the Class Specialization Bonus Trait:"
+
+L[ Language.French ].ReloadMessages = {
+
+    [ "raid_convert" ] = "You have joined the chat room for your raid, raid chat is now available.",
+    [ "fellowship_join" ] = " has joined your Fellowship.",
+    [ "raid_join" ] = " has joined your Raid.",
+    [ "fellowship_join_self" ] = "You have joined a Fellowship.",
+    [ "raid_join_self" ] = "You have joined a Raid.",
+    [ "fellowship_leave" ] = " has left your Fellowship.",
+    [ "raid_leave" ] = " has left your Raid.",
+    [ "fellowship_leave_self" ] = "You leave your Fellowship.",
+    [ "raid_leave_self" ] = "You leave your Raid.",
+    [ "self_dismiss_start" ] = "You dismiss ",
+    [ "fellowship_dismiss_end" ] = " from the fellowship.",
+    [ "raid_dismiss_end" ] = " from the Raid.",
+    [ "fellowship_dismiss" ] = " has been dismissed from your Fellowship.",
+    [ "raid_dismiss" ] = " has been dismissed from your Raid.",
+    [ "fellowship_dismiss_self" ] = "You have been dismissed from your Fellowship.",
+    [ "raid_dismiss_self" ] = "You have been dismissed from your Raid.",
+    [ "fellowship_disband" ] = "Your Fellowship has been disbanded.",
+    [ "raid_disband" ] = "Your Raid has been disbanded."
+}
+
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -307,6 +340,7 @@ L[ Language.French ].tooltip.tim_permanent2 = "Display the timer even if inactiv
 L[ Language.French ].tooltip.tim_stacking = "How should the plugin handle multiple occurrences of the trigger?"
 L[ Language.French ].tooltip.tim_loop = "Permanently repeat the timer instead of ending. Can be stoped with reset."
 L[ Language.French ].tooltip.tim_reset = "Should the timer be stopable with reset?"
+L[ Language.French ].tooltip.tim_proctect = "The timer will be protected from updates while running."
 L[ Language.French ].tooltip.tim_use_custom_timer = "Use trigger timer or custome timer value."
 L[ Language.French ].tooltip.tim_timer_value = "Custome timer value. Only used if use custom timer is enabled."
 L[ Language.French ].tooltip.tim_icon = "The displayed icon of the timer."

@@ -16,6 +16,7 @@ Timer[Timer.Types.BAR].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.BAR].Defaults.reset               = false
 Timer[Timer.Types.BAR].Defaults.loop                = false
 Timer[Timer.Types.BAR].Defaults.permanent           = false
+Timer[Timer.Types.BAR].Defaults.protect             = false
 
 Timer[Timer.Types.BAR].Defaults.counterEND          = 0
 Timer[Timer.Types.BAR].Defaults.counterSTART        = 10

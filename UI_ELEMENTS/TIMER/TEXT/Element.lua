@@ -32,6 +32,7 @@ function TextElement:Constructor( parent, data, index, startTime, duration, icon
     self.data  = data
     -- key
     self.key = key
+    self.icon = icon
 
     -- for threshold timer event
     self.firstThreshold = true
@@ -113,6 +114,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function TextElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
+    -- protrect timer from updates
+    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+        return
+    end
+    
     -- reset key
     self.key = key
 
@@ -120,6 +126,7 @@ function TextElement:UpdateContent( startTime, duration, icon, text, entity, key
     self.startTime = startTime
     self.duration = duration
     self.endTime = startTime + duration
+    self.icon = icon
 
     -- reset icon
     if self.data.showIcon == true then
@@ -385,7 +392,7 @@ function TextElement:Loop()
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
 
-    self:UpdateContent( startTime, self.duration, nil, nil, nil, self.key )
+    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------

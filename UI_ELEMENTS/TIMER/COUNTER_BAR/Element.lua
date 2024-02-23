@@ -149,6 +149,7 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
 
     -- reset key
     self.key = key
+    self.icon = icon
 
     -- reset target entity
     self.entityControl:SetEntity( entity )
@@ -426,7 +427,7 @@ function CounterBarElement:Loop()
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
 
-    self:UpdateContent( startTime, self.counterEND, nil, nil, nil, self.key )
+    self:UpdateContent( startTime, self.counterEND, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------

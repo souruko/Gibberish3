@@ -16,6 +16,7 @@ Timer[Timer.Types.TEXT].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.TEXT].Defaults.reset               = false
 Timer[Timer.Types.TEXT].Defaults.loop                = false
 Timer[Timer.Types.TEXT].Defaults.permanent           = false
+Timer[Timer.Types.TEXT].Defaults.protect             = false
 
 Timer[Timer.Types.TEXT].Defaults.counterEND          = 0
 Timer[Timer.Types.TEXT].Defaults.counterSTART        = 10

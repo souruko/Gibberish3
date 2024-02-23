@@ -33,6 +33,8 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
     -- key
     self.key = key
 
+    self.icon = icon
+
     -- for threshold timer event
     self.firstThreshold = true
 
@@ -146,6 +148,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
+    -- protrect timer from updates
+    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+        return
+    end
     -- reset key
     self.key = key
 
@@ -153,6 +159,7 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
     self.startTime = startTime
     self.duration = duration
     self.endTime = startTime + duration
+    self.icon = icon
 
     -- reset target entity
     self.entityControl:SetEntity( entity )
@@ -417,7 +424,7 @@ function CircelElement:Loop()
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
 
-    self:UpdateContent( startTime, self.duration, nil, nil, nil, self.key )
+    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -50,6 +50,12 @@ function GeneralOptions:Constructor( data )
     self.reset:SetPosition( left, top )
     
     top = top + 35
+          
+    self.protect = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "proctect", "tim_proctect", 30 )
+    self.protect:SetParent( self )
+    self.protect:SetPosition( left, top )
+    
+    top = top + 35
         
     self.useCustomTimer = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "useCustomTimer", "tim_use_custom_timer", 30 )
     self.useCustomTimer:SetParent( self )
@@ -75,6 +81,7 @@ function GeneralOptions:ResetContent()
     self.permanent:SetChecked( self.data.permanent )
     self.stacking:SetSelection( self.data.stacking )
     self.loop:SetChecked( self.data.loop )
+    self.protect:SetChecked( self.data.protect )
     self.reset:SetChecked( self.data.reset )
     self.useCustomTimer:SetChecked( self.data.useCustomTimer )
     self.timerValue:SetText( self.data.timerValue )
@@ -92,6 +99,7 @@ function GeneralOptions:SizeChanged()
     self.permanent:SetWidth( width )
     self.stacking:SetWidth( width )
     self.loop:SetWidth( width )
+    self.protect:SetWidth( width )
     self.reset:SetWidth( width )
     self.useCustomTimer:SetWidth( width )
     self.timerValue:SetWidth( width )
@@ -107,6 +115,7 @@ function GeneralOptions:Save()
     self.data.stacking      = self.stacking:GetSelectedValue(  )
     self.data.loop      = self.loop:IsChecked(  )
     self.data.reset      = self.reset:IsChecked(  )
+    self.data.protect      = self.protect:IsChecked(  )
     self.data.useCustomTimer      = self.useCustomTimer:IsChecked(  )
     self.data.timerValue      = self.timerValue:GetText(  )
 

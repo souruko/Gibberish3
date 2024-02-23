@@ -32,6 +32,7 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
     self.data  = data
     -- key
     self.key = key
+    self.icon = icon
 
     -- for threshold timer event
     self.firstThreshold = true
@@ -143,6 +144,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function IconElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
+    -- protrect timer from updates
+    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+        return
+    end
+    
     -- reset key
     self.key = key
 
@@ -150,6 +156,7 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
     self.startTime = startTime
     self.duration = duration
     self.endTime = startTime + duration
+    self.icon = icon
 
     -- reset target entity
     self.entityControl:SetEntity( entity )
@@ -459,7 +466,7 @@ function IconElement:Loop()
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
 
-    self:UpdateContent( startTime, self.duration, nil, nil, nil, self.key )
+    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -559,6 +566,8 @@ function IconElement:Resize()
 
     self.labelBack:SetPosition( labelBackLeft, labelBackTop )
     self.iconControl:SetPosition( frame, frame )
+    self.shadow:SetPosition( frame, frame )
+    self.animation:SetPosition( frame, frame )
 
     self.width = width
     self.height = height

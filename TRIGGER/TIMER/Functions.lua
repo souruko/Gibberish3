@@ -46,7 +46,7 @@ Trigger.TimerEvent = function ( timerID, event )
         end
 
         -- check window triggers
-        for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Skill ]) do
+        for triggerIndex, triggerData in ipairs(windowData[ event ]) do
 
             -- check if trigger is enabled
             if triggerData.enabled == true then
@@ -66,7 +66,7 @@ Trigger.TimerEvent = function ( timerID, event )
     for folderIndex, folderData in ipairs(Data.folder) do
         
         -- check window triggers
-        for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Skill ]) do
+        for triggerIndex, triggerData in ipairs(folderData[ event ]) do
 
             -- check if trigger is enabled
             if triggerData.enabled == true then

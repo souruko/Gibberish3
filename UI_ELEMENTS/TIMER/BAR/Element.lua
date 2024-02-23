@@ -49,12 +49,17 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     self.frame:SetZOrder( 2 )
 
     self.barBack = Turbine.UI.Control()
-    self.barBack:SetParent( self )
+    self.barBack:SetParent( self.frame )
     self.barBack:SetMouseVisible( false )
     self.barBack:SetZOrder( 3 )
 
-    self.bar = Turbine.UI.Window()
-    self.bar:SetParent( self.barBack )
+    self.barBase = Turbine.UI.Window()
+    self.barBase:SetParent( self )
+    self.barBase:SetMouseVisible( false )
+    self.barBase:SetZOrder( 3 )
+
+    self.bar = Turbine.UI.Control()
+    self.bar:SetParent( self.barBase )
     self.bar:SetMouseVisible( false )
     self.bar:SetZOrder( 4 )
 
@@ -142,6 +147,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
+    -- protrect timer from updates
+    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+        return
+    end
+
     -- reset key
     self.key = key
 
@@ -207,7 +217,7 @@ function BarElement:Finish()
 
     -- close all windows
     self.labelBack:Close()
-    self.bar:Close()
+    self.barBase:Close()
     self:Close()
 
 end
@@ -384,7 +394,6 @@ function BarElement:Activ( value )
     if value == true then
 
         self:SetOpacity( self.parent.data.opacityActiv )
-        self.barBack:SetOpacity( self.parent.data.opacityActiv )
 
         self.textLabel:SetVisible( true )
         self.timerLabel:SetVisible( self.parent.data.showTimer )
@@ -392,7 +401,7 @@ function BarElement:Activ( value )
     else
 
         self:SetOpacity( self.parent.data.opacityPassiv )
-        self.barBack:SetOpacity( self.parent.data.opacityPassiv )
+        self.barBack:SetBackColor( self.backColor )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
@@ -412,8 +421,8 @@ function BarElement:Loop()
 
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
-
-    self:UpdateContent( startTime, self.duration, nil, nil, nil, self.key )
+        -- startTime, duration, icon, text, entity, key, activ
+    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -442,6 +451,7 @@ function BarElement:SetVisibility( value )
     self:SetVisible( value )
     self.bar:SetVisible( value )
     self.labelBack:SetVisible( value )
+    self.barBase:SetVisible( value )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -496,6 +506,7 @@ function BarElement:Resize()
     self.entityControl:SetSize( maxWidth, maxHeight )
 
     self.barBack:SetSize( width, height)
+    self.barBase:SetSize( width, height)
     self.bar:SetSize( 0, height)
 
     self.labelBack:SetSize( labelWidth, labelHeight )
@@ -505,6 +516,8 @@ function BarElement:Resize()
     self.iconControl:SetSize( iconSize, iconSize )
 
     self.barBack:SetPosition( barBackLeft, barBackTop )
+    self.barBase:SetPosition( barBackLeft, barBackTop )
+    -- self.bar:SetPosition( barBackLeft, barBackTop )
     self.labelBack:SetPosition( labelBackLeft, labelBackTop )
     self.iconControl:SetPosition( frame, frame )
 

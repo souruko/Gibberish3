@@ -94,7 +94,7 @@ function Window.Copy(index)
     -- general
     window.saveGlobaly           = Data.window[index].saveGlobaly
     window.description           = Data.window[index].description
-    window.resetOnTargetChanged   = Data.window[index].resetOnTargetChanged
+    window.resetOnTargetChanged  = Data.window[index].resetOnTargetChanged
     window.useTargetEntity       = Data.window[index].useTargetEntity
 
     -- position / size
@@ -105,6 +105,7 @@ function Window.Copy(index)
     window.frame                 = Data.window[index].frame
     window.spacing               = Data.window[index].spacing
     window.direction             = Data.window[index].direction
+    window.sort_direction        = Data.window[index].sort_direction
     window.orientation           = Data.window[index].orientation
     window.overlay               = Data.window[index].overlay
 

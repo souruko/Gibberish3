@@ -4,6 +4,29 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.9
+fixed timerstart/end/threshold on window/folder work now
+
+
+3.0.8b
+fixed importing timers with 'protect' will now properly use the value
+fixed importing timer/timerlist with create new now properly creates a window
+fixed the plugin now loads without the Turbine folder
+
+
+3.0.8
+fixed sort direction did not copy
+fixed use custom timer works now after import
+fixed a initial position error with permanent timers
+fixed looping option
+fixed bar now nolonger is affected by opacity
+added new timer option 'protect'
+fixed permanent timer start opacity
+fixed permanent timer threshold color reset
+fixed import timer/timerlist with create new
+fixed importing timerstart/end/threshold triggers now keeps the token
+
+
 3.0.7
 self effect remove as timer add trigger now uses the correct starting time
 export now autoselects the text
