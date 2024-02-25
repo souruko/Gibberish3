@@ -60,6 +60,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.TabWindow:LanguageChanged()
 
+    for index, control in ipairs(self.controls) do
+        control:LanguageChanged()
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 

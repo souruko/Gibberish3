@@ -75,7 +75,7 @@ function ChatOptions:Constructor( parent, data, parentType )
         top = top + 35
     end
 
-    self.source = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "source", "trg_source", 30 )
+    self.source = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "source_chat", "trg_source_chat", 30 )
     self.source:SetParent( self )
     self.source:SetTop( top )
 
@@ -118,6 +118,19 @@ function ChatOptions:SizeChanged()
     self.value:SetWidth( self:GetWidth() )
     self.source:SetWidth( self:GetWidth() )
     self.listOfTargets:SetWidth( self:GetWidth() )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ChatOptions:LanguageChanged()
+
+    self.description:LanguageChanged()
+    self.token:LanguageChanged()
+    self.action:LanguageChanged()
+    self.value:LanguageChanged()
+    self.source:LanguageChanged()
+    self.listOfTargets:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

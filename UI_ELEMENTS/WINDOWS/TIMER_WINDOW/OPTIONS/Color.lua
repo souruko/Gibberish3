@@ -47,6 +47,18 @@ function ColorOptions:Constructor( data )
     self.color5:SetParent( self )
     self.color5:SetPosition( left, top )
     
+    top = top + 30
+
+    self.color6 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color6", "win_color_outline", 30, false )
+    self.color6:SetParent( self )
+    self.color6:SetPosition( left, top )
+    
+    top = top + 30
+
+    self.color7 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color7", "win_color_threshold", 30, false )
+    self.color7:SetParent( self )
+    self.color7:SetPosition( left, top )
+    
     top = top + 35
 
     -- opacity
@@ -75,6 +87,8 @@ function ColorOptions:ResetContent()
     self.color3:SetText( self.data.color3 )
     self.color4:SetText( self.data.color4 )
     self.color5:SetText( self.data.color5 )
+    self.color6:SetText( self.data.color6 )
+    self.color7:SetText( self.data.color7 )
 
     self.opacityActiv:SetText( self.data.opacityActiv )
     self.opacityPassiv:SetText( self.data.opacityPassiv )
@@ -93,6 +107,8 @@ function ColorOptions:SizeChanged()
     self.color3:SetWidth( width )
     self.color4:SetWidth( width )
     self.color5:SetWidth( width )
+    self.color6:SetWidth( width )
+    self.color7:SetWidth( width )
     
     self.opacityActiv:SetWidth( width )
     self.opacityPassiv:SetWidth( width )
@@ -108,6 +124,8 @@ function ColorOptions:Save()
     self.data.color3   = self.color3:GetText(  )
     self.data.color4   = self.color4:GetText(  )
     self.data.color5   = self.color5:GetText(  )
+    self.data.color6   = self.color6:GetText(  )
+    self.data.color7   = self.color7:GetText(  )
 
     self.data.opacityActiv   = self.opacityActiv:GetText(  )
     self.data.opacityPassiv  = self.opacityPassiv:GetText(  )
@@ -126,6 +144,16 @@ end
 ---------------------------------------------------------------------------------------------------
 function ColorOptions:LanguageChanged()
 
+    self.color1:LanguageChanged()
+    self.color2:LanguageChanged()
+    self.color3:LanguageChanged()
+    self.color4:LanguageChanged()
+    self.color5:LanguageChanged()
+    self.color6:LanguageChanged()
+    self.color7:LanguageChanged()
+
+    self.opacityActiv:LanguageChanged()
+    self.opacityPassiv:LanguageChanged()
 end
 ---------------------------------------------------------------------------------------------------
 

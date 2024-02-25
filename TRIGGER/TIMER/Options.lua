@@ -133,6 +133,17 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function TimerOptions:LanguageChanged()
+
+    self.description:LanguageChanged()
+    self.token:LanguageChanged()
+    self.action:LanguageChanged()
+    self.value:LanguageChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function TimerOptions:Save()
 
     self.data.description   = self.description:GetText(  )

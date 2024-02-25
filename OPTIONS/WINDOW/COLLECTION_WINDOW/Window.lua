@@ -108,6 +108,10 @@ function Options.Elements.CollectionWindow:LanguageChanged()
 	self.chat_label:SetText( UTILS.GetText( "collection", "chat" ) )
 	self.effects_label:SetText(  UTILS.GetText( "collection", "effects" ) )
 
+	self.skill_segment:LanguageChanged()
+	self.effect_segment:LanguageChanged()
+	self.chat_segment:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

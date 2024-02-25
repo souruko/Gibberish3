@@ -309,6 +309,14 @@ function StringToWindow( text, folder )
         data.color5                = StringToColor( window_attributes["color5"] )
     end
 
+    if window_attributes["color6"] ~= nil then
+        data.color6                = StringToColor( window_attributes["color6"] ) 
+    end
+
+    if window_attributes["color7"] ~= nil then
+        data.color7                = StringToColor( window_attributes["color7"] )
+    end
+
     if window_attributes["opacityActiv"] ~= nil then
         data.opacityActiv          = tonumber(window_attributes["opacityActiv"])
     end

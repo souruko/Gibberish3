@@ -47,7 +47,7 @@ function EffectSelfOptions:Constructor( parent, data, parentType )
 
     top = top + 35
 
-    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.backcolor1, "options", "icon", "tim_icon", 42 )
+    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.backcolor1, "options", "icon", "trg_icon", 42 )
     self.icon:SetParent( self )
     self.icon:SetTop( top )
 
@@ -122,6 +122,19 @@ function EffectSelfOptions:SizeChanged()
     self.value:SetWidth( self:GetWidth() )
     self.useRegex:SetWidth( self:GetWidth() )
     self.icon:SetWidth( self:GetWidth() )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function EffectSelfOptions:LanguageChanged()
+
+    self.description:LanguageChanged()
+    self.token:LanguageChanged()
+    self.action:LanguageChanged()
+    self.value:LanguageChanged()
+    self.useRegex:LanguageChanged()
+    self.icon:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

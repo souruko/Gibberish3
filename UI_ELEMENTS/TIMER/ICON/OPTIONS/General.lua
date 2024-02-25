@@ -133,6 +133,15 @@ end
 ---------------------------------------------------------------------------------------------------
 function GeneralOptions:LanguageChanged()
 
+    self.description:LanguageChanged()
+    self.permanent:LanguageChanged()
+    self.stacking:LanguageChanged()
+    self.loop:LanguageChanged()
+    self.protect:LanguageChanged()
+    self.reset:LanguageChanged()
+    self.useCustomTimer:LanguageChanged()
+    self.timerValue:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

@@ -120,6 +120,9 @@ function BarElement:DataChanged()
     self.timerLabel:SetForeColor( UTILS.ColorFix( parentData.color4 ) )
     self.textLabel:SetForeColor( UTILS.ColorFix( parentData.color5 ) )
 
+    self.timerLabel:SetOutlineColor( UTILS.ColorFix( parentData.color6 ) )
+    self.textLabel:SetOutlineColor( UTILS.ColorFix( parentData.color6 ) )
+
     -- text alignment
     self.textLabel:SetTextAlignment( parentData.textAlignment )
     self.timerLabel:SetTextAlignment( parentData.timerAlignment )
@@ -138,6 +141,12 @@ function BarElement:DataChanged()
     -- set barWidth
     self.barWidth  = parentData.width
     self.backColor = UTILS.ColorFix( parentData.color2 )
+    
+    if parentData.color7 ~= nil then
+        self.thresholdColor = UTILS.ColorFix( parentData.color7 )
+    else
+        self.thresholdColor = Turbine.UI.Color.Red
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -355,7 +364,7 @@ function BarElement:UpdateThreshold( timeLeft )
         -- no animation only red background
         else
             
-            self.barBack:SetBackColor( Turbine.UI.Color.Red )
+            self.barBack:SetBackColor( self.thresholdColor )
 
         end
         

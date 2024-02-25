@@ -155,6 +155,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function TextOptions:LanguageChanged()
 
+    self.font:LanguageChanged()
+    self.fontSize:LanguageChanged()
+    self.numberFormat:LanguageChanged()
+    self.textAlignment:LanguageChanged()
+    self.timerAlignment:LanguageChanged()
+    self.showTimer:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

@@ -39,7 +39,7 @@ end
 function ColorFix( color )
 
     if color == nil then
-        return nil
+        return Turbine.UI.Color.Black
     end
 
     return Turbine.UI.Color(color.R, color.G, color.B)

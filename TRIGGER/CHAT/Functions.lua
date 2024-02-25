@@ -29,7 +29,7 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         -- keep track of activ skills
         if args.ChatType == Turbine.ChatType.Advancement then
-            if string.find(args.Message, L[ Language.Local ].traitline_changed) then 
+            if string.find(args.Message, L[ Language.Local ].traitline_changed) then
                 Trigger.SkillTreeChanged_control:Go()
             end
         end

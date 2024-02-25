@@ -115,6 +115,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function AnimationOptions:LanguageChanged()
 
+    self.thresholdValue:LanguageChanged()
+    self.useThreshold:LanguageChanged()
+    self.useAnimation:LanguageChanged()
+    self.useShadow:LanguageChanged()
+    self.animationType:LanguageChanged()
+    self.animationSpeed:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

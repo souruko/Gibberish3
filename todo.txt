@@ -1,10 +1,11 @@
 
 
 -- now
-
+folder ui in window selection
 
 -- next
-folder ui in window selection
+trigger value as timerValue
+LanguageChanged > dropdown texte fixen
 loop an reset binden
 import triggers into window/folder 
 import folder

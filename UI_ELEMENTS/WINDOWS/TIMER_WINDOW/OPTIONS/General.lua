@@ -102,6 +102,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function GeneralOptions:LanguageChanged()
 
+    self.description:LanguageChanged()
+    self.saveGlobaly:LanguageChanged()
+    self.resetOnTargetChanged:LanguageChanged()
+    self.useTargetEntity:LanguageChanged()
+    self.overlay:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

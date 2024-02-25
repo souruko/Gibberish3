@@ -185,7 +185,7 @@ function Trigger.ParseCombatChat(line)
 		amount = string.gsub(amount,",","")+0;
 		
 		-- the only information we can extract directly is the target and amount
-		return 14,nil,trim_articles(player.name),nil,amount;
+		return 14,nil,trim_articles(LocalPlayer.name),nil,amount;
 	end
 	
 	-- 7) Combat State Break notice (as of 4.1.0)
@@ -195,10 +195,10 @@ function Trigger.ParseCombatChat(line)
 
 	if (initiator_name ~= nil) then
 		initiator_name =
-			string.match(initiator_name, "^Vous avez") and player.name or
+			string.match(initiator_name, "^Vous avez") and LocalPlayer.name or
 			string.match(initiator_name, " vous a$") and string.gsub(initiator_name, " vous a$", "") or
 			string.gsub(initiator_name, " a$", "");
-		target_name = (target_name == "" and player.name or target_name);
+		target_name = (target_name == "" and LocalPlayer.name or target_name);
 
 		if (printDebug) then
   		Turbine.Shell.WriteLine("root_broken", line, "ini_name: " .. initiator_name .. " tgt_name: " .. target_name);
@@ -212,10 +212,10 @@ function Trigger.ParseCombatChat(line)
 
 	if (initiator_name ~= nil) then
 		initiator_name =
-			string.match(initiator_name, "^Vous avez") and player.name or
+			string.match(initiator_name, "^Vous avez") and LocalPlayer.name or
 			string.match(initiator_name, " vous a$") and string.gsub(initiator_name, " vous a$", "") or
 			string.gsub(initiator_name, " a$", "");
-		target_name = (target_name == "" and player.name or target_name);
+		target_name = (target_name == "" and LocalPlayer.name or target_name);
 
 		if (printDebug) then
 		  Turbine.Shell.WriteLine("daze_broken", line, "ini_name: " .. initiator_name .. " tgt_name: " .. target_name);
@@ -237,7 +237,7 @@ function Trigger.ParseCombatChat(line)
 	local corruption, target_name = string.match(line, "Vous avez dissipé l'effet (.*) affectant (.*)%.$");
 
 	if (corruption ~= nil) then
-		initiator_name = player.name;
+		initiator_name = LocalPlayer.name;
 		-- NB: Currently ignore corruption name
 		
 		-- Update
@@ -264,7 +264,7 @@ function Trigger.ParseCombatChat(line)
 		return 9, trim_articles(initiator_name);
 	end
 
-	-- 10c) Defeat line 3 (a player was killed or died)
+	-- 10c) Defeat line 3 (a LocalPlayer was killed or died)
 	initiator_name = string.match(line, "^(.*) a péri%.$");
 
 	if (initiator_name ~= nil) then
@@ -279,7 +279,7 @@ function Trigger.ParseCombatChat(line)
 	if (match ~= nil) then
 		
 		-- Update
-		return 9, trim_articles(player.name);
+		return 9, trim_articles(LocalPlayer.name);
 	end
 
 	-- 10e) Defeat line 5 (you died)
@@ -288,7 +288,7 @@ function Trigger.ParseCombatChat(line)
 	if (match ~= nil) then
 		
 		-- Update
-		return 9, trim_articles(player.name);
+		return 9, trim_articles(LocalPlayer.name);
 	end	
 	-- 10f) Defeat line 6 (you killed a mob)
 	local initiatorName = string.match(line,"^Votre coup puissant a vaincu (.*)%.$");
@@ -301,7 +301,7 @@ function Trigger.ParseCombatChat(line)
 	
 	-- 11) Revive lines --
 	
-	-- 11a) Revive line 1 (player revived)
+	-- 11a) Revive line 1 (LocalPlayer revived)
 	local initiatorName = string.match(line,"^(.*) revient à la vie%.$");
 	
 	if (initiatorName ~= nil) then
@@ -310,7 +310,7 @@ function Trigger.ParseCombatChat(line)
 	  return 10,trim_articles(initiatorName);
 	end
 	
-	-- 11b) Revive line 2 (player succumbed)
+	-- 11b) Revive line 2 (LocalPlayer succumbed)
 	local initiatorName = string.match(line,"^(.*) a succombé à ses blessures%.$");
 	
 	if (initiatorName ~= nil) then
@@ -323,7 +323,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^Vous revenez à la vie%.$");
 	
 	if (match ~= nil) then
-	  initiatorName = player.name;
+	  initiatorName = LocalPlayer.name;
 	  
 		-- Update
 	  return 10,initiatorName;
@@ -333,7 +333,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^You succumb to your wounds%.$");
 	
 	if (match ~= nil) then
-	  initiatorName = player.name;
+	  initiatorName = LocalPlayer.name;
 	  
 		-- Update
 	  return 10,initiatorName;

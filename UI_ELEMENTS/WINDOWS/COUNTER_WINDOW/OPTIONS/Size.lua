@@ -125,6 +125,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function SizeOptions:LanguageChanged()
 
+    self.width:LanguageChanged()
+    self.height:LanguageChanged()
+    self.frame:LanguageChanged()
+    self.spacing:LanguageChanged()
+    self.direction:LanguageChanged()
+    self.orientation:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

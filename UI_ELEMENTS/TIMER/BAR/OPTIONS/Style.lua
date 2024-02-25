@@ -109,6 +109,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function StyleOptions:LanguageChanged()
 
+    self.icon:LanguageChanged()
+    self.showIcon:LanguageChanged()
+    self.textOption:LanguageChanged()
+    self.textValue:LanguageChanged()
+    self.direction:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

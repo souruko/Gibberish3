@@ -41,7 +41,7 @@ function EffectGroupOptions:Constructor( parent, data, parentType )
 
     top = top + 35
 
-    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.backcolor1, "options", "icon", "tim_icon", 42 )
+    self.icon = Options.Elements.IconBoxRow( Options.Defaults.window.backcolor1, "options", "icon", "trg_icon", 42 )
     self.icon:SetParent( self )
     self.icon:SetTop( top )
 
@@ -123,6 +123,20 @@ function EffectGroupOptions:SizeChanged()
     self.useRegex:SetWidth( self:GetWidth() )
     self.listOfTargets:SetWidth( self:GetWidth() )
     self.icon:SetWidth( self:GetWidth() )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function EffectGroupOptions:LanguageChanged()
+
+    self.description:LanguageChanged()
+    self.token:LanguageChanged()
+    self.action:LanguageChanged()
+    self.value:LanguageChanged()
+    self.useRegex:LanguageChanged()
+    self.listOfTargets:LanguageChanged()
+    self.icon:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -134,6 +134,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function TextOptions:LanguageChanged()
 
+    self.font:LanguageChanged()
+    self.fontSize:LanguageChanged()
+    self.textAlignment:LanguageChanged()
+    self.timerAlignment:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

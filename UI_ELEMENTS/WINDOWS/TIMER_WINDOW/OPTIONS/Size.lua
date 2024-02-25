@@ -57,7 +57,7 @@ function SizeOptions:Constructor( data )
     top = top + 30
 
     -- direction
-    self.sort_direction = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "sort_direction", "win_direction", 30 )
+    self.sort_direction = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "sort_direction", "win_sort_direction", 30 )
     self.sort_direction:SetParent( self )
     self.sort_direction:SetPosition( left, top )
     for name, value in pairs(Direction) do
@@ -137,6 +137,14 @@ end
 
 ---------------------------------------------------------------------------------------------------
 function SizeOptions:LanguageChanged()
+
+    self.width:LanguageChanged()
+    self.height:LanguageChanged()
+    self.frame:LanguageChanged()
+    self.spacing:LanguageChanged()
+    self.direction:LanguageChanged()
+    self.sort_direction:LanguageChanged()
+    self.orientation:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

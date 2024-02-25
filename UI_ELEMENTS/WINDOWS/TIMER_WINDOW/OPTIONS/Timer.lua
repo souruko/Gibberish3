@@ -126,6 +126,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerOptions:LanguageChanged()
 
+    if self.timerOptions == nil  then
+        return
+    end
+
+    self.timerOptions:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

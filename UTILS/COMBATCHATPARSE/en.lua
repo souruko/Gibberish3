@@ -186,7 +186,7 @@ function Trigger.ParseCombatChat(line)
 		amount = string.gsub(amount,",","")+0;
 		
 		-- the only information we can extract directly is the target and amount
-		return 14,nil,player.name,nil,amount;
+		return 14,nil,LocalPlayer.name,nil,amount;
 	end
 	
 	-- 7) Combat State Break notice (as of 4.1.0)
@@ -235,7 +235,7 @@ function Trigger.ParseCombatChat(line)
 	local corruption, targetName = string.match(line,"You have dispelled (.*) from (.*)%.$");
 	
 	if (corruption ~= nil) then
-		initiatorName = player.name;
+		initiatorName = LocalPlayer.name;
 		targetName = string.gsub(targetName,"^[Tt]he ","");
 		
 		-- NB: Currently ignore corruption name
@@ -266,7 +266,7 @@ function Trigger.ParseCombatChat(line)
 		return 9,initiatorName;
 	end
 	
-	-- 10c) Defeat line 3 (a player was killed or died)
+	-- 10c) Defeat line 3 (a LocalPlayer was killed or died)
 	local initiatorName = string.match(line,"^(.*) has been defeated%.$");
 
 	if (initiatorName ~= nil) then
@@ -280,7 +280,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^.* incapacitated you%.$");
 
 	if (match ~= nil) then
-		initiatorName = player.name;
+		initiatorName = LocalPlayer.name;
 		
 		-- Update
 		return 9,initiatorName;
@@ -290,7 +290,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^You have been incapacitated by misadventure%.$");
 
 	if (match ~= nil) then
-		initiatorName = player.name;
+		initiatorName = LocalPlayer.name;
 		
 		-- Update
 		return 9,initiatorName;
@@ -308,7 +308,7 @@ function Trigger.ParseCombatChat(line)
 	
 	-- 11) Revive lines --
 	
-	-- 11a) Revive line 1 (player revived)
+	-- 11a) Revive line 1 (LocalPlayer revived)
 	local initiatorName = string.match(line,"^(.*) has been revived%.$");
 	
 	if (initiatorName ~= nil) then
@@ -318,7 +318,7 @@ function Trigger.ParseCombatChat(line)
 	  return 10,initiatorName;
 	end
 	
-	-- 11b) Revive line 2 (player succumbed)
+	-- 11b) Revive line 2 (LocalPlayer succumbed)
 	local initiatorName = string.match(line,"^(.*) has succumbed to .* wounds%.$");
 	
 	if (initiatorName ~= nil) then
@@ -332,7 +332,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^You have been revived%.$");
 	
 	if (match ~= nil) then
-	  initiatorName = player.name;
+	  initiatorName = LocalPlayer.name;
 	  
 		-- Update
 	  return 10,initiatorName;
@@ -342,7 +342,7 @@ function Trigger.ParseCombatChat(line)
 	local match = string.match(line,"^You succumb to your wounds%.$");
 	
 	if (match ~= nil) then
-	  initiatorName = player.name;
+	  initiatorName = LocalPlayer.name;
 	  
 		-- Update
 	  return 10,initiatorName;

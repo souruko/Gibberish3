@@ -53,24 +53,29 @@ end
 function FolderItem:CreateBackground()
 
     -- base background
+    self:SetBackColor( Turbine.UI.Color.Black )
 
     -- window for dragging of the window
     self.dragWindow = Turbine.UI.Window()
     self.dragWindow:SetParent( self )
     self.dragWindow:SetMouseVisible( false )
     self.dragWindow:SetVisible( false )
+    -- self.dragWindow:SetTop(5)
 
     -- content background
     self.frame = Turbine.UI.Control()
     self.frame:SetParent( self )
     self.frame:SetPosition( 2* Options.Defaults.window.w_folder_frame, 2* Options.Defaults.window.w_folder_frame )
     self.frame:SetMouseVisible( false )
+    -- self.frame:SetTop(5)
+    self.frame:SetBackColor( Options.Defaults.window.framecolor )
 
     -- content background
     self.background = Turbine.UI.Control()
     self.background:SetParent( self.frame )
     self.background:SetPosition( Options.Defaults.window.w_folder_frame, Options.Defaults.window.w_folder_frame )
     self.background:SetMouseVisible( false )
+
 
     -- mouse actions
     self.MouseEnter = function ()
@@ -261,6 +266,7 @@ function FolderItem:CreateContent()
     self.listbox:SetParent( self.background )
     self.listbox:SetPosition( Options.Defaults.window.w_folder_frame, Options.Defaults.window.w_item_height )
     self.listbox:SetMouseVisible( false )
+    -- self.listbox:SetBackColor(Turbine.UI.Color.Black)
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -318,13 +324,13 @@ function FolderItem:Height( collapsed )
         collapsed = self.data.collapsed
     end
 
-    local height
+    local height = 0
     local item_count = self.listbox:GetItemCount()
 
     if collapsed == true then
-        height =  Options.Defaults.window.w_item_height + 4 * Options.Defaults.window.w_folder_frame
+        height = height + Options.Defaults.window.w_item_height + 4 * Options.Defaults.window.w_folder_frame
     else
-        height =  Options.Defaults.window.w_item_height + 7 * Options.Defaults.window.w_folder_frame
+        height = height + Options.Defaults.window.w_item_height + 7 * Options.Defaults.window.w_folder_frame
 
         
         for i = 1, self.listbox:GetItemCount() do
@@ -338,10 +344,11 @@ function FolderItem:Height( collapsed )
     end
 
     self:SetHeight( height )
+    -- height = height - 5
     self.dragWindow:SetHeight( height )
     self.frame:SetHeight( height - ( 2 * Options.Defaults.window.w_folder_frame ) )
     self.background:SetHeight( height - ( 4 * Options.Defaults.window.w_folder_frame ) )
-    self.listbox:SetHeight( height - Options.Defaults.window.w_item_height )
+    self.listbox:SetHeight( height - Options.Defaults.window.w_item_height + Options.Defaults.window.frame )
 
     return height
 
@@ -377,25 +384,14 @@ function FolderItem:FixColor()
     local collapsed = self.data.collapsed
 
     if selected == true then
-        self:SetBackColor( Options.Defaults.window.w_folder_select )
-        self.frame:SetBackColor( Options.Defaults.window.w_folder_select )
         self.background:SetBackColor( Options.Defaults.window.w_folder_select )
 
     elseif hover == true then
-        self:SetBackColor( Options.Defaults.window.w_folder_hover )
-        self.frame:SetBackColor( Options.Defaults.window.w_folder_hover )
         self.background:SetBackColor( Options.Defaults.window.w_folder_hover )
 
     else
-        self:SetBackColor( Options.Defaults.window.w_folder_base )
-        self.frame:SetBackColor( Options.Defaults.window.w_folder_base )
         self.background:SetBackColor( Options.Defaults.window.w_folder_base )
  
-    end
-
-    if collapsed == false then
-        self:SetBackColor( Turbine.UI.Color.Black )
-        self.frame:SetBackColor( Options.Defaults.window.framecolor )
     end
 
 end

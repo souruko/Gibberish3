@@ -179,7 +179,7 @@ function Trigger.ParseCombatChat(line)
 	if (amount ~= nil) then
 		amount = string.gsub(amount,",","")+0;
 		-- the only information we can extract directly is the target and amount
-		return 14,nil,player.name,nil,amount;
+		return 14,nil,LocalPlayer.name,nil,amount;
 	end
 	
 	-- 7) Combat State Break notice (as of 4.1.0)
@@ -226,7 +226,7 @@ function Trigger.ParseCombatChat(line)
 		-- NB: Currently ignore corruption name
 		
 		-- Update
-		return 8,player.name,targetName;
+		return 8,LocalPlayer.name,targetName;
 	end
 	
 	-- 10) Defeat lines ---
@@ -249,7 +249,7 @@ function Trigger.ParseCombatChat(line)
 		return 9,initiatorName;
 	end
 	
-	-- 10c) Defeat line 3 (a player was killed or died)
+	-- 10c) Defeat line 3 (a LocalPlayer was killed or died)
 	local initiatorName = string.match(line,"^(.*) wurde besiegt%.$");
 
 	if (initiatorName ~= nil) then
@@ -263,7 +263,7 @@ function Trigger.ParseCombatChat(line)
 
 	if (match ~= nil) then
 		-- Update
-		return 9,player.name;
+		return 9,LocalPlayer.name;
 	end
 	
 	-- 10e) Defeat line 5 (you died)
@@ -271,12 +271,12 @@ function Trigger.ParseCombatChat(line)
 
 	if (match ~= nil) then
 		-- Update
-		return 9,player.name;
+		return 9,LocalPlayer.name;
 	end
 	
 	-- 11) Revive lines --
 	
-	-- 11a) Revive line 1 (player revived)
+	-- 11a) Revive line 1 (LocalPlayer revived)
 	local initiatorName = string.match(line,"^(.*) wurde wiederbelebt%.$");
 	
 	if (initiatorName ~= nil) then
@@ -285,7 +285,7 @@ function Trigger.ParseCombatChat(line)
 	  return 10,initiatorName;
 	end
 	
-	-- 11b) Revive line 2 (player succumbed)
+	-- 11b) Revive line 2 (LocalPlayer succumbed)
 	local initiatorName = string.match(line,"^(.*) ist .* Wunden erlegen%.$");
 	
 	if (initiatorName ~= nil) then
@@ -299,7 +299,7 @@ function Trigger.ParseCombatChat(line)
 	
 	if (match ~= nil) then
 		-- Update
-	  return 10,player.name;
+	  return 10,LocalPlayer.name;
 	end
 	
 	-- 11d) Revive line 4 (you succumbed)
@@ -307,7 +307,7 @@ function Trigger.ParseCombatChat(line)
 	
 	if (match ~= nil) then
 		-- Update
-	  return 10,player.name;
+	  return 10,LocalPlayer.name;
 	end
 	
 	-- if we reach here, we were unable to parse the line

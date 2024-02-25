@@ -55,11 +55,13 @@ function WindowToString( data )
         if type(value) == "table" then
 
             -- colors
-            if key == "color1" or
+            if  key == "color1" or
                 key == "color2" or
                 key == "color3" or
                 key == "color4" or
-                key == "color5" then
+                key == "color5" or
+                key == "color6" or
+                key == "color7" then
                 
                 text = text  .. key .. ":{"
                 for k, v in pairs(value) do

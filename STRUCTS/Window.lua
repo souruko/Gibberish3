@@ -45,6 +45,8 @@ function Window.New(name, type)
     window.color3                = Window[type].Defaults.color3
     window.color4                = Window[type].Defaults.color4
     window.color5                = Window[type].Defaults.color5
+    window.color6                = Window[type].Defaults.color6
+    window.color7                = Window[type].Defaults.color7
 
     window.opacityActiv          = Window[type].Defaults.opacityActiv
     window.opacityPassiv         = Window[type].Defaults.opacityPassiv
@@ -115,24 +117,32 @@ function Window.Copy(index)
     window.color3                  = {}
     window.color4                  = {}
     window.color5                  = {}
+    window.color6                  = {}
+    window.color7                  = {}
     
     window.color1.R                = Data.window[index].color1.R
     window.color2.R                = Data.window[index].color2.R
     window.color3.R                = Data.window[index].color3.R
     window.color4.R                = Data.window[index].color4.R
     window.color5.R                = Data.window[index].color5.R
+    window.color6.R                = Data.window[index].color6.R
+    window.color7.R                = Data.window[index].color7.R
 
     window.color1.G                = Data.window[index].color1.G
     window.color2.G                = Data.window[index].color2.G
     window.color3.G                = Data.window[index].color3.G
     window.color4.G                = Data.window[index].color4.G
     window.color5.G                = Data.window[index].color5.G
+    window.color6.G                = Data.window[index].color6.G
+    window.color7.G                = Data.window[index].color7.G
 
     window.color1.B                = Data.window[index].color1.B
     window.color2.B                = Data.window[index].color2.B
     window.color3.B                = Data.window[index].color3.B
     window.color4.B                = Data.window[index].color4.B
     window.color5.B                = Data.window[index].color5.B
+    window.color6.B                = Data.window[index].color6.B
+    window.color7.B                = Data.window[index].color7.B
 
 
     window.opacityActiv          = Data.window[index].opacityActiv

@@ -66,6 +66,14 @@ function Options.OverwriteCharData( global_data, char_data )
     for index, window_data in ipairs( global_data.window ) do
         local data = Options.GetWindowByID( window_data.id, char_data )
 
+        -- new color fix delete later
+        if window_data.color6 == nil then
+            window_data.color6 = {R=0, G=0, B=0}
+        end
+        if window_data.color7 == nil then
+            window_data.color7 = {R=1, G=0, B=0}
+        end
+
         -- char data found
         if data ~= nil then
             window_data.enabled = data.enabled

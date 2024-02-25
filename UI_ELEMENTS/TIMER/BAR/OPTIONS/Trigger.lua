@@ -91,6 +91,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function TriggerOptions:LanguageChanged()
 
+    if self.triggerOptions == nil  then
+        return
+    end
+
+    self.triggerOptions:LanguageChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 

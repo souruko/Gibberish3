@@ -31,6 +31,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:LanguageChanged()
 	self.import_window:LanguageChanged()
+
+	if self.content == nil then
+		return
+	end
+
+	self.content:LanguageChanged()
 end
 ---------------------------------------------------------------------------------------------------
 

@@ -6,6 +6,13 @@
 
 3.0.9
 fixed timerstart/end/threshold on window/folder work now
+improved tooltips
+added german options language
+fixed changing options language now gets properly passed down
+added outline and threshold color option
+fixed an issue with parsing combat chat
+added french options language
+improved folders in window selection
 
 
 3.0.8b

@@ -103,6 +103,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function GeneralOptions:LanguageChanged()
 
+    self.description:LanguageChanged()
+    self.loop:LanguageChanged()
+    self.protect:LanguageChanged()
+    self.reset:LanguageChanged()
+    self.counterEND:LanguageChanged( )
+    self.counterSTART:LanguageChanged( )
+
 end
 ---------------------------------------------------------------------------------------------------
 
