@@ -145,6 +145,7 @@ end
 function TriggerOptions:DeleteTrigger( triggerIndex, triggerType )
 
     Options.DeleteTrigger( self.data, triggerIndex, triggerType )
+    Options.SaveData()
     self.listbox:ContentChanged( self.data )
 end
 ---------------------------------------------------------------------------------------------------

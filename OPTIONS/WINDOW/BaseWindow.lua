@@ -202,9 +202,9 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Window.Constructor:ShowExport( data, type )
+function Options.Window.Constructor:ShowExport( data, type, index )
 
-    self.selection_options:ShowExport( data, type )
+    self.selection_options:ShowExport( data, type, index )
 
 end
 ---------------------------------------------------------------------------------------------------

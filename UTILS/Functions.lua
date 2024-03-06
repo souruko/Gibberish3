@@ -39,7 +39,7 @@ end
 function ColorFix( color )
 
     if color == nil then
-        return Turbine.UI.Color.Black
+        return nil --Turbine.UI.Color.Black
     end
 
     return Turbine.UI.Color(color.R, color.G, color.B)
@@ -130,7 +130,7 @@ function TextToColor( text )
     local list = Split(text, ",")
 
     if #list ~= 3 then
-        return nil
+        return nil --{ R=0, G=0, B=0 }
 
     end
 
@@ -176,6 +176,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- 
 function ColorToText( color )
+
+    if color == nil then
+        return nil
+    end
 
     local r, g, b
 

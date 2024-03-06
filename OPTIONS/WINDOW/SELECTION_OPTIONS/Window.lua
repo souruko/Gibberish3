@@ -397,10 +397,10 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.SelectionOptions:ShowExport( data, type )
+function Options.Elements.SelectionOptions:ShowExport( data, type, index )
 
 	self.import = true
-	self.import_window:ShowExport( data, type )
+	self.import_window:ShowExport( data, type, index )
 	self.import_window:SetVisible( self.import )
 
 end

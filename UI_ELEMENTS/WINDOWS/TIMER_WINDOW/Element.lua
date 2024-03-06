@@ -143,6 +143,12 @@ function TimerWindowElement:TimerAction( triggerData, timerData, timerIndex, sta
     elseif triggerData.action == Action.Remove then
         self:ActionRemove( timerIndex, key )
 
+    elseif triggerData.action == Action.Enable then
+        self:ActionEnableTimer( timerIndex, true )
+
+    elseif triggerData.action == Action.Disable then
+        self:ActionEnableTimer( timerIndex, false )
+
     end
 
 end
@@ -357,6 +363,22 @@ function TimerWindowElement:ActionRemove( timerIndex, key )
         end
 
     end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- enable/disable timers
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:ActionEnableTimer( timerIndex, enabled )
+
+    self.data.timerList[ timerIndex ].enabled = enabled
+
+    if enabled == false then
+        self:ActionRemove( timerIndex, nil )
+    end
+
+    Options.SaveData()
 
 end
 ---------------------------------------------------------------------------------------------------

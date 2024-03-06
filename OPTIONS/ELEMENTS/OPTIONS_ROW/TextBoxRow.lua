@@ -32,6 +32,7 @@ function Options.Elements.TextBoxRow:Constructor( back_color, label_control, lab
 	self.textbox:SetSelectable( true )
     self.textbox:SetFont( Options.Defaults.window.font )
     self.textbox:SetMultiline( allow_multiline )
+    self.textbox:SetMarkupEnabled(false)
 
     self:SetHeight( height )
     self:SetBackColor( back_color )

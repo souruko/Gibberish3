@@ -104,6 +104,30 @@ end
 ---------------------------------------------------------------------------------------------------
 function ConvertFolder( text, insert )
 
+    local list = Split( text, "<folder>")
+
+    local index_assignment = {}
+
+    for i, folder_string in ipairs(list) do
+
+        local old_index, new_index = StringToFolder( folder_string )
+
+        if old_index ~= nil then
+            index_assignment[ old_index ] = new_index
+        end
+
+    end
+
+    for key, value in pairs(index_assignment) do
+        local old_folder = Data.folder[ value ].folder
+
+        if index_assignment[ old_folder ] ~= nil then
+            Data.folder[ value ].folder = index_assignment[ old_folder ]
+        else
+            Data.folder[ value ].folder = nil
+        end
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -612,7 +636,115 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function StringToFolder( text, insert )
+function StringToFolder( text )
+
+    local list = Split( text, "<window>")
+
+    -- no folder data
+    if list[1] == nil then
+        return
+    end
+
+    -- sperate folder from windows
+    local folder_string_with_trigger = list[1]
+    local window_strings = {}
+    for i = 2, #list do
+        window_strings[#window_strings+1] = list[i]
+    end
+
+    local list2 = Split( folder_string_with_trigger, "<trigger>")
+
+    -- no folder data
+    if list[1] == nil then
+        return
+    end
+
+    -- seperate folder and trigger
+    local folder_string = list2[1]
+    local trigger_strings = {}
+    for i = 2, #list2 do
+        trigger_strings[#trigger_strings+1] = list2[i]
+    end
+
+    -- process folder data
+    local folder_attribut_strings = Split( folder_string, "}:")
+
+    -- no folder data
+    if #folder_attribut_strings == 0 then
+        return
+    end
+
+    -- split attributes in key and value
+    local folder_attributes = {}
+    for index, value in ipairs(folder_attribut_strings) do
+        local tmp_list = Split(value, ":{")
+
+        -- should always be 2 key and value
+        if #tmp_list == 2 then
+            -- insert into window attributes
+            folder_attributes[ tmp_list[1] ] = tmp_list[2]
+        end
+    end
+
+    -- text can not be processed
+    if folder_attributes["name"] == nil then
+        return
+    end
+
+    -- creat new folder
+    local new_index = Folder.New( folder_attributes["name"] )
+    local data = Data.folder[ new_index ]
+
+    -- overwrite attributes
+    if folder_attributes["id"] ~= nil then
+        data.id    = tonumber(folder_attributes["id"])
+    end
+
+    if folder_attributes["name"] ~= nil then
+        data.name    = tostring(folder_attributes["name"])
+    end
+    
+    if folder_attributes["collapsed"] ~= nil then
+        data.collapsed    = ToBool(folder_attributes["collapsed"])
+    end
+    
+    if folder_attributes["folder"] ~= nil then
+        data.folder    = tonumber(folder_attributes["folder"])
+    end
+   
+    local old_index = nil
+    if folder_attributes["index"] ~= nil then
+        old_index = tonumber(folder_attributes["index"])
+    end
+
+    -- add folder triggers
+    for i, trigger_string in ipairs(trigger_strings) do
+        StringToTrigger( trigger_string, data )
+    end
+
+    -- add windows
+    for i, window_string in ipairs(window_strings) do
+        StringToWindow( window_string, new_index )
+    end
+
+    return old_index, new_index
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function GetFolderIndex( text )
+
+    local i, j = string.find( text, "<folder/%d+/>")
+
+    if i == nil then
+        return nil
+    end
+
+    local index = tonumber( string.match( text, "%d+", (i)) )
+    text = string.gsub( text, "<folder/".. index .."/>", "")
+
+    return index, text
 
 end
 ---------------------------------------------------------------------------------------------------

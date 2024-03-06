@@ -52,6 +52,12 @@ function Options.LoadData()
 
     end
 
+    -- fix data for non english clients
+    if Language.Local ~= Language.English then
+        char_data = Options.ConvertFromEuro( char_data )
+
+    end
+
     return Options.OverwriteCharData( global_data, char_data )
 
 end
@@ -66,7 +72,7 @@ function Options.OverwriteCharData( global_data, char_data )
     for index, window_data in ipairs( global_data.window ) do
         local data = Options.GetWindowByID( window_data.id, char_data )
 
-        -- new color fix delete later
+        -- new color fix delete later TODO
         if window_data.color6 == nil then
             window_data.color6 = {R=0, G=0, B=0}
         end
@@ -246,9 +252,15 @@ function Options.LoadRunningTimer()
 
     end
 
+    -- fix data for non english clients
+    if Language.Local ~= Language.English then
+        running_data = Options.ConvertFromEuro( running_data )
+
+    end
+
     -- fake trigger data for add action
     local fake_trigger_data = {}
-    fake_trigger_data.action = Action.Add
+    fake_trigger_data.action = Action.SetTo
 
     for i, windowData in ipairs(Data.window) do
 
@@ -264,7 +276,8 @@ function Options.LoadRunningTimer()
                 local timerData = windowData.timerList[ data.index ]
 
                 -- check if timer should get started again
-                if gameTime < data.startTime + data.duration or
+                if data.startTime == nil or
+                gameTime < (data.startTime + data.duration) or
                     timerData.loop == true then
 
                     -- fix loop start time

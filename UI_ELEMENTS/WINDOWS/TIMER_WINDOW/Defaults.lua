@@ -30,7 +30,7 @@ Window[ Window.Types.TIMER_WINDOW ].Defaults.color2                  = {R=0.11, 
 Window[ Window.Types.TIMER_WINDOW ].Defaults.color3                  = {R=0, G=0, B=0}
 Window[ Window.Types.TIMER_WINDOW ].Defaults.color4                  = {R=1, G=1, B=1}
 Window[ Window.Types.TIMER_WINDOW ].Defaults.color5                  = {R=1, G=1, B=1}
-Window[ Window.Types.TIMER_WINDOW ].Defaults.color6                  = {R=1, G=1, B=1}
+Window[ Window.Types.TIMER_WINDOW ].Defaults.color6                  = {R=0, G=0, B=0}
 Window[ Window.Types.TIMER_WINDOW ].Defaults.color7                  = {R=1, G=0, B=0}
 
 Window[ Window.Types.TIMER_WINDOW ].Defaults.opacityActiv            = 0.5

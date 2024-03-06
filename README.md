@@ -4,6 +4,19 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.10
+fixed an issue with looping text timer
+fixed the german client now properly load the character savefile
+added folder ex/import
+fixed a bug that broke the plugin after saving a color as ""
+fixed a bug that caused deleting folders to lag
+added copy folder
+fixed counter resizing
+fixed direction/orientation for counters
+added sort direction for counters
+fixed counter bar progress
+
+
 3.0.9
 fixed timerstart/end/threshold on window/folder work now
 improved tooltips

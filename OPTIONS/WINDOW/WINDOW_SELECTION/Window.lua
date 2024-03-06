@@ -516,8 +516,8 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.WindowSelection:ShowExport( data, type )
-	self:GetParent():ShowExport( data, type )
+function Options.Elements.WindowSelection:ShowExport( data, type, index )
+	self:GetParent():ShowExport( data, type, index )
 end
 ---------------------------------------------------------------------------------------------------
 

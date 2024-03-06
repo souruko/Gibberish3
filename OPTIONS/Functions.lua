@@ -339,8 +339,6 @@ function Options.DeleteFolder( folderIndex )
         Options.SelectionChanged( 0 )
     end
 
-    Options.SaveData()
-
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -354,8 +352,6 @@ function Options.DeleteTimer( data, timerIndex )
     if Data.selectedTimerIndex == (timerIndex) then
         Options.TimerSelectionChanged( 0 )
     end
-
-    Options.SaveData()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -371,8 +367,6 @@ function Options.DeleteTrigger( data, triggerIndex, triggerType )
         Options.TriggerSelectionChanged( 0, 0 )
     end
 
-    Options.SaveData()
-
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -386,8 +380,6 @@ function Options.DeleteTrigger2( data, triggerIndex, triggerType )
     if Data.selectedTriggerIndex2 == (triggerIndex) and Data.selectedTriggerType2 == triggerType then
         Options.Trigger2SelectionChanged( 0, 0 )
     end
-
-    Options.SaveData()
 
 end
 ---------------------------------------------------------------------------------------------------

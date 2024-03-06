@@ -197,6 +197,17 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- [required] set timer values
+---------------------------------------------------------------------------------------------------
+function CounterBarElement:SetContent( value, icon, text, entity, key, activ )
+
+    local setValue = value - self.counterCURRENT
+    self:UpdateContent( setValue, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- [required] close timer
 ---------------------------------------------------------------------------------------------------
 function CounterBarElement:Finish()
@@ -221,8 +232,6 @@ function CounterBarElement:UpdateElement( value )
     
     -- current counter value
     self.counterCURRENT = self.counterCURRENT + value
-    
-    local counterLeft = math.abs( self.counterSPAN - self.counterCURRENT )
 
     -- counter ended
     if self.counterCURRENT == self.counterEND then
@@ -240,7 +249,9 @@ function CounterBarElement:UpdateElement( value )
         end
 
     -- running timer
-    elseif counterLeft < 99999 then
+    elseif self.counterCURRENT < 99999 then
+
+        local counterLeft = self.counterCURRENT - self.counterEND
 
         self:UpdateBar( counterLeft )
         self:UpdateTime( self.counterCURRENT )
@@ -261,32 +272,33 @@ end
 -- update bar
 ---------------------------------------------------------------------------------------------------
 function CounterBarElement:UpdateBar( counterLeft )
+    Turbine.Shell.WriteLine(counterLeft .. " " .. self.counterSPAN)
 
     -- update bar size depending on direction and orientation
     -- descending horizontal
     if self.data.direction == Direction.Descending and
     self.parent.data.orientation == Orientation.Vertical then
 
-        self.bar:SetWidth( counterLeft / self.counterEND * self.barWidth )
+        self.bar:SetWidth( counterLeft / self.counterSPAN * self.barWidth )
 
     -- descending vertical
     elseif self.data.direction == Direction.Descending and
     self.parent.data.orientation == Orientation.Horizontal then
 
-        self.bar:SetHeight( counterLeft / self.counterEND * self.barWidth )
+        self.bar:SetHeight( counterLeft / self.counterSPAN * self.barWidth )
 
     -- ascending horizontal
     elseif self.data.direction == Direction.Ascending and
     self.parent.data.orientation == Orientation.Vertical then
 
         local counterPast = self.counterEND - counterLeft
-        self.bar:SetWidth( counterPast / self.counterEND * self.barWidth )
+        self.bar:SetWidth( counterPast / self.counterSPAN * self.barWidth )
 
     -- ascending vertical
     else
 
         local counterPast = self.counterEND - counterLeft
-        self.bar:SetWidth( counterPast / self.counterEND * self.barWidth )
+        self.bar:SetWidth( counterPast / self.counterSPAN * self.barWidth )
 
     end
 
@@ -547,6 +559,38 @@ function CounterBarElement:Resize()
     self.barBack:SetPosition( barBackLeft, barBackTop )
     self.labelBack:SetPosition( labelBackLeft, labelBackTop )
     self.iconControl:SetPosition( frame, frame )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+function CounterBarElement:GetRunningInformation()
+
+    local running_timer_data = {}
+
+    running_timer_data.index = self.index
+    running_timer_data.key = self.key
+    running_timer_data.startTime = nil
+    running_timer_data.duration = self.counterCURRENT
+    running_timer_data.icon = self.icon
+    running_timer_data.text = self.textLabel:GetText()
+
+    return running_timer_data
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- get running information
+---------------------------------------------------------------------------------------------------
+Timer[ Timer.Types.COUNTER_BAR ].GetItemSize = function ( parent_data )
+
+    local width = parent_data.width + ( 2 * parent_data.frame ) + parent_data.height
+    local height = parent_data.height + ( 2 * parent_data.frame)
+
+    return width, height
 
 end
 ---------------------------------------------------------------------------------------------------

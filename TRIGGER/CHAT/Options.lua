@@ -60,8 +60,8 @@ function ChatOptions:Constructor( parent, data, parentType )
         end
         
         self.action:AddItem( "action", Action.Remove, Action.Remove)
-        self.action:AddItem( "action", Action.Enable, Action.Enable)
-        self.action:AddItem( "action", Action.Disable, Action.Disable)
+        -- self.action:AddItem( "action", Action.Enable, Action.Enable)
+        -- self.action:AddItem( "action", Action.Disable, Action.Disable)
 
     end
 

@@ -48,7 +48,7 @@ function GeneralOptions:Constructor( data )
     self.reset = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "reset", "tim_reset", 30 )
     self.reset:SetParent( self )
     self.reset:SetPosition( left, top )
-    
+
     top = top + 35
        
     self.protect = Options.Elements.CheckBoxRow( Options.Defaults.window.basecolor, "options", "proctect", "tim_proctect", 30 )

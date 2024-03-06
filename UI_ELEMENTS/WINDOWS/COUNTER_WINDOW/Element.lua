@@ -31,6 +31,9 @@ function CounterWindowElement:Constructor( index )
     -- timer table
     self.children   = {}
 
+    self.base_left, self.base_top = UTILS.ScreenRatioToPixel( self.data.left, self.data.top )
+    self.left_shift = 0
+    self.top_shift = 0
 
     -- build elements
     self:SetMouseVisible( false )
@@ -141,6 +144,10 @@ function CounterWindowElement:TimerAction( triggerData, timerData, timerIndex, s
     -- remove timer
     elseif triggerData.action == Action.Remove then
         self:ActionRemove( timerIndex, key )
+
+    -- remove timer
+    elseif triggerData.action == Action.SetTo then
+        self:ActionSetTo( duration, timerData, timerIndex, icon, text, entity, key )
 
     else
         -- error!
@@ -321,28 +328,77 @@ end
 ---------------------------------------------------------------------------------------------------
 function CounterWindowElement:Resize()
 
-    local childCount = self.timerListBox:GetItemCount() + 1
+    local width, height, left, top
+    local childCount  = self.timerListBox:GetItemCount()
+    local childWidth, childHeight = Timer[ self.data.timerType ].GetItemSize( self.data )
 
-    local width, height
+    -- base size 1 element
+    if childCount == 0 then
+        childCount = 1
+    end
 
-    -- calculate width and heights depending on orientation
-    if self.data.orientation == Orientation.Horizontal then
+    -- right
+    if self.data.orientation == Orientation.Horizontal
+        and self.data.direction == Direction.Ascending then
 
-        width   = childCount * ( self.data.height + ( 2 * self.data.frame ) ) + ( ( childCount - 1) * self.data.spacing )
-        height  = self.data.width + ( 2 * self.data.frame )
+        width   = childCount * (childWidth + self.data.spacing)
+        height  = childHeight
 
-    else
+        left = self.base_left
+        top = self.base_top
 
-        width   = self.data.width + ( 2 * self.data.frame )
-        height  = childCount * ( self.data.height + ( 2 * self.data.frame ) ) + ( ( childCount - 1) * self.data.spacing )
+    -- left
+    elseif self.data.orientation == Orientation.Horizontal
+    and self.data.direction == Direction.Descending then
+
+        width   = childCount * (childWidth + self.data.spacing)
+        height  = childHeight
+
+        left = self.base_left - width + (childWidth + self.data.spacing)
+        top = self.base_top
+
+    -- down
+    elseif self.data.orientation == Orientation.Vertical
+    and self.data.direction == Direction.Ascending then
+
+        width   = childWidth
+        height  = childCount * (childHeight + self.data.spacing)
+
+        left = self.base_left
+        top = self.base_top
+
+    -- up
+    elseif self.data.orientation == Orientation.Vertical
+    and self.data.direction == Direction.Descending then
+
+        width   = childWidth
+        height  = childCount * (childHeight + self.data.spacing)
+
+        left = self.base_left
+        top = self.base_top - height + (childHeight + self.data.spacing)
 
     end
 
+    self.left_shift =  left - self.base_left
+    self.top_shift =  top - self.base_top
+
     self:SetSize( width, height )
+    self:SetPosition( left, top )
     self.timerListBox:SetSize( width, height )
     self.dragWindow:SetSize( width, height )
-    self.dragLabel:SetSize( width - 2 * Options.Defaults.move.FrameSize,
-                            height - 2 * Options.Defaults.move.FrameSize )
+    self.dragLabel:SetSize( childWidth - 2 * self.data.frame,
+                            childHeight - 2 * self.data.frame )
+
+    if self.data.direction == Direction.Ascending then
+        self.dragLabel:SetPosition( self.data.frame, self.data.frame )
+
+    elseif self.data.orientation == Orientation.Horizontal then
+        self.dragLabel:SetPosition( width -self.dragLabel:GetWidth() - self.data.frame , self.data.frame )
+
+    elseif self.data.orientation == Orientation.Vertical then
+        self.dragLabel:SetPosition( self.data.frame, height -self.dragLabel:GetHeight() - self.data.frame )
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -360,6 +416,32 @@ function CounterWindowElement:ActionAdd( value, timerData, timerIndex, icon, tex
     end
 
     child:UpdateContent( value, icon, text, entity, key, true  )
+    self:SortChildren()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- add value to counter
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionSetTo( value, timerData, timerIndex, icon, text, entity, key )
+
+    local child = self:CheckForRunningTimer( timerIndex, key )
+
+    -- stop when no timer is found
+    if child == nil then
+        
+        local index = #self.children + 1
+        self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, index )
+        child = self.children[ index ]
+        self.timerListBox:AddItem( self.children[ index ] )
+     
+    end
+
+    child:SetContent( value, icon, text, entity, key, true  )
+
+    self:Resize()
+    self:SortChildren()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -379,6 +461,7 @@ function CounterWindowElement:ActionSubtract( value, timerData, timerIndex, icon
     end
 
     child:UpdateContent( value, icon, text, entity, key, true  )
+    self:SortChildren()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -485,22 +568,45 @@ end
 ---------------------------------------------------------------------------------------------------
 function CounterWindowElement:SortChildren()
 
-    -- sort by sortIndex
-    self.timerListBox:Sort(
-        function (child1, child2)
+    if self.data.sort_direction == Direction.Descending then
 
-            if child1.sortIndex > child2.sortIndex then
+        -- sort by sortIndex
+        self.timerListBox:Sort(
+            function (child1, child2)
 
-                return false
+                if child1.counterCURRENT > child2.counterCURRENT then
 
-            else
+                    return false
 
-                return true
+                else
 
+                    return true
+
+                end
+                
             end
-            
-        end
-    )
+        )
+
+    else
+
+        -- sort by sortIndex
+        self.timerListBox:Sort(
+            function (child1, child2)
+
+                if child1.counterCURRENT < child2.counterCURRENT then
+
+                    return false
+
+                else
+
+                    return true
+
+                end
+                
+            end
+        )
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -551,7 +657,14 @@ end
 ---------------------------------------------------------------------------------------------------
 function CounterWindowElement:GetRunningTimer()
 
-    return nil
+    local running_window_data = {}
+
+    for i, control in ipairs(self.children) do
+        local index = #running_window_data+1
+        running_window_data[ index ] = control:GetRunningInformation()
+    end
+
+    return running_window_data
 
 end
 ---------------------------------------------------------------------------------------------------

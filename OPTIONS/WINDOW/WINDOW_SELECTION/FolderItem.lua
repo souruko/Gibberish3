@@ -191,7 +191,7 @@ function FolderItem:CreateRightClick()
 
         -- export folder
         self.rc_ex_folder = Options.Elements.Row( "selection", "ex_folder", function ()
-            self.parent:ShowExport( self.data, ImportType.Folder )
+            self.parent:ShowExport( self.data, ImportType.Folder, self.index*(-1) )
         end,
         Options.Defaults.rc_menu.item_height)
 
@@ -213,6 +213,7 @@ function FolderItem:CreateRightClick()
     -- delete
     self.rc_delete = Options.Elements.Row( "selection", "delete", function ()
         Options.DeleteFolder( self.index*(-1) )
+        Options.SaveData()
         self.parent:ReFill()
     end,
     Options.Defaults.rc_menu.item_height)

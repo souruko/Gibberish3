@@ -11,6 +11,7 @@ Options.Elements.ImportWindow = class(Turbine.UI.Control)
 function Options.Elements.ImportWindow:Constructor( parent )
 	Turbine.UI.Control.Constructor( self )
 
+	self.import = false
 	self.parent = parent
 	self:CreatBackground()
 
@@ -159,13 +160,14 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Elements.ImportWindow:ShowExport( data, type )
+function Options.Elements.ImportWindow:ShowExport( data, type, index )
 
+	self.import = false
 	self.textbox:SetEnabled( false )
 	self.insert_back:SetVisible(false)
 	self.create_new_back:SetVisible(false)
 	self.header_back:SetText( UTILS.GetText( "import", "export" ) )
-	self.textbox:SetText( UTILS.DataToString(data, type) )
+	self.textbox:SetText( UTILS.DataToString(data, type, index) )
 
 	Options.Window.Object:Activate()
 	self.textbox:Focus()
@@ -177,6 +179,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.ImportWindow:ShowImport()
 
+	self.import = true
 	self.textbox:SetEnabled( true )
 	self.insert_back:SetVisible(true)
 	self.create_new_back:SetVisible(true)

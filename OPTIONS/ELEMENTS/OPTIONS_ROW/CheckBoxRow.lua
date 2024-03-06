@@ -34,6 +34,10 @@ function Options.Elements.CheckBoxRow:Constructor( back_color, label_control, la
 	-- 	Options.ShowTooltipChanged( value )
 	-- end
 
+	self.checkbox.CheckedChanged = function ( value )
+		self.CheckedChanged( value )
+	end
+
     self:LanguageChanged()
 
 end
@@ -66,5 +70,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.CheckBoxRow:IsChecked()
     return self.checkbox:IsChecked()
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.CheckBox.CheckedChanged( value )
+
 end
 ---------------------------------------------------------------------------------------------------

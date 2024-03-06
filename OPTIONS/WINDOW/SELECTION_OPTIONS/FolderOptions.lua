@@ -154,7 +154,8 @@ end
 function Options.Elements.FolderOptions:DeleteTrigger( triggerIndex, triggerType )
 
     Options.DeleteTrigger2( self.data, triggerIndex, triggerType )
-    self.listbox:ContentChanged( self.data )
+    Options.SaveData()
+self.listbox:ContentChanged( self.data )
 
 end
 ---------------------------------------------------------------------------------------------------

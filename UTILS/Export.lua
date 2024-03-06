@@ -5,7 +5,7 @@
 --=================================================================================================
 
 ---------------------------------------------------------------------------------------------------
-function DataToString( data, type )
+function DataToString( data, type, index )
 
     local text = "```Gibberish3/" .. tostring(type)
 
@@ -13,7 +13,7 @@ function DataToString( data, type )
         text = text .. WindowToString( data )
 
     elseif type == ImportType.Folder then
-        text = text .. FolderToString( data )
+        text = text .. FolderToString( data, index )
 
     elseif type == ImportType.Timer then
         text = text .. TimerToString( data )
@@ -156,22 +156,41 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function FolderToString( data )
+function FolderToString( data, index )
 
-    local text = "<folder>"
+    local text = "<folder>index:{" .. index .. "}:"
 
     for key, value in pairs(data) do
 
         if type(value) == "table" then
 
         else
-
             text = text  .. key .. ":{" .. tostring(value) .. "}:"
         
         end
 
     end
+    
+    -- folder triggers
+    for name, i in pairs(Trigger.Types) do
+        for j, trigger_data in ipairs(data[i]) do
+            text = text .. TriggerToString( trigger_data )
+        end
+    end
 
+    -- windows
+    for i, window_data in ipairs(Data.window) do
+        if window_data.folder == index then
+            text = text .. WindowToString( window_data )
+        end
+    end
+
+    -- folders recursive
+    for i, folder_data in ipairs(Data.folder) do
+        if folder_data.folder == index then
+            text = text .. FolderToString( folder_data, i )
+        end
+    end
   
     return text
 

@@ -1,27 +1,20 @@
 
 
--- now
-folder ui in window selection
+-- version goal
 
--- next
-trigger value as timerValue
-LanguageChanged > dropdown texte fixen
-loop an reset binden
-import triggers into window/folder 
-import folder
-save counter on reload
-permanent counter bars / counter generell testen
-fix counter direction/orientation
 
+-- bugs
+fix sortIndex
+import triggers into window/folder (rework import buttons)
+LanguageChanged > dropdown texte
 single timer stacking option > self remove gets triggered after add so updating will remove ...
 
 
--- later
+-- features
 sort triggers
-timer enable/disable trigger action
 delete check window
 opacity slider
 options input check
 options save data feedback
 save window selections per char
-threshold color?
+trigger value as timerValue

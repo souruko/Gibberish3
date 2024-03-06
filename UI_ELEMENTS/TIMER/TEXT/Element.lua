@@ -392,7 +392,7 @@ function TextElement:Loop()
     -- reset timer with current time as start time
     local startTime = Turbine.Engine.GetGameTime()
 
-    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), self.entityControl:GetEntity(), self.key, true )
+    self:UpdateContent( startTime, self.duration, self.icon, self.textLabel:GetText(), nil, self.key, true )
 
 end
 ---------------------------------------------------------------------------------------------------

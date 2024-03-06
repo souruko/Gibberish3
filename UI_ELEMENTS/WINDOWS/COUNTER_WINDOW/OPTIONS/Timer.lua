@@ -162,6 +162,7 @@ end
 function TimerOptions:DeleteTimer( timerIndex )
 
     Options.DeleteTimer( self.data, timerIndex )
+    Options.SaveData()
     self.listbox:ContentChanged( self.data )
 end
 ---------------------------------------------------------------------------------------------------
