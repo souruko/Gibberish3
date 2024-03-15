@@ -11,6 +11,33 @@ L[ Language.French ] = {}
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+L[ Language.French ].class = {}
+L[ Language.French ].class[ Turbine.Gameplay.Class.Beorning ]      = "Beorning"
+L[ Language.French ].class[ Turbine.Gameplay.Class.BlackArrow ]    = "Black-Arrow"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Burglar ]       = "Burglar"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Brawler ]       = "Brawler"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Mariner ]       = "Mariner"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Captain ]       = "Captain"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Champion ]      = "Champion"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Chicken ]       = "Chicken"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Defiler ]       = "Defiler"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Guardian ]      = "Guardian"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Hunter ]        = "Hunter"
+L[ Language.French ].class[ Turbine.Gameplay.Class.LoreMaster ]    = "Lore-Master"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Minstrel ]      = "Minstrel"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Ranger ]        = "Ranger"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Reaver ]        = "Reaver"
+L[ Language.French ].class[ Turbine.Gameplay.Class.RuneKeeper ]    = "Rune-Keeper"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Stalker ]       = "Stalker"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Troll ]         = "Troll"
+L[ Language.French ].class[ Turbine.Gameplay.Class.WarLeader ]     = "War-Leader"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Warden ]        = "Warden"
+L[ Language.French ].class[ Turbine.Gameplay.Class.Weaver ]        = "Weaver"
+---------------------------------------------------------------------------------------------------
+
+LpData.class = L[ Language.French ].class[ LocalPlayer:GetClass() ]
+
+---------------------------------------------------------------------------------------------------
 
 L[ Language.French ].action = {}
 L[ Language.French ].action[ Action.Enable ]               = "Activer"
@@ -222,6 +249,7 @@ L[ Language.French ].options.useShadow                     = "Utiliser l'ombre"
 L[ Language.French ].options.timerType                     = "Type de minuterie"
 L[ Language.French ].options.counterEND                    = "Fin de comptoir"
 L[ Language.French ].options.counterSTART                  = "Démarrage du compteur"
+L[ Language.French ].options.saved                         = "Enregistré!"
 
 L[ Language.French ].options.permanent                     = "permanent"
 

@@ -23,6 +23,9 @@ function Options.Window.Constructor:Constructor()
     self.collection_window = Options.Elements.CollectionWindow()
     self.collection_window:SetParent( self )
 
+    self.messagePopup = Options.Elements.MessagePopup()
+    self.messagePopup:SetParent( self )
+
     self:LanguageChanged()
     self:SelectionChanged()
 
@@ -114,6 +117,14 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:Save()
+
+    self.messagePopup:Show( L[ Data.options.language ] )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:ResetSelectedContent()
 
     self.window_selection:ReFill()
@@ -155,6 +166,7 @@ function Options.Window.Constructor:SizeChanged()
     self.general_options:SetPosition(  Options.Defaults.window.outer_spacing, ( height - Options.Defaults.window.outer_spacing - general_height ) )
     self.selection_options:SetPosition( ( Options.Defaults.window.outer_spacing + Options.Defaults.window.spacing + Options.Defaults.window.ws_width ),  Options.Defaults.window.top_spacing )
     self.collection_window:SetPosition( ( Data.options.window.width - Options.Defaults.window.outer_spacing - Options.Defaults.window.c_width ), Options.Defaults.window.top_spacing )
+    self.messagePopup:SetPosition( selection_options_width + ( Options.Defaults.window.outer_spacing + Options.Defaults.window.spacing + Options.Defaults.window.ws_width ) - 110, selection_options_height - 40 )
 
 end
 ---------------------------------------------------------------------------------------------------

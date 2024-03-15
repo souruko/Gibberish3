@@ -15,6 +15,5 @@ sort triggers
 delete check window
 opacity slider
 options input check
-options save data feedback
 save window selections per char
 trigger value as timerValue

@@ -23,6 +23,8 @@ import "Gibberish3.OPTIONS.WINDOW.WINDOW_SELECTION.WindowItem"
 import "Gibberish3.OPTIONS.WINDOW.WINDOW_SELECTION.FolderItem"
 import "Gibberish3.OPTIONS.WINDOW.WINDOW_SELECTION.Window"
 
+import "Gibberish3.OPTIONS.WINDOW.MessagePopup"
+
 -- base
 import "Gibberish3.OPTIONS.WINDOW.BaseWindow"
 ---------------------------------------------------------------------------------------------------

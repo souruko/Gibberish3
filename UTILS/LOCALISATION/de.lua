@@ -11,6 +11,33 @@ L[ Language.German ] = {}
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+L[ Language.German].class = {}
+L[ Language.German].class[ Turbine.Gameplay.Class.Beorning ]      = "Beorning"
+L[ Language.German].class[ Turbine.Gameplay.Class.BlackArrow ]    = "Schwarzpfeil"
+L[ Language.German].class[ Turbine.Gameplay.Class.Burglar ]       = "Schurke"
+L[ Language.German].class[ Turbine.Gameplay.Class.Brawler ]       = "Schläger"
+L[ Language.German].class[ Turbine.Gameplay.Class.Mariner ]       = "Mariner"
+L[ Language.German].class[ Turbine.Gameplay.Class.Captain ]       = "Hauptmann"
+L[ Language.German].class[ Turbine.Gameplay.Class.Champion ]      = "Waffenmeister"
+L[ Language.German].class[ Turbine.Gameplay.Class.Chicken ]       = "Huhn"
+L[ Language.German].class[ Turbine.Gameplay.Class.Defiler ]       = "Sabo"
+L[ Language.German].class[ Turbine.Gameplay.Class.Guardian ]      = "Wächter"
+L[ Language.German].class[ Turbine.Gameplay.Class.Hunter ]        = "Jäger"
+L[ Language.German].class[ Turbine.Gameplay.Class.LoreMaster ]    = "Kundiger"
+L[ Language.German].class[ Turbine.Gameplay.Class.Minstrel ]      = "Barde"
+L[ Language.German].class[ Turbine.Gameplay.Class.Ranger ]        = "Waldläufer"
+L[ Language.German].class[ Turbine.Gameplay.Class.Reaver ]        = "Schnitter"
+L[ Language.German].class[ Turbine.Gameplay.Class.RuneKeeper ]    = "Runenbewahrer"
+L[ Language.German].class[ Turbine.Gameplay.Class.Stalker ]       = "Warg"
+L[ Language.German].class[ Turbine.Gameplay.Class.Troll ]         = "Troll"
+L[ Language.German].class[ Turbine.Gameplay.Class.WarLeader ]     = "Kriegsanführer"
+L[ Language.German].class[ Turbine.Gameplay.Class.Warden ]        = "Hüter"
+L[ Language.German].class[ Turbine.Gameplay.Class.Weaver ]        = "Spinne"
+---------------------------------------------------------------------------------------------------
+
+LpData.class = L[ Language.German ].class[ LocalPlayer:GetClass() ]
+
+---------------------------------------------------------------------------------------------------
 
 L[ Language.German ].action = {}
 L[ Language.German ].action[ Action.Enable ]                = "Aktivieren"
@@ -222,6 +249,7 @@ L[ Language.German ].options.useShadow                  	= "Schatten verwenden"
 L[ Language.German ].options.timerType                  	= "Timer Typ"
 L[ Language.German ].options.counterEND                 	= "Counter Ende"
 L[ Language.German ].options.counterSTART               	= "Counter Anfang"
+L[ Language.German ].options.saved                          = "Gespeichert!"
 
 L[ Language.German ].options.permanent                      = "dauerhaft"
 

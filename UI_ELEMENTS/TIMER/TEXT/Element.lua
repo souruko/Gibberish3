@@ -135,11 +135,13 @@ function TextElement:UpdateContent( startTime, duration, icon, text, entity, key
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
-    
+        self.iconControl:SetVisible(true)
+
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+        self.iconControl:SetVisible(false)
 
     end
 

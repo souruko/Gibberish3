@@ -161,11 +161,13 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+        self.iconControl:SetVisible(true)
 
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
+        self.iconControl:SetVisible(false)
 
     end
     

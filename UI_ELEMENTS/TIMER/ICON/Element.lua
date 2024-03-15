@@ -168,11 +168,13 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
-    
+        self.iconControl:SetVisible(true)
+
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
+        self.iconControl:SetVisible(false)
 
     end
 

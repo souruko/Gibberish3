@@ -171,11 +171,13 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
         self.iconControl:SetSize( 32, 32 )
+        self.iconControl:SetVisible(true)
 
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
         self.iconControl:SetSize( 32, 32 )
+        self.iconControl:SetVisible(false)
 
     end
 

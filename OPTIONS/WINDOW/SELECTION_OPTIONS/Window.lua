@@ -66,6 +66,8 @@ function Options.Elements.SelectionOptions:Save()
 	self.content:Save()
 	Options.SaveData()
 
+	self:GetParent():Save()
+
 	Options.DataChanged( Data.selectedIndex )
 
 	if Data.selectedIndex > 0 then

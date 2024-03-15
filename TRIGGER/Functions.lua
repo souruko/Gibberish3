@@ -27,7 +27,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)
 
-    return string.gsub(token, "&%d", "%%w+")
+    token = string.gsub(token, "&%d", "%%w+")
+    token = string.gsub(token, "&name", LpData.name)
+    token = string.gsub(token, "&class", LpData.class)
+
+    return token
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -54,7 +58,36 @@ function Trigger.GetPlaceholder(token, message, posAdjustment)
 
             posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
             pos1 = pos1+2
+
         end
+
+    end
+
+    -- player name
+    pos1 = string.find(token, "&name", pos1)
+
+    if pos1 ~= nil then
+
+        local index = "&name"
+
+        placeholder[index] = LpData.name
+
+        posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
+        pos1 = pos1+2
+
+    end
+
+    -- player class
+    pos1 = string.find(token, "&class", pos1)
+
+    if pos1 ~= nil then
+
+        local index = "&class"
+
+        placeholder[index] = LpData.class
+
+        posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
+        pos1 = pos1+2
 
     end
 

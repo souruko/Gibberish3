@@ -4,6 +4,13 @@
 =============================================================================================
 # CHANGELOG
 
+3.0.11
+fixed a bug with checkboxing always sending an error message
+fixed a bug where the icon made the background transparent even if not displayed
+added &name and &class as placeholder for tokens
+added save notification
+
+
 3.0.10
 fixed an issue with looping text timer
 fixed the german client now properly load the character savefile
