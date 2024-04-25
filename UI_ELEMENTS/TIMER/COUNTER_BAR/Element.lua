@@ -87,7 +87,7 @@ function CounterBarElement:Constructor( parent, data, index )
     self:DataChanged()
 
     -- start up
-    self:UpdateContent( 0, data.icon, data.text, nil, nil, true )
+    self:UpdateContent( 0, data.icon, data.textValue, nil, nil, true )
 
     -- timer started trigger event
     if Trigger.TimerEvent ~= nil then
@@ -274,7 +274,6 @@ end
 -- update bar
 ---------------------------------------------------------------------------------------------------
 function CounterBarElement:UpdateBar( counterLeft )
-    Turbine.Shell.WriteLine(counterLeft .. " " .. self.counterSPAN)
 
     -- update bar size depending on direction and orientation
     -- descending horizontal

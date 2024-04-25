@@ -119,7 +119,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:Save()
 
-    self.messagePopup:Show( L[ Data.options.language ] )
+    self.messagePopup:Show( L[ Data.options.language ].options.saved )
 
 end
 ---------------------------------------------------------------------------------------------------

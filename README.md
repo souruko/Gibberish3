@@ -4,6 +4,13 @@
 =============================================================================================
 # CHANGELOG
 
+3.1.1
+fixed stacking after import
+fixed a bug with enabling folders within folders per trigger
+fixed initial text for counter bars
+fixed save notification
+
+
 3.0.11
 fixed a bug with checkboxing always sending an error message
 fixed a bug where the icon made the background transparent even if not displayed

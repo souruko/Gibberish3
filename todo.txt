@@ -1,6 +1,7 @@
 
 
 -- version goal
+counter copy
 
 
 -- bugs

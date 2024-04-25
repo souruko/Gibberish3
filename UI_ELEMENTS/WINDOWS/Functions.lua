@@ -138,7 +138,7 @@ function Windows.FolderAction( folderIndex, folderData, triggerData )
     for index, data in ipairs(Data.folder) do
 
         if data.folder == folderIndex then
-            Windows.FolderAction( folderIndex, folderData, triggerData )
+            Windows.FolderAction( index, folderData, triggerData )
         end
         
     end

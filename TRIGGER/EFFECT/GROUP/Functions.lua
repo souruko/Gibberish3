@@ -158,7 +158,6 @@ Trigger[ Trigger.Types.EffectGroup ].CheckWindows = function ( effect, player, w
         return
     end
 
-    
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
         Trigger[ Trigger.Types.EffectGroup ].CheckTimer(effect, player, windowIndex, timerIndex, timerData)

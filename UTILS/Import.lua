@@ -462,7 +462,7 @@ function StringToTimer( text, parent )
     end
     
     if timer_attributes["stacking"] ~= nil then
-        data.stacking              = ToBool(timer_attributes["stacking"])
+        data.stacking              = tonumber(timer_attributes["stacking"])
     end
     
     if timer_attributes["loop"] ~= nil then
