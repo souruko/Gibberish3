@@ -53,11 +53,23 @@ function ColorOptions:Constructor( data )
     self.color6:SetParent( self )
     self.color6:SetPosition( left, top )
     
-    top = top + 30
+    top = top + 35
 
     self.color7 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color7", "win_color_threshold", 30, false )
     self.color7:SetParent( self )
     self.color7:SetPosition( left, top )
+    
+    top = top + 30
+
+    self.color8 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color8", "win_color_thresholdTimer", 30, false )
+    self.color8:SetParent( self )
+    self.color8:SetPosition( left, top )
+    
+    top = top + 30
+
+    self.color9 = Options.Elements.ColorBoxRow( Options.Defaults.window.basecolor, "options", "color9", "win_color_thresholdText", 30, false )
+    self.color9:SetParent( self )
+    self.color9:SetPosition( left, top )
     
     top = top + 35
 
@@ -71,6 +83,12 @@ function ColorOptions:Constructor( data )
     self.opacityPassiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityPassiv", "win_opacity_passiv", 30 )
     self.opacityPassiv:SetParent( self )
     self.opacityPassiv:SetPosition( left, top )
+    
+    top = top + 30
+    
+    self.opacityThreshold = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityThreshold", "win_opacity_theshold", 30 )
+    self.opacityThreshold:SetParent( self )
+    self.opacityThreshold:SetPosition( left, top )
     
     top = top + 35
 
@@ -89,9 +107,12 @@ function ColorOptions:ResetContent()
     self.color5:SetText( self.data.color5 )
     self.color6:SetText( self.data.color6 )
     self.color7:SetText( self.data.color7 )
+    self.color8:SetText( self.data.color8 )
+    self.color9:SetText( self.data.color9 )
 
     self.opacityActiv:SetText( self.data.opacityActiv )
     self.opacityPassiv:SetText( self.data.opacityPassiv )
+    self.opacityThreshold:SetText( self.data.opacityThreshold )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -109,9 +130,12 @@ function ColorOptions:SizeChanged()
     self.color5:SetWidth( width )
     self.color6:SetWidth( width )
     self.color7:SetWidth( width )
+    self.color8:SetWidth( width )
+    self.color9:SetWidth( width )
     
     self.opacityActiv:SetWidth( width )
     self.opacityPassiv:SetWidth( width )
+    self.opacityThreshold:SetWidth( width )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -126,9 +150,12 @@ function ColorOptions:Save()
     self.data.color5   = self.color5:GetText(  )
     self.data.color6   = self.color6:GetText(  )
     self.data.color7   = self.color7:GetText(  )
+    self.data.color8   = self.color8:GetText(  )
+    self.data.color9   = self.color9:GetText(  )
 
     self.data.opacityActiv   = self.opacityActiv:GetText(  )
     self.data.opacityPassiv  = self.opacityPassiv:GetText(  )
+    self.data.opacityThreshold  = self.opacityThreshold:GetText(  )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -151,9 +178,12 @@ function ColorOptions:LanguageChanged()
     self.color5:LanguageChanged()
     self.color6:LanguageChanged()
     self.color7:LanguageChanged()
+    self.color8:LanguageChanged()
+    self.color9:LanguageChanged()
 
     self.opacityActiv:LanguageChanged()
     self.opacityPassiv:LanguageChanged()
+    self.opacityThreshold:LanguageChanged()
 end
 ---------------------------------------------------------------------------------------------------
 

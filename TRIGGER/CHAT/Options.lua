@@ -143,8 +143,7 @@ function ChatOptions:Save()
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
     self.data.source        = self.source:GetSelectedValue()
-    -- self.data.listOfTargets = self.listOfTargets:GetText(  )
-    local text = self.listOfTargets:GetText()
+    local text              = self.listOfTargets:GetText()
     self.data.listOfTargets = UTILS.StringOfTargetsToList( text )
 
 end

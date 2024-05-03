@@ -223,18 +223,21 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
     local token = triggerData.token
     local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
+    if ( chatType == Turbine.ChatType.PlayerCombat or
+       chatType == Turbine.ChatType.EnemyCombat ) then
+
+        text, target = Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat(message, chatType)
+
+        -- check target against listOfTargets
+        if Trigger.CheckListForName(target, triggerData.listOfTargets) == false  then
+            return
+        end
+
+    end
+
 
     -- text
-    if timerData.textOption == TimerTextOptions.Target and
-    ( chatType             == Turbine.ChatType.PlayerCombat or
-      chatType             == Turbine.ChatType.EnemyCombat ) then
-
-       text, target = Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat(message, chatType)
-
-       -- check target against listOfTargets
-       if Trigger.CheckListForName(target, triggerData.listOfTargets) == false  then
-           return
-       end
+    if timerData.textOption == TimerTextOptions.Target then
 
        if text == "" then
            text = target

@@ -260,7 +260,7 @@ L[ Language.English ].options.color3                        = "Bar Color"
 L[ Language.English ].options.color4                        = "Timer Color"
 L[ Language.English ].options.color5                        = "Text Color"
 L[ Language.English ].options.color6                        = "Outline Color"
-L[ Language.English ].options.color7                        = "Threshold Color"
+L[ Language.English ].options.color7                        = "Threshold Back Color"
 L[ Language.English ].options.opacityActiv                  = "Opacity Activ"
 L[ Language.English ].options.opacityPassiv                 = "Opacity Passiv"
 
@@ -391,7 +391,7 @@ L[ Language.English ].tooltip.win_color_bar                 = "Color of the bar.
 L[ Language.English ].tooltip.win_color_timer               = "Font color of the timer."
 L[ Language.English ].tooltip.win_color_text                = "Font color of the text."
 L[ Language.English ].tooltip.win_color_outline             = "Outline color of the text and timer."
-L[ Language.English ].tooltip.win_color_threshold           = "Backcolor while within the threshold."
+L[ Language.English ].tooltip.win_color_threshold           = "Back color while within the threshold."
 L[ Language.English ].tooltip.win_opacity_activ             = "Opacity while the timer is activ."
 L[ Language.English ].tooltip.win_opacity_passiv            = "Opacity while the timer is passiv."
 L[ Language.English ].tooltip.win_description               = "Window description."
@@ -414,3 +414,19 @@ L[ Language.English ].tooltip.win_timer_align               = "Position of the t
 L[ Language.English ].tooltip.win_show_timer                = "If checked, the timer will be displayed."
 L[ Language.English ].tooltip.win_timer_type                = "What type of timer should the window use."
 ---------------------------------------------------------------------------------------------------
+
+
+L[ Language.English ].options.color8                        = "Threshold Timer Color"
+L[ Language.English ].options.color9                        = "Threshold Text Color"
+L[ Language.English ].options.opacityThreshold              = "Opacity Threshold"
+L[ Language.English ].options.thresholdFont                 = "Threhsold Font"
+L[ Language.English ].options.thresholdFontSize             = "Threshold Font size"
+
+L[ Language.English ].tooltip.win_color_thresholdTimer      = "Timer color while within the threshold."
+L[ Language.English ].tooltip.win_color_thresholdText       = "Text color while within the threshold."
+L[ Language.English ].tooltip.win_opacity_theshold          = "Opacity while the timer is within the threshold."
+L[ Language.English ].tooltip.win_thesholdFont              = "The font used for the window within the threshold."
+L[ Language.English ].tooltip.win_thesholdFont_size         = "Font size used within the threshold."
+
+
+L[ Language.English ].animationType.Zoom                    = "Zoom"

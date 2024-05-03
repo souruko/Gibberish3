@@ -413,3 +413,19 @@ L[ Language.French ].tooltip.win_timer_align               = "Position de la min
 L[ Language.French ].tooltip.win_show_timer                = "Si cette case est cochée, la minuterie sera affichée."
 L[ Language.French ].tooltip.win_timer_type                = "Quel type de minuterie la fenêtre doit-elle utiliser?"
 ---------------------------------------------------------------------------------------------------
+
+
+L[ Language.French ].options.color8                        = "Couleur de la minuterie de seuil"
+L[ Language.French ].options.color9                        = "Couleur du texte du seuil"
+L[ Language.French ].options.opacityThreshold              = "Seuil d'opacité"
+L[ Language.French ].options.thresholdFont                 = "Police Threhsold"
+L[ Language.French ].options.thresholdFontSize             = "Seuil Taille de la police"
+
+L[ Language.French ].tooltip.win_color_thresholdTimer      = "Couleur de la minuterie lorsque le seuil est atteint."
+L[ Language.French ].tooltip.win_color_thresholdText       = "Couleur du texte à l'intérieur du seuil."
+L[ Language.French ].tooltip.win_opacity_theshold          = "Opacité pendant que la minuterie est dans le seuil."
+L[ Language.French ].tooltip.win_thesholdFont              = "Police utilisée pour la fenêtre à l'intérieur du seuil."
+L[ Language.French ].tooltip.win_thesholdFont_size         = "Taille de la police utilisée dans le seuil."
+
+
+L[ Language.French ].animationType.Zoom                    = "Zoom"

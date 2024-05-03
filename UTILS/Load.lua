@@ -79,6 +79,24 @@ function Options.OverwriteCharData( global_data, char_data )
         if window_data.color7 == nil then
             window_data.color7 = {R=1, G=0, B=0}
         end
+        if window_data.color8 == nil then
+            local color = {R = window_data.color4.R, G = window_data.color4.G, B = window_data.color4.B}
+            window_data.color8 = color
+        end
+        if window_data.color9 == nil then
+            local color = {R = window_data.color5.R, G = window_data.color5.G, B = window_data.color5.B}
+            window_data.color9 = color
+        end
+        if window_data.opacityThreshold == nil then
+            window_data.opacityThreshold = window_data.opacityActiv
+        end
+        if window_data.thresholdFont == nil then
+            window_data.thresholdFont = window_data.font
+        end
+        if window_data.thresholdFontSize == nil then
+            window_data.thresholdFontSize = window_data.fontSize
+        end
+
 
         -- char data found
         if data ~= nil then

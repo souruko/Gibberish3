@@ -126,9 +126,15 @@ function CircelElement:DataChanged()
     self.textLabel:SetTextAlignment( parentData.textAlignment )
     self.timerLabel:SetTextAlignment( parentData.timerAlignment )
     
-    -- fonts
-    self.textLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
-    self.timerLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
+    -- fonts    
+    self.font = Font[ parentData.font ][ parentData.fontSize ]
+    if parentData.thresholdFont ~= nil then
+        self.thresholdFont = Font[ parentData.thresholdFont ][ parentData.thresholdFontSize ]
+    else
+        self.thresholdFont = self.font
+    end
+    self.textLabel:SetFont(  self.font )
+    self.timerLabel:SetFont( self.font )
 
     -- show timer
     self.timerLabel:SetVisible( parentData.showTimer )
@@ -139,7 +145,12 @@ function CircelElement:DataChanged()
 
     -- set circelWidth
     self.backColor = UTILS.ColorFix( parentData.color3 )
-
+    self.timerColor = UTILS.ColorFix( parentData.color4 )
+    self.textColor = UTILS.ColorFix( parentData.color5 )
+    self.thresholdColor = UTILS.ColorFix( parentData.color7 )
+    self.thresholdTimerColor = UTILS.ColorFix( parentData.color8 )
+    self.thresholdTextColor = UTILS.ColorFix( parentData.color9 )
+    
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -324,6 +335,12 @@ function CircelElement:UpdateThreshold( timeLeft )
 
         -- use backColor
         self.circel:SetBackColor( self.backColor )
+        self.timerLabel:SetForeColor( self.timerColor )
+        self.textLabel:SetForeColor( self.textColor )
+        self.timerLabel:SetFont( self.font )
+        self.textLabel:SetFont( self.font )
+        self:SetOpacity( self.parent.data.opacityActiv )
+        self.circelBack:SetOpacity( self.parent.data.opacityActiv )
 
     -- in the threshold
     else
@@ -361,6 +378,13 @@ function CircelElement:UpdateThreshold( timeLeft )
             self.circel:SetBackColor( Turbine.UI.Color.Red )
 
         end
+
+        self.timerLabel:SetForeColor( self.thresholdTimerColor )
+        self.textLabel:SetForeColor( self.thresholdTextColor )
+        self.timerLabel:SetFont( self.thresholdFont )
+        self.textLabel:SetFont( self.thresholdFont )
+        self:SetOpacity( self.parent.data.opacityThreshold )
+        self.circelBack:SetOpacity( self.parent.data.opacityThreshold )
         
     end
 

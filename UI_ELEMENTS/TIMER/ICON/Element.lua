@@ -123,8 +123,14 @@ function IconElement:DataChanged()
     self.timerLabel:SetTextAlignment( parentData.timerAlignment )
     
     -- fonts
-    self.textLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
-    self.timerLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
+    self.font = Font[ parentData.font ][ parentData.fontSize ]
+    if parentData.thresholdFont ~= nil then
+        self.thresholdFont = Font[ parentData.thresholdFont ][ parentData.thresholdFontSize ]
+    else
+        self.thresholdFont = self.font
+    end
+    self.textLabel:SetFont( self.font )
+    self.timerLabel:SetFont( self.font )
 
     -- show timer
     self.timerLabel:SetVisible( parentData.showTimer )
@@ -135,6 +141,11 @@ function IconElement:DataChanged()
 
     -- set 
     self.frameColor = UTILS.ColorFix( parentData.color1 )
+    self.timerColor = UTILS.ColorFix( parentData.color4 )
+    self.textColor = UTILS.ColorFix( parentData.color5 )
+    self.thresholdColor = UTILS.ColorFix( parentData.color7 )
+    self.thresholdTimerColor = UTILS.ColorFix( parentData.color8 )
+    self.thresholdTextColor = UTILS.ColorFix( parentData.color9 )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -334,6 +345,15 @@ function IconElement:UpdateThreshold( timeLeft )
 
             self.firstThreshold = false
             Trigger.TimerEvent( self.data.id, Trigger.Types.TimerThreshold )
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+            self:SetOpacity( self.parent.data.opacityActiv )
+            self.iconControl:SetOpacity( self.parent.data.opacityActiv )
+            
+            self.iconControl:SetPosition(0, 0)
+            self.iconControl:SetSize(self.width, self.height)
 
         end
 
@@ -368,11 +388,29 @@ function IconElement:UpdateThreshold( timeLeft )
 
             self:ThresholdAnimation()
 
+        elseif self.data.animationType == AnimationType.Zoom then
+            
+            local width = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.width
+            local height = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.height
+
+            local left = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.width * (-1)/2
+            local top = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.height * (-1)/2
+    
+            self.iconControl:SetPosition(left, top)
+            self.iconControl:SetSize(width, height)
+
         else
          
-            self.frame:SetBackColor( Turbine.UI.Color.Red )
+            self.frame:SetBackColor( self.thresholdColor )
 
         end
+
+        self.timerLabel:SetForeColor( self.thresholdTimerColor )
+        self.textLabel:SetForeColor( self.thresholdTextColor )
+        self.timerLabel:SetFont( self.thresholdFont )
+        self.textLabel:SetFont( self.thresholdFont )
+        self:SetOpacity( self.parent.data.opacityThreshold )
+        self.iconControl:SetOpacity( self.parent.data.opacityThreshold )
         
     end
 

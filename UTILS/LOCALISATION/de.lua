@@ -413,3 +413,19 @@ L[ Language.German ].tooltip.win_timer_align                = "Position des Time
 L[ Language.German ].tooltip.win_show_timer                 = "Wenn diese Option aktiviert ist, wird der Timer angezeigt."
 L[ Language.German ].tooltip.win_timer_type                 = "Welche Art von Zeitschaltuhr sollte das Fenster verwenden?"
 ---------------------------------------------------------------------------------------------------
+
+
+L[ Language.German ].options.color8                        = "Schwellen Timerfarbe."
+L[ Language.German ].options.color9                        = "Schwellen Textfarbe"
+L[ Language.German ].options.opacityThreshold              = "Schwellendeckkraft"
+L[ Language.German ].options.thresholdFont                 = "Schwellenschriftart"
+L[ Language.German ].options.thresholdFontSize             = "Schwellenschriftgröße"
+
+L[ Language.German ].tooltip.win_color_thresholdTimer      = "Timer-Farbe innerhalb des Schwellenwerts."
+L[ Language.German ].tooltip.win_color_thresholdText       = "Textfarbe innerhalb des Schwellenwerts."
+L[ Language.German ].tooltip.win_opacity_theshold          = "Deckkraft, solange der Timer innerhalb des Schwellenwerts liegt."
+L[ Language.German ].tooltip.win_thesholdFont              = "Die Schriftart, die für das Fenster innerhalb der Schwelle verwendet wird."
+L[ Language.German ].tooltip.win_thesholdFont_size         = "Schriftgröße innerhalb des Schwellenwerts."
+
+
+L[ Language.German ].animationType.Zoom                    = "Zoom"

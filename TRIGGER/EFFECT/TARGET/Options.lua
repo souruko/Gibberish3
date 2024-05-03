@@ -115,7 +115,7 @@ function EffectTargetOptions:ResetContent()
     self.useRegex:SetChecked( self.data.useRegex )
     self.action:SetSelection( self.data.action )
     self.value:SetText( self.data.value )
-    -- self.listOfTargets:SetText( self.data.value )
+    self.listOfTargets:SetText( UTILS.ListOfTargetsToString( self.data.listOfTargets ) )
     self.icon:SetText( self.data.icon )
 
 end
@@ -157,8 +157,9 @@ function EffectTargetOptions:Save()
     self.data.useRegex      = self.useRegex:IsChecked(  )
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
-    -- self.data.listOfTargets         = self.listOfTargets:GetText(  )
-    self.data.icon         = self.icon:GetText(  )
+    local text              = self.listOfTargets:GetText()
+    self.data.listOfTargets = UTILS.StringOfTargetsToList( text )
+    self.data.icon          = self.icon:GetText(  )
 
 end
 ---------------------------------------------------------------------------------------------------

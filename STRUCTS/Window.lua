@@ -47,9 +47,12 @@ function Window.New(name, type)
     window.color5                = Window[type].Defaults.color5
     window.color6                = Window[type].Defaults.color6
     window.color7                = Window[type].Defaults.color7
+    window.color8                = Window[type].Defaults.color8
+    window.color9                = Window[type].Defaults.color9
 
     window.opacityActiv          = Window[type].Defaults.opacityActiv
     window.opacityPassiv         = Window[type].Defaults.opacityPassiv
+    window.opacityThreshold      = Window[type].Defaults.opacityThreshold
 
     -- text
     window.font                  = Window[type].Defaults.font
@@ -58,6 +61,9 @@ function Window.New(name, type)
     window.textAlignment         = Window[type].Defaults.textAlignment
     window.timerAlignment        = Window[type].Defaults.timerAlignment
     window.showTimer             = Window[type].Defaults.showTimer
+
+    window.thresholdFont         = Window[type].Defaults.thresholdFont
+    window.thresholdFontSize     = Window[type].Defaults.thresholdFontSize
 
     window.timerType             = Window[type].Defaults.allowedTimers[1]
     window.timerList             = {}
@@ -119,6 +125,8 @@ function Window.Copy(index)
     window.color5                  = {}
     window.color6                  = {}
     window.color7                  = {}
+    window.color8                  = {}
+    window.color9                  = {}
     
     window.color1.R                = Data.window[index].color1.R
     window.color2.R                = Data.window[index].color2.R
@@ -127,6 +135,8 @@ function Window.Copy(index)
     window.color5.R                = Data.window[index].color5.R
     window.color6.R                = Data.window[index].color6.R
     window.color7.R                = Data.window[index].color7.R
+    window.color8.R                = Data.window[index].color8.R
+    window.color9.R                = Data.window[index].color9.R
 
     window.color1.G                = Data.window[index].color1.G
     window.color2.G                = Data.window[index].color2.G
@@ -135,6 +145,8 @@ function Window.Copy(index)
     window.color5.G                = Data.window[index].color5.G
     window.color6.G                = Data.window[index].color6.G
     window.color7.G                = Data.window[index].color7.G
+    window.color8.G                = Data.window[index].color8.G
+    window.color9.G                = Data.window[index].color9.G
 
     window.color1.B                = Data.window[index].color1.B
     window.color2.B                = Data.window[index].color2.B
@@ -143,10 +155,14 @@ function Window.Copy(index)
     window.color5.B                = Data.window[index].color5.B
     window.color6.B                = Data.window[index].color6.B
     window.color7.B                = Data.window[index].color7.B
+    window.color8.B                = Data.window[index].color8.B
+    window.color9.B                = Data.window[index].color9.B
 
 
     window.opacityActiv          = Data.window[index].opacityActiv
     window.opacityPassiv         = Data.window[index].opacityPassiv
+
+    window.opacityThreshold      = Data.window[index].opacityThreshold
 
     -- text
     window.font                  = Data.window[index].font
@@ -155,6 +171,9 @@ function Window.Copy(index)
     window.textAlignment         = Data.window[index].textAlignment
     window.timerAlignment        = Data.window[index].timerAlignment
     window.showTimer             = Data.window[index].showTimer
+
+    window.thresholdFont                  = Data.window[index].thresholdFont
+    window.thresholdFontSize              = Data.window[index].thresholdFontSize
 
     window.timerType             = Data.window[index].timerType
     window.timerList             = {}

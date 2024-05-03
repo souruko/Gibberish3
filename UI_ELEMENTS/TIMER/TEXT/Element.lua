@@ -97,14 +97,24 @@ function TextElement:DataChanged()
     self.timerLabel:SetTextAlignment( parentData.timerAlignment )
     
     -- fonts
-    self.textLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
-    self.timerLabel:SetFont( Font[ parentData.font ][ parentData. fontSize ] )
+    self.font = Font[ parentData.font ][ parentData.fontSize ]
+    if parentData.thresholdFont ~= nil then
+        self.thresholdFont = Font[ parentData.thresholdFont ][ parentData.thresholdFontSize ]
+    else
+        self.thresholdFont = self.font
+    end
+    self.textLabel:SetFont( self.font )
+    self.timerLabel:SetFont( self.font )
 
     -- show timer
     self.timerLabel:SetVisible( parentData.showTimer )
 
     -- remember base color
-    self.backColor = UTILS.ColorFix( parentData.color5 )
+    self.timerColor = UTILS.ColorFix( parentData.color4 )
+    self.textColor = UTILS.ColorFix( parentData.color5 )
+    self.thresholdColor = UTILS.ColorFix( parentData.color7 )
+    self.thresholdTimerColor = UTILS.ColorFix( parentData.color8 )
+    self.thresholdTextColor = UTILS.ColorFix( parentData.color9 )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -297,7 +307,11 @@ function TextElement:UpdateThreshold( timeLeft )
     if timeLeft > self.data.thresholdValue then
 
         -- use backColor
-        self.textLabel:SetForeColor( self.backColor )
+        self.timerLabel:SetForeColor( self.timerColor )
+        self.textLabel:SetForeColor( self.textColor )
+        self.timerLabel:SetFont( self.font )
+        self.textLabel:SetFont( self.font )
+        self:SetOpacity( self.parent.data.opacityActiv )
 
     -- in the threshold
     else
@@ -329,12 +343,13 @@ function TextElement:UpdateThreshold( timeLeft )
 
             self.textLabel:SetForeColor( Turbine.UI.Color( 1, value, value ) )
 
-        -- no animation only red background
-        else
-            
-            self.textLabel:SetForeColor( Turbine.UI.Color.Red )
-
         end
+
+        self.timerLabel:SetForeColor( self.timerColor )
+        self.textLabel:SetForeColor( self.textColor )
+        self.timerLabel:SetFont( self.font )
+        self.textLabel:SetFont( self.font )
+        self:SetOpacity( self.parent.data.opacityActiv )
         
     end
 

@@ -4,6 +4,12 @@
 =============================================================================================
 # CHANGELOG
 
+3.1.2
+fixed list of targets for targeteffects
+added new options: threshold (timer color, text color, opacity, font, fontSize)
+added threshold animation zoom for icons
+
+
 3.1.1
 fixed stacking after import
 fixed a bug with enabling folders within folders per trigger

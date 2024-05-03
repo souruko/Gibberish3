@@ -58,6 +58,7 @@ AnimationType.Dotted_Border         = 2
 AnimationType.Activation_Border     = 3
 AnimationType.New_Activation_Border = 4
 AnimationType.New_Dotted_Border     = 5
+AnimationType.Zoom                  = 6
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
