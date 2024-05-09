@@ -27,7 +27,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)
 
-    token = string.gsub(token, "&%d", "%%w+")
+    -- token = string.gsub(token, "&%d", "%%w+")
+    token = string.gsub(token, "&%d", "%%S+")
     token = string.gsub(token, "&name", LpData.name)
     token = string.gsub(token, "&class", LpData.class)
 
@@ -54,7 +55,8 @@ function Trigger.GetPlaceholder(token, message, posAdjustment)
 
             local index = string.match(token, "&%d", pos1)
 
-            placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment - 1))
+            -- placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment - 1))
+            placeholder[index] = string.match( message, "%S+", (pos1 + posAdjustment - 1))
 
             posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
             pos1 = pos1+2
@@ -196,6 +198,10 @@ end
 -- returns name and tier from combat chat message
 ---------------------------------------------------------------------------------------------------
 Trigger.CheckingNameForNumber = function(name)
+
+    if name == nil then
+        return
+    end
 
     local start_tier, end_tier = string.find(name, "%d+")
     

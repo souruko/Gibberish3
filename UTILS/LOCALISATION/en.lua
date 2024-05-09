@@ -419,7 +419,7 @@ L[ Language.English ].tooltip.win_timer_type                = "What type of time
 L[ Language.English ].options.color8                        = "Threshold Timer Color"
 L[ Language.English ].options.color9                        = "Threshold Text Color"
 L[ Language.English ].options.opacityThreshold              = "Opacity Threshold"
-L[ Language.English ].options.thresholdFont                 = "Threhsold Font"
+L[ Language.English ].options.thresholdFont                 = "Threshold Font"
 L[ Language.English ].options.thresholdFontSize             = "Threshold Font size"
 
 L[ Language.English ].tooltip.win_color_thresholdTimer      = "Timer color while within the threshold."
