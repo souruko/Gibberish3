@@ -72,22 +72,22 @@ function TextOptions:Constructor( data )
 
     top = top + 35
 
-    self.threhsoldFont = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "thresholdFont", "win_thesholdFont", 30 )
-    self.threhsoldFont:SetParent( self )
-    self.threhsoldFont:SetPosition( left, top )
+    self.thresholdFont = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "thresholdFont", "win_thesholdFont", 30 )
+    self.thresholdFont:SetParent( self )
+    self.thresholdFont:SetPosition( left, top )
     for name, value in pairs(Font.Type) do
-        self.threhsoldFont:AddItem( "font", name, value)
+        self.thresholdFont:AddItem( "font", name, value)
     end
-    self.threhsoldFont:Sort()
-    self.threhsoldFont.SelectionChanged = function ( sender, index, value )
+    self.thresholdFont:Sort()
+    self.thresholdFont.SelectionChanged = function ( sender, index, value )
         self:ThresholdFontChanged( sender, index, value )
     end
 
     top = top + 30
 
-    self.threhsoldFontSize = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "thresholdFontSize", "win_thesholdFont_size", 30 )
-    self.threhsoldFontSize:SetParent( self )
-    self.threhsoldFontSize:SetPosition( left, top )
+    self.thresholdFontSize = Options.Elements.DropDownRow( Options.Defaults.window.basecolor, "options", "thresholdFontSize", "win_thesholdFont_size", 30 )
+    self.thresholdFontSize:SetParent( self )
+    self.thresholdFontSize:SetPosition( left, top )
 
     top = top + 35
     
@@ -124,12 +124,12 @@ function TextOptions:ThresholdFontChanged( sender, index, value )
         break
     end
 
-    self.threhsoldFontSize:ClearItems()
+    self.thresholdFontSize:ClearItems()
     for name, font in pairs(Font[ value ]) do
-        self.threhsoldFontSize:AddItem( "fontSize", name, name)
+        self.thresholdFontSize:AddItem( "fontSize", name, name)
     end
-    self.threhsoldFontSize:Sort()
-    self.threhsoldFontSize:SetSelection( size )
+    self.thresholdFontSize:Sort()
+    self.thresholdFontSize:SetSelection( size )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -150,13 +150,13 @@ function TextOptions:ResetContent()
     self.timerAlignment:SetSelection( self.data.timerAlignment )
     self.showTimer:SetChecked( self.data.showTimer )
 
-    self.threhsoldFont:SetSelection( self.data.threhsoldFont )
-    self.threhsoldFontSize:ClearItems()
+    self.thresholdFont:SetSelection( self.data.thresholdFont )
+    self.thresholdFontSize:ClearItems()
     for name, value in pairs(Font[ self.data.font ]) do
-        self.threhsoldFontSize:AddItem( "fontSize", name, name)
+        self.thresholdFontSize:AddItem( "fontSize", name, name)
     end
-    self.threhsoldFontSize:Sort()
-    self.threhsoldFontSize:SetSelection( self.data.threhsoldFontSize )
+    self.thresholdFontSize:Sort()
+    self.thresholdFontSize:SetSelection( self.data.thresholdFontSize )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -173,8 +173,8 @@ function TextOptions:SizeChanged()
     self.textAlignment:SetWidth( width )
     self.timerAlignment:SetWidth( width )
     self.showTimer:SetWidth( width )
-    self.threhsoldFont:SetWidth( width )
-    self.threhsoldFontSize:SetWidth( width )
+    self.thresholdFont:SetWidth( width )
+    self.thresholdFontSize:SetWidth( width )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -188,8 +188,8 @@ function TextOptions:Save()
     self.data.textAlignment = self.textAlignment:GetSelectedValue(  )
     self.data.timerAlignment = self.timerAlignment:GetSelectedValue(  )
     self.data.showTimer = self.showTimer:IsChecked(  )
-    self.data.threhsoldFont = self.threhsoldFont:GetSelectedValue(  )
-    self.data.threhsoldFontSize = self.threhsoldFontSize:GetSelectedValue(  )
+    self.data.thresholdFont = self.thresholdFont:GetSelectedValue(  )
+    self.data.thresholdFontSize = self.thresholdFontSize:GetSelectedValue(  )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -211,8 +211,8 @@ function TextOptions:LanguageChanged()
     self.textAlignment:LanguageChanged()
     self.timerAlignment:LanguageChanged()
     self.showTimer:LanguageChanged()
-    self.threhsoldFont:LanguageChanged()
-    self.threhsoldFontSize:LanguageChanged()
+    self.thresholdFont:LanguageChanged()
+    self.thresholdFontSize:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

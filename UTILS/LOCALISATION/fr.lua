@@ -418,7 +418,7 @@ L[ Language.French ].tooltip.win_timer_type                = "Quel type de minut
 L[ Language.French ].options.color8                        = "Couleur de la minuterie de seuil"
 L[ Language.French ].options.color9                        = "Couleur du texte du seuil"
 L[ Language.French ].options.opacityThreshold              = "Seuil d'opacité"
-L[ Language.French ].options.thresholdFont                 = "Police Threhsold"
+L[ Language.French ].options.thresholdFont                 = "Police threshold"
 L[ Language.French ].options.thresholdFontSize             = "Seuil Taille de la police"
 
 L[ Language.French ].tooltip.win_color_thresholdTimer      = "Couleur de la minuterie lorsque le seuil est atteint."

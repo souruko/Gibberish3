@@ -27,7 +27,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)
 
-    ----------
     -- capture placeholders: these are replaced with Lua patterns that capture text when regex is used
     -- See: https://www.lua.org/pil/20.2.html
     -- See: https://www.lua.org/pil/20.3.html
@@ -39,6 +38,7 @@ function Trigger.ReplacePlaceholder(token)
 
     ----------
     -- common placeholders: these are just replaced with text
+
     token = string.gsub(token, "&name", LpData.name)
     token = string.gsub(token, "&class", LpData.class)
 
@@ -174,6 +174,10 @@ end
 -- returns name and tier from combat chat message
 ---------------------------------------------------------------------------------------------------
 Trigger.CheckingNameForNumber = function(name)
+
+    if name == nil then
+        return
+    end
 
     local start_tier, end_tier = string.find(name, "%d+")
     
