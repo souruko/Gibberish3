@@ -54,6 +54,37 @@ function EffectTargetOptions:Constructor( parent, data, parentType )
 
     top = top + 47
 
+    self.isDebuff = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "isDebuff", "trg_is_debuff", 30 )
+    self.isDebuff:SetParent( self )
+    self.isDebuff:SetTop( top )
+
+    self.isDebuff:AddItem( "source", "Any", Source.Any)
+    self.isDebuff:AddItem( "source", "Buff", Source.Buff)
+    self.isDebuff:AddItem( "source", "Debuff", Source.Debuff)
+
+    top = top + 35
+
+    self.isDispellable = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "isDispellable", "trg_is_dispellable", 30 )
+    self.isDispellable:SetParent( self )
+    self.isDispellable:SetTop( top )
+
+    self.isDispellable:AddItem( "source", "Any", Source.Any)
+    self.isDispellable:AddItem( "source", "IsDispellable", Source.Dispellable)
+    self.isDispellable:AddItem( "source", "NotDispellable", Source.NotDispellable)
+
+    top = top + 35
+
+    self.category = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "category", "trg_category", 30 )
+    self.category:SetParent( self )
+    self.category:SetTop( top )
+
+    self.category:AddItem( "source", "Any", Source.Any)
+    for name, value in pairs(EffectCategory) do
+        self.category:AddItem( "source", name, value)
+    end
+
+    top = top + 35
+
     self.action = Options.Elements.DropDownRow( Options.Defaults.window.backcolor1, "options", "action", "trg_action", 30 )
     self.action:SetParent( self )
     self.action:SetTop( top )
@@ -117,6 +148,9 @@ function EffectTargetOptions:ResetContent()
     self.value:SetText( self.data.value )
     self.listOfTargets:SetText( UTILS.ListOfTargetsToString( self.data.listOfTargets ) )
     self.icon:SetText( self.data.icon )
+    self.isDebuff:SetSelection( self.data.isDebuff )
+    self.isDispellable:SetSelection( self.data.isDispellable )
+    self.category:SetSelection( self.data.category )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -131,6 +165,9 @@ function EffectTargetOptions:SizeChanged()
     self.useRegex:SetWidth( self:GetWidth() )
     self.listOfTargets:SetWidth( self:GetWidth() )
     self.icon:SetWidth( self:GetWidth() )
+    self.isDebuff:SetWidth( self:GetWidth() )
+    self.isDispellable:SetWidth( self:GetWidth() )
+    self.category:SetWidth( self:GetWidth() )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -145,6 +182,9 @@ function EffectTargetOptions:LanguageChanged()
     self.useRegex:LanguageChanged()
     self.listOfTargets:LanguageChanged()
     self.icon:LanguageChanged()
+    self.isDebuff:LanguageChanged()
+    self.isDispellable:LanguageChanged()
+    self.category:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -160,6 +200,9 @@ function EffectTargetOptions:Save()
     local text              = self.listOfTargets:GetText()
     self.data.listOfTargets = UTILS.StringOfTargetsToList( text )
     self.data.icon          = self.icon:GetText(  )
+    self.data.isDebuff        = self.isDebuff:GetSelectedValue(  )
+    self.data.isDispellable        = self.isDispellable:GetSelectedValue(  )
+    self.data.category        = self.category:GetSelectedValue(  )
 
 end
 ---------------------------------------------------------------------------------------------------

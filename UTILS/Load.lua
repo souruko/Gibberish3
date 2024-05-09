@@ -97,7 +97,6 @@ function Options.OverwriteCharData( global_data, char_data )
             window_data.thresholdFontSize = window_data.fontSize
         end
 
-
         -- char data found
         if data ~= nil then
             window_data.enabled = data.enabled

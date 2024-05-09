@@ -208,6 +208,24 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
     if triggerData.icon ~= nil and triggerData.icon ~= effect:GetIcon() then
         return nil
     end
+    
+    -- debuff / buff
+    if triggerData.isDebuff ~= Source.Any
+        and (effect:IsDebuff() ~= (triggerData.isDebuff == Source.Debuff)) then
+        return nil
+    end
+
+    -- dispellable
+    if triggerData.isDispellable ~= Source.Any 
+        and (effect:IsCurable() ~= (triggerData.isDispellable == Source.Dispellable)) then
+        return nil
+    end
+
+    -- category
+    if triggerData.category ~= Source.Any 
+        and (effect:GetCategory() ~= triggerData.category) then
+        return nil
+    end
 
     -- check listOfTargets
     if Trigger.CheckListForName( player:GetName(), triggerData.listOfTargets ) == false then

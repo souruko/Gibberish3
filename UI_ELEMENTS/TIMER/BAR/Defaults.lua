@@ -12,7 +12,7 @@ Timer[Timer.Types.BAR].Defaults                     = {}
 
 Timer[Timer.Types.BAR].Defaults.description         = ""
 
-Timer[Timer.Types.BAR].Defaults.stacking            = Stacking.Single
+Timer[Timer.Types.BAR].Defaults.stacking            = Stacking.Multi
 Timer[Timer.Types.BAR].Defaults.reset               = false
 Timer[Timer.Types.BAR].Defaults.loop                = false
 Timer[Timer.Types.BAR].Defaults.permanent           = false

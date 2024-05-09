@@ -429,3 +429,25 @@ L[ Language.French ].tooltip.win_thesholdFont_size         = "Taille de la polic
 
 
 L[ Language.French ].animationType.Zoom                    = "Zoom"
+---------------------------------------------------------------------------------------------------
+
+L[ Language.French ].options.isDebuff                      = "Type"
+L[ Language.French ].options.isDispellable                 = "Dispellable"
+L[ Language.French ].options.category                      = "Category"
+
+L[ Language.French ].source.Buff                           = "Buff"
+L[ Language.French ].source.Debuff                         = "Debuff"
+
+L[ Language.French ].source.Dispellable                    = "Dispellable"
+L[ Language.French ].source.NotDispellable                 = "Not Dispellable"
+
+L[ Language.French ].source.Corruption                     = "Corruption"
+L[ Language.French ].source.Cry                            = "Cry"
+L[ Language.French ].source.Disease                        = "Disease"
+L[ Language.French ].source.Dispellable                    = "Dispellable"
+L[ Language.French ].source.Elemental                      = "Elemental"
+L[ Language.French ].source.Fear                           = "Fear"
+L[ Language.French ].source.Physical                       = "Physical"
+L[ Language.French ].source.Poison                         = "Poison"  
+L[ Language.French ].source.Song                           = "Song"    
+L[ Language.French ].source.Wound                          = "Wound"  

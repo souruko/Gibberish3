@@ -429,3 +429,25 @@ L[ Language.German ].tooltip.win_thesholdFont_size         = "Schriftgröße inn
 
 
 L[ Language.German ].animationType.Zoom                    = "Zoom"
+---------------------------------------------------------------------------------------------------
+
+L[ Language.German ].options.isDebuff                      = "Type"
+L[ Language.German ].options.isDispellable                 = "Dispellable"
+L[ Language.German ].options.category                      = "Category"
+
+L[ Language.German ].source.Buff                           = "Buff"
+L[ Language.German ].source.Debuff                         = "Debuff"
+
+L[ Language.German ].source.Dispellable                    = "Dispellable"
+L[ Language.German ].source.NotDispellable                 = "Not Dispellable"
+
+L[ Language.German ].source.Corruption                     = "Corruption"
+L[ Language.German ].source.Cry                            = "Cry"
+L[ Language.German ].source.Disease                        = "Disease"
+L[ Language.German ].source.Dispellable                    = "Dispellable"
+L[ Language.German ].source.Elemental                      = "Elemental"
+L[ Language.German ].source.Fear                           = "Fear"
+L[ Language.German ].source.Physical                       = "Physical"
+L[ Language.German ].source.Poison                         = "Poison"  
+L[ Language.German ].source.Song                           = "Song"    
+L[ Language.German ].source.Wound                          = "Wound"  

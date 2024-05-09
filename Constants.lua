@@ -85,10 +85,14 @@ Orientation.Vertical    = false
 
 ---------------------------------------------------------------------------------------------------
 -- trigger source
-Source              = {}
-Source.Any          = 0
-Source.CombatStart  = 1
-Source.CombatEnd    = 2
+Source               = {}
+Source.Any           = 0
+Source.CombatStart   = 1
+Source.CombatEnd     = 2
+Source.Buff          = 3
+Source.Debuff        = 4
+Source.Dispellable   = 5
+Source.NotDispellable= 6
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -132,6 +136,21 @@ Alignment.MiddleRight    = Turbine.UI.ContentAlignment.MiddleRight
 Alignment.BottomLeft     = Turbine.UI.ContentAlignment.BottomLeft
 Alignment.BottomCenter   = Turbine.UI.ContentAlignment.BottomCenter
 Alignment.BottomRight    = Turbine.UI.ContentAlignment.BottomRight
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- Alignment
+EffectCategory           = {}
+EffectCategory.Corruption = Turbine.Gameplay.EffectCategory.Corruption 
+EffectCategory.Cry        = Turbine.Gameplay.EffectCategory.Cry        
+EffectCategory.Disease    = Turbine.Gameplay.EffectCategory.Disease    
+EffectCategory.Dispellable= Turbine.Gameplay.EffectCategory.Dispellable
+EffectCategory.Elemental  = Turbine.Gameplay.EffectCategory.Elemental  
+EffectCategory.Fear       = Turbine.Gameplay.EffectCategory.Fear       
+EffectCategory.Physical   = Turbine.Gameplay.EffectCategory.Physical   
+EffectCategory.Poison     = Turbine.Gameplay.EffectCategory.Poison     
+EffectCategory.Song       = Turbine.Gameplay.EffectCategory.Song       
+EffectCategory.Wound      = Turbine.Gameplay.EffectCategory.Wound      
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

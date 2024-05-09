@@ -19,8 +19,11 @@ function Trigger.New(type)
     trigger.type            = type
     
     trigger.token           = Trigger[type].Defaults.token
-    trigger.icon            = Trigger[type].Defaults.icon
     trigger.useRegex        = Trigger[type].Defaults.useRegex
+    trigger.icon            = Trigger[type].Defaults.icon
+    trigger.isDebuff        = Trigger[type].Defaults.isDebuff
+    trigger.isDispellable   = Trigger[type].Defaults.isDispellable
+    trigger.category        = Trigger[type].Defaults.category
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
     trigger.value           = Trigger[type].Defaults.value
@@ -44,7 +47,10 @@ function Trigger.Copy( data )
     trigger.sortIndex       = data.sortIndex    
     trigger.type            = data.type         
     trigger.token           = data.token        
-    trigger.icon            = data.icon
+    trigger.icon            = data.icon  
+    trigger.isDebuff        = data.isDebuff  
+    trigger.isDispellable   = data.isDispellable  
+    trigger.category        = data.category
     trigger.useRegex        = data.useRegex     
     trigger.description     = data.description  
     trigger.action          = data.action       

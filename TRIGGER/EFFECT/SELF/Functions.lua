@@ -181,6 +181,24 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerDat
         return nil
     end
 
+    -- debuff / buff
+    if triggerData.isDebuff ~= Source.Any
+        and (effect:IsDebuff() ~= (triggerData.isDebuff == Source.Debuff)) then
+        return nil
+    end
+
+    -- dispellable
+    if triggerData.isDispellable ~= Source.Any 
+        and (effect:IsCurable() ~= (triggerData.isDispellable == Source.Dispellable)) then
+        return nil
+    end
+
+    -- category
+    if triggerData.category ~= Source.Any 
+        and (effect:GetCategory() ~= triggerData.category) then
+        return nil
+    end
+
     -- check token
     if triggerData.useRegex == true then
 

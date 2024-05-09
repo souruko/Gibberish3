@@ -4,6 +4,9 @@
 =============================================================================================
 # CHANGELOG
 
+3.1.3
+changed how placeholer(&1) work to use captures
+
 3.1.2
 fixed list of targets for targeteffects
 added new options: threshold (timer color, text color, opacity, font, fontSize)

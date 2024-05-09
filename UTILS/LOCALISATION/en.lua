@@ -430,3 +430,25 @@ L[ Language.English ].tooltip.win_thesholdFont_size         = "Font size used wi
 
 
 L[ Language.English ].animationType.Zoom                    = "Zoom"
+---------------------------------------------------------------------------------------------------
+
+L[ Language.English ].options.isDebuff                      = "Type"
+L[ Language.English ].options.isDispellable                 = "Cureable"
+L[ Language.English ].options.category                      = "Category"
+
+L[ Language.English ].source.Buff                           = "Buff"
+L[ Language.English ].source.Debuff                         = "Debuff"
+
+L[ Language.English ].source.IsDispellable                    = "Cureable"
+L[ Language.English ].source.NotDispellable                 = "Not Cureable"
+
+L[ Language.English ].source.Corruption                     = "Corruption"
+L[ Language.English ].source.Cry                            = "Cry"
+L[ Language.English ].source.Disease                        = "Disease"
+L[ Language.English ].source.Dispellable                    = "Dispellable"
+L[ Language.English ].source.Elemental                      = "Elemental"
+L[ Language.English ].source.Fear                           = "Fear"
+L[ Language.English ].source.Physical                       = "Physical"
+L[ Language.English ].source.Poison                         = "Poison"  
+L[ Language.English ].source.Song                           = "Song"    
+L[ Language.English ].source.Wound                          = "Wound"  
