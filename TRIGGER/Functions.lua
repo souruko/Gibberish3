@@ -23,12 +23,22 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- replace placeholders with %w+
+-- replace placeholders in token
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)
 
-    -- token = string.gsub(token, "&%d", "%%w+")
-    token = string.gsub(token, "&%d", "%%S+")
+    -- capture placeholders: these are replaced with Lua patterns that capture text when regex is used
+    -- See: https://www.lua.org/pil/20.2.html
+    -- See: https://www.lua.org/pil/20.3.html
+
+    -- replace &1, &2, etc. with (%w+) to capture one or more alphanumeric characters
+    -- It is not guaranteed that &1, etc. in the placeholder table will match the &1, etc. in the token
+    -- token can have custom capture strings, out of order placeholders ("&2 &1"), bad placeholders (&0, &11)
+    token = string.gsub(token, "&%d", "(%%w+)")
+
+    ----------
+    -- common placeholders: these are just replaced with text
+
     token = string.gsub(token, "&name", LpData.name)
     token = string.gsub(token, "&class", LpData.class)
 
@@ -43,55 +53,21 @@ end
 function Trigger.GetPlaceholder(token, message, posAdjustment)
 
     local placeholder = {}
-    local pos1 = 1
+    local captures = { string.find(message, Trigger.ReplacePlaceholder(token), posAdjustment) }
 
-    -- as long as a placeholder is found
-    while pos1 ~= nil do    
+    -- Remove the first 2 values from captures array since string.find returns startindex and endindex before captures
+    table.remove(captures, 1)
+    table.remove(captures, 1)
 
-        pos1 = string.find(token, "&%d", pos1)
-
-        -- extrect the placeholder at the same position
-        if pos1 ~= nil then
-
-            local index = string.match(token, "&%d", pos1)
-
-            -- placeholder[index] = string.match( message, "%w+", (pos1 + posAdjustment - 1))
-            placeholder[index] = string.match( message, "%S+", (pos1 + posAdjustment - 1))
-
-            posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
-            pos1 = pos1+2
-
-        end
-
+    -- Create index, value pairs for each capture. Index has & added so &1, &2, etc can be used in custom text, duration, etc
+    -- The index matches the order the captures were returned from string.find and may not match &1, &2, etc in the token
+    for index, value in pairs(captures) do
+        placeholder["&" .. index] = value
     end
 
-    -- player name
-    pos1 = string.find(token, "&name", pos1)
-
-    if pos1 ~= nil then
-
-        local index = "&name"
-
-        placeholder[index] = LpData.name
-
-        posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
-        pos1 = pos1+2
-
-    end
-
-    -- player class
-    pos1 = string.find(token, "&class", pos1)
-
-    if pos1 ~= nil then
-
-        local index = "&class"
-
-        placeholder[index] = LpData.class
-
-        posAdjustment = posAdjustment - 2 + string.len(placeholder[index])
-        pos1 = pos1+2
-
-    end
+    -- Add index, value pairs for common placeholders
+    placeholder["&name"] = LpData.name
+    placeholder["&class"] = LpData.class
 
     return placeholder
 
