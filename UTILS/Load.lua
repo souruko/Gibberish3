@@ -72,13 +72,7 @@ function Options.OverwriteCharData( global_data, char_data )
     for index, window_data in ipairs( global_data.window ) do
         local data = Options.GetWindowByID( window_data.id, char_data )
 
-        -- new color fix delete later TODO
-        if window_data.color6 == nil then
-            window_data.color6 = {R=0, G=0, B=0}
-        end
-        if window_data.color7 == nil then
-            window_data.color7 = {R=1, G=0, B=0}
-        end
+        -- new options 3.1.2 TODO delte
         if window_data.color8 == nil then
             local color = {R = window_data.color4.R, G = window_data.color4.G, B = window_data.color4.B}
             window_data.color8 = color
@@ -95,6 +89,29 @@ function Options.OverwriteCharData( global_data, char_data )
         end
         if window_data.thresholdFontSize == nil then
             window_data.thresholdFontSize = window_data.fontSize
+        end
+
+        -- new options 3.1.3 TODO delte
+        for i, timer in ipairs(window_data.timerList) do
+
+            for j, triggerType in ipairs(timer) do
+
+                for k, trigger in ipairs(triggerType) do
+                   
+                    if trigger.isDebuff == nil then
+                        trigger.isDebuff = 0
+                    end 
+                    if trigger.isDispellable == nil then
+                        trigger.isDispellable = 0
+                    end 
+                    if trigger.category == nil then
+                        trigger.category = 0
+                    end 
+
+                end
+              
+            end
+            
         end
 
         -- char data found

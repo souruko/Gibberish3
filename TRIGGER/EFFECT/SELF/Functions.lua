@@ -194,7 +194,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerDat
     end
 
     -- category
-    if triggerData.category ~= Source.Any 
+    if triggerData.category ~= Source.Any
         and (effect:GetCategory() ~= triggerData.category) then
         return nil
     end

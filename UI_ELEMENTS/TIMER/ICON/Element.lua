@@ -352,7 +352,7 @@ function IconElement:UpdateThreshold( timeLeft )
             self:SetOpacity( self.parent.data.opacityActiv )
             self.iconControl:SetOpacity( self.parent.data.opacityActiv )
             
-            self.iconControl:SetPosition(0, 0)
+            self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
             self.iconControl:SetSize(self.width, self.height)
 
         end
