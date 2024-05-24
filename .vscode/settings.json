@@ -40,6 +40,7 @@
         "assign-type-mismatch",
         "undefined-field",
         "redundant-parameter",
-        "unused-local"
+        "unused-local",
+        "param-type-mismatch"
     ]
 }

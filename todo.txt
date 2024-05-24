@@ -1,6 +1,7 @@
 
 
 -- version goal
+add import/exort new settings!
 counter copy
 
 

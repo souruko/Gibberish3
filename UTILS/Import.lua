@@ -373,6 +373,26 @@ function StringToWindow( text, folder )
         data.showTimer             = ToBool(window_attributes["showTimer"])
     end
 
+    if window_attributes["color8"] ~= nil then
+        data.color8                = StringToColor( window_attributes["color8"] )
+    end
+    
+    if window_attributes["color9"] ~= nil then
+        data.color9                = StringToColor( window_attributes["color9"] )
+    end
+
+    if window_attributes["opacityThreshold"] ~= nil then
+        data.opacityThreshold         = tonumber(window_attributes["opacityThreshold"])
+    end
+
+    if window_attributes["thresholdFont"] ~= nil then
+        data.thresholdFont                  = tonumber(window_attributes["thresholdFont"])
+    end
+
+    if window_attributes["thresholdFontSize"] ~= nil then
+        data.thresholdFontSize              = tonumber(window_attributes["thresholdFontSize"])
+    end
+
     -- add window triggers
     for i, trigger_string in ipairs(trigger_strings) do
         StringToTrigger( trigger_string, data )
@@ -628,6 +648,18 @@ function StringToTrigger( text, parent )
     
     if trigger_attributes["source"] ~= nil then
         data.source          = tonumber(trigger_attributes["source"])
+    end
+
+    if trigger_attributes["isDebuff"] ~= nil then
+        data.isDebuff          = tonumber(trigger_attributes["isDebuff"])
+    end
+    
+    if trigger_attributes["isDispellable"] ~= nil then
+        data.isDispellable          = tonumber(trigger_attributes["isDispellable"])
+    end
+    
+    if trigger_attributes["category"] ~= nil then
+        data.category          = tonumber(trigger_attributes["category"])
     end
 
     parent[ type ][ #parent[ type ] + 1 ] = data

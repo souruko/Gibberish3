@@ -62,7 +62,7 @@ function EffectGroupOptions:Constructor( parent, data, parentType )
     self.isDispellable:SetTop( top )
 
     self.isDispellable:AddItem( "source", "Any", Source.Any)
-    self.isDispellable:AddItem( "source", "IsDispellableo", Source.Dispellable)
+    self.isDispellable:AddItem( "source", "IsDispellable", Source.Dispellable)
     self.isDispellable:AddItem( "source", "NotDispellable", Source.NotDispellable)
 
     top = top + 35
