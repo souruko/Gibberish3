@@ -3,7 +3,7 @@
 ## Installation
 
 ...\Documents\The Lord of the Rings Online\plugins\Gibberish3
- 
+  
 ## Configs
 
 https://lotro-gibberish.com/  || by mydnic
