@@ -10,6 +10,9 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.1.4
+- fixed saving group effect triggers
+
 ### 3.1.3
 - fixed icon position outside of threshold
 - changed how placeholders( &1 ) work by usesing captures( https://www.lua.org/pil/20.3.html ) || contributed by ***Tsu***

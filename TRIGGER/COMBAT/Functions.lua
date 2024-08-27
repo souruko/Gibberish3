@@ -32,7 +32,7 @@ Trigger[Trigger.Types.Combat].Init = function ()
         for folderIndex, folderData in ipairs(Data.folder) do
 
             if LocalPlayer:IsInCombat() == true then
-                Trigger[Trigger.Types.Combat].CheckFolder( Source.CombatEnd, folderIndex, folderData )
+                Trigger[Trigger.Types.Combat].CheckFolder( Source.CombatStart, folderIndex, folderData )
             else
                 Trigger[Trigger.Types.Combat].CheckFolder( Source.CombatEnd, folderIndex, folderData )
             end

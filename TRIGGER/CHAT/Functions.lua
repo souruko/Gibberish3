@@ -307,7 +307,7 @@ end
 Trigger[ Trigger.Types.Chat ].GetTargetNameFromCombatChat = function(message, chatType)
 
     local updateType,initiatorName,targetName,skillName,var1,var2,var3,var4 = Trigger.ParseCombatChat(string.gsub(string.gsub(message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"))
-   
+
     local text = Trigger.CheckingNameForNumber(skillName)
   
     local target = nil

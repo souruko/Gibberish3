@@ -60,6 +60,7 @@ function Options.Elements.WindowSelection:FillContent()
 
 		-- if window does not have parentfolder and machtes filter add to listbox
 		if windowItem.data.folder == nil and windowItem:Filter( self.filterText ) then
+
 			self.listbox:AddItem( windowItem )
 		end
 		
@@ -121,7 +122,6 @@ function Options.Elements.WindowSelection:AsignFolder()
 
 	end
 	self.listbox:ClearItems()
-
 	for index, folderItem in ipairs( self.folderTable ) do
 
 		-- add sub folders
@@ -133,6 +133,7 @@ function Options.Elements.WindowSelection:AsignFolder()
 
 		for i, item in ipairs( self.windowTable ) do
 			if item.data.folder == index then
+
 				folderItem:AddItem( item )
 			end
 		end
