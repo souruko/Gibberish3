@@ -10,6 +10,10 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+
+### 3.1.5
+- added &target as placeholder for custom texts
+
 ### 3.1.4
 - fixed saving group effect triggers
 

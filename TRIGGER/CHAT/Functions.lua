@@ -221,7 +221,6 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
     local timer     = nil
 
     local token = triggerData.token
-    local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment)
 
     if ( chatType == Turbine.ChatType.PlayerCombat or
        chatType == Turbine.ChatType.EnemyCombat ) then
@@ -234,6 +233,8 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
         end
 
     end
+
+    local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment, target)
 
 
     -- text

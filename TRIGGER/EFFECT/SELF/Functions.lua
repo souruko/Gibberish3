@@ -332,7 +332,7 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
     local key       = nil
 
     local token = triggerData.token
-    local placeholder = Trigger.GetPlaceholder(token, effect:GetName(), posAdjustment)
+    local placeholder = Trigger.GetPlaceholder(token, effect:GetName(), posAdjustment, target)
 
     -- target list
     if Trigger.CheckListForName(target, triggerData.listOfTargets) == false then
