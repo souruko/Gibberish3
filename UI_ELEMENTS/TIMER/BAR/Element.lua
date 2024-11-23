@@ -314,7 +314,7 @@ function BarElement:UpdateTime( timeLeft )
         local timePast = self.duration - timeLeft
         self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )
 
-    elseif self.data.direction == Direction.Ascending then
+    elseif self.data.direction == Direction.Descending then
         
         self.timerLabel:SetText( UTILS.TimerFormat( timeLeft, self.parent.data.durationFormat ) )
 
