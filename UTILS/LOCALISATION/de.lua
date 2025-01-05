@@ -434,6 +434,7 @@ L[ Language.German ].animationType.Zoom                    = "Zoom"
 L[ Language.German ].options.isDebuff                      = "Typ"
 L[ Language.German ].options.isDispellable                 = "Nehmbar"
 L[ Language.German ].options.category                      = "Kategorie"
+L[ Language.German ].options.excludeSelf                   = "Nur Gruppe(ohne selbst)"
 
 L[ Language.German ].source.Buff                           = "Buff"
 L[ Language.German ].source.Debuff                         = "Debuff"

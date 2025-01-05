@@ -18,5 +18,6 @@ Trigger[ Trigger.Types.EffectGroup ].Defaults.icon               = nil
 Trigger[ Trigger.Types.EffectGroup ].Defaults.isDebuff           = 0
 Trigger[ Trigger.Types.EffectGroup ].Defaults.isDispellable      = 0
 Trigger[ Trigger.Types.EffectGroup ].Defaults.category           = 0
+Trigger[ Trigger.Types.EffectGroup ].Defaults.excludeSelf        = false
 ---------------------------------------------------------------------------------------------------
 

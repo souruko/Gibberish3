@@ -27,6 +27,7 @@ function Trigger.New(type)
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
     trigger.value           = Trigger[type].Defaults.value
+    trigger.excludeSelf     = Trigger[type].Defaults.excludeSelf
     trigger.listOfTargets   = {}
     trigger.source          = Trigger[type].Defaults.source
 
@@ -55,6 +56,7 @@ function Trigger.Copy( data )
     trigger.description     = data.description  
     trigger.action          = data.action       
     trigger.value           = data.value  
+    trigger.excludeSelf     = data.excludeSelf  
     trigger.listOfTargets   = {}
 
     for index, value in ipairs(data.listOfTargets) do

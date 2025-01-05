@@ -125,6 +125,12 @@ function EffectGroupOptions:Constructor( parent, data, parentType )
 
     top = top + 55
 
+    self.excludeSelf = Options.Elements.CheckBoxRow( Options.Defaults.window.backcolor1, "options", "excludeSelf", "trg_excludeSelf", 30 )
+    self.excludeSelf:SetParent( self )
+    self.excludeSelf:SetTop( top )
+
+    top = top + 35
+
     self:ResetContent()
 
 end
@@ -143,6 +149,7 @@ function EffectGroupOptions:ResetContent()
     self.isDebuff:SetSelection( self.data.isDebuff )
     self.isDispellable:SetSelection( self.data.isDispellable )
     self.category:SetSelection( self.data.category )
+    self.excludeSelf:SetChecked( self.data.excludeSelf )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -160,6 +167,7 @@ function EffectGroupOptions:SizeChanged()
     self.isDebuff:SetWidth( self:GetWidth() )
     self.isDispellable:SetWidth( self:GetWidth() )
     self.category:SetWidth( self:GetWidth() )
+    self.excludeSelf:SetWidth( self:GetWidth() )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -177,6 +185,7 @@ function EffectGroupOptions:LanguageChanged()
     self.isDebuff:LanguageChanged()
     self.isDispellable:LanguageChanged()
     self.category:LanguageChanged()
+    self.excludeSelf:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -195,6 +204,7 @@ function EffectGroupOptions:Save()
     self.data.isDebuff        = self.isDebuff:GetSelectedValue(  )
     self.data.isDispellable        = self.isDispellable:GetSelectedValue(  )
     self.data.category        = self.category:GetSelectedValue(  )
+    self.data.excludeSelf      = self.excludeSelf:IsChecked(  )
 
 end
 ---------------------------------------------------------------------------------------------------

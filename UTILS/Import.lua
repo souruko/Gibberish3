@@ -661,6 +661,10 @@ function StringToTrigger( text, parent )
     if trigger_attributes["category"] ~= nil then
         data.category          = tonumber(trigger_attributes["category"])
     end
+    
+    if trigger_attributes["excludeSelf"] ~= nil then
+        data.excludeSelf          = ToBool(trigger_attributes["excludeSelf"])
+    end
 
     parent[ type ][ #parent[ type ] + 1 ] = data
 

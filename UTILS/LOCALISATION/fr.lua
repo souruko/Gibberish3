@@ -434,6 +434,7 @@ L[ Language.French ].animationType.Zoom                    = "Zoom"
 L[ Language.French ].options.isDebuff                      = "Type"
 L[ Language.French ].options.isDispellable                 = "Dispensable"
 L[ Language.French ].options.category                      = "Catégorie"
+L[ Language.French ].options.excludeSelf                   = "Exclude Self"
 
 L[ Language.French ].source.Buff                           = "Buff"
 L[ Language.French ].source.Debuff                         = "Debuff"

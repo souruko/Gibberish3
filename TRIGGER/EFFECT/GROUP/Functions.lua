@@ -227,8 +227,13 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
         return nil
     end
 
-    -- check listOfTargets
+    -- listOfTargets
     if Trigger.CheckListForName( player:GetName(), triggerData.listOfTargets ) == false then
+        return nil
+    end
+
+    -- exclude self
+    if triggerData.excludeSelf == true and player == LocalPlayer then
         return nil
     end
 

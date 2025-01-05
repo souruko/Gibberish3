@@ -435,6 +435,7 @@ L[ Language.English ].animationType.Zoom                    = "Zoom"
 L[ Language.English ].options.isDebuff                      = "Type"
 L[ Language.English ].options.isDispellable                 = "Cureable"
 L[ Language.English ].options.category                      = "Category"
+L[ Language.English ].options.excludeSelf                   = "Exclude Self"
 
 L[ Language.English ].source.Buff                           = "Buff"
 L[ Language.English ].source.Debuff                         = "Debuff"
