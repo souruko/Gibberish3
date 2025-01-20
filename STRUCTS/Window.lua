@@ -40,15 +40,15 @@ function Window.New(name, type)
     window.overlay               = Window[type].Defaults.overlay
 
     -- color / opacity
-    window.color1                = Window[type].Defaults.color1
-    window.color2                = Window[type].Defaults.color2
-    window.color3                = Window[type].Defaults.color3
-    window.color4                = Window[type].Defaults.color4
-    window.color5                = Window[type].Defaults.color5
-    window.color6                = Window[type].Defaults.color6
-    window.color7                = Window[type].Defaults.color7
-    window.color8                = Window[type].Defaults.color8
-    window.color9                = Window[type].Defaults.color9
+    window.color1                = deepcopy(Window[type].Defaults.color1)
+    window.color2                = deepcopy(Window[type].Defaults.color2)
+    window.color3                = deepcopy(Window[type].Defaults.color3)
+    window.color4                = deepcopy(Window[type].Defaults.color4)
+    window.color5                = deepcopy(Window[type].Defaults.color5)
+    window.color6                = deepcopy(Window[type].Defaults.color6)
+    window.color7                = deepcopy(Window[type].Defaults.color7)
+    window.color8                = deepcopy(Window[type].Defaults.color8)
+    window.color9                = deepcopy(Window[type].Defaults.color9)
 
     window.opacityActiv          = Window[type].Defaults.opacityActiv
     window.opacityPassiv         = Window[type].Defaults.opacityPassiv
