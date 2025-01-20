@@ -61,7 +61,9 @@ function WindowToString( data )
                 key == "color4" or
                 key == "color5" or
                 key == "color6" or
-                key == "color7" then
+                key == "color7" or
+                key == "color8" or
+                key == "color9" then
                 
                 text = text  .. key .. ":{"
                 for k, v in pairs(value) do
