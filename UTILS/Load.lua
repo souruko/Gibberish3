@@ -73,11 +73,11 @@ function Options.OverwriteCharData( global_data, char_data )
         local data = Options.GetWindowByID( window_data.id, char_data )
 
         -- new options 3.1.2 TODO delte
-        if window_data.color8 == nil then
-            window_data.color8 = deepcopy(Window[window_data.type].Defaults.color8)
-        end
-        if window_data.color9 == nil then
-            window_data.color9 = deepcopy(Window[window_data.type].Defaults.color9)
+        for i=1,9 do
+            local c = "color"..tostring(i)
+            if window_data[c] == nil then
+                window_data[c] = deepcopy(Window[window_data.type].Defaults[c])
+            end
         end
         if window_data.opacityThreshold == nil then
             window_data.opacityThreshold = window_data.opacityActiv
