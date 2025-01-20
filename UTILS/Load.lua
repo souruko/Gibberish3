@@ -74,12 +74,10 @@ function Options.OverwriteCharData( global_data, char_data )
 
         -- new options 3.1.2 TODO delte
         if window_data.color8 == nil then
-            local color = {R = window_data.color4.R, G = window_data.color4.G, B = window_data.color4.B}
-            window_data.color8 = color
+            window_data.color8 = deepcopy(Window[window_data.type].Defaults.color8)
         end
         if window_data.color9 == nil then
-            local color = {R = window_data.color5.R, G = window_data.color5.G, B = window_data.color5.B}
-            window_data.color9 = color
+            window_data.color9 = deepcopy(Window[window_data.type].Defaults.color9)
         end
         if window_data.opacityThreshold == nil then
             window_data.opacityThreshold = window_data.opacityActiv
