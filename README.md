@@ -11,6 +11,11 @@ https://lotro-gibberish.com/  || by mydnic
 ## Changlog
 
 
+### 3.1.6
+- fixed color deep copy error || by Dromo
+- fixed folder deletion error || by Dromo
+
+
 ### 3.1.5
 - added &target as placeholder for custom texts
 - added excludeSelf option for group effect triggers
