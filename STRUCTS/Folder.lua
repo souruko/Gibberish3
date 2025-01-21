@@ -100,14 +100,30 @@ end
 function Folder.Delete(index)
 
     -- kill all child folders/windows
-    for i, item in ipairs(Data.window) do
-        if item.folder == index then
-            Options.DeleteWindow( i )
+    local delete = true
+    local startIndex = 1
+    while delete do 
+        delete = false
+        for i=startIndex,#Data.window do
+            if Data.window[i].folder == index then
+                delete = true
+                startIndex = i
+                Options.DeleteWindow( i )
+                break
+            end
         end
     end
-    for j, item in ipairs(Data.folder) do
-        if item.folder == index then
-            Options.DeleteFolder( j )
+    local delete = true
+    local startIndex = 1
+    while delete do 
+        delete = false
+        for i=startIndex,#Data.folder do
+            if Data.folder[i].folder == index then
+                delete = true
+                startIndex = i
+                Options.DeleteFolder( i )
+                break
+            end
         end
     end
 
