@@ -14,6 +14,7 @@ https://lotro-gibberish.com/  || by mydnic
 ### 3.1.5
 - added &target as placeholder for custom texts
 - added excludeSelf option for group effect triggers
+- fixed color4 on load error
 
 ### 3.1.4
 - fixed saving group effect triggers
