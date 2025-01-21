@@ -72,7 +72,14 @@ function Options.OverwriteCharData( global_data, char_data )
     for index, window_data in ipairs( global_data.window ) do
         local data = Options.GetWindowByID( window_data.id, char_data )
 
-        -- new options 3.1.2 TODO delte
+        if window_data.color4 == nil then
+            local color = {R = 1, G = 1, B = 1}
+            window_data.color4 = color
+        end
+        if window_data.color5 == nil then
+            local color = {R = 1, G = 1, B = 1}
+            window_data.color5 = color
+        end
         if window_data.color8 == nil then
             local color = {R = window_data.color4.R, G = window_data.color4.G, B = window_data.color4.B}
             window_data.color8 = color
