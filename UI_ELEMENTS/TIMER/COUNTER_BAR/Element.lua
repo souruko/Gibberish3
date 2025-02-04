@@ -390,6 +390,7 @@ end
 function CounterBarElement:Ended()
 
     -- timer ended trigger event
+
     Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
 
     if self.data.permanent == true then

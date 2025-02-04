@@ -12,8 +12,8 @@ https://lotro-gibberish.com/  || by mydnic
 
 
 ### 3.1.6
-- fixed color deep copy error || by Dromo
-- fixed folder deletion error || by Dromo
+- fixed color deep copy error || contributed by ***Dromo***
+- fixed folder deletion error || contributed by ***Dromo***
 
 
 ### 3.1.5
