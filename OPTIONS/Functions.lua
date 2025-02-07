@@ -23,7 +23,7 @@ function Options.SelectionChanged( index )
     -- save new selection
     Data.selectedIndex = index
 
-    Options.TimerSelectionChanged( 0 )
+    Options.TimerSelectionChanged( 1 )
 
     Options.TriggerSelectionChanged( 0, 0 )
     Options.Trigger2SelectionChanged( 0, 0 )
