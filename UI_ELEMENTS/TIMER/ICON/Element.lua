@@ -486,9 +486,23 @@ function IconElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.iconControl:SetOpacity( self.parent.data.opacityPassiv )
+        self:UpdateShadow( 0 )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
+
+        if self.data.useThreshold == true then
+
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+            self.animation:SetBackground()
+            self.frame:SetBackColor( self.frameColor )
+            self.iconControl:SetSize(self.width, self.height)
+            self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
+
+        end
 
     end
 

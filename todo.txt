@@ -1,10 +1,5 @@
 
 
--- version goal
-add import/exort new settings!
-counter copy
-
-
 -- bugs
 fix sortIndex
 import triggers into window/folder (rework import buttons)

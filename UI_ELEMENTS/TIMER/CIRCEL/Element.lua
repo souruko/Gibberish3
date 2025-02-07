@@ -430,10 +430,20 @@ function CircelElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.circelBack:SetOpacity( self.parent.data.opacityPassiv )
+        self.circel:SetBackColor( self.backColor )
+        self:UpdateCircel( 0 )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
 
+        if self.data.useThreshold == true then
+
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+
+        end
     end
 
     -- start or stop updates

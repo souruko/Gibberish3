@@ -403,6 +403,7 @@ function BarElement:Ended()
     if self.data.permanent == true then
         
         self:Activ( false )
+        
 
     else
 
@@ -430,9 +431,19 @@ function BarElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.barBack:SetBackColor( self.backColor )
+        self.bar:SetWidth( 0 )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
+
+        if self.data.useThreshold == true then
+
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+
+        end
 
     end
 

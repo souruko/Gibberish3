@@ -69,6 +69,48 @@ function GeneralOptions:Constructor( data )
     
     top = top + 35
 
+    self.testTimerButton = Turbine.UI.Lotro.Button()
+    self.testTimerButton:SetParent(self)
+    self.testTimerButton:SetPosition( left, top )
+    self.testTimerButton:SetWidth(150)
+    self.testTimerButton:SetText("Test Timer")
+    self.testTimerButton.MouseClick = function ()
+
+        local windowIndex = Data.selectedIndex
+        local timerIndex = Data.selectedTimerIndex
+        
+        local fakeTriggerData = {}
+        fakeTriggerData.action = Action.Add
+
+        local startTime = Turbine.Engine.GetGameTime()
+
+        local duration = 10
+        if self.data.useCustomTimer == true then
+            duration = self.data.timerValue
+        end
+
+        local icon = self.data.icon
+
+        local text = ""
+        if self.data.textOption == TimerTextOptions.Target then
+            text = LocalPlayer:GetName()
+        elseif self.data.textOption == TimerTextOptions.Token then
+            text = "token"
+        elseif self.data.textOption == TimerTextOptions.CustomText then
+            text = self.data.textValue
+        end
+
+        local entity = nil
+
+        local key = nil
+        if self.data.stacking == Stacking.Multi then
+            key              = startTime
+        end
+
+        Windows[ windowIndex ]:TimerAction( fakeTriggerData, self.data, timerIndex, startTime , duration, icon, text, entity, key )
+      
+    end
+
     self:ResetContent()
 
 end

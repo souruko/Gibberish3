@@ -390,8 +390,20 @@ function TextElement:Activ( value )
 
     else
 
+        self:SetOpacity( self.parent.data.opacityPassiv )
+
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
+
+        if self.data.useThreshold == true then
+
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+            self:SetOpacity( self.parent.data.opacityActiv )
+
+        end
 
     end
 
