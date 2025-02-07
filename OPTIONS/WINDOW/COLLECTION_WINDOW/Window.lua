@@ -274,6 +274,12 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.filter_back = Turbine.UI.Control()
 	self.filter_back:SetParent( self.frame )
 	self.filter_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	self.filter_back.MouseEnter = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.filter_back.MouseLeave = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end	
 
 	self.filter = Turbine.UI.TextBox()
     self.filter:SetParent( self.filter_back )
@@ -327,6 +333,12 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.collaps_back = Turbine.UI.Control()
 	self.collaps_back:SetParent( self.frame )
 	self.collaps_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	self.collaps_back.MouseEnter = function ()
+		self.collaps_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.collaps_back.MouseLeave = function ()
+		self.collaps_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
 	
 	self.collaps_button = Turbine.UI.Button()
 	self.collaps_button:SetParent( self.collaps_back )

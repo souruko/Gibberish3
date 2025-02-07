@@ -13,6 +13,8 @@ https://lotro-gibberish.com/  || by mydnic
 ### 3.1.7
 - added test timer button to timer > general
 - fixed permanent timer reset display
+- allowed timer selection text multiline
+- hovered buttons will now be highlighted
 
 ### 3.1.6
 - fixed color deep copy error || contributed by ***Dromo***

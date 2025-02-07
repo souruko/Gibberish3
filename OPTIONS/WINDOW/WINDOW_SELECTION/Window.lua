@@ -408,7 +408,13 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.file_back = Turbine.UI.Control()
 	self.file_back:SetParent( self.frame )
 	self.file_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.file_back.MouseEnter = function ()
+		self.file_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.file_back.MouseLeave = function ()
+		self.file_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.file_button = Turbine.UI.Button()
 	self.file_button:SetParent( self.file_back )
 	self.file_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
@@ -418,13 +424,19 @@ function Options.Elements.WindowSelection:CreateToolbar()
 		local left, top = self.file_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
 		self.file_menu:Show( left, top )
 	end
-	Options.Elements.Tooltip.AddTooltip( self.file_button, "tooltip", "button_new_window", false )
+	Options.Elements.Tooltip.AddTooltip( self.file_button, "toltip", "button_new_window", false )
 
 	-- new folder button
 	self.dir_back = Turbine.UI.Control()
 	self.dir_back:SetParent( self.frame )
 	self.dir_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.dir_back.MouseEnter = function ()
+		self.dir_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.dir_back.MouseLeave = function ()
+		self.dir_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.dir_button = Turbine.UI.Button()
 	self.dir_button:SetParent( self.dir_back )
 	self.dir_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
@@ -439,7 +451,13 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.filter_back = Turbine.UI.Control()
 	self.filter_back:SetParent( self.frame )
 	self.filter_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.filter_back.MouseEnter = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.filter_back.MouseLeave = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.filter = Turbine.UI.TextBox()
     self.filter:SetParent( self.filter_back )
 	self.filter:SetLeft( 4 )
@@ -491,6 +509,12 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.collaps_back = Turbine.UI.Control()
 	self.collaps_back:SetParent( self.frame )
 	self.collaps_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	self.collaps_back.MouseEnter = function ()
+		self.collaps_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.collaps_back.MouseLeave = function ()
+		self.collaps_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
 	
 	self.collaps_button = Turbine.UI.Button()
 	self.collaps_button:SetParent( self.collaps_back )
@@ -500,7 +524,8 @@ function Options.Elements.WindowSelection:CreateToolbar()
 	self.collaps_button.MouseClick = function ()
 		self:CollapsButtonPressed()
 	end
-	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "button_collaps", false )
+	
+	-- Options.Elements.Tooltip.AddTootip( self.collaps_button, "tooltip", "button_collaps", false )
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -315,7 +315,13 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.reset_back = Turbine.UI.Control()
 	self.reset_back:SetParent( self.frame )
 	self.reset_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.reset_back.MouseEnter = function ()
+		self.reset_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.reset_back.MouseLeave = function ()
+		self.reset_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.reset_button = Turbine.UI.Button()
 	self.reset_button:SetParent( self.reset_back )
 	self.reset_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
@@ -330,6 +336,12 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.save_back = Turbine.UI.Control()
 	self.save_back:SetParent( self.frame )
 	self.save_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	self.save_back.MouseEnter = function ()
+		self.save_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.save_back.MouseLeave = function ()
+		self.save_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
 
 	self.save_button = Turbine.UI.Button()
 	self.save_button:SetParent( self.save_back )
@@ -345,7 +357,13 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.import_back = Turbine.UI.Control()
 	self.import_back:SetParent( self.frame )
 	self.import_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.import_back.MouseEnter = function ()
+		self.import_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.import_back.MouseLeave = function ()
+		self.import_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.import_button = Turbine.UI.Button()
 	self.import_button:SetParent( self.import_back )
 	self.import_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
@@ -360,7 +378,13 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.reload_back = Turbine.UI.Control()
 	self.reload_back:SetParent( self.frame )
 	self.reload_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.reload_back.MouseEnter = function ()
+		self.reload_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.reload_back.MouseLeave = function ()
+		self.reload_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.reload_button = Turbine.UI.Button()
 	self.reload_button:SetParent( self.reload_back )
 	self.reload_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
@@ -375,7 +399,13 @@ function Options.Elements.SelectionOptions:CreateToolbar()
 	self.name_back = Turbine.UI.Control()
 	self.name_back:SetParent( self.frame )
 	self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
+	self.name_back.MouseEnter = function ()
+		self.name_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.name_back.MouseLeave = function ()
+		self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+	
 	self.name_textbox = Turbine.UI.TextBox()
 	self.name_textbox:SetParent( self.name_back )
 	self.name_textbox:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )

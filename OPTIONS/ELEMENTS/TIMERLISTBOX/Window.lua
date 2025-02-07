@@ -27,7 +27,13 @@ function Options.Elements.TimerListbox:Constructor( windowType, parent )
     self.add_back:SetBackColor( Options.Defaults.window.backcolor2 )
     self.add_back:SetPosition( Options.Defaults.window.frame, Options.Defaults.window.frame )
     self.add_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
-
+	self.add_back.MouseEnter = function ()
+		self.add_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.add_back.MouseLeave = function ()
+		self.add_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
+    
     self.add_button = Turbine.UI.Button()
     self.add_button:SetParent( self.add_back )
     self.add_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
@@ -46,6 +52,12 @@ function Options.Elements.TimerListbox:Constructor( windowType, parent )
 	self.filter_back:SetParent( self )
     self.filter_back:SetPosition( Options.Defaults.window.toolbar_height + (2*Options.Defaults.window.frame), Options.Defaults.window.frame)
     self.filter_back:SetHeight( Options.Defaults.window.toolbar_height )
+	self.filter_back.MouseEnter = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.hovercolor )
+	end
+	self.filter_back.MouseLeave = function ()
+		self.filter_back:SetBackColor( Options.Defaults.window.backcolor2 )
+	end
 
 	self.filter = Turbine.UI.TextBox()
     self.filter:SetParent( self.filter_back )

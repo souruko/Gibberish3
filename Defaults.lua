@@ -55,6 +55,7 @@ Options.Defaults.window.basecolor    = Turbine.UI.Color( 0.18, 0.18, 0.18 )
 Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.1, 0.1, 0.1 )--Turbine.UI.Color( 0.18, 0.18, 0.18 )
 Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.6, 0.6, 0.6 )
+Options.Defaults.window.hovercolor   = Turbine.UI.Color( 0.22, 0.22, 0.22 )
 Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
 Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.segmenthover = Turbine.UI.Color( 0.15, 0.15, 0.15 )
