@@ -1,3 +1,6 @@
+- conditions
+- auto select first timer
+
 
 
 -- bugs

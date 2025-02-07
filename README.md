@@ -15,6 +15,9 @@ https://lotro-gibberish.com/  || by mydnic
 - fixed permanent timer reset display
 - allowed timer selection text multiline
 - hovered buttons will now be highlighted
+- collection is now sorted a-z
+- selecting a window now automaticly selects the first timer
+
 
 ### 3.1.6
 - fixed color deep copy error || contributed by ***Dromo***
@@ -26,8 +29,10 @@ https://lotro-gibberish.com/  || by mydnic
 - added excludeSelf option for group effect triggers
 - fixed color4 on load error
 
+
 ### 3.1.4
 - fixed saving group effect triggers
+
 
 ### 3.1.3
 - fixed icon position outside of threshold

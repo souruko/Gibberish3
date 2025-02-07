@@ -381,6 +381,7 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 
 		end
 	end
+
 	Options.Elements.Tooltip.AddTooltip( self.effects_button, "tooltip", "button_collect_effects", true )
 
 	self.effects_label = Turbine.UI.Label()

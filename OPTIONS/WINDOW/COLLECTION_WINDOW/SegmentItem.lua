@@ -143,6 +143,10 @@ function SegmentItem:FillContent( text )
 		end
 	end
 
+	self.listbox:Sort(function(a,b) 
+		return a.data.token < b.data.token
+	end)
+
 end
 ---------------------------------------------------------------------------------------------------
 

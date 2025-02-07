@@ -74,6 +74,7 @@ function GeneralOptions:Constructor( data )
     self.testTimerButton:SetPosition( left, top )
     self.testTimerButton:SetWidth(150)
     self.testTimerButton:SetText("Test Timer")
+    self.testTimerButton:SetEnabled(Windows[ Data.selectedIndex ] ~= nil)
     self.testTimerButton.MouseClick = function ()
 
         local windowIndex = Data.selectedIndex
@@ -107,8 +108,10 @@ function GeneralOptions:Constructor( data )
             key              = startTime
         end
 
-        Windows[ windowIndex ]:TimerAction( fakeTriggerData, self.data, timerIndex, startTime , duration, icon, text, entity, key )
-      
+        if Windows[ windowIndex ] ~= nil then
+            Windows[ windowIndex ]:TimerAction( fakeTriggerData, self.data, timerIndex, startTime , duration, icon, text, entity, key )
+        end
+
     end
 
     self:ResetContent()
