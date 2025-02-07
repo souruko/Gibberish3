@@ -345,7 +345,7 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.collaps_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
 	self.collaps_button:SetBackground( "Gibberish3/RESOURCES/collaps.tga" )
 	self.collaps_button:SetPosition( 0, 0 )
-	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "collaps", true )
+	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "button_collaps", false )
 
 	-- effects
 	self.effects_back = Turbine.UI.Control()

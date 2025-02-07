@@ -424,7 +424,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 		local left, top = self.file_back:PointToScreen(0, Options.Defaults.window.toolbar_height + Options.Defaults.window.frame )
 		self.file_menu:Show( left, top )
 	end
-	Options.Elements.Tooltip.AddTooltip( self.file_button, "toltip", "button_new_window", false )
+	Options.Elements.Tooltip.AddTooltip( self.file_button, "tooltip", "button_new_window", false )
 
 	-- new folder button
 	self.dir_back = Turbine.UI.Control()
@@ -525,7 +525,7 @@ function Options.Elements.WindowSelection:CreateToolbar()
 		self:CollapsButtonPressed()
 	end
 	
-	-- Options.Elements.Tooltip.AddTootip( self.collaps_button, "tooltip", "button_collaps", false )
+	Options.Elements.Tooltip.AddTooltip( self.collaps_button, "tooltip", "button_collaps", false )
 
 end
 ---------------------------------------------------------------------------------------------------

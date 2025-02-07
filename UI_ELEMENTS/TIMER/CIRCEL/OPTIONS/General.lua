@@ -146,6 +146,8 @@ function GeneralOptions:SizeChanged()
     self.useCustomTimer:SetWidth( width )
     self.timerValue:SetWidth( width )
 
+    self.testTimerButton:SetLeft( (width / 2) - 75 )
+
 end
 ---------------------------------------------------------------------------------------------------
 
