@@ -1,6 +1,4 @@
-- conditions
-- auto select first timer
-
+conditions
 
 
 -- bugs

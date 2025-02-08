@@ -264,13 +264,15 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
 
     -- key
     -- every trigger = new timer
-    if timerData.stacking == Stacking.Multi then
+    if timerData.permanent == false and
+        timerData.stacking == Stacking.Multi then
 
         key              = ChatTriggerID
         ChatTriggerID    = ChatTriggerID + 1
 
     -- one timer per target
-    elseif timerData.stacking == Stacking.PerTarget and
+    elseif timerData.permanent == false and
+          timerData.stacking == Stacking.PerTarget and
         ( chatType        == Turbine.ChatType.PlayerCombat or
           chatType        == Turbine.ChatType.EnemyCombat ) then
 

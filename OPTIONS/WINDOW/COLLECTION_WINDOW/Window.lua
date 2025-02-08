@@ -165,10 +165,10 @@ function Options.Elements.CollectionWindow:SizeChanged()
 	self.collaps_back:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height)
 
 	self.effects_back:SetSize( listbox_width, Options.Defaults.window.toolbar_height )
-	self.effects_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
+	self.effects_icon:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.effects_label:SetHeight( Options.Defaults.window.toolbar_height )
 	self.chat_back:SetSize( listbox_width, Options.Defaults.window.toolbar_height )
-	self.chat_button:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
+	self.chat_icon:SetSize( Options.Defaults.window.toolbar_height, Options.Defaults.window.toolbar_height )
 	self.chat_label:SetHeight( Options.Defaults.window.toolbar_height )
 
 
@@ -351,22 +351,10 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.effects_back = Turbine.UI.Control()
 	self.effects_back:SetParent( self.frame )
 	self.effects_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
-	self.effects_button = Turbine.UI.Button()
-	self.effects_button:SetParent( self.effects_back )
-	self.effects_button:SetPosition( -1, -3 )
-	self.effects_button:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	if Options.CollectEffects == false then
-		self.effects_button:SetBackground("Gibberish3/RESOURCES/play.tga")
-		self.effects_back:SetBackColor( Options.Defaults.window.backcolor1 )
-	else
-		self.effects_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
-		self.effects_back:SetBackColor( Options.Defaults.window.collecting )
-	end
-	self.effects_button.MouseClick = function (sender, args)
+	self.effects_back.MouseClick = function (sender, args)
 		Options.CollectEffects = not( Options.CollectEffects )
 		if  Options.CollectEffects then
-			self.effects_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
+			self.effects_icon:SetBackground("Gibberish3/RESOURCES/stop.tga")
 			self.effects_back:SetBackColor( Options.Defaults.window.collecting )
 
 			local effects = LocalPlayer:GetEffects()
@@ -376,13 +364,37 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 			end
 
 		else
-			self.effects_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+			self.effects_icon:SetBackground("Gibberish3/RESOURCES/play.tga")
 			self.effects_back:SetBackColor( Options.Defaults.window.backcolor1 )
 
 		end
 	end
+	self.effects_back.MouseEnter = function ()
+		if not(Options.CollectEffects) then
+		self.effects_back:SetBackColor( Options.Defaults.window.hovercolor )
+		end
+	end
+	self.effects_back.MouseLeave = function ()
+		if not(Options.CollectEffects) then
+		self.effects_back:SetBackColor( Options.Defaults.window.backcolor2 )
+		end
+	end
 
-	Options.Elements.Tooltip.AddTooltip( self.effects_button, "tooltip", "button_collect_effects", true )
+	self.effects_icon = Turbine.UI.Control()
+	self.effects_icon:SetParent( self.effects_back )
+	self.effects_icon:SetPosition( -1, -3 )
+	self.effects_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.effects_icon:SetMouseVisible(false)
+	if Options.CollectEffects == false then
+		self.effects_icon:SetBackground("Gibberish3/RESOURCES/play.tga")
+		self.effects_back:SetBackColor( Options.Defaults.window.backcolor1 )
+	else
+		self.effects_icon:SetBackground("Gibberish3/RESOURCES/stop.tga")
+		self.effects_back:SetBackColor( Options.Defaults.window.collecting )
+	end
+
+
+	Options.Elements.Tooltip.AddTooltip( self.effects_icon, "tooltip", "button_collect_effects", true )
 
 	self.effects_label = Turbine.UI.Label()
 	self.effects_label:SetParent( self.effects_back )
@@ -390,6 +402,7 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.effects_label:SetFont( Options.Defaults.window.font )
 	self.effects_label:SetForeColor( Options.Defaults.window.textcolor )
 	self.effects_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+	self.effects_label:SetMouseVisible(false)
 
 	self.effects_checkbox = Options.Elements.CheckBox()
 	self.effects_checkbox:SetParent( self.effects_back )
@@ -404,36 +417,49 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 	self.chat_back = Turbine.UI.Control()
 	self.chat_back:SetParent( self.frame )
 	self.chat_back:SetBackColor( Options.Defaults.window.backcolor2 )
-
-	self.chat_button = Turbine.UI.Button()
-	self.chat_button:SetParent( self.chat_back )
-	self.chat_button:SetPosition( -1, -3 )
-	self.chat_button:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-	if Options.CollectChat == false then
-		self.chat_button:SetBackground("Gibberish3/RESOURCES/play.tga")
-		self.chat_back:SetBackColor( Options.Defaults.window.backcolor1 )
-	else
-		self.chat_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
-		self.chat_back:SetBackColor( Options.Defaults.window.collecting )
-	end
-	self.chat_button.MouseClick = function (sender, args)
+	self.chat_back.MouseClick = function (sender, args)
 		Options.CollectChat = not( Options.CollectChat )
 		if Options.CollectChat then
-			self.chat_button:SetBackground("Gibberish3/RESOURCES/stop.tga")
+			self.chat_icon:SetBackground("Gibberish3/RESOURCES/stop.tga")
 			self.chat_back:SetBackColor( Options.Defaults.window.collecting )
 		else
-			self.chat_button:SetBackground("Gibberish3/RESOURCES/play.tga")
+			self.chat_icon:SetBackground("Gibberish3/RESOURCES/play.tga")
 			self.chat_back:SetBackColor( Options.Defaults.window.backcolor1 )
 
 		end
 	end
-	Options.Elements.Tooltip.AddTooltip( self.chat_button, "tooltip", "button_collect_chat", true )
+	self.chat_back.MouseEnter = function ()
+		if not(Options.CollectChat) then
+		self.chat_back:SetBackColor( Options.Defaults.window.hovercolor )
+		end
+	end
+	self.chat_back.MouseLeave = function ()
+		if not(Options.CollectChat) then
+		self.chat_back:SetBackColor( Options.Defaults.window.backcolor2 )
+		end
+	end
+
+	self.chat_icon = Turbine.UI.Button()
+	self.chat_icon:SetParent( self.chat_back )
+	self.chat_icon:SetPosition( -1, -3 )
+	self.chat_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+	self.chat_icon:SetMouseVisible(false)
+	if Options.CollectChat == false then
+		self.chat_icon:SetBackground("Gibberish3/RESOURCES/play.tga")
+		self.chat_back:SetBackColor( Options.Defaults.window.backcolor1 )
+	else
+		self.chat_icon:SetBackground("Gibberish3/RESOURCES/stop.tga")
+		self.chat_back:SetBackColor( Options.Defaults.window.collecting )
+	end
+
+	Options.Elements.Tooltip.AddTooltip( self.chat_icon, "tooltip", "button_collect_chat", true )
 
 	self.chat_label = Turbine.UI.Label()
 	self.chat_label:SetParent( self.chat_back )
 	self.chat_label:SetLeft( 45 )
 	self.chat_label:SetFont( Options.Defaults.window.font )
 	self.chat_label:SetForeColor( Options.Defaults.window.textcolor )
+	self.chat_label:SetMouseVisible(false)
 	self.chat_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
 
 	self.chat_checkbox = Options.Elements.CheckBox()

@@ -17,6 +17,8 @@ https://lotro-gibberish.com/  || by mydnic
 - hovered buttons will now be highlighted
 - collection is now sorted a-z
 - selecting a window now automaticly selects the first timer
+- permanent timers now work properly with changing stacking to single
+- fixed transparent edges around icons
 
 
 ### 3.1.6

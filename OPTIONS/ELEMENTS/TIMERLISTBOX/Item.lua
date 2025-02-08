@@ -147,7 +147,7 @@ function Item:Constructor( index, data, width, parent )
     self.icon:SetPosition( 1, 1 )
     self.icon:SetSize( 32, 32 )
     self.icon:SetMouseVisible( false )
-
+    self.icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.background )

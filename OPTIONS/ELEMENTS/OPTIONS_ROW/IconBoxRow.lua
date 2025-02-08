@@ -26,6 +26,7 @@ function Options.Elements.IconBoxRow:Constructor( back_color, label_control, lab
 
     self.icon = Turbine.UI.Control()
     self.icon:SetParent( self )
+    self.icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.icon:SetPosition( 130 + 2*Options.Defaults.window.spacing, Options.Defaults.window.spacing )
     self.icon:SetSize( self.content_height, self.content_height)
 
@@ -88,14 +89,13 @@ function Options.Elements.IconBoxRow:SetIcon()
     local icon_id = tonumber( self.textbox:GetText() )
 
     if icon_id == nil then
+        self.icon:SetBackground()
         return
     end
 
     self.icon:SetSize( UTILS.GetImageSize( icon_id ) )
 
     self.icon:SetBackground( icon_id )
-    -- self.icon:SetStretchMode( 1 )
-    -- self.icon:SetSize( self.content_height, self.content_height )
 
 end
 ---------------------------------------------------------------------------------------------------
