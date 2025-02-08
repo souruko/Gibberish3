@@ -51,7 +51,7 @@ end
 function Options.TimerSelectionChanged( index )
 
     -- do nothing if selection didnt change
-    if index == Data.selectedTimerIndex or index == nil then
+    if (index ~= 1 and index == Data.selectedTimerIndex) or index == nil then
         return
     end
 
