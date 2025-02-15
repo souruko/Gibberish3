@@ -293,6 +293,7 @@ L[ Language.English ].tab = {}
 L[ Language.English ].tab.general                           = "General"
 L[ Language.English ].tab.timer                             = "Timer"
 L[ Language.English ].tab.trigger                           = "Trigger"
+L[ Language.English ].tab.conditions                        = "Conditions"
 L[ Language.English ].tab.size                              = "Size"
 L[ Language.English ].tab.color                             = "Color"
 L[ Language.English ].tab.text                              = "Text"

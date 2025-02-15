@@ -38,6 +38,7 @@ function Item:Constructor( width, data, type, parent )
 	self.icon:SetPosition( 4, 2 )
 	self.icon:SetSize(32, 32)
 	self.icon:SetMouseVisible( false )
+    self.icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 	
 	if data.icon ~= nil then
 		self.icon:SetBackground( data.icon )

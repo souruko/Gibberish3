@@ -292,6 +292,7 @@ L[ Language.French ].tab = {}
 L[ Language.French ].tab.general                           = "Général"
 L[ Language.French ].tab.timer                             = "Minuterie"
 L[ Language.French ].tab.trigger                           = "Déclencheur"
+L[ Language.English ].tab.conditions                       = "Conditions"
 L[ Language.French ].tab.size                              = "Taille"
 L[ Language.French ].tab.color                             = "Couleur"
 L[ Language.French ].tab.text                              = "Texte"

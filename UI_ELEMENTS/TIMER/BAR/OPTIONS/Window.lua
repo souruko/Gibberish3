@@ -14,18 +14,20 @@ function OptionsWindow:Constructor( parent, data )
     self.parent = parent
     self.data   = data
 
-    self.tabwindow = Options.Elements.TabWindow( 137 )
+    self.tabwindow = Options.Elements.TabWindow( 110 )
     self.tabwindow:SetParent( self )
     self.tabwindow:SetLeft( 3 )
     -- self.tabwindow:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
 
     self.tab_general = GeneralOptions( self.data )
     self.tab_trigger = TriggerOptions( self.data )
+    -- self.tab_conditions = ConditionsOptions( self.data )
     self.tab_style = StyleOptions( self.data )
     self.tab_animation = AnimationOptions( self.data )
 
     self.tabwindow:AddTab( self.tab_general, "tab", "general")
     self.tabwindow:AddTab( self.tab_trigger, "tab", "trigger")
+    -- self.tabwindow:AddTab( self.tab_conditions, "tab", "conditions")
     self.tabwindow:AddTab( self.tab_style, "tab", "style")
     self.tabwindow:AddTab( self.tab_animation, "tab", "animation")
 

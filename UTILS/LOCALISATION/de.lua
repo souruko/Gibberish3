@@ -292,6 +292,7 @@ L[ Language.German ].tab = {}
 L[ Language.German ].tab.general                            = "Allgemein"
 L[ Language.German ].tab.timer                              = "Timer"
 L[ Language.German ].tab.trigger                            = "Auslöser"
+L[ Language.English ].tab.conditions                        = "Bedingungen"
 L[ Language.German ].tab.size                               = "Größe"
 L[ Language.German ].tab.color                              = "Farbe"
 L[ Language.German ].tab.text                               = "Text"
