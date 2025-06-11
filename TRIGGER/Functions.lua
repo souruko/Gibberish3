@@ -34,7 +34,7 @@ function Trigger.ReplacePlaceholder(token)
     -- replace &1, &2, etc. with (%w+) to capture one or more alphanumeric characters
     -- It is not guaranteed that &1, etc. in the placeholder table will match the &1, etc. in the token
     -- token can have custom capture strings, out of order placeholders ("&2 &1"), bad placeholders (&0, &11)
-    token = string.gsub(token, "&%d", "(%%w+)")
+    token = string.gsub(token, "&%d", "([%%w%%s%%-]+)")
 
     ----------
     -- common placeholders: these are just replaced with text

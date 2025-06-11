@@ -43,6 +43,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerOptions:ResetContent()
 
+    -- self.timerType:SetSelection( self.data.timerType )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -133,7 +134,7 @@ function TimerOptions:TimerSelectionChanged()
         self.timerOptions = nil
     end
 
-    if Data.selectedTimerIndex ~= 0 then
+    if Data.selectedTimerIndex ~= 0 and self.data.timerList[ Data.selectedTimerIndex ] ~= nil then
         local timerData = self.data.timerList[ Data.selectedTimerIndex ]
 
         self.timerOptions = Timer[ timerData.type ].Options( self, timerData, 0 )
