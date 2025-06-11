@@ -20,6 +20,7 @@ https://lotro-gibberish.com/  || by mydnic
 - permanent timers now work properly with changing stacking to single
 - fixed transparent edges around icons
 - fixed counter window creation
+- fixed counter window copy
 
 
 ### 3.1.6

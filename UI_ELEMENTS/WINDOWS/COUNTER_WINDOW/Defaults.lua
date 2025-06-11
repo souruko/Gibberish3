@@ -32,9 +32,12 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.color4                  = {R=1, G
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color5                  = {R=1, G=1, B=1}
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color6                  = {R=1, G=1, B=1}
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color7                  = {R=1, G=0, B=0}
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.color8                  = {R=1, G=1, B=1}
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.color9                  = {R=1, G=1, B=1}
 
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.opacityActiv            = 0.5
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.opacityPassiv           = 0.5
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.opacityThreshold        = 0.5
 
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.font                    = 4
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.fontSize                = 20
@@ -45,6 +48,10 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.showTimer               = true
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.showIcon                = false
 
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.timerType               = Timer.Types.COUNTER_BAR
+
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.thresholdFont                    = 4
+Window[ Window.Types.TIMER_WINDOW ].Defaults.thresholdFontSize                = 20
+COUNTER_WINDOW
 -- allowed timer
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers           = {}
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[1]        = Timer.Types.COUNTER_BAR
