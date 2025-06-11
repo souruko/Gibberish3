@@ -19,6 +19,7 @@ https://lotro-gibberish.com/  || by mydnic
 - selecting a window now automaticly selects the first timer
 - permanent timers now work properly with changing stacking to single
 - fixed transparent edges around icons
+- fixed counter window creation
 
 
 ### 3.1.6
