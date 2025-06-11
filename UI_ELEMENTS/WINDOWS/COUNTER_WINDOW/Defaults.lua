@@ -50,8 +50,8 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.showIcon                = false
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.timerType               = Timer.Types.COUNTER_BAR
 
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.thresholdFont                    = 4
-Window[ Window.Types.TIMER_WINDOW ].Defaults.thresholdFontSize                = 20
-COUNTER_WINDOW
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.thresholdFontSize                = 20
+
 -- allowed timer
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers           = {}
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.allowedTimers[1]        = Timer.Types.COUNTER_BAR
