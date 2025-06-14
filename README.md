@@ -21,6 +21,7 @@ https://lotro-gibberish.com/  || by mydnic
 - fixed transparent edges around icons
 - fixed counter window creation
 - fixed counter window copy
+- fixed counter window moving via the side panel
 
 
 ### 3.1.6

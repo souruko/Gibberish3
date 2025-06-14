@@ -238,9 +238,6 @@ function TimerWindowElement:DataChanged()
     -- resize depending from children
     self:Resize()
 
-    -- set the fill direction for children
-    -- self.timerListBox:SetReverseFill    (self.data.direction)
-    -- self.timerListBox:SetFlippedLayout  (self.data.direction)
     self.timerListBox:SetReverseFill    (self.data.direction)
     if self.data.orientation == Orientation.Horizontal then
         self.timerListBox:SetOrientation(Turbine.UI.Orientation.Horizontal)
