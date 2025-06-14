@@ -278,12 +278,8 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
 
         key = target
 
-    else
-
-        key = nil
-        
     end
-Turbine.Shell.WriteLine(tostring(key))
+
    -- duration
    if timerData.useCustomTimer == true then
         duration = timerData.timerValue

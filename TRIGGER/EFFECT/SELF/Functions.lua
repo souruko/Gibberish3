@@ -340,11 +340,13 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
     end
 
     -- key
-    if timerData.stacking == Stacking.Multi then
+    if timerData.permanent == false and
+        timerData.stacking == Stacking.Multi then
         
         key = effect:GetID()
     
-    elseif timerData.stacking == Stacking.PerTarget then
+    elseif timerData.permanent == false and
+        timerData.stacking == Stacking.PerTarget then
 
         key = player:GetName()
 

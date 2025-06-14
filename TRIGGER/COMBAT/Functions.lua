@@ -158,14 +158,11 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
 
     -- key
     -- every trigger = new timer
-    if timerData.stacking == Stacking.Multi then
+    if timerData.permanent == false and
+        timerData.stacking == Stacking.Multi then
 
         key              = CombatTriggerID
         CombatTriggerID  = CombatTriggerID + 1
-
-    else
-
-        key = nil
 
     end
 

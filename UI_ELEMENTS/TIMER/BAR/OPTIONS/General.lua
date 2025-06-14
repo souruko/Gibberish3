@@ -104,7 +104,8 @@ function GeneralOptions:Constructor( data )
         local entity = nil
 
         local key = nil
-        if self.data.stacking == Stacking.Multi then
+        if self.data.permanent == false and
+        self.data.stacking == Stacking.Multi then
             key              = startTime
         end
 

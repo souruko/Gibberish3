@@ -22,6 +22,7 @@ https://lotro-gibberish.com/  || by mydnic
 - fixed counter window creation
 - fixed counter window copy
 - fixed counter window moving via the side panel
+- fixed display permanently with allow multiple
 
 
 ### 3.1.6

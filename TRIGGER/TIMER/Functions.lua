@@ -104,14 +104,11 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
 
     -- key
     -- every trigger = new timer
-    if timerData.stacking == Stacking.Multi then
+    if timerData.permanent == false and
+        timerData.stacking == Stacking.Multi then
 
         key = startTime
 
-    else
-
-        key = nil
-        
     end
 
     -- duration  
