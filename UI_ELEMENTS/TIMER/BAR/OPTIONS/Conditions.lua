@@ -129,11 +129,11 @@ function ConditionsOptions:TriggerSelectionChanged()
     end
 
     if Data.selectedConditionsIndex ~= 0 then
-        local triggerData = self.data[ Data.selectedTriggerType ][ Data.selectedTriggerIndex ]
+        -- local triggerData = self.data[ Data.selectedTriggerType ][ Data.selectedTriggerIndex ]
 
-        self.conditionOptions = Trigger[ Data.selectedTriggerType ].Options( self, triggerData, -1 )
-        self.conditionOptions:SetParent( self.background1 )
-        self.conditionOptions:SetPosition( 200 + (2*Options.Defaults.window.spacing), Options.Defaults.window.spacing )
+        -- self.conditionOptions = Trigger[ Data.selectedTriggerType ].Options( self, triggerData, -1 )
+        -- self.conditionOptions:SetParent( self.background1 )
+        -- self.conditionOptions:SetPosition( 200 + (2*Options.Defaults.window.spacing), Options.Defaults.window.spacing )
 
         self:SizeChanged()
     end

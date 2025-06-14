@@ -77,6 +77,7 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
     self.textLabel:SetParent( self.labelBack )
     self.textLabel:SetMouseVisible( false )
     self.textLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
+    self.textLabel:SetMarkupEnabled(true)
     self.textLabel:SetZOrder( 7 )
     
     self.timerLabel = Turbine.UI.Label()
@@ -179,12 +180,14 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
         self.iconControl:SetStretchMode( 1 )
         self.iconControl:SetBackground( icon )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
+        self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
         self.iconControl:SetVisible(true)
 
     else
 
         self.iconControl:SetBackground( UTILS.IconID.Blank )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
+        self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
         self.iconControl:SetVisible(false)
 
     end
@@ -482,6 +485,8 @@ function IconElement:Activ( value )
         self.textLabel:SetVisible( true )
         self.timerLabel:SetVisible( self.parent.data.showTimer )
 
+        self.animation:SetBackground(UTILS.IconID.Blank)
+
     else
 
         self:SetOpacity( self.parent.data.opacityPassiv )
@@ -497,7 +502,7 @@ function IconElement:Activ( value )
             self.textLabel:SetForeColor( self.textColor )
             self.timerLabel:SetFont( self.font )
             self.textLabel:SetFont( self.font )
-            self.animation:SetBackground()
+            self.animation:SetBackground(UTILS.IconID.Blank)
             self.frame:SetBackColor( self.frameColor )
             self.iconControl:SetSize(self.width, self.height)
             self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)

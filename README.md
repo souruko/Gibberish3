@@ -23,6 +23,8 @@ https://lotro-gibberish.com/  || by mydnic
 - fixed counter window copy
 - fixed counter window moving via the side panel
 - fixed display permanently with allow multiple
+- fixed icon animations when triggered while the threshold is activ
+- enabled markup for timer text
 
 
 ### 3.1.6

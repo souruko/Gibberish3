@@ -75,6 +75,7 @@ function CounterBarElement:Constructor( parent, data, index )
     self.textLabel:SetParent( self.labelBack )
     self.textLabel:SetMouseVisible( false )
     self.textLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
+    self.textLabel:SetMarkupEnabled(true)
     self.textLabel:SetZOrder( 7 )
     
     self.timerLabel = Turbine.UI.Label()
