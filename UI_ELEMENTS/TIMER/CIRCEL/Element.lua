@@ -49,7 +49,7 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
     self.circelBack:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
     self.circelBack:SetZOrder( 3 )
 
-    self.circel = Turbine.UI.Control()
+    self.circel = Turbine.UI.Window()
     self.circel:SetParent( self.circelBack )
     self.circel:SetMouseVisible( false )
     self.circel:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
@@ -231,6 +231,7 @@ function CircelElement:Finish()
 
     -- close all windows
     self.labelBack:Close()
+    self.circel:Close()
     self.circelBack:Close()
     self:Close()
 
@@ -488,6 +489,7 @@ function CircelElement:SetVisibility( value )
 
     -- change visiblility for all windows
     self:SetVisible( value )
+    self.circel:SetVisible( value )
     self.circelBack:SetVisible( value )
     self.labelBack:SetVisible( value )
 
