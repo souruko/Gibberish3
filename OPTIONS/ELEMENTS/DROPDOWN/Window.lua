@@ -63,13 +63,13 @@ function Options.Elements.Dropdown:Constructor( width )
     self.listbox = Turbine.UI.ListBox()
     self.listbox:SetParent( self.drop_down )
     self.listbox:SetTop( Options.Defaults.dropdown.spacing )
-    self.listbox:SetSize( width , self.drop_down:GetHeight() - ( 2 * Options.Defaults.dropdown.spacing ) )
+    self.listbox:SetSize( width - 10, self.drop_down:GetHeight() - ( 2 * Options.Defaults.dropdown.spacing ) )
 
 	self.scrollbar = Turbine.UI.Lotro.ScrollBar()
-	self.scrollbar:SetParent( self.listbox )
+	self.scrollbar:SetParent( self.drop_down )
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
 	self.scrollbar:SetBackColor( Options.Defaults.window.framecolor )
-    self.scrollbar:SetPosition( width-10 ,0 )
+    self.scrollbar:SetPosition( width - 10, Options.Defaults.dropdown.spacing )
     self.scrollbar:SetWidth( 10 )
 
     self.listbox:SetVerticalScrollBar( self.scrollbar )
@@ -77,29 +77,33 @@ function Options.Elements.Dropdown:Constructor( width )
     -- show on click
     self.base.MouseClick = function ()
 
-        if self.drop_down:IsVisible() then
-
-            self:Show( false )
-            
-        else
-
-            self:Show( true )
-            self.drop_down:Activate()
-            self.drop_down:Focus()
-
+        if self.closedByBase then
+            -- Deactivated already closed it because the mouse was over the base
+            self.closedByBase = false
+            return
         end
+
+        self:Show( true )
+        self.drop_down:Activate()
+        self.drop_down:Focus()
 
     end
     -- enter highlight
     self.base.MouseEnter = function ()
         self.background:SetBackColor( Options.Defaults.dropdown.hover_color )
+        self.mouseOverBase = true
     end
-    -- leave remove hightlight
+    -- leave remove highlight
     self.base.MouseLeave = function ()
         self.background:SetBackColor( Options.Defaults.dropdown.back_color )
+        self.mouseOverBase = false
     end
-    -- hide on focus lost
-    self.drop_down.FocusLost = function ()
+    -- hide when window is deactivated (user clicked outside)
+    self.drop_down.Deactivated = function ()
+        -- if mouse is over the base the user clicked the base to close; skip the next open
+        if self.showing and self.mouseOverBase then
+            self.closedByBase = true
+        end
         self:Show( false )
     end
     

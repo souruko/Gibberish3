@@ -11,7 +11,9 @@ https://lotro-gibberish.com/  || by mydnic
 ## Changlog
 
 ### 3.1.9
-- added Usage file
+- added a usage file
+- added more highlighting to the settings window
+- fixed dropdown behavior
 
 ### 3.1.8
 - fixed circles

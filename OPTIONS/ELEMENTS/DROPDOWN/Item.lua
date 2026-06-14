@@ -33,9 +33,9 @@ function Item:Constructor( parent, width, text_control, text_description, value 
     self.MouseClick = function ()
 
         if self.selected == false then
-
             self.parent:ChangeSelection( self )
-
+        else
+            self.parent:Show( false )
         end
 
     end
