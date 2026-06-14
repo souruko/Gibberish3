@@ -27,12 +27,13 @@ function TimerOptions:Constructor( data )
         self.timerType:AddItem( "type", Timer.Types.ICON, Timer.Types.ICON)
         self.timerType:AddItem( "type", Timer.Types.TEXT, Timer.Types.TEXT)
         self.timerType:AddItem( "type", Timer.Types.CIRCEL, Timer.Types.CIRCEL)
+        self.timerType:SortAlpha()
 
     elseif self.data.type == Window.Types.COUNTER_WINDOW then
         self.timerType:AddItem( "type", Timer.Types.COUNTER_BAR, Timer.Types.COUNTER_BAR)
 
     end
-    
+
     top = top + 35
     
     self.background1 = Turbine.UI.Control()

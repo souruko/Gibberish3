@@ -42,6 +42,7 @@ function AnimationOptions:Constructor( data )
     for name, value in pairs(AnimationType) do
         self.animationType:AddItem( "animationType", name, value)
     end
+    self.animationType:SortAlpha()
 
     top = top + 30
 

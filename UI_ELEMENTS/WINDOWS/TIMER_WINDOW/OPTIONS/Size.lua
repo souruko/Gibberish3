@@ -53,6 +53,7 @@ function SizeOptions:Constructor( data )
     for name, value in pairs(Direction) do
         self.direction:AddItem( "direction", name, value)
     end
+    self.direction:SortAlpha()
 
     top = top + 30
 
@@ -63,6 +64,7 @@ function SizeOptions:Constructor( data )
     for name, value in pairs(Direction) do
         self.sort_direction:AddItem( "direction", name, value)
     end
+    self.sort_direction:SortAlpha()
 
     top = top + 30
 
@@ -73,6 +75,7 @@ function SizeOptions:Constructor( data )
     for name, value in pairs(Orientation) do
         self.orientation:AddItem( "orientation", name, value)
     end
+    self.orientation:SortAlpha()
     
     top = top + 35
 

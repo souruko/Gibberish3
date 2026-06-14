@@ -46,7 +46,7 @@ function TimerOptions:Constructor( parent, data, parentType )
     self.token:SetTop( top )
 
     for i, window_data in ipairs(Data.window) do
-        
+
         for j, timer_data in ipairs(window_data.timerList) do
 
             local text =  timer_data.description
@@ -60,6 +60,7 @@ function TimerOptions:Constructor( parent, data, parentType )
         end
 
     end
+    self.token:SortAlpha()
 
     top = top + 35
 

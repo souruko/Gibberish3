@@ -75,6 +75,7 @@ function EffectGroupOptions:Constructor( parent, data, parentType )
     for name, value in pairs(EffectCategory) do
         self.category:AddItem( "source", name, value)
     end
+    self.category:SortAlpha()
 
     top = top + 35
 
