@@ -124,16 +124,16 @@ Trigger[Trigger.Types.Combat].CheckTrigger = function ( combatState, triggerData
 
     -- only check for enabled trigger
     if triggerData.enabled == false then
-        return false
+        return nil
     end
 
     -- check if combatState matches
     if triggerData.source == Source.Any
     or triggerData.source == combatState then
-        return true
+        return 1
     end
 
-    return false
+    return nil
 
 end
 ---------------------------------------------------------------------------------------------------

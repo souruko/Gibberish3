@@ -10,6 +10,12 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.1.8
+- fixed circles
+- fixed reset on target change
+- fixed posadjustment in combat trigger
+
+
 ### 3.1.7
 - added test timer button to timer > general
 - fixed permanent timer reset display

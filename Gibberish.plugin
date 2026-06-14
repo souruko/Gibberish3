@@ -3,8 +3,9 @@
 	<Information>
 		<Name>Gibberish3</Name>
 		<Author>Souru</Author>
-		<Version>3.1.7</Version>
+		<Version>3.1.8</Version>
 		<Description>...</Description>
+		<Image>Gibberish3/RESOURCES/gibberish_new_icon.tga</Image>
 	</Information>
 	<Package>Gibberish3.Main</Package>
 	<Configuration Apartment="Gibberish3" />

@@ -354,6 +354,7 @@ function IconElement:UpdateThreshold( timeLeft )
             self.textLabel:SetFont( self.font )
             self:SetOpacity( self.parent.data.opacityActiv )
             self.iconControl:SetOpacity( self.parent.data.opacityActiv )
+            self.shadow:SetOpacity( self.parent.data.opacityActiv )
             
             self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
             self.iconControl:SetSize(self.width, self.height)
@@ -363,7 +364,7 @@ function IconElement:UpdateThreshold( timeLeft )
         -- no animation only red background
         if self.data.useAnimation == false  then
    
-            self.frame:SetBackColor( Turbine.UI.Color.Red )
+            self.frame:SetBackColor( self.thresholdColor )
 
         -- flashing
         elseif self.data.animationType == AnimationType.Flashing then
@@ -414,6 +415,7 @@ function IconElement:UpdateThreshold( timeLeft )
         self.textLabel:SetFont( self.thresholdFont )
         self:SetOpacity( self.parent.data.opacityThreshold )
         self.iconControl:SetOpacity( self.parent.data.opacityThreshold )
+        self.shadow:SetOpacity( self.parent.data.opacityThreshold )
         
     end
 
@@ -481,6 +483,7 @@ function IconElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityActiv )
         self.iconControl:SetOpacity( self.parent.data.opacityActiv )
+        self.shadow:SetOpacity( self.parent.data.opacityActiv )
 
         self.textLabel:SetVisible( true )
         self.timerLabel:SetVisible( self.parent.data.showTimer )
@@ -491,6 +494,7 @@ function IconElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.iconControl:SetOpacity( self.parent.data.opacityPassiv )
+        self.shadow:SetOpacity( self.parent.data.opacityPassiv )
         self:UpdateShadow( 0 )
 
         self.textLabel:SetVisible( false )
@@ -533,10 +537,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- reset timer
 ---------------------------------------------------------------------------------------------------
-function IconElement:Reset()
+function IconElement:Reset(force)
 
     -- if reset attribute is set call the timer end
-    if self.data.reset == true then
+    if force == true or self.data.reset == true then
         
         self:Ended()
 

@@ -430,10 +430,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- reset timer
 ---------------------------------------------------------------------------------------------------
-function TextElement:Reset()
+function TextElement:Reset(force)
 
     -- if reset attribute is set call the timer end
-    if self.data.reset == true then
+    if force == true or self.data.reset == true then
         
         self:Ended()
 

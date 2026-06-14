@@ -303,12 +303,12 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] reset all timer with  the reset attribute
 ---------------------------------------------------------------------------------------------------
-function CounterWindowElement:Reset()
+function CounterWindowElement:Reset(force)
 
     -- iterrate from the back because the table can change from resets
     for i = #self.children, 1, -1 do
 
-        self.children[i]:Reset()
+        self.children[i]:Reset(force)
 
     end
 

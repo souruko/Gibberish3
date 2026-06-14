@@ -56,11 +56,11 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
 
                 Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects()
 
-                -- reset on target changed
+                -- reset on target chcleanged
                 for windowIndex, windowData in ipairs(Data.window) do
                     if windowData.resetOnTargetChanged == true
                        and Windows[ windowIndex ] ~= nil then
-                 
+
                         Windows[ windowIndex ]:Reset()
 
                     end

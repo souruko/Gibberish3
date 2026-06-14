@@ -259,12 +259,12 @@ end
 ---------------------------------------------------------------------------------------------------
 -- [required] listbox reset all timer with  the reset attribute
 ---------------------------------------------------------------------------------------------------
-function TimerWindowElement:Reset()
+function TimerWindowElement:Reset(force)
 
     -- iterrate from the back because the table can change from resets
     for i = #self.children, 1, -1 do
 
-        self.children[i]:Reset()
+        self.children[i]:Reset(force)
 
     end
 
