@@ -26,6 +26,10 @@ You create windows and timers in the options panel, then assign triggers to each
 | **Reset on Target Change** | Clears all running timers in this window whenever you select a different target. Useful for debuff tracking where old timers should not carry over. |
 | **Use Target Entity** | Attaches the current target's identity to each timer when it starts. Required for **Per Target** stacking to work correctly. Only effective with effect triggers (EffectSelf, EffectGroup). |
 | **Overlay** | When checked, the window renders on top of the LOTRO interface (HUD elements will not obscure it). When unchecked the game UI can cover the window. |
+
+### Timer tab
+| Setting | What it does |
+|---|---|
 | **Timer Type** | Which visual style the timers in this window use: Bar, Icon, Circle, Text, or Counter Bar. Counter Windows only support Counter Bar. |
 
 ### Size tab
@@ -114,16 +118,22 @@ Each timer has its own tabs. Some tabs only appear for certain timer types.
 | Option | What is displayed |
 |---|---|
 | **No Text** | Nothing. |
-| **Token** | The capture group `&1` from the regex match, or the effect name for effect triggers. |
-| **Custom Text** | The fixed string you enter in the Text field. |
+| **Token** | The Trigger token. |
+| **Custom Text** | The fixed string you enter in the Text field with the capture group `&1` from the regex match, or the effect name for effect triggers. |
 | **Target Name** | The name of your current target at the moment the timer started. |
 
-### Style tab (Counter Bar)
+### General tab (Counter Bar)
 
 | Setting | What it does |
 |---|---|
 | **Counter Start** | The value the counter begins at when first triggered. |
 | **Counter End** | The value at which the counter stops ticking. |
+
+
+### Style tab (Counter Bar)
+
+| Setting | What it does |
+|---|---|
 | **Direction** | **Descending** counts down from Start to End; **Ascending** counts up from Start to End. |
 
 ### Animation tab
@@ -173,12 +183,13 @@ Triggers tell a timer what to do and when. Each timer can have multiple triggers
 |---|---|
 | **Add** | Starts the timer. If it is already running and stacking is Single, resets it. If Allow Multiple, creates a new instance. |
 | **Remove** | Stops and removes the timer (or the matching stacked instance). |
-| **Reset** | Stops the timer and returns it to zero. Only works when the timer's own **Reset** setting is enabled. |
+| **Reset** *(Window only)* | Stops the timer and returns it to zero. Only works when the timer's own **Reset** setting is enabled. |
+| **Reset** *(Counter only)* | Resets Counter to the start values. |
 | **Enable** | Enables the timer (reverses a Disable). |
 | **Disable** | Disables the timer so future triggers are ignored. |
 | **Subtract** *(Counter only)* | Subtracts Value from the current counter. |
 | **Clear** *(Counter only)* | Resets the counter to its Counter Start value and removes all instances. |
-| **Set To** *(Counter only)* | Sets the counter to an exact value. |
+| (**Set To** *(Counter only)*) | Sets the counter to an exact value. |
 
 ### Trigger types
 
@@ -229,10 +240,10 @@ Fires when you use a skill.
 
 | Field | What it does |
 |---|---|
-| **Token** | The exact skill name to watch for. The skill list is populated from your current trait configuration. If you change traits, use **Auto Reload** to refresh the list. |
+| **Token** | The exact skill name to watch for. The skill list is populated from your current trait configuration. If you change traits, reopen the settings window to refresh the list. |
 | **Use Regex** | Enables pattern matching on the skill name. |
 
-> **Note:** The skill list is read when the plugin loads. After changing trait lines or acquiring new skills, use the **Auto Reload** shortcut button to pick up the changes without a full game restart.
+> **Note:** The skill list is read when the plugin loads. After changing trait lines or acquiring new skills, reopen the settings window to pick up the changes without a full game restart.
 
 #### Timer Start / Timer End / Timer Threshold triggers
 
@@ -240,7 +251,7 @@ Fire when another timer in the plugin starts, ends, or crosses its threshold. Th
 
 | Field | What it does |
 |---|---|
-| **Token** | The **Description** of the source timer to watch. Must match exactly (or by regex if Use Regex is on). |
+| **Token** | The **Description** of the source timer to watch. Must match exactly. |
 
 ---
 
@@ -264,8 +275,9 @@ Example: if your chat token is `(%w+) hits you` and Text Option is set to Token,
 The Collection is a helper tool for setting up triggers. Instead of guessing effect names or chat patterns, you record them live:
 
 - **Collect Effects** — captures all effects currently on you or the group and lists them with their exact name, icon, and timer. Click any entry to copy its token and icon directly into a new trigger.
-- **Collect Chat Messages** — captures chat messages as they arrive. Options let you filter to debuffs only or the Say channel only.
+- **Collect Chat Messages** — captures chat messages as they arrive. 
 
+Options let you filter to debuffs only or the Say channel only.
 Use the Collection to find the exact spelling of an effect name before writing a trigger for it.
 
 ---
@@ -289,8 +301,8 @@ The small Gibberish shortcut button on your toolbar opens a quick menu:
 |---|---|
 | **Open Options** | Opens the main options panel. |
 | **Move Windows** | Toggles the move handles that let you drag windows around the screen. |
-| **Reset All** | Stops all running timers and resets all counters. |
-| **Track Group** | Switches effect tracking to your fellowship/raid. |
-| **Track Target** | Switches effect tracking to your current target. |
-| **Auto Reload** | Reloads the plugin. Use this after changing trait lines to update the skill trigger list. |
+| **Reset All** | Stops all running timers and resets all counters that have reset enabled. |
+| **Track Group** | Switches effect tracking to your fellowship/raid. Reload the plugin after changing this setting. |
+| **Track Target** | Switches effect tracking to your current target. Reload the plugin after changing this setting. |
+| **Auto Reload** | Automaticly reloads the plugin when the current group/raid is changed. |
 | **Reload Plugin** | Full plugin reload. |
