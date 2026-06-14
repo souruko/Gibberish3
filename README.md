@@ -10,6 +10,9 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.1.9
+- added Usage file
+
 ### 3.1.8
 - fixed circles
 - fixed reset on target change

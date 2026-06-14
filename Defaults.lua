@@ -75,9 +75,9 @@ Options.Defaults.window.w_window_base   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.window.w_window_hover  = Turbine.UI.Color(0.3,0.3,0.3)
 Options.Defaults.window.w_window_select = Turbine.UI.Color(0.18,0.18,0.18)
 
-Options.Defaults.window.w_folder_base   = Turbine.UI.Color(0.15,0.15,0.35)
-Options.Defaults.window.w_folder_hover  = Turbine.UI.Color(0.4,0.4,0.6)
-Options.Defaults.window.w_folder_select = Turbine.UI.Color(0.25,0.25,0.45)
+Options.Defaults.window.w_folder_base   = Turbine.UI.Color(0.08,0.08,0.42)
+Options.Defaults.window.w_folder_hover  = Turbine.UI.Color(0.22,0.22,0.58)
+Options.Defaults.window.w_folder_select = Turbine.UI.Color(0.15,0.15,0.50)
 Options.Defaults.window.w_folder_frame  = 1
 Options.Defaults.window.menu_width      = 140
 Options.Defaults.window.file_width      = 130

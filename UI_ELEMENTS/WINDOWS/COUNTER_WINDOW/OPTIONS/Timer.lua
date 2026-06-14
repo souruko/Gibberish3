@@ -22,7 +22,7 @@ function TimerOptions:Constructor( data )
     self.background1:SetParent(self)
     self.background1:SetPosition( Options.Defaults.window.tab_c_left, top )
     -- self.background1:SetHeight( self.height + 2*Options.Defaults.window.spacing )
-    self.background1:SetBackColor( Options.Defaults.window.basecolor )
+    self.background1:SetBackColor( Turbine.UI.Color(0.14, 0.11, 0.08) )
 
     self.listbox = Options.Elements.TimerListbox( self.data.type, self )
     self.listbox:SetParent( self.background1 )

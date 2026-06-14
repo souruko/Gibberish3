@@ -201,6 +201,20 @@ end
 ---------------------------------------------------------------------------------------------------
 function WindowItem:CreateContent()
 
+    -- left accent stripe coloured by window type
+    local stripeColor
+    if self.data.type == Window.Types.COUNTER_WINDOW then
+        stripeColor = Turbine.UI.Color(0.75, 0.42, 0.08)
+    else
+        stripeColor = Turbine.UI.Color(0.10, 0.52, 0.62)
+    end
+    self.typeStripe = Turbine.UI.Control()
+    self.typeStripe:SetParent( self.background )
+    self.typeStripe:SetPosition( 0, 0 )
+    self.typeStripe:SetSize( 3, Options.Defaults.window.w_item_height )
+    self.typeStripe:SetBackColor( stripeColor )
+    self.typeStripe:SetMouseVisible( false )
+
     -- window name
     self.nameLabel = Turbine.UI.Label()
     self.nameLabel:SetParent( self.background )
@@ -268,6 +282,7 @@ function WindowItem:Height()
     self.dragWindow:SetHeight( Options.Defaults.window.w_item_height )
     self.nameLabel:SetHeight( Options.Defaults.window.w_item_height )
     self.background:SetHeight( Options.Defaults.window.w_item_height )
+    self.typeStripe:SetHeight( Options.Defaults.window.w_item_height )
 
     return Options.Defaults.window.w_item_height
 

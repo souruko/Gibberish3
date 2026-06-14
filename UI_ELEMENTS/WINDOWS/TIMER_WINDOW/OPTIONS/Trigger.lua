@@ -22,7 +22,7 @@ function TriggerOptions:Constructor( data )
     self.background1:SetParent(self)
     self.background1:SetPosition( Options.Defaults.window.tab_c_left, Options.Defaults.window.tab_c_top )
     -- self.background1:SetHeight( self.height + 2*Options.Defaults.window.spacing )
-    self.background1:SetBackColor( Options.Defaults.window.basecolor )
+    self.background1:SetBackColor( Turbine.UI.Color(0.08, 0.10, 0.17) )
 
     self.listbox = Options.Elements.TriggerListbox( self )
     self.listbox:SetParent( self.background1 )

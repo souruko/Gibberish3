@@ -17,6 +17,8 @@ function OptionsWindow:Constructor( parent, data )
     self.tabwindow = Options.Elements.TabWindow( 137 )
     self.tabwindow:SetParent( self )
     self.tabwindow:SetLeft( 3 )
+    self.tabwindow.frame:SetBackColor( Turbine.UI.Color(0.55, 0.38, 0.08) )
+    self.tabwindow.content_back:SetBackColor( Turbine.UI.Color(0.13, 0.10, 0.08) )
     -- self.tabwindow:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
 
     self.tab_general = GeneralOptions( self.data )
