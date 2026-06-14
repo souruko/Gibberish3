@@ -35,6 +35,7 @@ function CounterBarElement:Constructor( parent, data, index )
 
     -- for threshold timer event
     self.firstThreshold = true
+    self._inThreshold = nil
 
     -- counter values
     self.counterEND = 0
@@ -187,6 +188,7 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
         if counterLeft == self.data.thresholdValue then
 
             self.firstThreshold = true
+            self._inThreshold = nil
 
         end
 
@@ -337,49 +339,49 @@ function CounterBarElement:UpdateThreshold( counterLeft )
         return
     end
 
-    -- not in the threshold
-    if counterLeft > self.data.thresholdValue then
+    local inThreshold = counterLeft <= self.data.thresholdValue
 
-        -- use backColor
-        self.barBack:SetBackColor( self.backColor )
+    -- not in the threshold: restore normal background only on state change
+    if not inThreshold then
+
+        if self._inThreshold ~= false then
+            self._inThreshold = false
+            self.barBack:SetBackColor( self.backColor )
+        end
 
     -- in the threshold
     else
 
         -- threshold timer event
         if self.firstThreshold == true then
-
             self.firstThreshold = false
             Trigger.TimerEvent( self.data.id, Trigger.Types.TimerThreshold )
-
         end
 
-        -- flashing
+        -- flashing: update every frame
         if self.data.useAnimation == true and
         self.data.animationType == AnimationType.Flashing then
 
-            local value
             local flashValue = counterLeft * self.data.animationSpeed
-            
+            local value
+
             if math.floor( flashValue ) % 2 == 0 then
-            
                 value = 1 - ( flashValue - math.floor( flashValue ) )
-
             else
-
                 value = ( flashValue - math.floor( flashValue ) )
-
             end
 
             self.barBack:SetBackColor( Turbine.UI.Color( 1, value, value ) )
 
-        -- no animation only red background
-        else
-            
+        -- static background: set once on entry
+        elseif self._inThreshold ~= true then
+
             self.barBack:SetBackColor( Turbine.UI.Color.Red )
 
         end
-        
+
+        self._inThreshold = true
+
     end
 
 end

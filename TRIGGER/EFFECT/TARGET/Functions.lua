@@ -27,6 +27,7 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
                 for key, value in pairs(TackingCallbacks) do
                     RemoveCallback(key, "EffectAdded", value)
                 end
+                TackingCallbacks = {}
 
                 local effects = target:GetEffects()
 
@@ -202,11 +203,20 @@ Trigger[ Trigger.Types.EffectTarget ].CheckTrigger = function ( effect, target, 
         return nil
     end
 
+    local effectName = effect:GetName()
+
+    -- for exact-match: check name first to skip all API calls on non-matching effects
+    if triggerData.useRegex ~= true then
+        if effectName ~= triggerData.token then
+            return nil
+        end
+    end
+
     -- icon
     if triggerData.icon ~= nil and triggerData.icon ~= effect:GetIcon() then
         return nil
     end
-    
+
     -- debuff / buff
     if triggerData.isDebuff ~= Source.Any
         and (effect:IsDebuff() ~= (triggerData.isDebuff == Source.Debuff)) then
@@ -214,39 +224,33 @@ Trigger[ Trigger.Types.EffectTarget ].CheckTrigger = function ( effect, target, 
     end
 
     -- dispellable
-    if triggerData.isDispellable ~= Source.Any 
+    if triggerData.isDispellable ~= Source.Any
         and (effect:isDispellable() ~= (triggerData.isDispellable == Source.Dispellable)) then
         return nil
     end
 
     -- category
-    if triggerData.category ~= Source.Any 
+    if triggerData.category ~= Source.Any
         and (effect:GetCategory() ~= triggerData.category) then
         return nil
     end
-
 
     -- check listOfTargets
     if Trigger.CheckListForName( target:GetName(), triggerData.listOfTargets ) == false then
         return nil
     end
 
-    -- check token
+    -- check token (regex path only; exact match already confirmed above)
     if triggerData.useRegex == true then
 
-        return string.find( effect:GetName(), Trigger.ReplacePlaceholder(triggerData.token) )
-
-    else
-
-        if effect:GetName() == triggerData.token then
-
-            return 1
-
+        if triggerData._cachedPattern == nil then
+            triggerData._cachedPattern = Trigger.ReplacePlaceholder(triggerData.token)
         end
+        return string.find( effectName, triggerData._cachedPattern )
 
     end
 
-    return nil
+    return 1
 
 end
 ---------------------------------------------------------------------------------------------------

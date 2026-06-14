@@ -37,6 +37,8 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
 
     -- for threshold timer event
     self.firstThreshold = true
+    self._inThreshold = nil
+    self._lastTimeKey = nil
 
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
@@ -201,6 +203,7 @@ function BarElement:UpdateContent( startTime, duration, icon, text, entity, key,
     if text ~= nil then
         self.textLabel:SetText( text )
         self.timerLabel:SetText( "" )
+        self._lastTimeKey = nil
     end
 
     -- check if firstThreshold has to be reset
@@ -212,13 +215,14 @@ function BarElement:UpdateContent( startTime, duration, icon, text, entity, key,
         if timeLeft > self.data.thresholdValue then
 
             self.firstThreshold = true
+            self._inThreshold = nil
 
         end
 
     end
 
     self:Activ( activ )
-    
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -310,16 +314,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:UpdateTime( timeLeft )
 
-    -- update time depending on the direction
-    if self.data.direction == Direction.Ascending then
+    local t = self.data.direction == Direction.Ascending and (self.duration - timeLeft) or timeLeft
+    local fmt = self.parent.data.durationFormat
+    local key = fmt == NumberFormat.OneDecimal and math.floor(t * 10) or math.floor(t)
 
-        local timePast = self.duration - timeLeft
-        self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )
-
-    elseif self.data.direction == Direction.Descending then
-        
-        self.timerLabel:SetText( UTILS.TimerFormat( timeLeft, self.parent.data.durationFormat ) )
-
+    if key ~= self._lastTimeKey then
+        self._lastTimeKey = key
+        self.timerLabel:SetText( UTILS.TimerFormat( t, fmt ) )
     end
 
 end
@@ -335,59 +336,60 @@ function BarElement:UpdateThreshold( timeLeft )
         return
     end
 
-    -- not in the threshold
-    if timeLeft > self.data.thresholdValue then
+    local inThreshold = timeLeft <= self.data.thresholdValue
 
-        -- use backColor
-        self.barBack:SetBackColor( self.backColor )
-        self.timerLabel:SetForeColor( self.timerColor )
-        self.textLabel:SetForeColor( self.textColor )
-        self.timerLabel:SetFont( self.font )
-        self.textLabel:SetFont( self.font )
-        self:SetOpacity( self.parent.data.opacityActiv )
+    -- not in the threshold: restore normal appearance only on state change
+    if not inThreshold then
+
+        if self._inThreshold ~= false then
+            self._inThreshold = false
+            self.barBack:SetBackColor( self.backColor )
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+            self:SetOpacity( self.parent.data.opacityActiv )
+        end
 
     -- in the threshold
     else
 
         -- threshold timer event
         if self.firstThreshold == true then
-
             self.firstThreshold = false
             Trigger.TimerEvent( self.data.id, Trigger.Types.TimerThreshold )
-
         end
 
-        -- flashing
+        -- static threshold properties: only apply on entry
+        if self._inThreshold ~= true then
+            self._inThreshold = true
+            self.timerLabel:SetForeColor( self.thresholdTimerColor )
+            self.textLabel:SetForeColor( self.thresholdTextColor )
+            self.timerLabel:SetFont( self.thresholdFont )
+            self.textLabel:SetFont( self.thresholdFont )
+            self:SetOpacity( self.parent.data.opacityThreshold )
+            -- static background: set once on entry when not flashing
+            if not ( self.data.useAnimation == true and self.data.animationType == AnimationType.Flashing ) then
+                self.barBack:SetBackColor( self.thresholdColor )
+            end
+        end
+
+        -- flashing background: must update every frame
         if self.data.useAnimation == true and
         self.data.animationType == AnimationType.Flashing then
 
-            local value
             local flashValue = timeLeft * self.data.animationSpeed
-            
+            local value
+
             if math.floor( flashValue ) % 2 == 0 then
-            
                 value = 1 - ( flashValue - math.floor( flashValue ) )
-
             else
-
                 value = ( flashValue - math.floor( flashValue ) )
-
             end
 
             self.barBack:SetBackColor( Turbine.UI.Color( 1, value, value ) )
 
-        -- no animation only red background
-        else
-            
-            self.barBack:SetBackColor( self.thresholdColor )
-
         end
-
-        self.timerLabel:SetForeColor( self.thresholdTimerColor )
-        self.textLabel:SetForeColor( self.thresholdTextColor )
-        self.timerLabel:SetFont( self.thresholdFont )
-        self.textLabel:SetFont( self.thresholdFont )
-        self:SetOpacity( self.parent.data.opacityThreshold )
 
     end
 

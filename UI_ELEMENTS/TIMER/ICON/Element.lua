@@ -36,7 +36,10 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
 
     -- for threshold timer event
     self.firstThreshold = true
-    -- animation 
+    self._inThreshold = nil
+    self._lastShadowID = nil
+    self._lastTimeKey = nil
+    -- animation
     self.nextAnimation  = 0
     self.animationStep  = 1
 
@@ -196,6 +199,7 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
     if text ~= nil then
         self.textLabel:SetText( text )
         self.timerLabel:SetText( "" )
+        self._lastTimeKey = nil
     end
 
     -- check if firstThreshold has to be reset
@@ -207,13 +211,15 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
         if timeLeft > self.data.thresholdValue then
 
             self.firstThreshold = true
+            self._inThreshold = nil
+            self._lastShadowID = nil
 
         end
 
     end
 
     self:Activ( activ )
-    
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -290,16 +296,17 @@ function IconElement:UpdateShadow( timeLeft )
 
     if self.data.direction == Direction.Ascending then
         shadowID = 61 - math.floor(timeLeft / self.duration * 60)
-
     else
         shadowID = math.floor(timeLeft / self.duration * 60)
-
     end
 
-    self.shadow:SetSize( 32, 32 )
-    self.shadow:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Shadow ][ shadowID ] )
-    self.shadow:SetStretchMode( 1 )
-    self.shadow:SetSize( self.width, self.height )
+    if shadowID ~= self._lastShadowID then
+        self._lastShadowID = shadowID
+        self.shadow:SetSize( 32, 32 )
+        self.shadow:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Shadow ][ shadowID ] )
+        self.shadow:SetStretchMode( 1 )
+        self.shadow:SetSize( self.width, self.height )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -309,16 +316,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function IconElement:UpdateTime( timeLeft )
 
-    -- update time depending on the direction
-    if self.data.direction == Direction.Ascending then
+    local t = self.data.direction == Direction.Ascending and (self.duration - timeLeft) or timeLeft
+    local fmt = self.parent.data.durationFormat
+    local key = fmt == NumberFormat.OneDecimal and math.floor(t * 10) or math.floor(t)
 
-        local timePast = self.duration - timeLeft
-        self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )
-
-    else
-        
-        self.timerLabel:SetText( UTILS.TimerFormat( timeLeft, self.parent.data.durationFormat ) )
-
+    if key ~= self._lastTimeKey then
+        self._lastTimeKey = key
+        self.timerLabel:SetText( UTILS.TimerFormat( t, fmt ) )
     end
 
 end
@@ -334,16 +338,20 @@ function IconElement:UpdateThreshold( timeLeft )
         return
     end
 
-    -- not in the threshold
-    if timeLeft > self.data.thresholdValue then
+    local inThreshold = timeLeft <= self.data.thresholdValue
 
-        -- use backColor
-        self.frame:SetBackColor( self.frameColor )
+    -- not in the threshold: restore frame color only on state change
+    if not inThreshold then
+
+        if self._inThreshold ~= false then
+            self._inThreshold = false
+            self.frame:SetBackColor( self.frameColor )
+        end
 
     -- in the threshold
     else
 
-        -- threshold timer event
+        -- threshold timer event (first entry): fire event and reset icon to default state
         if self.firstThreshold == true then
 
             self.firstThreshold = false
@@ -355,36 +363,34 @@ function IconElement:UpdateThreshold( timeLeft )
             self:SetOpacity( self.parent.data.opacityActiv )
             self.iconControl:SetOpacity( self.parent.data.opacityActiv )
             self.shadow:SetOpacity( self.parent.data.opacityActiv )
-            
             self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
             self.iconControl:SetSize(self.width, self.height)
 
         end
 
-        -- no animation only red background
-        if self.data.useAnimation == false  then
-   
-            self.frame:SetBackColor( self.thresholdColor )
+        -- per-frame animation updates
+        if self.data.useAnimation == false then
 
-        -- flashing
+            -- static background: set once on entry
+            if self._inThreshold ~= true then
+                self.frame:SetBackColor( self.thresholdColor )
+            end
+
+        -- flashing: update every frame
         elseif self.data.animationType == AnimationType.Flashing then
-         
-            local value
+
             local flashValue = timeLeft * self.data.animationSpeed
-            
+            local value
+
             if math.floor( flashValue ) % 2 == 0 then
-            
                 value = 1 - ( flashValue - math.floor( flashValue ) )
-
             else
-
                 value = ( flashValue - math.floor( flashValue ) )
-
             end
 
             self.frame:SetBackColor( Turbine.UI.Color( 1, value, value ) )
 
-        -- animation
+        -- border animation: has its own rate-limiting via nextAnimation
         elseif self.data.animationType == AnimationType.Activation_Border or
         self.data.animationType == AnimationType.Dotted_Border or
         self.data.animationType == AnimationType.New_Activation_Border or
@@ -392,31 +398,38 @@ function IconElement:UpdateThreshold( timeLeft )
 
             self:ThresholdAnimation()
 
+        -- zoom: size changes every frame
         elseif self.data.animationType == AnimationType.Zoom then
-            
-            local width = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.width
-            local height = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.height
 
-            local left = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.width * (-1)/2
-            local top = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.height * (-1)/2
-    
+            local width  = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.width
+            local height = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1) + 1) * self.height
+            local left   = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.width  * (-1)/2
+            local top    = (timeLeft / self.data.thresholdValue * (self.data.animationSpeed - 1)) * self.height * (-1)/2
+
             self.iconControl:SetPosition(left, top)
             self.iconControl:SetSize(width, height)
 
         else
-         
-            self.frame:SetBackColor( self.thresholdColor )
+
+            -- static background: set once on entry
+            if self._inThreshold ~= true then
+                self.frame:SetBackColor( self.thresholdColor )
+            end
 
         end
 
-        self.timerLabel:SetForeColor( self.thresholdTimerColor )
-        self.textLabel:SetForeColor( self.thresholdTextColor )
-        self.timerLabel:SetFont( self.thresholdFont )
-        self.textLabel:SetFont( self.thresholdFont )
-        self:SetOpacity( self.parent.data.opacityThreshold )
-        self.iconControl:SetOpacity( self.parent.data.opacityThreshold )
-        self.shadow:SetOpacity( self.parent.data.opacityThreshold )
-        
+        -- static threshold colors/fonts/opacity: only apply on entry
+        if self._inThreshold ~= true then
+            self._inThreshold = true
+            self.timerLabel:SetForeColor( self.thresholdTimerColor )
+            self.textLabel:SetForeColor( self.thresholdTextColor )
+            self.timerLabel:SetFont( self.thresholdFont )
+            self.textLabel:SetFont( self.thresholdFont )
+            self:SetOpacity( self.parent.data.opacityThreshold )
+            self.iconControl:SetOpacity( self.parent.data.opacityThreshold )
+            self.shadow:SetOpacity( self.parent.data.opacityThreshold )
+        end
+
     end
 
 end

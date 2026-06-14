@@ -27,7 +27,7 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
                 local player = party:GetMember(i)
 
                 -- if member ~= lp
-                if player:GetName() ~= localPlayerName then     
+                if player:GetName() ~= localPlayerName then
 
                     local effects = player:GetEffects()
 
@@ -46,17 +46,17 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
 
                         for folderIndex, folderData in ipairs(Data.folder) do
                             Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, player, folderIndex, folderData )
-    
-                        end
-    
-                    end
 
-                    -- check all activ effects
-                    Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects()
+                        end
+
+                    end
 
                 end
 
             end
+
+            -- check all active effects once after all callbacks are registered
+            Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects()
 
         end
 
@@ -204,11 +204,20 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
         return nil
     end
 
+    local effectName = effect:GetName()
+
+    -- for exact-match: check name first to skip all API calls on non-matching effects
+    if triggerData.useRegex ~= true then
+        if effectName ~= triggerData.token then
+            return nil
+        end
+    end
+
     -- icon
     if triggerData.icon ~= nil and triggerData.icon ~= effect:GetIcon() then
         return nil
     end
-    
+
     -- debuff / buff
     if triggerData.isDebuff ~= Source.Any
         and (effect:IsDebuff() ~= (triggerData.isDebuff == Source.Debuff)) then
@@ -216,13 +225,13 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
     end
 
     -- dispellable
-    if triggerData.isDispellable ~= Source.Any 
+    if triggerData.isDispellable ~= Source.Any
         and (effect:IsCurable() ~= (triggerData.isDispellable == Source.Dispellable)) then
         return nil
     end
 
     -- category
-    if triggerData.category ~= Source.Any 
+    if triggerData.category ~= Source.Any
         and (effect:GetCategory() ~= triggerData.category) then
         return nil
     end
@@ -237,22 +246,17 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
         return nil
     end
 
-    -- check token
+    -- check token (regex path only; exact match already confirmed above)
     if triggerData.useRegex == true then
 
-        return string.find( effect:GetName(), Trigger.ReplacePlaceholder(triggerData.token) )
-
-    else
-
-        if effect:GetName() == triggerData.token then
-
-            return 1
-
+        if triggerData._cachedPattern == nil then
+            triggerData._cachedPattern = Trigger.ReplacePlaceholder(triggerData.token)
         end
+        return string.find( effectName, triggerData._cachedPattern )
 
     end
 
-    return nil
+    return 1
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -37,6 +37,9 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
 
     -- for threshold timer event
     self.firstThreshold = true
+    self._inThreshold = nil
+    self._lastCircelID = nil
+    self._lastTimeKey = nil
 
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
@@ -197,6 +200,7 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
     if text ~= nil then
         self.textLabel:SetText( text )
         self.timerLabel:SetText( "" )
+        self._lastTimeKey = nil
     end
 
     -- check if firstThreshold has to be reset
@@ -208,13 +212,15 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
         if timeLeft > self.data.thresholdValue then
 
             self.firstThreshold = true
+            self._inThreshold = nil
+            self._lastCircelID = nil
 
         end
 
     end
 
     self:Activ( activ )
-    
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -285,18 +291,17 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:UpdateCircel( timeLeft )
 
+    local circelID
     if self.data.direction == Direction.Ascending then
-
-        local circelID = 100 - ( math.floor( timeLeft / self.duration * 100 ) )
-        self.circel:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ circelID ] )
-        self.circel:SetStretchMode( 2 )
-
+        circelID = 100 - math.floor( timeLeft / self.duration * 100 )
     else
+        circelID = math.floor( timeLeft / self.duration * 100 )
+    end
 
-        local circelID = math.floor( timeLeft / self.duration * 100 )
+    if circelID ~= self._lastCircelID then
+        self._lastCircelID = circelID
         self.circel:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ circelID ] )
         self.circel:SetStretchMode( 2 )
-
     end
 
 end
@@ -307,16 +312,13 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:UpdateTime( timeLeft )
 
-    -- update time depending on the direction
-    if self.data.direction == Direction.Ascending then
+    local t = self.data.direction == Direction.Ascending and (self.duration - timeLeft) or timeLeft
+    local fmt = self.parent.data.durationFormat
+    local key = fmt == NumberFormat.OneDecimal and math.floor(t * 10) or math.floor(t)
 
-        local timePast = self.duration - timeLeft
-        self.timerLabel:SetText( UTILS.TimerFormat( timePast, self.parent.data.durationFormat ) )
-
-    else
-        
-        self.timerLabel:SetText( UTILS.TimerFormat( timeLeft, self.parent.data.durationFormat ) )
-
+    if key ~= self._lastTimeKey then
+        self._lastTimeKey = key
+        self.timerLabel:SetText( UTILS.TimerFormat( t, fmt ) )
     end
 
 end
@@ -332,62 +334,63 @@ function CircelElement:UpdateThreshold( timeLeft )
         return
     end
 
-    -- not in the threshold
-    if timeLeft > self.data.thresholdValue then
+    local inThreshold = timeLeft <= self.data.thresholdValue
 
-        -- use backColor
-        self.circel:SetBackColor( self.backColor )
-        self.timerLabel:SetForeColor( self.timerColor )
-        self.textLabel:SetForeColor( self.textColor )
-        self.timerLabel:SetFont( self.font )
-        self.textLabel:SetFont( self.font )
-        self:SetOpacity( self.parent.data.opacityActiv )
-        self.circelBack:SetOpacity( self.parent.data.opacityActiv )
+    -- not in the threshold: restore normal appearance only on state change
+    if not inThreshold then
+
+        if self._inThreshold ~= false then
+            self._inThreshold = false
+            self.circel:SetBackColor( self.backColor )
+            self.timerLabel:SetForeColor( self.timerColor )
+            self.textLabel:SetForeColor( self.textColor )
+            self.timerLabel:SetFont( self.font )
+            self.textLabel:SetFont( self.font )
+            self:SetOpacity( self.parent.data.opacityActiv )
+            self.circelBack:SetOpacity( self.parent.data.opacityActiv )
+        end
 
     -- in the threshold
     else
 
         -- threshold timer event
         if self.firstThreshold == true then
-
             self.firstThreshold = false
             Trigger.TimerEvent( self.data.id, Trigger.Types.TimerThreshold )
-
         end
 
-        -- flashing
+        -- static threshold properties: only apply on entry
+        if self._inThreshold ~= true then
+            self._inThreshold = true
+            self.timerLabel:SetForeColor( self.thresholdTimerColor )
+            self.textLabel:SetForeColor( self.thresholdTextColor )
+            self.timerLabel:SetFont( self.thresholdFont )
+            self.textLabel:SetFont( self.thresholdFont )
+            self:SetOpacity( self.parent.data.opacityThreshold )
+            self.circelBack:SetOpacity( self.parent.data.opacityThreshold )
+            -- static background: set once on entry when not flashing
+            if not ( self.data.useAnimation == true and self.data.animationType == AnimationType.Flashing ) then
+                self.circel:SetBackColor( Turbine.UI.Color.Red )
+            end
+        end
+
+        -- flashing background: must update every frame
         if self.data.useAnimation == true and
         self.data.animationType == AnimationType.Flashing then
 
-            local value
             local flashValue = timeLeft * self.data.animationSpeed
-            
+            local value
+
             if math.floor( flashValue ) % 2 == 0 then
-            
                 value = 1 - ( flashValue - math.floor( flashValue ) )
-
             else
-
                 value = ( flashValue - math.floor( flashValue ) )
-
             end
 
             self.circel:SetBackColor( Turbine.UI.Color( 1, value, value ) )
 
-        -- no animation only red background
-        else
-            
-            self.circel:SetBackColor( Turbine.UI.Color.Red )
-
         end
 
-        self.timerLabel:SetForeColor( self.thresholdTimerColor )
-        self.textLabel:SetForeColor( self.thresholdTextColor )
-        self.timerLabel:SetFont( self.thresholdFont )
-        self.textLabel:SetFont( self.thresholdFont )
-        self:SetOpacity( self.parent.data.opacityThreshold )
-        self.circelBack:SetOpacity( self.parent.data.opacityThreshold )
-        
     end
 
 end
