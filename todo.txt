@@ -6,7 +6,6 @@ single timer stacking option > self remove gets triggered after add so updating 
  
 -- features
 delete check window
-opacity slider
 options input check
 save window selections per char
 trigger value as timerValue

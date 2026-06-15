@@ -18,6 +18,7 @@ https://lotro-gibberish.com/  || by mydnic
 - sortIndex fixes
 - added sorting for triggers
 - changing the language now updates dropdowns aswell
+- added sliders to opacity options
 
 ### 3.1.8
 - fixed circles

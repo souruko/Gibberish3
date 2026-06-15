@@ -24,6 +24,7 @@ import "Gibberish3.OPTIONS.ELEMENTS.TIMERLISTBOX"
 
 import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.TextBoxRow"
 import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.NumberBoxRow"
+import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.SliderBoxRow"
 import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.IconBoxRow"
 import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.ColorBoxRow"
 import "Gibberish3.OPTIONS.ELEMENTS.OPTIONS_ROW.CheckBoxRow"

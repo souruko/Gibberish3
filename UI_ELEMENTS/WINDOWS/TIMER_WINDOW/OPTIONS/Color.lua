@@ -74,19 +74,19 @@ function ColorOptions:Constructor( data )
     top = top + 35
 
     -- opacity
-    self.opacityActiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityActiv", "win_opacity_activ", 30 )
+    self.opacityActiv = Options.Elements.SliderBoxRow( Options.Defaults.window.basecolor, "options", "opacityActiv", "win_opacity_activ", 30 )
     self.opacityActiv:SetParent( self )
     self.opacityActiv:SetPosition( left, top )
-    
+
     top = top + 30
-    
-    self.opacityPassiv = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityPassiv", "win_opacity_passiv", 30 )
+
+    self.opacityPassiv = Options.Elements.SliderBoxRow( Options.Defaults.window.basecolor, "options", "opacityPassiv", "win_opacity_passiv", 30 )
     self.opacityPassiv:SetParent( self )
     self.opacityPassiv:SetPosition( left, top )
-    
+
     top = top + 30
-    
-    self.opacityThreshold = Options.Elements.NumberBoxRow( Options.Defaults.window.basecolor, "options", "opacityThreshold", "win_opacity_theshold", 30 )
+
+    self.opacityThreshold = Options.Elements.SliderBoxRow( Options.Defaults.window.basecolor, "options", "opacityThreshold", "win_opacity_theshold", 30 )
     self.opacityThreshold:SetParent( self )
     self.opacityThreshold:SetPosition( left, top )
     
