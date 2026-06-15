@@ -203,7 +203,7 @@ function Options.Elements.WindowSelection:LanguageChanged()
 	for index, folderItem in ipairs( self.folderTable ) do
 		folderItem:LanguageChanged()
 	end
-	for index, windowItem in ipairs( self.folderTable ) do
+	for index, windowItem in ipairs( self.windowTable ) do
 		windowItem:LanguageChanged()
 	end
 end

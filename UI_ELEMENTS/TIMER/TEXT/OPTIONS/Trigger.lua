@@ -154,10 +154,19 @@ end
 function TriggerOptions:CopyTrigger( triggerData )
 
     local trigger = Trigger.Copy( triggerData )
+    trigger.sortIndex = self.listbox:GetNextSortIndex()
     local index = #self.data[ triggerData.type ] + 1
 
     self.data[ triggerData.type ][ index ] = trigger
     self.listbox:ContentChanged( self.data )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TriggerOptions:DraggingEnd( triggerData )
+
+    self.listbox:DraggingEnd( triggerData )
 
 end
 ---------------------------------------------------------------------------------------------------

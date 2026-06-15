@@ -160,8 +160,9 @@ function Options.Elements.TriggerListbox:FillContent()
 		if item:Filter( self.filterText ) then
             self.listbox:AddItem( item )
         end
-        
+
     end
+    self:Sort()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -194,9 +195,70 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.TriggerListbox:Sort()
+
+    self.listbox:Sort(function (a, b)
+        if a.data.sortIndex < b.data.sortIndex then
+            return true
+        end
+        return false
+    end)
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.TriggerListbox:GetNextSortIndex()
+
+    local idx = self.nextTriggerSortIndex
+    self.nextTriggerSortIndex = self.nextTriggerSortIndex + 1
+    return idx
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.TriggerListbox:DraggingEnd( triggerData )
+
+    local left, top = self.listbox:GetMousePosition()
+    local toItem = self.listbox:GetItemAt(left, top)
+
+    if toItem ~= nil and triggerData ~= toItem.data then
+
+        local toIndex = toItem.data.sortIndex
+
+        for _, typeList in ipairs(self.data) do
+            for _, item in ipairs(typeList) do
+                if item.sortIndex >= toIndex then
+                    item.sortIndex = item.sortIndex + 1
+                end
+            end
+        end
+
+        triggerData.sortIndex = toIndex
+
+        local maxIdx = 0
+        for _, typeList in ipairs(self.data) do
+            for _, item in ipairs(typeList) do
+                if item.sortIndex > maxIdx then
+                    maxIdx = item.sortIndex
+                end
+            end
+        end
+        self.nextTriggerSortIndex = maxIdx + 1
+
+        self:Sort()
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.TriggerListbox:NewTriggerPressed( type )
 
-    local triggerData =  Trigger.New( type )
+    local triggerData = Trigger.New( type )
+    triggerData.sortIndex = self:GetNextSortIndex()
     local triggerIndex = #self.data[ type ] + 1
 
     self.data[ type ][ triggerIndex ] = triggerData
@@ -244,10 +306,26 @@ function Options.Elements.TriggerListbox:ContentChanged( data )
         for triggerIndex, triggerData in ipairs(typeList) do
 
             self.controls[#self.controls +1] = Item( triggerIndex, triggerData, 200, self.parent )
-        
+
         end
 
     end
+
+    -- find current max sortIndex
+    local maxIdx = 0
+    for _, item in ipairs(self.controls) do
+        if item.data.sortIndex > maxIdx then
+            maxIdx = item.data.sortIndex
+        end
+    end
+    -- migrate legacy triggers that have sortIndex=0
+    for _, item in ipairs(self.controls) do
+        if item.data.sortIndex == 0 then
+            maxIdx = maxIdx + 1
+            item.data.sortIndex = maxIdx
+        end
+    end
+    self.nextTriggerSortIndex = maxIdx + 1
 
     self:FillContent()
 

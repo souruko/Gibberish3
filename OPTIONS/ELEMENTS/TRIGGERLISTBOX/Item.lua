@@ -37,19 +37,19 @@ function Item:Constructor( index, data, width, parent )
     -- mouse actions
     self.MouseEnter = function ()
 
-        -- if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
-        --     return
-        -- end
-        -- self:SetBackColor( Options.Defaults.window.w_window_hover )
+        if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
+            return
+        end
+        self:SetBackColor( Options.Defaults.window.w_window_hover )
 
     end
 
     self.MouseLeave = function ()
 
-        -- if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
-        --     return
-        -- end
-        -- self:SetBackColor( Options.Defaults.window.w_window_base )
+        if self.index == Data.selectedTriggerIndex and self.data.type == Data.selectedTriggerType then
+            return
+        end
+        self:SetBackColor( Options.Defaults.window.w_window_base )
 
     end
 
@@ -68,16 +68,15 @@ function Item:Constructor( index, data, width, parent )
     end
 
     self.MouseDown = function ( sender, args )
-        
+
         -- only allow move with leftclick
         if args.Button == Turbine.UI.MouseButton.Left then
 
-            -- set state to dragging and save start positions
-            -- self.dragging = true
-            -- self.leftSave, self.topSave = self:GetPosition()
-            -- self.dragStartX = args.X
-            -- self.dragStartY = args.Y
-            -- self:SetZOrder(200)
+            self.dragging = true
+            self.leftSave, self.topSave = self:GetPosition()
+            self.dragStartX = args.X
+            self.dragStartY = args.Y
+            self:SetZOrder(200)
 
         end
 
@@ -87,32 +86,32 @@ function Item:Constructor( index, data, width, parent )
 
         if self.dragging then
 
-			-- local x, y = self:GetPosition()
-            -- local x_offset = args.X - self.dragStartX
-            -- local y_offset = args.Y - self.dragStartY
-            -- x = x + x_offset
-            -- y = y + y_offset
-            -- self.dragWindow:SetVisible( true )
-            -- self.background:SetParent( self.dragWindow )
-            -- self:SetPosition( x, y )
+			local x, y = self:GetPosition()
+            local x_offset = args.X - self.dragStartX
+            local y_offset = args.Y - self.dragStartY
+            x = x + x_offset
+            y = y + y_offset
+            self.dragWindow:SetVisible( true )
+            self.background:SetParent( self.dragWindow )
+            self:SetPosition( x, y )
 
 		end
 
     end
 
     self.MouseUp = function ( sender, args )
-     
+
         if args.Button == Turbine.UI.MouseButton.Left then
 
-			-- self.dragging = false
-            -- self:SetPosition( self.leftSave, self.topSave )
-            -- -- self.parent:DraggingEnd(self.data)
-            -- self:SetZOrder(nil)
-            -- self.dragWindow:SetVisible(false)
-            -- self.background:SetParent(self)
-            
+			self.dragging = false
+            self:SetPosition( self.leftSave, self.topSave )
+            self.parent:DraggingEnd( self.data )
+            self:SetZOrder(nil)
+            self.dragWindow:SetVisible(false)
+            self.background:SetParent(self)
+
 		end
-           
+
     end
 
     -- rightclick menu
