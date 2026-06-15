@@ -449,6 +449,8 @@ function FolderItem:DraggingEnd( fromData )
 
 	else
 		fromData.folder = self.index * (-1)
+		Data.lastSortIndex = Data.lastSortIndex + 1
+		fromData.sortIndex = Data.lastSortIndex
 
 	end
 

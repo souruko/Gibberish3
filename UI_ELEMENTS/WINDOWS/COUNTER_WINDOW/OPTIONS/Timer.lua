@@ -171,7 +171,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerOptions:CopyTimer( timerData )
 
-    local timer = Trigger.Copy( timerData )
+    local timer = Timer.Copy( timerData )
+    timer.sortIndex = self.data.nextTimerSortIndex
+    self.data.nextTimerSortIndex = self.data.nextTimerSortIndex + 1
     local index = #self.data.timerList + 1
 
     self.data.timerList[ index ] = timer

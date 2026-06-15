@@ -14,6 +14,8 @@ https://lotro-gibberish.com/  || by mydnic
 - added a usage file
 - added more highlighting to the settings window
 - fixed dropdown behavior
+- performance fixes
+- sortIndex fixes
 
 ### 3.1.8
 - fixed circles

@@ -284,6 +284,14 @@ function Options.Elements.TimerListbox:DraggingEnd( timerData )
 
         timerData.sortIndex = toIndex
 
+        local maxSortIndex = 0
+        for _, item in ipairs(self.data.timerList) do
+            if item.sortIndex > maxSortIndex then
+                maxSortIndex = item.sortIndex
+            end
+        end
+        self.data.nextTimerSortIndex = maxSortIndex + 1
+
         self:Sort()
     
     end
