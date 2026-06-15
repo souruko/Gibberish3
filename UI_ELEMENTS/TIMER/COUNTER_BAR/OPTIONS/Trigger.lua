@@ -131,6 +131,11 @@ function TriggerOptions:TriggerSelectionChanged()
     if Data.selectedTriggerIndex ~= 0 then
         local triggerData = self.data[ Data.selectedTriggerType ][ Data.selectedTriggerIndex ]
 
+        if triggerData == nil then
+            Options.TriggerSelectionChanged( 0, 0 )
+            return
+        end
+
         self.triggerOptions = Trigger[ Data.selectedTriggerType ].Options( self, triggerData, self.data.type*(-1) )
         self.triggerOptions:SetParent( self.background1 )
         self.triggerOptions:SetPosition( 200 + (2*Options.Defaults.window.spacing), Options.Defaults.window.spacing )

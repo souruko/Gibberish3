@@ -318,10 +318,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.DeleteWindow( windowIndex )
 
+    local window_count = #Data.window
     Windows.UnloadWindow( windowIndex )
     Window.Delete( windowIndex )
 
-    if Data.selectedIndex == windowIndex then
+    -- window_count slot is now nil (swap-delete); also clear if deleted slot was selected
+    if Data.selectedIndex == windowIndex or Data.selectedIndex == window_count then
         Options.SelectionChanged( 0 )
     end
 
@@ -333,9 +335,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.DeleteFolder( folderIndex )
 
+    local folder_count = #Data.folder
     Folder.Delete( folderIndex )
 
-    if Data.selectedIndex == (folderIndex*(-1)) then
+    -- folder_count slot is now nil (swap-delete); also clear if deleted slot was selected
+    if Data.selectedIndex == (folderIndex*(-1)) or Data.selectedIndex == (folder_count*(-1)) then
         Options.SelectionChanged( 0 )
     end
 
@@ -349,7 +353,8 @@ function Options.DeleteTimer( data, timerIndex )
 
     Timer.Delete( data, timerIndex )
 
-    if Data.selectedTimerIndex == (timerIndex) then
+    -- reset if selected timer was deleted or shifted out from under us
+    if Data.selectedTimerIndex >= timerIndex then
         Options.TimerSelectionChanged( 0 )
     end
 
@@ -363,7 +368,8 @@ function Options.DeleteTrigger( data, triggerIndex, triggerType )
 
     Trigger.Delete( data, triggerIndex, triggerType )
 
-    if Data.selectedTriggerIndex == (triggerIndex) and Data.selectedTriggerType == triggerType then
+    -- reset if selected trigger was deleted or shifted out from under us
+    if Data.selectedTriggerType == triggerType and Data.selectedTriggerIndex >= triggerIndex then
         Options.TriggerSelectionChanged( 0, 0 )
     end
 
@@ -377,7 +383,8 @@ function Options.DeleteTrigger2( data, triggerIndex, triggerType )
 
     Trigger.Delete( data, triggerIndex, triggerType )
 
-    if Data.selectedTriggerIndex2 == (triggerIndex) and Data.selectedTriggerType2 == triggerType then
+    -- reset if selected trigger was deleted or shifted out from under us
+    if Data.selectedTriggerType2 == triggerType and Data.selectedTriggerIndex2 >= triggerIndex then
         Options.Trigger2SelectionChanged( 0, 0 )
     end
 
