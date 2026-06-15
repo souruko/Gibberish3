@@ -17,6 +17,7 @@ https://lotro-gibberish.com/  || by mydnic
 - performance fixes
 - sortIndex fixes
 - added sorting for triggers
+- changing the language now updates dropdowns aswell
 
 ### 3.1.8
 - fixed circles

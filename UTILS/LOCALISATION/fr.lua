@@ -440,7 +440,7 @@ L[ Language.French ].options.excludeSelf                   = "Exclure soi-même"
 L[ Language.French ].source.Buff                           = "Buff"
 L[ Language.French ].source.Debuff                         = "Debuff"
 
-L[ Language.French ].source.Dispellable                    = "Dissipable"
+L[ Language.French ].source.IsDispellable                  = "Dissipable"
 L[ Language.French ].source.NotDispellable                 = "Non dissipable"
 
 L[ Language.French ].source.Corruption                     = "Corruption"

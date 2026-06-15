@@ -261,6 +261,23 @@ function Options.Elements.Dropdown:LanguageChanged()
 
     end
 
+    -- retranslate the collapsed label to match the newly translated selected item
+    if self.selected_index ~= nil then
+
+        local selected = self.listbox:GetItem( self.selected_index )
+
+        if selected ~= nil then
+
+            if selected.text_control == nil then
+                self.label:SetText( selected.text_description )
+            else
+                self.label:SetText( UTILS.GetText( selected.text_control, selected.text_description ) )
+            end
+
+        end
+
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 

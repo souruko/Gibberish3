@@ -440,7 +440,7 @@ L[ Language.German ].options.excludeSelf                   = "Nur Gruppe(ohne se
 L[ Language.German ].source.Buff                           = "Buff"
 L[ Language.German ].source.Debuff                         = "Debuff"
 
-L[ Language.German ].source.Dispellable                    = "Nehmbar"
+L[ Language.German ].source.IsDispellable                  = "Nehmbar"
 L[ Language.German ].source.NotDispellable                 = "Nicht Nehmbar"
 
 L[ Language.German ].source.Corruption                     = "Korruption"

@@ -42,6 +42,7 @@ end
 function Options.Elements.DropDownRow:LanguageChanged()
 
     self.label:SetText( UTILS.GetText( self.label_control, self.label_description ) )
+    self.drop_down:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

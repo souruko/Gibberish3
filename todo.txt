@@ -2,12 +2,9 @@ conditions
 
 -- bugs
 import triggers into window/folder (rework import buttons)
-LanguageChanged > dropdown texte
 single timer stacking option > self remove gets triggered after add so updating will remove ...
-
  
 -- features
-sort triggers
 delete check window
 opacity slider
 options input check
