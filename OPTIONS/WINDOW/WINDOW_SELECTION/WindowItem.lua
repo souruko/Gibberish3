@@ -174,8 +174,10 @@ function WindowItem:CreateRightClick()
 
     -- delete
     self.rc_delete = Options.Elements.Row( "selection", "delete", function ()
-        Options.DeleteWindow( self.index )
-        Options.Window.Object:ResetSelectedContent()
+        Options.Window.Object:ShowDeletePopup( self.data.name, function ()
+            Options.DeleteWindow( self.index )
+            Options.Window.Object:ResetSelectedContent()
+        end )
     end,
     Options.Defaults.rc_menu.item_height)
 

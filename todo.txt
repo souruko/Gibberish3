@@ -5,7 +5,6 @@ import triggers into window/folder (rework import buttons)
 single timer stacking option > self remove gets triggered after add so updating will remove ...
  
 -- features
-delete check window
 options input check
 save window selections per char
 trigger value as timerValue

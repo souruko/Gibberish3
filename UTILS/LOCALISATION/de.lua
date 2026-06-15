@@ -201,6 +201,7 @@ L[ Language.German ].selection.copy                         = "Kopieren"
 L[ Language.German ].selection.paste                        = "Einfügen"
 L[ Language.German ].selection.new_folder                   = "Neuer Ordner "
 L[ Language.German ].selection.new_window                   = "Neues Fenster "
+L[ Language.German ].selection.cancel                       = "Abbrechen"
 
 -- options
 L[ Language.German ].options = {}

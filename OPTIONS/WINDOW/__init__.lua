@@ -24,6 +24,7 @@ import "Gibberish3.OPTIONS.WINDOW.WINDOW_SELECTION.FolderItem"
 import "Gibberish3.OPTIONS.WINDOW.WINDOW_SELECTION.Window"
 
 import "Gibberish3.OPTIONS.WINDOW.MessagePopup"
+import "Gibberish3.OPTIONS.WINDOW.DeletePopup"
 
 -- base
 import "Gibberish3.OPTIONS.WINDOW.BaseWindow"

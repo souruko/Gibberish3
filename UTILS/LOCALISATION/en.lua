@@ -201,6 +201,7 @@ L[ Language.English ].selection.copy                        = "Copy"
 L[ Language.English ].selection.paste                       = "Paste"
 L[ Language.English ].selection.new_folder                  = "New Folder "
 L[ Language.English ].selection.new_window                  = "New Window "
+L[ Language.English ].selection.cancel                      = "Cancel"
 
 -- options
 L[ Language.English ].options = {}

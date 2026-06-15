@@ -212,9 +212,11 @@ function FolderItem:CreateRightClick()
 
     -- delete
     self.rc_delete = Options.Elements.Row( "selection", "delete", function ()
-        Options.DeleteFolder( self.index*(-1) )
-        Options.SaveData()
-        self.parent:ReFill()
+        Options.Window.Object:ShowDeletePopup( self.data.name, function ()
+            Options.DeleteFolder( self.index*(-1) )
+            Options.SaveData()
+            self.parent:ReFill()
+        end )
     end,
     Options.Defaults.rc_menu.item_height)
 

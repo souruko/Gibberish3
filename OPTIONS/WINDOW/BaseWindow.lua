@@ -26,6 +26,9 @@ function Options.Window.Constructor:Constructor()
     self.messagePopup = Options.Elements.MessagePopup()
     self.messagePopup:SetParent( self )
 
+    self.deletePopup = Options.Elements.DeletePopup()
+    self.deletePopup:SetParent( self )
+
     self:LanguageChanged()
     self:SelectionChanged()
 
@@ -69,6 +72,7 @@ function Options.Window.Constructor:LanguageChanged()
     self.selection_options:LanguageChanged()
     self.general_options:LanguageChanged()
     self.collection_window:LanguageChanged()
+    self.deletePopup:LanguageChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -112,6 +116,14 @@ end
 function Options.Window.Constructor:DataChanged( index )
 
     self.window_selection:DataChanged( index )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:ShowDeletePopup( name, onConfirm )
+
+    self.deletePopup:Show( name, onConfirm )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -164,7 +176,12 @@ function Options.Window.Constructor:SizeChanged()
 
     self.window_selection:SetPosition( Options.Defaults.window.outer_spacing, Options.Defaults.window.top_spacing )
     self.general_options:SetPosition(  Options.Defaults.window.outer_spacing, ( height - Options.Defaults.window.outer_spacing - general_height ) )
-    self.selection_options:SetPosition( ( Options.Defaults.window.outer_spacing + Options.Defaults.window.spacing + Options.Defaults.window.ws_width ),  Options.Defaults.window.top_spacing )
+    local sel_opt_left = Options.Defaults.window.outer_spacing + Options.Defaults.window.spacing + Options.Defaults.window.ws_width
+    self.selection_options:SetPosition( sel_opt_left, Options.Defaults.window.top_spacing )
+    local sp = Options.Defaults.window.outer_spacing
+    self.deletePopup:SetPosition( sp, Options.Defaults.window.top_spacing )
+    self.deletePopup:SetSize( width - 2 * sp, height - Options.Defaults.window.top_spacing - sp )
+    self.deletePopup:SizeChanged()
     self.collection_window:SetPosition( ( Data.options.window.width - Options.Defaults.window.outer_spacing - Options.Defaults.window.c_width ), Options.Defaults.window.top_spacing )
     self.messagePopup:SetPosition( selection_options_width + ( Options.Defaults.window.outer_spacing + Options.Defaults.window.spacing + Options.Defaults.window.ws_width ) - 110, selection_options_height - 40 )
 
