@@ -194,6 +194,11 @@ Trigger[ Trigger.Types.Chat ].CheckTrigger = function( message, chatType, trigge
         return nil
     end
 
+    -- require a non-empty token
+    if triggerData.token == nil or triggerData.token == "" then
+        return nil
+    end
+
     -- find match with message and token (cache the processed pattern since the token is immutable at runtime)
     if triggerData._cachedPattern == nil then
         triggerData._cachedPattern = Trigger.ReplacePlaceholder( triggerData.token )

@@ -140,6 +140,7 @@ function ChatOptions:Save()
 
     self.data.description   = self.description:GetText(  )
     self.data.token         = self.token:GetText(  )
+    self.data._cachedPattern = nil
     self.data.action        = self.action:GetSelectedValue(  )
     self.data.value         = self.value:GetText(  )
     self.data.source        = self.source:GetSelectedValue()
