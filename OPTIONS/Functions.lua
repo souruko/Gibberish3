@@ -56,8 +56,9 @@ function Options.TimerSelectionChanged( index )
     end
 
     Data.selectedTimerIndex = index
-    
+
     Options.TriggerSelectionChanged( 0, 0 )
+    Options.ConditionsSelectionChanged( 0 )
 
     if Data.options.window.open == true then
         Options.Window.Object:TimerSelectionChanged()
@@ -386,6 +387,56 @@ function Options.DeleteTrigger2( data, triggerIndex, triggerType )
     -- reset if selected trigger was deleted or shifted out from under us
     if Data.selectedTriggerType2 == triggerType and Data.selectedTriggerIndex2 >= triggerIndex then
         Options.Trigger2SelectionChanged( 0, 0 )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- condition selection changed
+---------------------------------------------------------------------------------------------------
+function Options.ConditionsSelectionChanged( index )
+
+    if index == (Data.selectedConditionsIndex or 0) or index == nil then return end
+    Data.selectedConditionsIndex = index
+    Options.ConditionTriggerSelectionChanged( 0, 0 )
+
+    if Data.options.window.open == true and Options.Window.Object ~= nil then
+        Options.Window.Object:ConditionsSelectionChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- condition trigger selection changed
+---------------------------------------------------------------------------------------------------
+function Options.ConditionTriggerSelectionChanged( index, type )
+
+    if (index == (Data.selectedConditionTriggerIndex or 0) and type == (Data.selectedConditionTriggerType or 0)) or index == nil then return end
+    Data.selectedConditionTriggerIndex = index
+    Data.selectedConditionTriggerType  = type
+
+    if Data.options.window.open == true and Options.Window.Object ~= nil then
+        Options.Window.Object:ConditionTriggerSelectionChanged()
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- delete condition
+---------------------------------------------------------------------------------------------------
+function Options.DeleteConditions( timerData, conditionIndex )
+
+    local count = #timerData.conditionList
+    for i = conditionIndex, count - 1 do
+        timerData.conditionList[i] = timerData.conditionList[i + 1]
+    end
+    timerData.conditionList[count] = nil
+
+    if Data.selectedConditionsIndex >= conditionIndex then
+        Options.ConditionsSelectionChanged( 0 )
     end
 
 end

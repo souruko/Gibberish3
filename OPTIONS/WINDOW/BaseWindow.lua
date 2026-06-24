@@ -113,6 +113,22 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:ConditionsSelectionChanged()
+
+    self.selection_options:ConditionsSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Window.Constructor:ConditionTriggerSelectionChanged()
+
+    self.selection_options:ConditionTriggerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Window.Constructor:DataChanged( index )
 
     self.window_selection:DataChanged( index )

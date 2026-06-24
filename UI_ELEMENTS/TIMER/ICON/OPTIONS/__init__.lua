@@ -9,6 +9,7 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS.General"
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS.Trigger"
+import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS.Conditions"
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS.Animation"
 import "Gibberish3.UI_ELEMENTS.TIMER.ICON.OPTIONS.Style"
 

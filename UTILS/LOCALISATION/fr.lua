@@ -438,6 +438,11 @@ L[ Language.French ].options.isDispellable                 = "Dissipable"
 L[ Language.French ].options.category                      = "Catégorie"
 L[ Language.French ].options.excludeSelf                   = "Exclure soi-même"
 
+L[ Language.French ].options.enabled                       = "Activé"
+L[ Language.French ].options.duration                      = "Durée (s)"
+
+L[ Language.French ].tooltip.button_new_condition          = "Ajouter une nouvelle condition à ce minuteur."
+
 L[ Language.French ].source.Buff                           = "Buff"
 L[ Language.French ].source.Debuff                         = "Debuff"
 

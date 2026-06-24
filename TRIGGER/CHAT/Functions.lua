@@ -164,6 +164,10 @@ Trigger[ Trigger.Types.Chat ].CheckTimer = function(message, chatType, windowInd
         return
     end
 
+    Condition.CheckAll( timerData, Trigger.Types.Chat, function(t)
+        return Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, t)
+    end)
+
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Chat ]) do
         local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)

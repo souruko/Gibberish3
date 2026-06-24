@@ -190,6 +190,24 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function TimerOptions:ConditionsSelectionChanged()
+
+    if self.timerOptions == nil then return end
+    self.timerOptions:ConditionsSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function TimerOptions:ConditionTriggerSelectionChanged()
+
+    if self.timerOptions == nil then return end
+    self.timerOptions:ConditionTriggerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function TimerOptions:DeleteTimer( timerIndex )
 
     Options.DeleteTimer( self.data, timerIndex )

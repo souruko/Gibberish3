@@ -31,6 +31,10 @@ function DataFunction.New()
     -- window/folder trigger
     data.selectedTriggerIndex2      = 0
     data.selectedTriggerType2       = 0
+    -- condition and condition trigger
+    data.selectedConditionsIndex        = 0
+    data.selectedConditionTriggerIndex  = 0
+    data.selectedConditionTriggerType   = 0
 
     -- 
     data.moveMode                   = false

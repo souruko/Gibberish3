@@ -177,6 +177,10 @@ Trigger[ Trigger.Types.EffectTarget ].CheckTimer = function ( effect, target, wi
         return
     end
 
+    Condition.CheckAll( timerData, Trigger.Types.EffectTarget, function(t)
+        return Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effect, target, t)
+    end)
+
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectTarget ]) do
 

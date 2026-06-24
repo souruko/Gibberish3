@@ -21,8 +21,13 @@ Trigger.TimerEvent = function ( timerID, event )
             for timerIndex, timerData in ipairs(windowData.timerList) do                     
 
                 -- check if timer is enabled
-                if timerData.enabled == true then                                           
-                
+                if timerData.enabled == true then
+
+                    Condition.CheckAll( timerData, event, function(t)
+                        if t.enabled == true and t.token == timerID then return 1 end
+                        return nil
+                    end)
+
                     -- all effect self of the timer
                     for triggerIndex, triggerData in ipairs(timerData[ event ]) do 
 

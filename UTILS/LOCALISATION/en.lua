@@ -439,6 +439,11 @@ L[ Language.English ].options.isDispellable                 = "Cureable"
 L[ Language.English ].options.category                      = "Category"
 L[ Language.English ].options.excludeSelf                   = "Exclude Self"
 
+L[ Language.English ].options.enabled                       = "Enabled"
+L[ Language.English ].options.duration                      = "Duration (s)"
+
+L[ Language.English ].tooltip.button_new_condition          = "Add a new condition to this timer."
+
 L[ Language.English ].source.Buff                           = "Buff"
 L[ Language.English ].source.Debuff                         = "Debuff"
 

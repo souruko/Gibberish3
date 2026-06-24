@@ -95,21 +95,39 @@ function Options.OverwriteCharData( global_data, char_data )
             for j, triggerType in ipairs(timer) do
 
                 for k, trigger in ipairs(triggerType) do
-                   
+
                     if trigger.isDebuff == nil then
                         trigger.isDebuff = 0
-                    end 
+                    end
                     if trigger.isDispellable == nil then
                         trigger.isDispellable = 0
-                    end 
+                    end
                     if trigger.category == nil then
                         trigger.category = 0
-                    end 
+                    end
 
                 end
-              
+
             end
-            
+
+            -- backward compat: conditionList
+            if timer.conditionList == nil then
+                timer.conditionList = {}
+            end
+            for _, condition in ipairs(timer.conditionList) do
+                condition.tod = 0
+                if condition.duration == nil then condition.duration = 30 end
+                for trigType = 1, 10 do
+                    if condition[trigType] then
+                        for _, t in ipairs(condition[trigType]) do
+                            if t.isDebuff == nil then t.isDebuff = 0 end
+                            if t.isDispellable == nil then t.isDispellable = 0 end
+                            if t.category == nil then t.category = 0 end
+                        end
+                    end
+                end
+            end
+
         end
 
         -- char data found

@@ -149,6 +149,10 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTimer = function ( effect, windowIndex,
         return
     end
 
+    Condition.CheckAll( timerData, Trigger.Types.EffectSelf, function(t)
+        return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, t)
+    end)
+
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectSelf ]) do
 
@@ -259,11 +263,15 @@ end
 -- check timer
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTimer = function ( effect, windowIndex, timerIndex, timerData  )
-  
+
     -- only check for enabled timers
     if timerData.enabled == false then
         return
     end
+
+    Condition.CheckAll( timerData, Trigger.Types.EffectRemoveSelf, function(t)
+        return Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effect, t)
+    end)
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectRemoveSelf ]) do

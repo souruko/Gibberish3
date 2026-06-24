@@ -21,15 +21,17 @@ function OptionsWindow:Constructor( parent, data )
     self.tabwindow.content_back:SetBackColor( Turbine.UI.Color(0.13, 0.10, 0.08) )
     -- self.tabwindow:SetPosition( Options.Defaults.window.spacing, Options.Defaults.window.spacing )
 
-    self.tab_general = GeneralOptions( self.data )
-    self.tab_trigger = TriggerOptions( self.data )
-    self.tab_style = StyleOptions( self.data )
-    self.tab_animation = AnimationOptions( self.data )
+    self.tab_general    = GeneralOptions( self.data )
+    self.tab_trigger    = TriggerOptions( self.data )
+    self.tab_conditions = ConditionsOptions( self.data )
+    self.tab_style      = StyleOptions( self.data )
+    self.tab_animation  = AnimationOptions( self.data )
 
-    self.tabwindow:AddTab( self.tab_general, "tab", "general")
-    self.tabwindow:AddTab( self.tab_trigger, "tab", "trigger")
-    self.tabwindow:AddTab( self.tab_style, "tab", "style")
-    self.tabwindow:AddTab( self.tab_animation, "tab", "animation")
+    self.tabwindow:AddTab( self.tab_general,    "tab", "general")
+    self.tabwindow:AddTab( self.tab_trigger,    "tab", "trigger")
+    self.tabwindow:AddTab( self.tab_conditions, "tab", "conditions")
+    self.tabwindow:AddTab( self.tab_style,      "tab", "style")
+    self.tabwindow:AddTab( self.tab_animation,  "tab", "animation")
 
     self.tabwindow:ChangeSelection( Data.options.window.tab2 )
 
@@ -75,6 +77,7 @@ function OptionsWindow:Save()
 
     self.tab_general:Save()
     self.tab_trigger:Save()
+    self.tab_conditions:Save()
     self.tab_style:Save()
     self.tab_animation:Save()
 
@@ -86,6 +89,7 @@ function OptionsWindow:Reset()
 
     self.tab_general:Reset()
     self.tab_trigger:Reset()
+    self.tab_conditions:Reset()
     self.tab_style:Reset()
     self.tab_animation:Reset()
 
@@ -96,6 +100,22 @@ end
 function OptionsWindow:TriggerSelectionChanged()
 
     self.tab_trigger:TriggerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:ConditionsSelectionChanged()
+
+    self.tab_conditions:TriggerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:ConditionTriggerSelectionChanged()
+
+    self.tab_conditions:TriggerSelectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -120,6 +140,7 @@ function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
     self.tab_general:BuildCollectionRightClickMenu( data, menu )
     self.tab_style:BuildCollectionRightClickMenu( data, menu )
     self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
+    self.tab_conditions:BuildCollectionRightClickMenu( data, menu )
 
 end
 ---------------------------------------------------------------------------------------------------

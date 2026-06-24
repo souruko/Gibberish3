@@ -56,6 +56,8 @@ function Timer.New(type)
 
     end
 
+    timer.conditionList = {}
+
     return timer
 
 end
@@ -109,7 +111,12 @@ function Timer.Copy( data )
         for i, triggerData in ipairs( data[ triggerType ] ) do
             timer[ triggerType ][ i ] = Trigger.Copy( triggerData )
         end
-    
+
+    end
+
+    timer.conditionList = {}
+    for i, conditionData in ipairs( data.conditionList or {} ) do
+        timer.conditionList[i] = Condition.Copy( conditionData )
     end
 
     return timer

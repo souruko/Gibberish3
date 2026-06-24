@@ -138,7 +138,9 @@ function TimerWindowElement:TimerAction( triggerData, timerData, timerIndex, sta
 
     -- split the call into the relevant actions
     if triggerData.action == Action.Add then
-        self:ActionAdd( timerData, timerIndex, startTime, duration, icon, text, entity, key )
+        if Condition.AreAllMet( timerData ) then
+            self:ActionAdd( timerData, timerIndex, startTime, duration, icon, text, entity, key )
+        end
 
     elseif triggerData.action == Action.Remove then
         self:ActionRemove( timerIndex, key )

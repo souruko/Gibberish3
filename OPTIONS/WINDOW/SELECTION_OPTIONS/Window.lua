@@ -204,6 +204,26 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:ConditionsSelectionChanged()
+
+	if self.content ~= nil then
+		self.content:ConditionsSelectionChanged()
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.SelectionOptions:ConditionTriggerSelectionChanged()
+
+	if self.content ~= nil then
+		self.content:ConditionTriggerSelectionChanged()
+	end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Elements.SelectionOptions:CloseContent()
 
 	if self.content == nil then

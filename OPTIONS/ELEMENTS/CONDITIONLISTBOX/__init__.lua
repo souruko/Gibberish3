@@ -1,16 +1,12 @@
 --=================================================================================================
---= Structs        
+--= Condition Listbox
 --= ===============================================================================================
---= definitions for data structures
+--=
 --=================================================================================================
 
 
 
 ---------------------------------------------------------------------------------------------------
-import "Gibberish3.STRUCTS.Data"
-import "Gibberish3.STRUCTS.Folder"
-import "Gibberish3.STRUCTS.Window"
-import "Gibberish3.STRUCTS.Timer"
-import "Gibberish3.STRUCTS.Trigger"
-import "Gibberish3.STRUCTS.Condition"
+import "Gibberish3.OPTIONS.ELEMENTS.CONDITIONLISTBOX.Item"
+import "Gibberish3.OPTIONS.ELEMENTS.CONDITIONLISTBOX.Window"
 ---------------------------------------------------------------------------------------------------

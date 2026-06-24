@@ -438,6 +438,11 @@ L[ Language.German ].options.isDispellable                 = "Nehmbar"
 L[ Language.German ].options.category                      = "Kategorie"
 L[ Language.German ].options.excludeSelf                   = "Nur Gruppe(ohne selbst)"
 
+L[ Language.German ].options.enabled                       = "Aktiviert"
+L[ Language.German ].options.duration                      = "Dauer (s)"
+
+L[ Language.German ].tooltip.button_new_condition          = "Neue Bedingung für diesen Timer hinzufügen."
+
 L[ Language.German ].source.Buff                           = "Buff"
 L[ Language.German ].source.Debuff                         = "Debuff"
 

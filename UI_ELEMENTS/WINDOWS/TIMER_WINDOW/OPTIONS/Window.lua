@@ -127,6 +127,22 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function OptionsWindow:ConditionsSelectionChanged()
+
+    self.tab_timer:ConditionsSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function OptionsWindow:ConditionTriggerSelectionChanged()
+
+    self.tab_timer:ConditionTriggerSelectionChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
 
     self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
