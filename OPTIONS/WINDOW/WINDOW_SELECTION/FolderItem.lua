@@ -253,10 +253,18 @@ function FolderItem:CreateContent()
         self.parent:FixElementHeight()
 
 	end
+    -- amber left stripe marking this as folder level
+    self.folderStripe = Turbine.UI.Control()
+    self.folderStripe:SetParent( self.background )
+    self.folderStripe:SetPosition( 0, 0 )
+    self.folderStripe:SetSize( 5, Options.Defaults.window.w_item_height )
+    self.folderStripe:SetBackColor( Options.Defaults.window.color_folder )
+    self.folderStripe:SetMouseVisible( false )
+
     -- window name
     self.nameLabel = Turbine.UI.Label()
     self.nameLabel:SetParent( self.background )
-    self.nameLabel:SetLeft( 40 )
+    self.nameLabel:SetLeft( 47 )
     self.nameLabel:SetHeight( Options.Defaults.window.w_item_height )
     self.nameLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
     self.nameLabel:SetFont( Turbine.UI.Lotro.Font.VerdanaBold16 )

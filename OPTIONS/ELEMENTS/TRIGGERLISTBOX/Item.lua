@@ -34,6 +34,14 @@ function Item:Constructor( index, data, width, parent )
     self.background:SetSize( width, Options.Defaults.window.t_item_height )
     self.background:SetMouseVisible( false )
 
+    -- orange left stripe marking this as trigger level
+    self.triggerStripe = Turbine.UI.Control()
+    self.triggerStripe:SetParent( self.background )
+    self.triggerStripe:SetPosition( 0, 0 )
+    self.triggerStripe:SetSize( 5, Options.Defaults.window.t_item_height )
+    self.triggerStripe:SetBackColor( Options.Defaults.window.color_trigger )
+    self.triggerStripe:SetMouseVisible( false )
+
     -- mouse actions
     self.MouseEnter = function ()
 
@@ -145,8 +153,8 @@ function Item:Constructor( index, data, width, parent )
 
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.background )
-    self.textLabel:SetLeft( 10 )
-    self.textLabel:SetSize( width - 40, Options.Defaults.window.t_item_height - 12 )
+    self.textLabel:SetLeft( 16 )
+    self.textLabel:SetSize( width - 46, Options.Defaults.window.t_item_height - 12 )
     self.textLabel:SetMultiline( false )
     self.textLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
     self.textLabel:SetFont( Options.Defaults.window.w_font )
@@ -155,7 +163,7 @@ function Item:Constructor( index, data, width, parent )
 
     self.actionLabel = Turbine.UI.Label()
     self.actionLabel:SetParent( self.background )
-    self.actionLabel:SetPosition( 10, Options.Defaults.window.t_item_height - 13 )
+    self.actionLabel:SetPosition( 16, Options.Defaults.window.t_item_height - 13 )
     self.actionLabel:SetSize( width - 10, 12 )
     self.actionLabel:SetMultiline( false )
     self.actionLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )

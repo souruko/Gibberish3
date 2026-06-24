@@ -98,7 +98,8 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 	-- no selection
 	if Data.selectedIndex == 0 then
 		self.selectedData = nil
-	
+		self.frame:SetBackColor( Options.Defaults.window.framecolor )
+
 	-- folder
 	elseif Data.selectedIndex < 0 then
 		self.selectedData = Data.folder[ Data.selectedIndex * (-1) ]
@@ -108,6 +109,7 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 			return
 		end
 
+		self.frame:SetBackColor( Options.Defaults.window.color_folder )
 		self.name_back:SetBackColor( Options.Defaults.window.w_folder_base )
 		-- self.background2:SetBackColor( Options.Defaults.window.w_folder_base )
 		self.name_textbox:SetText( self.selectedData.name )
@@ -122,11 +124,12 @@ function Options.Elements.SelectionOptions:SelectionChanged()
 			return
 		end
 
+		self.frame:SetBackColor( Options.Defaults.window.color_window )
 		self.name_back:SetBackColor( Options.Defaults.window.backcolor2 )
 		-- self.background2:SetBackColor( Options.Defaults.window.backcolor2 )
 		self.name_textbox:SetText( self.selectedData.name )
 		self:FillWindow()
-		
+
 	end
 
 	if self.import == true then

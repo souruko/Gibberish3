@@ -203,18 +203,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function WindowItem:CreateContent()
 
-    -- left accent stripe coloured by window type
-    local stripeColor
-    if self.data.type == Window.Types.COUNTER_WINDOW then
-        stripeColor = Turbine.UI.Color(0.75, 0.42, 0.08)
-    else
-        stripeColor = Turbine.UI.Color(0.10, 0.52, 0.62)
-    end
+    -- left accent stripe — window level color (type shown via typeLabel text)
     self.typeStripe = Turbine.UI.Control()
     self.typeStripe:SetParent( self.background )
     self.typeStripe:SetPosition( 0, 0 )
-    self.typeStripe:SetSize( 3, Options.Defaults.window.w_item_height )
-    self.typeStripe:SetBackColor( stripeColor )
+    self.typeStripe:SetSize( 5, Options.Defaults.window.w_item_height )
+    self.typeStripe:SetBackColor( Options.Defaults.window.color_window )
     self.typeStripe:SetMouseVisible( false )
 
     -- window name

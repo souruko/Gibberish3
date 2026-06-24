@@ -33,6 +33,14 @@ function Item:Constructor( index, data, width, parent )
     self.background:SetSize( width, Options.Defaults.window.t_item_height )
     self.background:SetMouseVisible( false )
 
+    -- teal left stripe marking this as timer level
+    self.timerStripe = Turbine.UI.Control()
+    self.timerStripe:SetParent( self.background )
+    self.timerStripe:SetPosition( 0, 0 )
+    self.timerStripe:SetSize( 5, Options.Defaults.window.t_item_height )
+    self.timerStripe:SetBackColor( Options.Defaults.window.color_timer )
+    self.timerStripe:SetMouseVisible( false )
+
     -- mouse actions
     self.MouseEnter = function ()
 
@@ -144,14 +152,14 @@ function Item:Constructor( index, data, width, parent )
 
     self.icon = Turbine.UI.Control()
     self.icon:SetParent( self.background )
-    self.icon:SetPosition( 1, 1 )
+    self.icon:SetPosition( 7, 1 )
     self.icon:SetSize( 32, 32 )
     self.icon:SetMouseVisible( false )
     self.icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
 
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.background )
-    self.textLabel:SetLeft( 38 )
+    self.textLabel:SetLeft( 44 )
     self.textLabel:SetSize( width - 40, Options.Defaults.window.t_item_height )
     -- self.textLabel:SetMultiline( false )
     self.textLabel:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleLeft )
