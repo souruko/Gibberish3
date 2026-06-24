@@ -411,6 +411,16 @@ end
 ---------------------------------------------------------------------------------------------------
 function StringToTimer( text, parent )
 
+    -- extract conditions before splitting on triggers
+    local condition_strings = {}
+    local cond_split = Split( text, "<condition>")
+    if #cond_split > 1 then
+        text = cond_split[1]
+        for i = 2, #cond_split do
+            condition_strings[#condition_strings+1] = cond_split[i]
+        end
+    end
+
     -- list[1] = window data
     -- list[2-X] = trigger data
     local list2 = Split( text, "<trigger>")
@@ -567,7 +577,68 @@ function StringToTimer( text, parent )
         StringToTrigger( trigger_string, data )
     end
 
+    -- add conditions
+    for _, condition_string in ipairs(condition_strings) do
+        StringToCondition( condition_string, data )
+    end
+
     parent.timerList[ #parent.timerList + 1 ] = data
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function StringToCondition( text, timer_data )
+
+    local parts = Split( text, "<condtrigger>")
+
+    if parts[1] == nil then
+        return
+    end
+
+    local condition_string = parts[1]
+    local condtrigger_strings = {}
+    for i = 2, #parts do
+        condtrigger_strings[#condtrigger_strings+1] = parts[i]
+    end
+
+    local attr_strings = Split( condition_string, "}:")
+
+    if #attr_strings == 0 then
+        return
+    end
+
+    local attrs = {}
+    for _, value in ipairs(attr_strings) do
+        local tmp = Split(value, ":{")
+        if #tmp == 2 then
+            attrs[tmp[1]] = tmp[2]
+        end
+    end
+
+    local data = Condition.New()
+
+    if attrs["enabled"] ~= nil then
+        data.enabled = ToBool(attrs["enabled"])
+    end
+
+    if attrs["description"] ~= nil then
+        data.description = tostring(attrs["description"])
+    end
+
+    if attrs["sortIndex"] ~= nil then
+        data.sortIndex = tonumber(attrs["sortIndex"])
+    end
+
+    if attrs["duration"] ~= nil then
+        data.duration = tonumber(attrs["duration"])
+    end
+
+    for _, condtrigger_string in ipairs(condtrigger_strings) do
+        StringToTrigger( condtrigger_string, data )
+    end
+
+    timer_data.conditionList[#timer_data.conditionList + 1] = data
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -122,6 +122,10 @@ function TimerToString( data )
         end
     end
 
+    -- timer conditions
+    for i, condition_data in ipairs(data.conditionList or {}) do
+        text = text .. ConditionToString( condition_data )
+    end
 
     return text
 
@@ -139,7 +143,7 @@ function TriggerToString( data )
 
             -- list of Targets
             if key == "listOfTargets" then
-                
+
                 text = text  .. key .. ":{" .. tostring( ListOfTargetsToString( value ) ) .. "}:"
 
             end
@@ -147,9 +151,40 @@ function TriggerToString( data )
         else
 
             text = text  .. key .. ":{" .. tostring(value) .. "}:"
-        
+
         end
 
+    end
+
+    return text
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConditionToString( data )
+
+    local text = "<condition>"
+
+    text = text .. "enabled:{" .. tostring(data.enabled) .. "}:"
+    text = text .. "description:{" .. tostring(data.description) .. "}:"
+    text = text .. "sortIndex:{" .. tostring(data.sortIndex) .. "}:"
+    text = text .. "duration:{" .. tostring(data.duration) .. "}:"
+
+    for name, triggerType in pairs(Trigger.Types) do
+        for i, trigger_data in ipairs(data[triggerType]) do
+            local t = "<condtrigger>"
+            for key, value in pairs(trigger_data) do
+                if type(value) == "table" then
+                    if key == "listOfTargets" then
+                        t = t .. key .. ":{" .. tostring( ListOfTargetsToString( value ) ) .. "}:"
+                    end
+                else
+                    t = t .. key .. ":{" .. tostring(value) .. "}:"
+                end
+            end
+            text = text .. t
+        end
     end
 
     return text
