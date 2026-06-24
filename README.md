@@ -10,6 +10,12 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.2.0
+- added conditions system for gating timer triggers (timers only fire when all enabled conditions are met)
+- added conditions to export/import system
+- added color-coded hierarchy stripes to options panel
+- improved export/import compression using LibDeflate (~3.5x shorter strings, old import strings still work)
+
 ### 3.1.9
 - added a usage file
 - added more highlighting to the settings window
