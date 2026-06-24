@@ -7,6 +7,21 @@
 ---------------------------------------------------------------------------------------------------
 function StringToData( text, insert )
 
+    -- decompress v2 format before normal parsing
+    local stripped = string.gsub( text, "```", "" )
+    stripped = string.gsub( stripped, "\n", "" )
+
+    if string.find( stripped, "^G3z/%d" ) then
+        local encoded     = string.sub( stripped, 6 )
+        local compressed  = LibDeflate:DecodeForPrint( encoded )
+        if compressed then
+            local decompressed = LibDeflate:DecompressDeflate( compressed )
+            if decompressed then
+                text = decompressed
+            end
+        end
+    end
+
     local type
     type, text = GetStringType( text )
 

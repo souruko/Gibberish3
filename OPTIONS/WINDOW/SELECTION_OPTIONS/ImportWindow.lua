@@ -167,7 +167,7 @@ function Options.Elements.ImportWindow:ShowExport( data, type, index )
 	self.insert_back:SetVisible(false)
 	self.create_new_back:SetVisible(false)
 	self.header_back:SetText( UTILS.GetText( "import", "export" ) )
-	self.textbox:SetText( UTILS.DataToString(data, type, index) )
+	self.textbox:SetText( UTILS.DataToStringV2(data, type, index) )
 
 	Options.Window.Object:Activate()
 	self.textbox:Focus()

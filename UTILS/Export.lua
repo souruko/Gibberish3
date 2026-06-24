@@ -5,6 +5,22 @@
 --=================================================================================================
 
 ---------------------------------------------------------------------------------------------------
+function DataToStringV2( data, type, index )
+
+    -- build the v1 payload (strip the backtick wrapper)
+    local v1 = DataToString( data, type, index )
+    local payload = string.gsub( v1, "```", "" )
+    payload = string.gsub( payload, "\n", "" )
+
+    local compressed = LibDeflate:CompressDeflate( payload, { level = 9 } )
+    local encoded    = LibDeflate:EncodeForPrint( compressed )
+
+    return "```G3z/" .. tostring(type) .. encoded .. "```\n"
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function DataToString( data, type, index )
 
     local text = "```Gibberish3/" .. tostring(type)
