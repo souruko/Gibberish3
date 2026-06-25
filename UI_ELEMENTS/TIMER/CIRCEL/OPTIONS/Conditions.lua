@@ -317,7 +317,6 @@ function ConditionsOptions:BuildCollectionRightClickMenu( data, menu )
 
     if self.condTriggerOptions == nil then return end
 
-    menu:AddSeperator()
     self.condTriggerOptions:BuildCollectionRightClickMenu( data, menu )
 
 end

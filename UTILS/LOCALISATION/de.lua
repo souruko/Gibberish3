@@ -283,6 +283,12 @@ L[ Language.German ].collection.source                      = "Quelle"
 L[ Language.German ].collection.timer                       = "Timer"
 L[ Language.German ].collection.icon                        = "Icon"
 
+L[ Language.German ].collection.sub_window                  = "Fenster"
+L[ Language.German ].collection.sub_timer                   = "Timer"
+L[ Language.German ].collection.sub_trigger                 = "Auslöser"
+L[ Language.German ].collection.sub_conditions              = "Bedingungen"
+L[ Language.German ].collection.sub_window_trigger          = "Fenster Auslöser"
+
 L[ Language.German ].segment = {}               
 L[ Language.German ].segment.effects                        = "- Effekte -"
 L[ Language.German ].segment.skills                         = "- Fertigkeiten -"

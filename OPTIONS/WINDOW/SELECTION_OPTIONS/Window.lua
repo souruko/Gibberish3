@@ -155,17 +155,23 @@ function Options.Elements.SelectionOptions:BuildCollectionRightClickMenu( data )
 
 	self.collection_menu = Options.Elements.RightClickMenu( 150 )
 
-	local row =  Options.Elements.Row(
+	local height = Options.Defaults.rc_menu.item_height
+
+	-- Window sub-menu (always present: copies token to window name)
+	local windowSubMenu = Options.Elements.RightClickSubMenu( 150 )
+	windowSubMenu:AddRow( Options.Elements.Row(
 		"collection",
 		"window_name",
 		function ()
 			self.name_textbox:SetText( data.token )
 		end,
-		Options.Defaults.rc_menu.item_height
-	)
-	self.collection_menu:AddRow( row )
+		height
+	) )
+	self.collection_menu:AddSubRow(
+		Options.Elements.SubRow( "collection", "sub_window", windowSubMenu, height ),
+		windowSubMenu )
 
-	-- build menu for children
+	-- Timer / Trigger / Conditions sub-menus come from content
 	self.content:BuildCollectionRightClickMenu( data, self.collection_menu )
 
 	self.collection_menu:Show( nil, nil, Turbine.UI.ContentAlignment.TopLeft )

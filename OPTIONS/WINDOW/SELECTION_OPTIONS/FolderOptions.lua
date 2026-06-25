@@ -43,7 +43,12 @@ function Options.Elements.FolderOptions:BuildCollectionRightClickMenu( data, men
         return
     end
 
-    self.triggerOptions:BuildCollectionRightClickMenu( data, menu )
+    local height = Options.Defaults.rc_menu.item_height
+    local triggerSubMenu = Options.Elements.RightClickSubMenu( 150 )
+    self.triggerOptions:BuildCollectionRightClickMenu( data, triggerSubMenu )
+    if triggerSubMenu:HasRows() then
+        menu:AddSubRow( Options.Elements.SubRow( "collection", "sub_trigger", triggerSubMenu, height ), triggerSubMenu )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

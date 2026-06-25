@@ -284,6 +284,12 @@ L[ Language.English ].collection.source                     = "Source"
 L[ Language.English ].collection.timer                      = "Timer"
 L[ Language.English ].collection.icon                       = "Icon"
 
+L[ Language.English ].collection.sub_window                 = "Window"
+L[ Language.English ].collection.sub_timer                  = "Timer"
+L[ Language.English ].collection.sub_trigger                = "Trigger"
+L[ Language.English ].collection.sub_conditions             = "Conditions"
+L[ Language.English ].collection.sub_window_trigger         = "Window Trigger"
+
 L[ Language.English ].segment = {}
 L[ Language.English ].segment.effects                       = "- Effects -"
 L[ Language.English ].segment.skills                        = "- Skills -"

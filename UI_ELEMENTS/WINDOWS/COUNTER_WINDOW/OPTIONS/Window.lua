@@ -145,7 +145,14 @@ end
 ---------------------------------------------------------------------------------------------------
 function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
 
-    self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
+    local height = Options.Defaults.rc_menu.item_height
+
+    local windowTriggerSubMenu = Options.Elements.RightClickSubMenu( 150 )
+    self.tab_trigger:BuildCollectionRightClickMenu( data, windowTriggerSubMenu )
+    if windowTriggerSubMenu:HasRows() then
+        menu:AddSubRow( Options.Elements.SubRow( "collection", "sub_window_trigger", windowTriggerSubMenu, height ), windowTriggerSubMenu )
+    end
+
     self.tab_timer:BuildCollectionRightClickMenu( data, menu )
 
 end

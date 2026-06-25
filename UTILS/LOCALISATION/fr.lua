@@ -283,6 +283,12 @@ L[ Language.French ].collection.source                     = "Source"
 L[ Language.French ].collection.timer                      = "Minuterie"
 L[ Language.French ].collection.icon                       = "Icône"
 
+L[ Language.French ].collection.sub_window                 = "Fenêtre"
+L[ Language.French ].collection.sub_timer                  = "Minuterie"
+L[ Language.French ].collection.sub_trigger                = "Déclencheur"
+L[ Language.French ].collection.sub_conditions             = "Conditions"
+L[ Language.French ].collection.sub_window_trigger         = "Déclencheur de fenêtre"
+
 L[ Language.French ].segment = {}
 L[ Language.French ].segment.effects                       = "- Effets -"
 L[ Language.French ].segment.skills                        = "- Compétences -"

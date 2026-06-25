@@ -10,6 +10,10 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.2.1
+- restructured collection right-click menu into categorized sub-menus: Window, Window Trigger, Timer, Trigger, Conditions
+- added Conditions and Window Trigger to the collection copy system (were previously missing)
+
 ### 3.2.0
 - added conditions system for gating timer triggers (timers only fire when all enabled conditions are met)
 - added conditions to export/import system

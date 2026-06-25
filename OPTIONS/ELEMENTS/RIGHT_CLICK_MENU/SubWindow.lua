@@ -16,6 +16,7 @@ function Options.Elements.RightClickSubMenu:Constructor( width )
     self.orientation = Turbine.UI.ContentAlignment.BottomRight
 
     self.children = {}
+    self.has_rows = false
 
     -- self
     self:SetMouseVisible( false )
@@ -73,6 +74,16 @@ function Options.Elements.RightClickSubMenu:AddRow( row )
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
 
+    self.has_rows = true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Elements.RightClickSubMenu:HasRows()
+
+    return self.has_rows == true
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -118,6 +129,8 @@ function Options.Elements.RightClickSubMenu:AddSubRow( row, subMenu )
 
     -- fix height
     self:ChangeHeight( Options.Defaults.rc_menu.item_height )
+
+    self.has_rows = true
 
 end
 ---------------------------------------------------------------------------------------------------

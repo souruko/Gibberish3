@@ -135,12 +135,26 @@ end
 ---------------------------------------------------------------------------------------------------
 function OptionsWindow:BuildCollectionRightClickMenu( data, menu )
 
-    menu:AddSeperator()
+    local height = Options.Defaults.rc_menu.item_height
 
-    self.tab_general:BuildCollectionRightClickMenu( data, menu )
-    self.tab_style:BuildCollectionRightClickMenu( data, menu )
-    self.tab_trigger:BuildCollectionRightClickMenu( data, menu )
-    self.tab_conditions:BuildCollectionRightClickMenu( data, menu )
+    local timerSubMenu = Options.Elements.RightClickSubMenu( 150 )
+    self.tab_general:BuildCollectionRightClickMenu( data, timerSubMenu )
+    self.tab_style:BuildCollectionRightClickMenu( data, timerSubMenu )
+    if timerSubMenu:HasRows() then
+        menu:AddSubRow( Options.Elements.SubRow( "collection", "sub_timer", timerSubMenu, height ), timerSubMenu )
+    end
+
+    local triggerSubMenu = Options.Elements.RightClickSubMenu( 150 )
+    self.tab_trigger:BuildCollectionRightClickMenu( data, triggerSubMenu )
+    if triggerSubMenu:HasRows() then
+        menu:AddSubRow( Options.Elements.SubRow( "collection", "sub_trigger", triggerSubMenu, height ), triggerSubMenu )
+    end
+
+    local condSubMenu = Options.Elements.RightClickSubMenu( 150 )
+    self.tab_conditions:BuildCollectionRightClickMenu( data, condSubMenu )
+    if condSubMenu:HasRows() then
+        menu:AddSubRow( Options.Elements.SubRow( "collection", "sub_conditions", condSubMenu, height ), condSubMenu )
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
