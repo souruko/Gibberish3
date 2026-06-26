@@ -185,6 +185,7 @@ function ConditionToString( data )
     text = text .. "enabled:{" .. tostring(data.enabled) .. "}:"
     text = text .. "description:{" .. tostring(data.description) .. "}:"
     text = text .. "sortIndex:{" .. tostring(data.sortIndex) .. "}:"
+    text = text .. "useCustomDuration:{" .. tostring(data.useCustomDuration) .. "}:"
     text = text .. "duration:{" .. tostring(data.duration) .. "}:"
 
     for name, triggerType in pairs(Trigger.Types) do

@@ -79,6 +79,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Elements.ConditionTriggerListbox:ContentChanged( data )
 
+    for _, item in ipairs( self.controls ) do
+        item:SetParent( nil )
+    end
+
     self.data     = data
     self.controls = {}
 

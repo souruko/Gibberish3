@@ -117,6 +117,9 @@ function Options.OverwriteCharData( global_data, char_data )
             for _, condition in ipairs(timer.conditionList) do
                 condition.tod = 0
                 if condition.duration == nil then condition.duration = 30 end
+                if condition.useCustomDuration == nil then
+                    condition.useCustomDuration = (condition.duration > 0)
+                end
                 for trigType = 1, 10 do
                     if condition[trigType] then
                         for _, t in ipairs(condition[trigType]) do

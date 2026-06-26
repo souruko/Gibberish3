@@ -31,41 +31,41 @@ function ConditionsOptions:Constructor( data )
     self.conditionListbox:SetPosition( sp, sp )
     -- width set in SizeChanged
 
-    -- below: edit panel for selected condition
+    -- below: scrollable edit panel for selected condition
     self.editPanel = Turbine.UI.Control()
     self.editPanel:SetParent( self.background1 )
     self.editPanel:SetVisible( false )
 
-    local ep_top = 0
+    self.LISTBOX_HEIGHT      = 100
+    self.TRIGGER_OPTS_HEIGHT = 400
+
+    self.editListbox = Turbine.UI.ListBox()
+    self.editListbox:SetParent( self.editPanel )
+    self.editListbox:SetBackColor( Options.Defaults.window.basecolor )
+
+    self.editScrollbar = Turbine.UI.Lotro.ScrollBar()
+    self.editScrollbar:SetParent( self.editPanel )
+    self.editScrollbar:SetOrientation( Turbine.UI.Orientation.Vertical )
+    self.editScrollbar:SetBackColor( Options.Defaults.window.framecolor )
+    self.editScrollbar:SetWidth( 10 )
+
+    self.editListbox:SetVerticalScrollBar( self.editScrollbar )
 
     self.condDescription = Options.Elements.TextBoxRow(
         Options.Defaults.window.basecolor, "options", "description", "cond_description", 50, true )
-    self.condDescription:SetParent( self.editPanel )
-    self.condDescription:SetPosition( 0, ep_top )
-    ep_top = ep_top + 55
 
-    self.condEnabled = Options.Elements.CheckBoxRow(
-        Options.Defaults.window.basecolor, "options", "enabled", "cond_enabled", 30 )
-    self.condEnabled:SetParent( self.editPanel )
-    self.condEnabled:SetPosition( 0, ep_top )
-    ep_top = ep_top + 35
+    self.condUseCustomDuration = Options.Elements.CheckBoxRow(
+        Options.Defaults.window.basecolor, "options", "useCustomDuration", "cond_use_custom_duration", 30 )
 
     self.condDuration = Options.Elements.NumberBoxRow(
         Options.Defaults.window.basecolor, "options", "duration", "cond_duration", 30 )
-    self.condDuration:SetParent( self.editPanel )
-    self.condDuration:SetPosition( 0, ep_top )
-    ep_top = ep_top + 35
-
-    -- trigger listbox: full editPanel width, fixed height; trigger options appear below it
-    self.triggerRow_top  = ep_top
-    self.LISTBOX_HEIGHT  = 100
 
     self.condTriggerListbox = Options.Elements.ConditionTriggerListbox( self )
-    self.condTriggerListbox:SetParent( self.editPanel )
-    self.condTriggerListbox:SetPosition( 0, ep_top )
     self.condTriggerListbox:SetHeight( self.LISTBOX_HEIGHT )
 
     self.condTriggerOptions = nil
+
+    self:RefreshListbox()
 
     self.conditionListbox:ContentChanged( self.data )
 
@@ -91,6 +91,21 @@ end
 
 function ConditionsOptions:TriggerSelected( index, type )
     Options.ConditionTriggerSelectionChanged( index, type )
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConditionsOptions:RefreshListbox()
+
+    self.editListbox:ClearItems()
+    self.editListbox:AddItem( self.condDescription )
+    self.editListbox:AddItem( self.condUseCustomDuration )
+    self.editListbox:AddItem( self.condDuration )
+    self.editListbox:AddItem( self.condTriggerListbox )
+    if self.condTriggerOptions ~= nil then
+        self.editListbox:AddItem( self.condTriggerOptions )
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -173,19 +188,18 @@ function ConditionsOptions:SizeChanged()
     self.editPanel:SetPosition( 0, ep_top )
     self.editPanel:SetSize( inner_width, ep_height )
 
-    local row_width = inner_width - sp
-    self.condDescription:SetWidth( row_width )
-    self.condEnabled:SetWidth( row_width )
-    self.condDuration:SetWidth( row_width )
+    self.editListbox:SetSize( inner_width - 10, ep_height )
+    self.editScrollbar:SetLeft( inner_width - 10 )
+    self.editScrollbar:SetHeight( ep_height )
 
+    local row_width = inner_width - 10 - sp
+    self.condDescription:SetWidth( row_width )
+    self.condUseCustomDuration:SetWidth( row_width )
+    self.condDuration:SetWidth( row_width )
     self.condTriggerListbox:SetWidth( row_width )
 
-    local trigger_opts_top    = self.triggerRow_top + self.LISTBOX_HEIGHT + sp
-    local trigger_opts_height = ep_height - trigger_opts_top - sp
-
     if self.condTriggerOptions ~= nil then
-        self.condTriggerOptions:SetPosition( 0, trigger_opts_top )
-        self.condTriggerOptions:SetSize( row_width, trigger_opts_height )
+        self.condTriggerOptions:SetWidth( row_width )
     end
 
 end
@@ -197,9 +211,9 @@ function ConditionsOptions:Save()
     local conditionData = self.data.conditionList[ Data.selectedConditionsIndex ]
     if conditionData == nil then return end
 
-    conditionData.description = self.condDescription:GetText()
-    conditionData.enabled     = self.condEnabled:IsChecked()
-    conditionData.duration    = tonumber( self.condDuration:GetText() ) or conditionData.duration
+    conditionData.description       = self.condDescription:GetText()
+    conditionData.useCustomDuration = self.condUseCustomDuration:IsChecked()
+    conditionData.duration          = tonumber( self.condDuration:GetText() ) or conditionData.duration
 
     if self.condTriggerOptions ~= nil then
         self.condTriggerOptions:Save()
@@ -218,7 +232,7 @@ function ConditionsOptions:Reset()
     if conditionData == nil then return end
 
     self.condDescription:SetText( conditionData.description )
-    self.condEnabled:SetChecked( conditionData.enabled )
+    self.condUseCustomDuration:SetChecked( conditionData.useCustomDuration )
     self.condDuration:SetText( tostring( conditionData.duration ) )
 
     if self.condTriggerOptions ~= nil then
@@ -232,7 +246,7 @@ end
 function ConditionsOptions:LanguageChanged()
 
     self.condDescription:LanguageChanged()
-    self.condEnabled:LanguageChanged()
+    self.condUseCustomDuration:LanguageChanged()
     self.condDuration:LanguageChanged()
 
     if self.condTriggerOptions ~= nil then
@@ -265,8 +279,8 @@ function ConditionsOptions:TriggerSelectionChanged()
     -- close any open trigger options sub-panel
     if self.condTriggerOptions ~= nil then
         self.condTriggerOptions:Close()
-        self.condTriggerOptions:SetParent()
         self.condTriggerOptions = nil
+        self:RefreshListbox()
     end
 
     -- no condition selected: hide right panel
@@ -284,7 +298,7 @@ function ConditionsOptions:TriggerSelectionChanged()
     -- show right panel with this condition's data
     self.editPanel:SetVisible( true )
     self.condDescription:SetText( conditionData.description )
-    self.condEnabled:SetChecked( conditionData.enabled )
+    self.condUseCustomDuration:SetChecked( conditionData.useCustomDuration )
     self.condDuration:SetText( tostring( conditionData.duration ) )
 
     self.condTriggerListbox:ContentChanged( conditionData )
@@ -303,8 +317,8 @@ function ConditionsOptions:TriggerSelectionChanged()
         end
 
         self.condTriggerOptions = Trigger[ Data.selectedConditionTriggerType ].Options( self, triggerData, -1 )
-        self.condTriggerOptions:SetParent( self.editPanel )
-
+        self.condTriggerOptions:SetHeight( self.TRIGGER_OPTS_HEIGHT )
+        self:RefreshListbox()
         self:SizeChanged()
 
     end

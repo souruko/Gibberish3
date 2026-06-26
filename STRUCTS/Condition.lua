@@ -14,10 +14,11 @@ function Condition.New()
     local condition = {}
 
     condition.id          = Turbine.Engine.GetGameTime()
-    condition.enabled     = false
+    condition.enabled     = true
     condition.description = ""
     condition.sortIndex   = 0
-    condition.duration    = 30
+    condition.useCustomDuration = false
+    condition.duration    = 10
     condition.tod         = 0
 
     for index, triggerType in pairs( Trigger.Types ) do
@@ -40,6 +41,7 @@ function Condition.Copy( data )
     condition.enabled     = data.enabled
     condition.description = data.description
     condition.sortIndex   = data.sortIndex
+    condition.useCustomDuration = data.useCustomDuration
     condition.duration    = data.duration
     condition.tod         = 0
 
@@ -102,7 +104,7 @@ function Condition.CheckAll( timerData, triggerType, matchFn )
 
                     if condTriggerData.action == Action.Add then
 
-                        if condition.duration > 0 then
+                        if condition.useCustomDuration == true then
                             condition.tod = gameTime + condition.duration
                         else
                             condition.tod = math.huge

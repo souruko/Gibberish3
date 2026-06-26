@@ -102,6 +102,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function ConditionTriggerItem:SizeChanged()
 
+    if self.background == nil then return end
+
     local w, h = self:GetSize()
     self.background:SetSize( w, h )
     self.triggerStripe:SetHeight( h )

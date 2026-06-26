@@ -447,7 +447,10 @@ L[ Language.English ].options.excludeSelf                   = "Exclude Self"
 
 L[ Language.English ].options.enabled                       = "Enabled"
 L[ Language.English ].options.duration                      = "Duration (s)"
+L[ Language.English ].options.useCustomDuration             = "Use Custom Duration"
 
+L[ Language.English ].tooltip.cond_use_custom_duration      = "When enabled, the condition expires after the specified Duration. When disabled, the condition stays active until explicitly removed by a Remove trigger."
+L[ Language.English ].tooltip.cond_duration                 = "How long in seconds the condition remains active after being triggered. Only used when 'Use Custom Duration' is enabled."
 L[ Language.English ].tooltip.button_new_condition          = "Add a new condition to this timer."
 
 L[ Language.English ].source.Buff                           = "Buff"

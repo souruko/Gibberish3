@@ -10,6 +10,13 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.2.2
+- added `useCustomDuration` toggle to conditions: explicit boolean to choose between timed expiry and permanent (until removed by a trigger), replacing the old `duration == 0` sentinel
+- added scrollbar to the condition edit panel so all fields remain accessible regardless of panel height
+- removed duplicate "Enabled" checkbox from the condition edit panel (it is already shown in the condition listbox)
+- fixed condition and condition trigger deletion not removing items from the listbox display
+- fixed crash on plugin load when settings were open with a condition selected
+
 ### 3.2.1
 - restructured collection right-click menu into categorized sub-menus: Window, Window Trigger, Timer, Trigger, Conditions
 - added Conditions and Window Trigger to the collection copy system (were previously missing)

@@ -446,7 +446,10 @@ L[ Language.French ].options.excludeSelf                   = "Exclure soi-même"
 
 L[ Language.French ].options.enabled                       = "Activé"
 L[ Language.French ].options.duration                      = "Durée (s)"
+L[ Language.French ].options.useCustomDuration             = "Utiliser une durée personnalisée"
 
+L[ Language.French ].tooltip.cond_use_custom_duration      = "Lorsqu'elle est activée, la condition expire après la durée spécifiée. Lorsqu'elle est désactivée, la condition reste active jusqu'à ce qu'elle soit explicitement supprimée par un déclencheur de suppression."
+L[ Language.French ].tooltip.cond_duration                 = "Durée en secondes pendant laquelle la condition reste active après avoir été déclenchée. Utilisée uniquement lorsque 'Utiliser une durée personnalisée' est activé."
 L[ Language.French ].tooltip.button_new_condition          = "Ajouter une nouvelle condition à ce minuteur."
 
 L[ Language.French ].source.Buff                           = "Buff"

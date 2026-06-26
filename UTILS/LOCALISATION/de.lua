@@ -446,7 +446,10 @@ L[ Language.German ].options.excludeSelf                   = "Nur Gruppe(ohne se
 
 L[ Language.German ].options.enabled                       = "Aktiviert"
 L[ Language.German ].options.duration                      = "Dauer (s)"
+L[ Language.German ].options.useCustomDuration             = "Benutzerdefinierte Dauer verwenden"
 
+L[ Language.German ].tooltip.cond_use_custom_duration      = "Wenn aktiviert, läuft die Bedingung nach der angegebenen Dauer ab. Wenn deaktiviert, bleibt die Bedingung aktiv, bis sie explizit durch einen Entfernen-Auslöser deaktiviert wird."
+L[ Language.German ].tooltip.cond_duration                 = "Dauer in Sekunden, die die Bedingung nach dem Auslösen aktiv bleibt. Wird nur verwendet, wenn 'Benutzerdefinierte Dauer verwenden' aktiviert ist."
 L[ Language.German ].tooltip.button_new_condition          = "Neue Bedingung für diesen Timer hinzufügen."
 
 L[ Language.German ].source.Buff                           = "Buff"

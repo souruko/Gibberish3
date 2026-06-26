@@ -645,6 +645,10 @@ function StringToCondition( text, timer_data )
         data.sortIndex = tonumber(attrs["sortIndex"])
     end
 
+    if attrs["useCustomDuration"] ~= nil then
+        data.useCustomDuration = ToBool(attrs["useCustomDuration"])
+    end
+
     if attrs["duration"] ~= nil then
         data.duration = tonumber(attrs["duration"])
     end
