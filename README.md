@@ -10,6 +10,11 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.2.3
+- added "Conditions" and "Condition Triggers" section headers to the condition listboxes in the options panel
+- added `permanent` toggle to conditions: when enabled, `tod` is set to `math.huge` on trigger and the condition stays active indefinitely; can still be deactivated by a Remove trigger
+- changed `useCustomDuration = false` behaviour: condition now lasts for the duration provided by the trigger event (e.g. remaining time of an effect) instead of infinite; falls back to infinite for trigger types that carry no duration (Combat, Chat, Skill, Timer)
+
 ### 3.2.2
 - added `useCustomDuration` toggle to conditions: explicit boolean to choose between timed expiry and permanent (until removed by a trigger), replacing the old `duration == 0` sentinel
 - added scrollbar to the condition edit panel so all fields remain accessible regardless of panel height

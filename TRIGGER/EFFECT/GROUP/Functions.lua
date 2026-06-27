@@ -179,7 +179,7 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTimer = function ( effect, player, win
 
     Condition.CheckAll( timerData, Trigger.Types.EffectGroup, function(t)
         return Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effect, player, t)
-    end)
+    end, effect:GetDuration())
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectGroup ]) do

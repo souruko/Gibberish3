@@ -50,6 +50,16 @@ function Options.Elements.ConditionTriggerListbox:Constructor( parent )
     end
     Options.Elements.Tooltip.AddTooltip( self.add_button, "tooltip", "button_new_trigger", false )
 
+    self.header = Turbine.UI.Label()
+    self.header:SetParent( self )
+    self.header:SetPosition( Options.Defaults.window.toolbar_height + (2 * Options.Defaults.window.frame), Options.Defaults.window.frame )
+    self.header:SetHeight( Options.Defaults.window.toolbar_height )
+    self.header:SetBackColor( Options.Defaults.window.backcolor2 )
+    self.header:SetTextAlignment( Turbine.UI.ContentAlignment.MiddleCenter )
+    self.header:SetForeColor( Options.Defaults.window.textcolor )
+    self.header:SetFont( Options.Defaults.window.font )
+    self.header:SetText( L[ Language.Local ].tab.condition_triggers )
+
     -- items area: horizontal flow, below toolbar
     self.itemsArea = Turbine.UI.Control()
     self.itemsArea:SetParent( self )
@@ -67,6 +77,8 @@ function Options.Elements.ConditionTriggerListbox:SizeChanged()
 
     local area_top    = (2 * f) + tb
     local area_height = height - area_top - f
+
+    self.header:SetWidth( width - tb - (3 * f) )
 
     self.itemsArea:SetPosition( f, area_top )
     self.itemsArea:SetSize( width - 2*f, area_height )

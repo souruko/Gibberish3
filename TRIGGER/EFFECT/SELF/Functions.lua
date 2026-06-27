@@ -151,7 +151,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTimer = function ( effect, windowIndex,
 
     Condition.CheckAll( timerData, Trigger.Types.EffectSelf, function(t)
         return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, t)
-    end)
+    end, effect:GetDuration())
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectSelf ]) do

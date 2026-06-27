@@ -17,6 +17,7 @@ function Condition.New()
     condition.enabled     = true
     condition.description = ""
     condition.sortIndex   = 0
+    condition.permanent   = false
     condition.useCustomDuration = false
     condition.duration    = 10
     condition.tod         = 0
@@ -41,6 +42,7 @@ function Condition.Copy( data )
     condition.enabled     = data.enabled
     condition.description = data.description
     condition.sortIndex   = data.sortIndex
+    condition.permanent   = data.permanent
     condition.useCustomDuration = data.useCustomDuration
     condition.duration    = data.duration
     condition.tod         = 0
@@ -84,7 +86,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- iterates conditionList and fires matchFn against each condition trigger; updates tod on match
 ---------------------------------------------------------------------------------------------------
-function Condition.CheckAll( timerData, triggerType, matchFn )
+function Condition.CheckAll( timerData, triggerType, matchFn, duration )
 
     if timerData.conditionList == nil then
         return
@@ -104,8 +106,12 @@ function Condition.CheckAll( timerData, triggerType, matchFn )
 
                     if condTriggerData.action == Action.Add then
 
-                        if condition.useCustomDuration == true then
+                        if condition.permanent == true then
+                            condition.tod = math.huge
+                        elseif condition.useCustomDuration == true then
                             condition.tod = gameTime + condition.duration
+                        elseif duration ~= nil then
+                            condition.tod = gameTime + duration
                         else
                             condition.tod = math.huge
                         end

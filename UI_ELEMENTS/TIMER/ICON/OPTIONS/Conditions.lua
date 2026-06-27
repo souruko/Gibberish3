@@ -54,6 +54,9 @@ function ConditionsOptions:Constructor( data )
     self.condDescription = Options.Elements.TextBoxRow(
         Options.Defaults.window.basecolor, "options", "description", "cond_description", 50, true )
 
+    self.condPermanent = Options.Elements.CheckBoxRow(
+        Options.Defaults.window.basecolor, "options", "permanent", "cond_permanent", 30 )
+
     self.condUseCustomDuration = Options.Elements.CheckBoxRow(
         Options.Defaults.window.basecolor, "options", "useCustomDuration", "cond_use_custom_duration", 30 )
 
@@ -99,6 +102,7 @@ function ConditionsOptions:RefreshListbox()
 
     self.editListbox:ClearItems()
     self.editListbox:AddItem( self.condDescription )
+    self.editListbox:AddItem( self.condPermanent )
     self.editListbox:AddItem( self.condUseCustomDuration )
     self.editListbox:AddItem( self.condDuration )
     self.editListbox:AddItem( self.condTriggerListbox )
@@ -194,6 +198,7 @@ function ConditionsOptions:SizeChanged()
 
     local row_width = inner_width - 10 - sp
     self.condDescription:SetWidth( row_width )
+    self.condPermanent:SetWidth( row_width )
     self.condUseCustomDuration:SetWidth( row_width )
     self.condDuration:SetWidth( row_width )
     self.condTriggerListbox:SetWidth( row_width )
@@ -212,6 +217,7 @@ function ConditionsOptions:Save()
     if conditionData == nil then return end
 
     conditionData.description       = self.condDescription:GetText()
+    conditionData.permanent          = self.condPermanent:IsChecked()
     conditionData.useCustomDuration = self.condUseCustomDuration:IsChecked()
     conditionData.duration          = tonumber( self.condDuration:GetText() ) or conditionData.duration
 
@@ -232,6 +238,7 @@ function ConditionsOptions:Reset()
     if conditionData == nil then return end
 
     self.condDescription:SetText( conditionData.description )
+    self.condPermanent:SetChecked( conditionData.permanent )
     self.condUseCustomDuration:SetChecked( conditionData.useCustomDuration )
     self.condDuration:SetText( tostring( conditionData.duration ) )
 
@@ -246,6 +253,7 @@ end
 function ConditionsOptions:LanguageChanged()
 
     self.condDescription:LanguageChanged()
+    self.condPermanent:LanguageChanged()
     self.condUseCustomDuration:LanguageChanged()
     self.condDuration:LanguageChanged()
 
@@ -298,6 +306,7 @@ function ConditionsOptions:TriggerSelectionChanged()
     -- show right panel with this condition's data
     self.editPanel:SetVisible( true )
     self.condDescription:SetText( conditionData.description )
+    self.condPermanent:SetChecked( conditionData.permanent )
     self.condUseCustomDuration:SetChecked( conditionData.useCustomDuration )
     self.condDuration:SetText( tostring( conditionData.duration ) )
 
