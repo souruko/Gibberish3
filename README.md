@@ -10,6 +10,12 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.4
+- added test timer button to OPTIONS2 timer editor (General tab); fires a fake Add action on the live window for quick preview
+- triggers can now be dragged to any parent container in the OPTIONS2 nav tree (folder, window, timer, or condition), not just their matching parent type; the effect type is preserved and the action is reset if invalid for the new parent
+- fixed trigger drop-target detection using a coordinate-based item scan instead of GetItemAt, which could return sub-controls and miss the nav item
+- changed the drag target highlight to Turbine.UI.Window to support opacity
+
 ### 3.3.3
 - unified toolbar height across nav, editor, and library panels (all 36px)
 - unified toolbar icon size (16×16) and vertical alignment across all three panels

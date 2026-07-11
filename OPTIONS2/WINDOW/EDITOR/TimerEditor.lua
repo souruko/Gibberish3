@@ -85,7 +85,7 @@ end
 
 -- ── General tab (non-COUNTER_BAR) ─────────────────────────────────────────────
 
-local function make_general_tab(data, bc)
+local function make_general_tab(data, bc, windowIndex, timerIndex)
     local panel = Turbine.UI.Control()
     local add, rows = make_rows(panel)
     local plist = {}
@@ -112,6 +112,47 @@ local function make_general_tab(data, bc)
     add(timerValue)
     plist[#plist+1] = paste_btn(panel, timerValue, "timer", {1,2},
         function(v) timerValue:SetText(tostring(v)) end)
+
+    local testBtn = Turbine.UI.Lotro.Button()
+    testBtn:SetParent(panel)
+    testBtn:SetWidth(150)
+    testBtn:SetText("Test Timer")
+    testBtn:SetEnabled(Windows[windowIndex] ~= nil)
+    do
+        local count = #rows + 1
+        local bc_btn = count % 2 == 1 and BC_ODD or BC_EVEN
+        local y_btn  = TOP
+        for _, r in ipairs(rows) do
+            y_btn = y_btn + r:GetHeight() + 5
+        end
+        testBtn:SetPosition(LEFT, y_btn)
+        testBtn:SetBackColor(bc_btn)
+    end
+    testBtn.MouseClick = function()
+        if Windows[windowIndex] == nil then return end
+        local fakeTriggerData = {}
+        fakeTriggerData.action = Action.Add
+        local startTime = Turbine.Engine.GetGameTime()
+        local duration = 10
+        if data.useCustomTimer == true then
+            duration = tonumber(data.timerValue) or 10
+        end
+        local icon = data.icon
+        local text = ""
+        if data.textOption == TimerTextOptions.Target then
+            text = LocalPlayer:GetName()
+        elseif data.textOption == TimerTextOptions.Token then
+            text = "token"
+        elseif data.textOption == TimerTextOptions.CustomText then
+            text = data.textValue
+        end
+        local entity = nil
+        local key = nil
+        if data.permanent == false and data.stacking == Stacking.Multi then
+            key = startTime
+        end
+        Windows[windowIndex]:TimerAction(fakeTriggerData, data, timerIndex, startTime, duration, icon, text, entity, key)
+    end
 
     local function load()
         desc:SetText(data.description or "")
@@ -295,7 +336,7 @@ function Options2.Window.TimerEditor:Constructor(nodeData)
         gp, gl, gs, glc, gsc = make_counter_tab(data, bc)
         gpl = {}
     else
-        gp, gl, gs, glc, gsc, gpl = make_general_tab(data, bc)
+        gp, gl, gs, glc, gsc, gpl = make_general_tab(data, bc, nodeData.windowIndex, nodeData.timerIndex)
     end
     local sp, sl, ss, slc, ssc, spl = make_style_tab(data, bc)
     local ap, al, as, alc, asc      = make_animation_tab(data, bc)

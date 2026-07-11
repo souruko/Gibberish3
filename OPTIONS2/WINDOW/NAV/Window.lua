@@ -896,7 +896,7 @@ function Options2.Window.Nav.Constructor:_InitDrag()
     self._drag_indicator:SetVisible(false)
     self._drag_indicator:SetMouseVisible(false)
 
-    self._drag_folder_hl = Turbine.UI.Control()
+    self._drag_folder_hl = Turbine.UI.Window()
     self._drag_folder_hl:SetParent(self)
     self._drag_folder_hl:SetHeight(ITEM_H)
     self._drag_folder_hl:SetBackColor(Turbine.UI.Color(0.3, 0.25, 0.6, 0.5))
@@ -910,10 +910,13 @@ function Options2.Window.Nav.Constructor:_DragBegin(item, args)
     if nt ~= "folder" and nt ~= "window" and nt ~= "timer" and nt ~= "condition"
         and nt ~= "foldertrigger" and nt ~= "windowtrigger"
         and nt ~= "trigger" and nt ~= "conditiontrigger" then return end
-    self._drag.pending = true
-    self._drag.active  = false
-    self._drag.item    = item
-    self._drag.startY  = args.Y
+    self._drag.pending            = true
+    self._drag.active             = false
+    self._drag.item               = item
+    self._drag.startY             = args.Y
+    self._drag.dropAfterIdx       = -1    -- sentinel: force update on first move
+    self._drag.dropMode           = nil
+    self._drag.dropIntoFolderItem = nil
 end
 
 function Options2.Window.Nav.Constructor:_DragMove(item, args)
@@ -935,10 +938,54 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
     local lx, list_y = self.listbox:GetMousePosition()
     local hover      = self.listbox:GetItemAt(lx, list_y)
 
-    -- Ghost follows mouse in nav coords (listbox sits at TOOLBAR_H)
+    -- Ghost always tracks the mouse
     self._drag_ghost:SetTop(TOOLBAR_H + list_y - math.floor(ITEM_H / 2))
 
     local nodeType = item.nodeData.nodeType
+
+    -- Triggers can drop onto any parent container (folder/window/timer/condition)
+    local is_trigger = nodeType == "foldertrigger" or nodeType == "windowtrigger"
+        or nodeType == "trigger" or nodeType == "conditiontrigger"
+
+    if is_trigger then
+        -- Scan items directly by cursor position (avoids GetItemAt returning sub-controls)
+        local target = nil
+        for _, it in ipairs(self.items) do
+            if it.nodeData ~= nil then
+                local nt = it.nodeData.nodeType
+                if nt == "folder" or nt == "window" or nt == "timer" or nt == "condition" then
+                    local _, iy = it:GetMousePosition()
+                    if iy >= 0 and iy < ITEM_H then
+                        target = it
+                        break
+                    end
+                end
+            end
+        end
+        if target then
+            if target ~= self._drag.dropIntoFolderItem or self._drag.dropMode ~= "into" then
+                self._drag.dropMode           = "into"
+                self._drag.dropIntoFolderItem = target
+                self._drag.valid              = true
+                local _, iy    = target:GetMousePosition()
+                local item_top = list_y - iy
+                self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
+                self._drag_folder_hl:SetVisible(true)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+            end
+        else
+            if self._drag.dropMode ~= "trig_invalid" then
+                self._drag.dropMode           = "trig_invalid"
+                self._drag.dropIntoFolderItem = nil
+                self._drag.valid              = false
+                self._drag_folder_hl:SetVisible(false)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
+            end
+        end
+        return
+    end
 
     -- "Drop into folder" when hovering over a folder row while dragging a folder or window
     local drop_into = hover ~= nil
@@ -947,19 +994,23 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         and hover ~= item
 
     if drop_into then
-        self._drag.dropMode           = "into"
-        self._drag.dropIntoFolderItem = hover
-        self._drag.valid              = true
-        local _, iy    = hover:GetMousePosition()
-        local item_top = list_y - iy
-        self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
-        self._drag_folder_hl:SetVisible(true)
-        self._drag_indicator:SetVisible(false)
-        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+        -- Only update highlight if the target folder changed
+        if hover ~= self._drag.dropIntoFolderItem or self._drag.dropMode ~= "into" then
+            self._drag.dropMode           = "into"
+            self._drag.dropIntoFolderItem = hover
+            self._drag.valid              = true
+            local _, iy    = hover:GetMousePosition()
+            local item_top = list_y - iy
+            self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
+            self._drag_folder_hl:SetVisible(true)
+            self._drag_indicator:SetVisible(false)
+            self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+        end
         return
     end
 
-    -- "Drop to root" when hovering over empty space below all items while dragging a folder or window
+    -- "Drop to root" when hovering over empty space while dragging a folder or window;
+    -- indicator tracks the mouse continuously so always update
     if hover == nil and list_y > 0 and (nodeType == "folder" or nodeType == "window") then
         self._drag.dropMode           = "toroot"
         self._drag.dropIntoFolderItem = nil
@@ -972,10 +1023,6 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
     end
 
     -- "Drop between" items
-    self._drag.dropMode           = "between"
-    self._drag.dropIntoFolderItem = nil
-    self._drag_folder_hl:SetVisible(false)
-
     local dropAfterIdx = 0
     local ind_list_y   = 0
 
@@ -1000,7 +1047,16 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         ind_list_y   = list_y
     end
 
-    self._drag.dropAfterIdx = dropAfterIdx
+    -- Skip validation and UI updates when the drop slot hasn't changed
+    if dropAfterIdx == self._drag.dropAfterIdx and self._drag.dropMode == "between" then
+        return
+    end
+
+    self._drag.dropAfterIdx       = dropAfterIdx
+    self._drag.dropMode           = "between"
+    self._drag.dropIntoFolderItem = nil
+    self._drag_folder_hl:SetVisible(false)
+
     local valid = self:_IsValidDrop(nodeType, dropAfterIdx)
     self._drag.valid = valid
 
@@ -1031,7 +1087,12 @@ function Options2.Window.Nav.Constructor:_DragFinish(item, args)
     local dropAfterIdx = self._drag.dropAfterIdx
 
     if self._drag.dropMode == "into" and self._drag.dropIntoFolderItem ~= nil then
-        self:_CommitDropIntoFolder(nd, self._drag.dropIntoFolderItem.nodeData.folderIndex)
+        if nd.nodeType == "foldertrigger" or nd.nodeType == "windowtrigger"
+            or nd.nodeType == "trigger" or nd.nodeType == "conditiontrigger" then
+            self:_CommitTriggerMove(nd, self._drag.dropIntoFolderItem.nodeData)
+        else
+            self:_CommitDropIntoFolder(nd, self._drag.dropIntoFolderItem.nodeData.folderIndex)
+        end
     elseif self._drag.dropMode == "toroot" then
         self:_CommitDropToRoot(nd)
     elseif nd.nodeType == "folder" or nd.nodeType == "window" then
@@ -1040,9 +1101,6 @@ function Options2.Window.Nav.Constructor:_DragFinish(item, args)
         self:_CommitTimerDrop(nd, dropAfterIdx)
     elseif nd.nodeType == "condition" then
         self:_CommitConditionDrop(nd, dropAfterIdx)
-    elseif nd.nodeType == "foldertrigger" or nd.nodeType == "windowtrigger"
-        or nd.nodeType == "trigger" or nd.nodeType == "conditiontrigger" then
-        self:_CommitTriggerDrop(nd, dropAfterIdx)
     end
 
     Options.SaveData()
@@ -1089,12 +1147,6 @@ function Options2.Window.Nav.Constructor:_IsValidDrop(nodeType, dropAfterIdx)
             or after.nodeData.nodeType == "timer"
         return ok_before and ok_after
 
-    elseif nodeType == "foldertrigger" or nodeType == "windowtrigger"
-        or nodeType == "trigger" or nodeType == "conditiontrigger" then
-        local same = function(it)
-            return it ~= nil and it.nodeData.nodeType == nodeType
-        end
-        return same(before) or same(after)
     end
 
     return false
@@ -1248,48 +1300,19 @@ function Options2.Window.Nav.Constructor:_GetTriggerArray(ref_nd, nt, tt)
     end
 end
 
-function Options2.Window.Nav.Constructor:_CommitTriggerDrop(nd, dropAfterIdx)
-    local src_tt  = nd.triggerType
-    local src_ti  = nd.triggerIndex
-    local data    = nd.data
-    local nt      = nd.nodeType
+function Options2.Window.Nav.Constructor:_CommitTriggerMove(nd, tgt_parent_nd)
+    local src_tt = nd.triggerType
+    local src_ti = nd.triggerIndex
+    local data   = nd.data
+    local nt     = nd.nodeType
 
-    local src_arr = self:_GetTriggerArray(nd, nt, src_tt)
-
-    -- Resolve target (triggerType may differ from source for cross-type moves)
-    local after_item = self.items[dropAfterIdx + 1]
-    local tgt_nd, tgt_pos, tgt_tt
-
-    if after_item and after_item.nodeData.nodeType == nt then
-        tgt_nd  = after_item.nodeData
-        tgt_tt  = tgt_nd.triggerType
-        tgt_pos = tgt_nd.triggerIndex
-    else
-        for i = dropAfterIdx, 1, -1 do
-            local it = self.items[i]
-            if it.nodeData.nodeType == nt then
-                tgt_nd  = it.nodeData
-                tgt_tt  = tgt_nd.triggerType
-                tgt_pos = it.nodeData.triggerIndex + 1
-                break
-            end
-        end
-    end
-
-    if tgt_nd == nil then return end
-
-    local tgt_arr = self:_GetTriggerArray(tgt_nd, nt, tgt_tt)
+    local src_arr = self:_GetTriggerArray(nd,            nt, src_tt)
+    local tgt_arr = self:_GetTriggerArray(tgt_parent_nd, nt, src_tt)
 
     table.remove(src_arr, src_ti)
+    table.insert(tgt_arr, data)
 
-    if tgt_arr == src_arr and src_ti < tgt_pos then
-        tgt_pos = tgt_pos - 1
-    end
-
-    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_arr + 1))
-    table.insert(tgt_arr, tgt_pos, data)
-
-    self:_ResetActionIfInvalid(data, nt, tgt_nd)
+    self:_ResetActionIfInvalid(data, nt, tgt_parent_nd)
 end
 
 function Options2.Window.Nav.Constructor:_ResetActionIfInvalid(trigData, nt, tgt_nd)
