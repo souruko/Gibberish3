@@ -15,6 +15,7 @@ function Condition.New()
 
     condition.id          = Turbine.Engine.GetGameTime()
     condition.enabled     = true
+    condition.collapsed   = false
     condition.description = ""
     condition.sortIndex   = 0
     condition.permanent   = false
@@ -40,6 +41,7 @@ function Condition.Copy( data )
 
     condition.id          = Turbine.Engine.GetGameTime()
     condition.enabled     = data.enabled
+    condition.collapsed   = data.collapsed
     condition.description = data.description
     condition.sortIndex   = data.sortIndex
     condition.permanent   = data.permanent

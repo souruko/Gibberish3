@@ -51,6 +51,9 @@ function StringToData( text, insert )
 
     elseif type_number == ImportType.TriggerList then
 
+    elseif type_number == ImportType.Condition then
+        ConvertCondition( text, insert )
+
     end
 
 	Options.Window.Object:ResetSelectedContent()
@@ -112,6 +115,18 @@ function ConvertTrigger( text, insert )
     end
     text = string.gsub( text, "<trigger>", "")
     StringToTrigger( text, Data.window[ Data.selectedIndex ].timerList[ Data.selectedTimerIndex ] )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function ConvertCondition( text, insert )
+
+    if insert == false or Data.selectedIndex < 1 or Data.selectedTimerIndex < 1 then
+        return
+    end
+    text = string.gsub( text, "<condition>", "")
+    StringToCondition( text, Data.window[ Data.selectedIndex ].timerList[ Data.selectedTimerIndex ] )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -643,6 +658,10 @@ function StringToCondition( text, timer_data )
 
     if attrs["sortIndex"] ~= nil then
         data.sortIndex = tonumber(attrs["sortIndex"])
+    end
+
+    if attrs["permanent"] ~= nil then
+        data.permanent = ToBool(attrs["permanent"])
     end
 
     if attrs["useCustomDuration"] ~= nil then

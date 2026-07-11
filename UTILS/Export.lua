@@ -48,9 +48,12 @@ function DataToString( data, type, index )
         end
 
     elseif type == ImportType.TriggerList then
-        for index, window_data in ipairs(data) do   
+        for index, window_data in ipairs(data) do
             text = text .. TriggerToString( window_data )
         end
+
+    elseif type == ImportType.Condition then
+        text = text .. ConditionToString( data )
 
     end
 
@@ -185,6 +188,7 @@ function ConditionToString( data )
     text = text .. "enabled:{" .. tostring(data.enabled) .. "}:"
     text = text .. "description:{" .. tostring(data.description) .. "}:"
     text = text .. "sortIndex:{" .. tostring(data.sortIndex) .. "}:"
+    text = text .. "permanent:{" .. tostring(data.permanent == true) .. "}:"
     text = text .. "useCustomDuration:{" .. tostring(data.useCustomDuration) .. "}:"
     text = text .. "duration:{" .. tostring(data.duration) .. "}:"
 

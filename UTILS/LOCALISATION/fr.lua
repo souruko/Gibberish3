@@ -176,6 +176,7 @@ L[ Language.French ].shortcut = {}
 L[ Language.French ].shortcut.reset                        = "Réinitialiser tout"
 L[ Language.French ].shortcut.reload                       = "Recharger le plugin"
 L[ Language.French ].shortcut.options                      = "Ouvrir les options"
+L[ Language.French ].shortcut.options2                     = "Ouvrir les options 2"
 L[ Language.French ].shortcut.move                         = "Déplacer les fenêtres"
 L[ Language.French ].shortcut.track_group                  = "Groupe de suivi"
 L[ Language.French ].shortcut.track_target                 = "Poursuivre l'objectif"
@@ -470,4 +471,32 @@ L[ Language.French ].source.Fear                           = "Peur"
 L[ Language.French ].source.Physical                       = "Physique"
 L[ Language.French ].source.Poison                         = "Poison"  
 L[ Language.French ].source.Song                           = "Chanson"    
-L[ Language.French ].source.Wound                          = "Plaie"  
+L[ Language.French ].source.Wound                          = "Plaie"
+
+-- options2 editor
+L[ Language.French ].options2 = {}
+L[ Language.French ].options2.name                         = "Nom"
+L[ Language.French ].options2.save                         = "Sauvegarder"
+L[ Language.French ].options2.reset                        = "Réinitialiser"
+L[ Language.French ].options2.no_selection                 = "Sélectionnez un élément dans l'arbre pour le modifier."
+L[ Language.French ].options2.tab_general                  = "Général"
+L[ Language.French ].options2.tab_size                     = "Taille"
+L[ Language.French ].options2.tab_color                    = "Couleur"
+L[ Language.French ].options2.tab_text                     = "Texte"
+L[ Language.French ].options2.trigger_type                 = "Type"
+
+L[ Language.French ].tooltip.cond_enabled                  = "Lorsqu'elle est décochée, cette condition est ignorée et le minuteur s'affiche toujours."
+L[ Language.French ].tooltip.tim_enabled                   = "Lorsqu'il est décoché, ce minuteur est masqué et ne s'affiche jamais."
+L[ Language.French ].tooltip.trg_is_debuff                 = "Filtrer par type buff ou debuff. 'Any' correspond aux deux."
+L[ Language.French ].tooltip.trg_is_dispellable            = "Filtrer selon si l'effet peut être dissipé. 'Any' correspond aux deux."
+L[ Language.French ].tooltip.trg_category                  = "Filtrer par catégorie d'effet. 'Any' correspond à toutes les catégories."
+L[ Language.French ].tooltip.trg_exclude_self              = "Lorsqu'elle est cochée, les effets provenant de vous-même sont ignorés."
+
+-- nav context menu
+L[ Language.French ].nav_menu = {}
+L[ Language.French ].nav_menu.add_folder                   = "Ajouter dossier"
+L[ Language.French ].nav_menu.add_window                   = "Ajouter fenêtre"
+L[ Language.French ].nav_menu.add_timer                    = "Ajouter minuteur"
+L[ Language.French ].nav_menu.add_trigger                  = "Ajouter déclencheur"
+L[ Language.French ].nav_menu.add_condition                = "Ajouter condition"
+L[ Language.French ].nav_menu.delete                       = "Supprimer"

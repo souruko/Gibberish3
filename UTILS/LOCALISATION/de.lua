@@ -176,6 +176,7 @@ L[ Language.German ].shortcut = {}
 L[ Language.German ].shortcut.reset                         = "Alle Zurücksetzen"
 L[ Language.German ].shortcut.reload                        = "Plugin Neuladen"
 L[ Language.German ].shortcut.options                       = "Optionen Öffnen"
+L[ Language.German ].shortcut.options2                      = "Optionen 2 Öffnen"
 L[ Language.German ].shortcut.move                          = "Fenster bewegen"
 L[ Language.German ].shortcut.track_group                   = "Gruppe Verfolgen"
 L[ Language.German ].shortcut.track_target                  = "Ziel Verfolgen"
@@ -470,4 +471,32 @@ L[ Language.German ].source.Fear                           = "Furcht"
 L[ Language.German ].source.Physical                       = "Physisch"
 L[ Language.German ].source.Poison                         = "Gift"  
 L[ Language.German ].source.Song                           = "Lied"    
-L[ Language.German ].source.Wound                          = "Wunde"  
+L[ Language.German ].source.Wound                          = "Wunde"
+
+-- options2 editor
+L[ Language.German ].options2 = {}
+L[ Language.German ].options2.name                         = "Name"
+L[ Language.German ].options2.save                         = "Speichern"
+L[ Language.German ].options2.reset                        = "Zurücksetzen"
+L[ Language.German ].options2.no_selection                 = "Element im Baum auswählen zum Bearbeiten."
+L[ Language.German ].options2.tab_general                  = "Allgemein"
+L[ Language.German ].options2.tab_size                     = "Größe"
+L[ Language.German ].options2.tab_color                    = "Farbe"
+L[ Language.German ].options2.tab_text                     = "Text"
+L[ Language.German ].options2.trigger_type                 = "Typ"
+
+L[ Language.German ].tooltip.cond_enabled                  = "Wenn deaktiviert, wird diese Bedingung ignoriert und der Timer wird immer angezeigt."
+L[ Language.German ].tooltip.tim_enabled                   = "Wenn deaktiviert, wird dieser Timer ausgeblendet und nie angezeigt."
+L[ Language.German ].tooltip.trg_is_debuff                 = "Nach Buff- oder Debuff-Typ filtern. 'Any' passt auf beides."
+L[ Language.German ].tooltip.trg_is_dispellable            = "Filtern ob der Effekt entfernt werden kann. 'Any' passt auf beides."
+L[ Language.German ].tooltip.trg_category                  = "Nach Effektkategorie filtern. 'Any' passt auf alle Kategorien."
+L[ Language.German ].tooltip.trg_exclude_self              = "Wenn aktiviert, werden Effekte von dir selbst ignoriert."
+
+-- nav context menu
+L[ Language.German ].nav_menu = {}
+L[ Language.German ].nav_menu.add_folder                   = "Ordner hinzufügen"
+L[ Language.German ].nav_menu.add_window                   = "Fenster hinzufügen"
+L[ Language.German ].nav_menu.add_timer                    = "Timer hinzufügen"
+L[ Language.German ].nav_menu.add_trigger                  = "Trigger hinzufügen"
+L[ Language.German ].nav_menu.add_condition                = "Bedingung hinzufügen"
+L[ Language.German ].nav_menu.delete                       = "Löschen"

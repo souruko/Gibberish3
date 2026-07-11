@@ -176,6 +176,7 @@ L[ Language.English ].shortcut = {}
 L[ Language.English ].shortcut.reset                        = "Reset All"
 L[ Language.English ].shortcut.reload                       = "Reload Plugin"
 L[ Language.English ].shortcut.options                      = "Open Options"
+L[ Language.English ].shortcut.options2                     = "Open Options 2"
 L[ Language.English ].shortcut.move                         = "Move Windows"
 L[ Language.English ].shortcut.track_group                  = "Track Group"
 L[ Language.English ].shortcut.track_target                 = "Track Target"
@@ -471,4 +472,32 @@ L[ Language.English ].source.Fear                           = "Fear"
 L[ Language.English ].source.Physical                       = "Physical"
 L[ Language.English ].source.Poison                         = "Poison"  
 L[ Language.English ].source.Song                           = "Song"    
-L[ Language.English ].source.Wound                          = "Wound"  
+L[ Language.English ].source.Wound                          = "Wound"
+
+-- options2 editor
+L[ Language.English ].options2 = {}
+L[ Language.English ].options2.name                         = "Name"
+L[ Language.English ].options2.save                         = "Save"
+L[ Language.English ].options2.reset                        = "Reset"
+L[ Language.English ].options2.no_selection                 = "Select an item in the tree to edit it."
+L[ Language.English ].options2.tab_general                  = "General"
+L[ Language.English ].options2.tab_size                     = "Size"
+L[ Language.English ].options2.tab_color                    = "Color"
+L[ Language.English ].options2.tab_text                     = "Text"
+L[ Language.English ].options2.trigger_type                 = "Type"
+
+L[ Language.English ].tooltip.cond_enabled                  = "When unchecked, this condition is ignored and the timer always shows as if the condition were met."
+L[ Language.English ].tooltip.tim_enabled                   = "When unchecked, this timer is hidden and never displays, regardless of triggers."
+L[ Language.English ].tooltip.trg_is_debuff                 = "Filter by buff or debuff type. 'Any' matches both buffs and debuffs."
+L[ Language.English ].tooltip.trg_is_dispellable            = "Filter by whether the effect can be cured. 'Any' matches both."
+L[ Language.English ].tooltip.trg_category                  = "Filter by effect category. 'Any' matches all categories."
+L[ Language.English ].tooltip.trg_exclude_self              = "When checked, effects that originate from yourself are ignored."
+
+-- nav context menu
+L[ Language.English ].nav_menu = {}
+L[ Language.English ].nav_menu.add_folder                   = "Add Folder"
+L[ Language.English ].nav_menu.add_window                   = "Add Window"
+L[ Language.English ].nav_menu.add_timer                    = "Add Timer"
+L[ Language.English ].nav_menu.add_trigger                  = "Add Trigger"
+L[ Language.English ].nav_menu.add_condition                = "Add Condition"
+L[ Language.English ].nav_menu.delete                       = "Delete"

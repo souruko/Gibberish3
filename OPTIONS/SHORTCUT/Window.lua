@@ -99,6 +99,14 @@ function Options.Shortcut.Constructor:Constructor()
         end,
         Options.Defaults.rc_menu.item_height)
 
+    -- right click options 2
+    self.rc_options2 = Options.Elements.Row( "shortcut", "options2", function ()
+            if Options2.Window.Object ~= nil then
+                Options2.Window.Object:SetVisible( not Options2.Window.Object:IsVisible() )
+            end
+        end,
+        Options.Defaults.rc_menu.item_height)
+
     -- right click move
     self.rc_move = Options.Elements.CheckRow( "shortcut", "move", function ()
             Options.MoveChanged( not( Data.moveMode ) )
@@ -127,6 +135,7 @@ function Options.Shortcut.Constructor:Constructor()
     self.rightClickMenu:AddRow( self.rc_reset )
     self.rightClickMenu:AddRow( self.rc_reload )
     self.rightClickMenu:AddRow( self.rc_options )
+    self.rightClickMenu:AddRow( self.rc_options2 )
     self.rightClickMenu:AddSeperator()
     self.rightClickMenu:AddCheckRow( self.rc_move )
     self.rightClickMenu:AddCheckRow( self.rc_auto )

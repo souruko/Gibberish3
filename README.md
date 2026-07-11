@@ -10,6 +10,14 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.0
+- added new options panel (OPTIONS2) with a full 4-level navigation tree (Folder → Window → Timer → Trigger/Condition → ConditionTrigger)
+- nav selection is now persistent across plugin reloads (saved to character PluginData)
+- added export/import dialog to OPTIONS2 panel; supports both v1 and v2 (LibDeflate) import strings
+- added Export context menu entry for all node types including Conditions
+- extended condition serialization to include the `permanent` field
+- added `ConvertCondition` to the import pipeline for inserting exported conditions into a selected timer
+
 ### 3.2.3
 - added "Conditions" and "Condition Triggers" section headers to the condition listboxes in the options panel
 - added `permanent` toggle to conditions: when enabled, `tod` is set to `math.huge` on trigger and the condition stays active indefinitely; can still be deactivated by a Remove trigger

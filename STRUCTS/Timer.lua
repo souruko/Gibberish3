@@ -16,6 +16,7 @@ function Timer.New(type)
     timer.id                    = Turbine.Engine.GetGameTime()
     timer.nextTriggerSortIndex  = 1
     timer.enabled               = true
+    timer.collapsed             = false
     timer.sortIndex             = 0
     timer.type                  = type
     
@@ -74,6 +75,7 @@ function Timer.Copy( data )
     timer.id                    = Turbine.Engine.GetGameTime()
     timer.nextTriggerSortIndex  = data.nextTriggerSortIndex
     timer.enabled               = data.enabled
+    timer.collapsed             = data.collapsed
     timer.sortIndex             = data.sortIndex
     timer.type                  = data.type
     timer.description           = data.description

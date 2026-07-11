@@ -22,6 +22,7 @@ function Window.New(name, type)
     window.type                  = type
     window.timerType             = Window[type].Defaults.timerType
     window.enabled               = true
+    window.collapsed             = false
     window.saveGlobaly           = true
     window.description           = Window[type].Defaults.description
     window.resetOnTargetChanged   = Window[type].Defaults.resetOnTargetChanged
@@ -95,6 +96,7 @@ function Window.Copy(index)
     window.nextTimerSortIndex    = Data.window[index].nextTimerSortIndex
 
     window.enabled               = Data.window[index].enabled
+    window.collapsed             = Data.window[index].collapsed
     window.folder                = Data.window[index].folder
     window.name                  = Data.window[index].name
     window.type                  = Data.window[index].type
