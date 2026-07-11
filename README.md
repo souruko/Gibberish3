@@ -10,6 +10,14 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.3
+- unified toolbar height across nav, editor, and library panels (all 36px)
+- unified toolbar icon size (16×16) and vertical alignment across all three panels
+- replaced the nav filter "Filter:" text label with a search icon matching the library panel
+- added clear (x) button to the nav filter; clicking the search icon focuses the textbox in both panels
+- fixed import button icon color (was white, now matches the gray of all other toolbar icons)
+- redrawn search icon at 16×16 with anti-aliasing (was 25×25, too large for the icon slot)
+
 ### 3.3.2
 - added drag-and-drop reordering in the OPTIONS2 nav tree for all node types (folder, window, timer, condition, trigger, condition trigger)
 - timers can be dragged between windows; conditions can be dragged between timers

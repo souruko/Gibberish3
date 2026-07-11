@@ -1,4 +1,4 @@
-local TOOLBAR_H = 40
+local TOOLBAR_H = 36
 local SEP_H     = 2
 local BTN_SIZE  = 26
 local BTN_ICON  = 16

@@ -1,10 +1,9 @@
-local TOOLBAR_H = 30
+local TOOLBAR_H = 36
 local ITEM_H    = 28
 local SCROLL_W  = 10
-local BTN_SIZE  = 24
+local BTN_SIZE  = 26
 local BTN_GAP   = 2
 local BTN_ICON  = 16
-local LABEL_W   = 44
 
 local function make_nav_btn(parent, icon_path, click_fn)
     local BTN_TOP = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
@@ -48,30 +47,46 @@ function Options2.Window.Nav.Constructor:Constructor()
     end
     table.sort(self.trig_types)
 
+
+    self:SetBackColor(Options.Defaults.window.backcolor1)
+
     -- ── toolbar ──────────────────────────────────────────────────
     self.toolbar = Turbine.UI.Control()
     self.toolbar:SetParent(self)
     self.toolbar:SetPosition(0, 0)
     self.toolbar:SetBackColor(Options.Defaults.window.backcolor2)
 
-    self.search_label = Turbine.UI.Label()
-    self.search_label:SetParent(self.toolbar)
-    self.search_label:SetPosition(4, 0)
-    self.search_label:SetSize(LABEL_W, TOOLBAR_H)
-    self.search_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.search_label:SetFont(Options.Defaults.window.font)
-    self.search_label:SetForeColor(Options.Defaults.window.textdark)
-    self.search_label:SetText("Filter:")
-    self.search_label:SetMouseVisible(false)
-
-    self.search_box = Turbine.UI.Lotro.TextBox()
+    self.search_box = Turbine.UI.TextBox()
     self.search_box:SetParent(self.toolbar)
-    self.search_box:SetHeight(TOOLBAR_H - 8)
+    self.search_box:SetHeight(BTN_SIZE)
     self.search_box:SetFont(Options.Defaults.window.font)
     self.search_box:SetForeColor(Options.Defaults.window.textcolor)
+    self.search_box:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.search_box:SetMultiline(false)
+    self.search_box:SetSelectable(true)
     self.search_box.TextChanged = function()
         self.filter = self.search_box:GetText():lower()
+        self.search_clear:SetVisible(self.filter ~= "")
+        self:Rebuild()
+    end
+
+    self.search_icon = Turbine.UI.Control()
+    self.search_icon:SetParent(self.toolbar)
+    self.search_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.search_icon:SetBackground("Gibberish3/Resources/search.tga")
+    self.search_icon:SetMouseVisible(true)
+    self.search_icon.MouseClick = function() self.search_box:Focus() end
+
+    self.search_clear = Turbine.UI.Button()
+    self.search_clear:SetSize(20, 20)
+    self.search_clear:SetParent(self.search_box)
+    self.search_clear:SetText("x")
+    self.search_clear:SetFont(Options.Defaults.window.font)
+    self.search_clear:SetVisible(false)
+    self.search_clear.Click = function()
+        self.search_box:SetText("")
+        self.filter = ""
+        self.search_clear:SetVisible(false)
         self:Rebuild()
     end
 
@@ -131,9 +146,15 @@ function Options2.Window.Nav.Constructor:SizeChanged()
     self.add_window_btn:SetLeft(add_window_left)
     self.collapse_btn:SetLeft(collapse_left)
 
-    local search_left = 4 + LABEL_W
-    self.search_box:SetPosition(search_left, 4)
-    self.search_box:SetWidth(import_left - search_left - 4)
+    local icon_top    = math.floor((TOOLBAR_H - BTN_ICON) / 2)
+    local btn_top     = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
+    local search_left = 4 + BTN_ICON + 2
+    local search_w    = import_left - search_left - 4
+    self.search_icon:SetPosition(4, icon_top)
+    self.search_icon:SetSize(BTN_ICON, BTN_ICON)
+    self.search_box:SetPosition(search_left, btn_top)
+    self.search_box:SetWidth(search_w)
+    self.search_clear:SetPosition(search_w - 26, math.floor((BTN_SIZE - 20) / 2))
 
     local view_h = h - TOOLBAR_H
     self.listbox:SetPosition(0, TOOLBAR_H)
@@ -850,7 +871,7 @@ function Options2.Window.Nav.Constructor:_InitDrag()
     }
     self._drag_just_ended = false
 
-    self._drag_ghost = Turbine.UI.Control()
+    self._drag_ghost = Turbine.UI.Window()
     self._drag_ghost:SetParent(self)
     self._drag_ghost:SetHeight(ITEM_H)
     self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))

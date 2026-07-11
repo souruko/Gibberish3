@@ -1,4 +1,6 @@
-local TOOLBAR_H = 30
+local TOOLBAR_H = 36
+local BTN_SIZE  = 26
+local BTN_ICON  = 16
 local CLIP_H    = 54
 local SEG_H     = Options.Defaults.window.segment_height
 
@@ -21,8 +23,7 @@ function Options2.Library.Window:Constructor()
 
     self.filter = Turbine.UI.TextBox()
     self.filter:SetParent(self.toolbar)
-    self.filter:SetPosition(4, 4)
-    self.filter:SetHeight(TOOLBAR_H - 8)
+    self.filter:SetHeight(BTN_SIZE)
     self.filter:SetFont(Options.Defaults.window.font)
     self.filter:SetForeColor(Options.Defaults.window.textcolor)
     self.filter:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
@@ -35,11 +36,11 @@ function Options2.Library.Window:Constructor()
     end
 
     self.filter_icon = Turbine.UI.Control()
-    self.filter_icon:SetParent(self.filter)
-    self.filter_icon:SetPosition(-2, 0)
+    self.filter_icon:SetParent(self.toolbar)
     self.filter_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.filter_icon:SetBackground("Gibberish3/Resources/search.tga")
-    self.filter_icon:SetMouseVisible(false)
+    self.filter_icon:SetMouseVisible(true)
+    self.filter_icon.MouseClick = function() self.filter:Focus() end
 
     self.filter_clear = Turbine.UI.Button()
     self.filter_clear:SetSize(20, 20)
@@ -172,9 +173,15 @@ function Options2.Library.Window:_ApplyLayout()
     if w == 0 or h == 0 then return end
 
     self.toolbar:SetSize(w, TOOLBAR_H)
-    self.filter:SetSize(w - 8, TOOLBAR_H - 8)
-    self.filter_icon:SetSize(TOOLBAR_H, TOOLBAR_H - 8)
-    self.filter_clear:SetPosition(w - 26, math.floor((TOOLBAR_H - 8 - 20) / 2))
+    local icon_top    = math.floor((TOOLBAR_H - BTN_ICON) / 2)
+    local btn_top     = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
+    local filter_left = 4 + BTN_ICON + 2
+    local filter_w    = w - filter_left - 4
+    self.filter_icon:SetPosition(4, icon_top)
+    self.filter_icon:SetSize(BTN_ICON, BTN_ICON)
+    self.filter:SetPosition(filter_left, btn_top)
+    self.filter:SetSize(filter_w, BTN_SIZE)
+    self.filter_clear:SetPosition(filter_w - 26, math.floor((BTN_SIZE - 20) / 2))
 
     local seg_h  = h - TOOLBAR_H - CLIP_H
     local open_h = math.max(0, seg_h - 2 * SEG_H)
