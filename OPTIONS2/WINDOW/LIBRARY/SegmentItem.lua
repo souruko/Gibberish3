@@ -12,7 +12,7 @@ function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, t
     self.header = Turbine.UI.Label()
     self.header:SetParent(self)
     self.header:SetHeight(SEG_H)
-    self.header:SetFont(Options.Defaults.window.w_font)
+    self.header:SetFont(Turbine.UI.Lotro.Font.Verdana14)
     self.header:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.header:SetBackColor(Options.Defaults.window.basecolor)
     self.header:SetForeColor(Options.Defaults.window.textcolor)

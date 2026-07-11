@@ -151,8 +151,8 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     local windowData = Data.window[windowIndex]
     local timerData = windowData.timerList[timerIndex]
     local triggerData = timerData[Trigger.Types.Combat][triggerIndex]
+    local placeholder = { ["&tag"] = tostring(triggerData.tag or "") }
 
-    
     local startTime = Turbine.Engine.GetGameTime()
     local text      = ""
     local duration  = 10
@@ -174,6 +174,7 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     if timerData.textOption == TimerTextOptions.CustomText then
 
        text = timerData.textValue
+       for k, v in pairs(placeholder) do text = string.gsub(text, k, v) end
 
     elseif timerData.textOption == TimerTextOptions.NoText then
 
@@ -193,6 +194,8 @@ Trigger[ Trigger.Types.Combat ].ProcessTrigger = function ( combatState, windowI
     if timerData.useCustomTimer == true then
 
         duration = timerData.timerValue
+        for k, v in pairs(placeholder) do duration = string.gsub(tostring(duration), k, v) end
+        duration = tonumber(duration) or duration
 
     end
 

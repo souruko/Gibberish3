@@ -14,5 +14,6 @@ Trigger[ Trigger.Types.Skill ].Defaults.action             = Action.Add
 Trigger[ Trigger.Types.Skill ].Defaults.source             = nil
 Trigger[ Trigger.Types.Skill ].Defaults.description        = ""
 Trigger[ Trigger.Types.Skill ].Defaults.listOfTargets       = {}
+Trigger[ Trigger.Types.Skill ].Defaults.tag                 = ""
 ---------------------------------------------------------------------------------------------------
 

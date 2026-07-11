@@ -27,6 +27,7 @@ function Trigger.New(type)
     trigger.description     = Trigger[type].Defaults.description
     trigger.action          = Trigger[type].Defaults.action
     trigger.value           = Trigger[type].Defaults.value
+    trigger.tag             = Trigger[type].Defaults.tag
     trigger.excludeSelf     = Trigger[type].Defaults.excludeSelf
     trigger.listOfTargets   = {}
     trigger.source          = Trigger[type].Defaults.source
@@ -55,7 +56,8 @@ function Trigger.Copy( data )
     trigger.useRegex        = data.useRegex     
     trigger.description     = data.description  
     trigger.action          = data.action       
-    trigger.value           = data.value  
+    trigger.value           = data.value
+    trigger.tag             = data.tag
     trigger.excludeSelf     = data.excludeSelf  
     trigger.listOfTargets   = {}
 

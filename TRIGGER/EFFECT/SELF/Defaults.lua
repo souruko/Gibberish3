@@ -18,6 +18,7 @@ Trigger[ Trigger.Types.EffectSelf ].Defaults.action             = Action.Add
 Trigger[ Trigger.Types.EffectSelf ].Defaults.source             = nil
 Trigger[ Trigger.Types.EffectSelf ].Defaults.description        = ""
 Trigger[ Trigger.Types.EffectSelf ].Defaults.listOfTargets      = {}
+Trigger[ Trigger.Types.EffectSelf ].Defaults.tag                = ""
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -32,4 +33,5 @@ Trigger[ Trigger.Types.EffectRemoveSelf ].Defaults.action             = Action.R
 Trigger[ Trigger.Types.EffectRemoveSelf ].Defaults.source             = nil
 Trigger[ Trigger.Types.EffectRemoveSelf ].Defaults.description        = ""
 Trigger[ Trigger.Types.EffectRemoveSelf ].Defaults.listOfTargets      = {}
+Trigger[ Trigger.Types.EffectRemoveSelf ].Defaults.tag                = ""
 ---------------------------------------------------------------------------------------------------

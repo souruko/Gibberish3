@@ -1,4 +1,5 @@
 local TOOLBAR_H = 36
+local SEP_H     = 2
 local BTN_SIZE  = 26
 local BTN_ICON  = 16
 local CLIP_H    = 54
@@ -55,10 +56,17 @@ function Options2.Library.Window:Constructor()
         self:_FilterAll()
     end
 
+    -- separator line below toolbar
+    self.toolbar_sep = Turbine.UI.Control()
+    self.toolbar_sep:SetParent(self)
+    self.toolbar_sep:SetPosition(0, TOOLBAR_H)
+    self.toolbar_sep:SetBackColor(Options.Defaults.window.framecolor)
+    self.toolbar_sep:SetMouseVisible(false)
+
     -- ── segment listbox ─────────────────────────────────────────────────────
     self.seg_list = Turbine.UI.ListBox()
     self.seg_list:SetParent(self)
-    self.seg_list:SetPosition(0, TOOLBAR_H)
+    self.seg_list:SetPosition(0, TOOLBAR_H + SEP_H)
     self.seg_list:SetBackColor(Options.Defaults.window.backcolor1)
     self.seg_list:SetMouseVisible(false)
 
@@ -173,6 +181,7 @@ function Options2.Library.Window:_ApplyLayout()
     if w == 0 or h == 0 then return end
 
     self.toolbar:SetSize(w, TOOLBAR_H)
+    self.toolbar_sep:SetSize(w, SEP_H)
     local icon_top    = math.floor((TOOLBAR_H - BTN_ICON) / 2)
     local btn_top     = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
     local filter_left = 4 + BTN_ICON + 2
@@ -183,8 +192,9 @@ function Options2.Library.Window:_ApplyLayout()
     self.filter:SetSize(filter_w, BTN_SIZE)
     self.filter_clear:SetPosition(filter_w - 26, math.floor((BTN_SIZE - 20) / 2))
 
-    local seg_h  = h - TOOLBAR_H - CLIP_H
+    local seg_h  = h - TOOLBAR_H - SEP_H - CLIP_H
     local open_h = math.max(0, seg_h - 2 * SEG_H)
+    self.seg_list:SetPosition(0, TOOLBAR_H + SEP_H)
     self.seg_list:SetSize(w, seg_h)
 
     local op = self._openSeg
@@ -192,6 +202,6 @@ function Options2.Library.Window:_ApplyLayout()
     self.effect_seg:SetSize(w, op == self.effect_seg and open_h or SEG_H)
     self.chat_seg:SetSize(w,   op == self.chat_seg   and open_h or SEG_H)
 
-    self.clip_bar:SetPosition(0, TOOLBAR_H + seg_h)
+    self.clip_bar:SetPosition(0, TOOLBAR_H + SEP_H + seg_h)
     self.clip_bar:SetSize(w, CLIP_H)
 end

@@ -199,6 +199,9 @@ local function make_effect_form(data, bc, nodeData, trigType)
         add(valueRow)
     end
 
+    local tagRow = Options2.Elements.TextBoxRow(bc, "options", "tag", "trg_tag", ROW_H, false)
+    add(tagRow)
+
     local function load()
         desc:SetText(data.description or "")
         token:SetText(data.token or "")
@@ -210,6 +213,7 @@ local function make_effect_form(data, bc, nodeData, trigType)
         if excludeSelf ~= nil then excludeSelf:SetChecked(data.excludeSelf == true) end
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
+        tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description   = desc:GetText()
@@ -222,6 +226,7 @@ local function make_effect_form(data, bc, nodeData, trigType)
         if excludeSelf ~= nil then data.excludeSelf = excludeSelf:IsChecked() end
         data.action        = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
+        data.tag = tagRow:GetText()
     end
 
     load()
@@ -268,6 +273,9 @@ local function make_chat_form(data, bc, nodeData)
         add(valueRow)
     end
 
+    local tagRow = Options2.Elements.TextBoxRow(bc, "options", "tag", "trg_tag", ROW_H, false)
+    add(tagRow)
+
     local function load()
         desc:SetText(data.description or "")
         token:SetText(data.token or "")
@@ -276,6 +284,7 @@ local function make_chat_form(data, bc, nodeData)
         listOfTargets:SetText(UTILS.ListOfTargetsToString(data.listOfTargets or {}))
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
+        tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description     = desc:GetText()
@@ -286,6 +295,7 @@ local function make_chat_form(data, bc, nodeData)
         data.listOfTargets   = UTILS.StringOfTargetsToList(listOfTargets:GetText())
         data.action          = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
+        data.tag = tagRow:GetText()
     end
 
     load()
@@ -321,12 +331,16 @@ local function make_skill_form(data, bc, nodeData)
         add(valueRow)
     end
 
+    local tagRow = Options2.Elements.TextBoxRow(bc, "options", "tag", "trg_tag", ROW_H, false)
+    add(tagRow)
+
     local function load()
         desc:SetText(data.description or "")
         token:SetText(data.token or "")
         useRegex:SetChecked(data.useRegex == true)
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
+        tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description = desc:GetText()
@@ -334,6 +348,7 @@ local function make_skill_form(data, bc, nodeData)
         data.useRegex    = useRegex:IsChecked()
         data.action      = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
+        data.tag = tagRow:GetText()
     end
 
     load()
@@ -364,17 +379,22 @@ local function make_timer_form(data, bc, nodeData)
         add(valueRow)
     end
 
+    local tagRow = Options2.Elements.TextBoxRow(bc, "options", "tag", "trg_tag", ROW_H, false)
+    add(tagRow)
+
     local function load()
         desc:SetText(data.description or "")
         token:SetText(data.token or "")
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
+        tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description = desc:GetText()
         data.token       = token:GetText()
         data.action      = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
+        data.tag = tagRow:GetText()
     end
 
     load()
@@ -408,17 +428,22 @@ local function make_combat_form(data, bc, nodeData)
         add(valueRow)
     end
 
+    local tagRow = Options2.Elements.TextBoxRow(bc, "options", "tag", "trg_tag", ROW_H, false)
+    add(tagRow)
+
     local function load()
         desc:SetText(data.description or "")
         source:SetSelection(data.source or Source.CombatEnd)
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
+        tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description = desc:GetText()
         data.source      = source:GetSelectedValue()
         data.action      = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
+        data.tag = tagRow:GetText()
     end
 
     load()

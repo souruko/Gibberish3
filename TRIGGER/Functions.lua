@@ -50,7 +50,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- returns list of placeholders
 ---------------------------------------------------------------------------------------------------
-function Trigger.GetPlaceholder(token, message, posAdjustment, target)
+function Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerData)
 
     local placeholder = {}
     local captures = { string.find(message, Trigger.ReplacePlaceholder(token), posAdjustment) }
@@ -69,6 +69,7 @@ function Trigger.GetPlaceholder(token, message, posAdjustment, target)
     placeholder["&name"] = LpData.name
     placeholder["&class"] = LpData.class
     placeholder["&target"] = target
+    placeholder["&tag"] = tostring((triggerData and triggerData.tag) or "")
 
     return placeholder
 

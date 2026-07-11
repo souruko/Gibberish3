@@ -1,4 +1,5 @@
 local TOOLBAR_H = 36
+local SEP_H     = 2
 local ITEM_H    = 28
 local SCROLL_W  = 10
 local BTN_SIZE  = 26
@@ -119,6 +120,13 @@ function Options2.Window.Nav.Constructor:Constructor()
             Options2.ShowImport(nd)
         end)
 
+    -- separator line below toolbar
+    self.toolbar_sep = Turbine.UI.Control()
+    self.toolbar_sep:SetParent(self)
+    self.toolbar_sep:SetPosition(0, TOOLBAR_H)
+    self.toolbar_sep:SetBackColor(Options.Defaults.window.framecolor)
+    self.toolbar_sep:SetMouseVisible(false)
+
     -- ── flat-list ListBox (right-click events reach items) ────────
     self.listbox = Turbine.UI.ListBox()
     self.listbox:SetParent(self)
@@ -136,6 +144,7 @@ function Options2.Window.Nav.Constructor:SizeChanged()
     local list_w = w - SCROLL_W
 
     self.toolbar:SetSize(w, TOOLBAR_H)
+    self.toolbar_sep:SetSize(w, SEP_H)
 
     local collapse_left   = w - 4 - BTN_SIZE
     local add_window_left = collapse_left - BTN_GAP - BTN_SIZE
@@ -156,11 +165,12 @@ function Options2.Window.Nav.Constructor:SizeChanged()
     self.search_box:SetWidth(search_w)
     self.search_clear:SetPosition(search_w - 26, math.floor((BTN_SIZE - 20) / 2))
 
-    local view_h = h - TOOLBAR_H
-    self.listbox:SetPosition(0, TOOLBAR_H)
+    local list_top = TOOLBAR_H + SEP_H
+    local view_h   = h - list_top
+    self.listbox:SetPosition(0, list_top)
     self.listbox:SetSize(list_w, view_h)
 
-    self.scrollbar:SetPosition(list_w, TOOLBAR_H)
+    self.scrollbar:SetPosition(list_w, list_top)
     self.scrollbar:SetSize(SCROLL_W, view_h)
 
     for _, item in ipairs(self.items) do
@@ -943,7 +953,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
     local hover      = self.listbox:GetItemAt(lx, list_y)
 
     -- Ghost always tracks the mouse
-    self._drag_ghost:SetTop(TOOLBAR_H + list_y - math.floor(ITEM_H / 2))
+    self._drag_ghost:SetTop(TOOLBAR_H + SEP_H + list_y - math.floor(ITEM_H / 2))
 
     local nodeType = item.nodeData.nodeType
 
@@ -973,7 +983,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
                 self._drag.valid              = true
                 local _, iy    = target:GetMousePosition()
                 local item_top = list_y - iy
-                self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
+                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + item_top)
                 self._drag_folder_hl:SetVisible(true)
                 self._drag_indicator:SetVisible(false)
                 self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
@@ -1020,7 +1030,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         self._drag.dropIntoFolderItem = nil
         self._drag.valid              = true
         self._drag_folder_hl:SetVisible(false)
-        self._drag_indicator:SetTop(TOOLBAR_H + list_y - 1)
+        self._drag_indicator:SetTop(TOOLBAR_H + SEP_H + list_y - 1)
         self._drag_indicator:SetVisible(true)
         self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
         return
@@ -1065,7 +1075,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
     self._drag.valid = valid
 
     if valid then
-        self._drag_indicator:SetTop(TOOLBAR_H + ind_list_y - 1)
+        self._drag_indicator:SetTop(TOOLBAR_H + SEP_H + ind_list_y - 1)
         self._drag_indicator:SetVisible(true)
         self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
     else

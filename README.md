@@ -10,6 +10,9 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.5
+- added `tag` field to all trigger types; use `&tag` as a placeholder in the timer's Custom Text or Custom Duration fields to substitute the trigger's tag value at runtime
+
 ### 3.3.4
 - added test timer button to OPTIONS2 timer editor (General tab); fires a fake Add action on the live window for quick preview
 - triggers can now be dragged to any parent container in the OPTIONS2 nav tree (folder, window, timer, or condition), not just their matching parent type; the effect type is preserved and the action is reset if invalid for the new parent

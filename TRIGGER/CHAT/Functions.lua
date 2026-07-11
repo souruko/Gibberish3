@@ -246,7 +246,7 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
 
     end
 
-    local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment, target)
+    local placeholder = Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerData)
 
 
     -- text

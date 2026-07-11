@@ -14,4 +14,5 @@ Trigger[ Trigger.Types.Combat ].Defaults.action             = Action.Add
 Trigger[ Trigger.Types.Combat ].Defaults.source             = Source.CombatEnd
 Trigger[ Trigger.Types.Combat ].Defaults.description        = ""
 Trigger[ Trigger.Types.Combat ].Defaults.listOfTargets      = {}
+Trigger[ Trigger.Types.Combat ].Defaults.tag                = ""
 ---------------------------------------------------------------------------------------------------

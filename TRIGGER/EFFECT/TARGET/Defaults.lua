@@ -18,5 +18,6 @@ Trigger[ Trigger.Types.EffectTarget ].Defaults.icon               = nil
 Trigger[ Trigger.Types.EffectTarget ].Defaults.isDebuff           = 0
 Trigger[ Trigger.Types.EffectTarget ].Defaults.isDispellable      = 0
 Trigger[ Trigger.Types.EffectTarget ].Defaults.category           = 0
+Trigger[ Trigger.Types.EffectTarget ].Defaults.tag                = ""
 ---------------------------------------------------------------------------------------------------
 

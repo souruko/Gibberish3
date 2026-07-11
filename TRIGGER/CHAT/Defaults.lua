@@ -14,5 +14,6 @@ Trigger[ Trigger.Types.Chat ].Defaults.action             = Action.Add
 Trigger[ Trigger.Types.Chat ].Defaults.description        = ""
 Trigger[ Trigger.Types.Chat ].Defaults.source             = Source.Any
 Trigger[ Trigger.Types.Chat ].Defaults.listOfTargets      = {}
+Trigger[ Trigger.Types.Chat ].Defaults.tag                = ""
 ---------------------------------------------------------------------------------------------------
 
