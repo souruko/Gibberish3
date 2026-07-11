@@ -10,6 +10,14 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.2
+- added drag-and-drop reordering in the OPTIONS2 nav tree for all node types (folder, window, timer, condition, trigger, condition trigger)
+- timers can be dragged between windows; conditions can be dragged between timers
+- triggers can be dragged between trigger type groups (cross-type move resets the action value if it becomes invalid in the new context)
+- dragging a folder or window onto a folder reparents it into that folder
+- dragging a folder or window onto the empty nav background moves it to root level
+- added Duplicate to the OPTIONS2 nav context menu for windows, timers, conditions, and all trigger types; duplicate is inserted immediately after the original
+
 ### 3.3.1
 - fixed OPTIONS2 window always opening on plugin load (now only opens if it was open when the plugin was last unloaded)
 - fixed error when opening OPTIONS2 window after plugin load (`PluginData.Load` called outside synchronous context); nav state is now cached during startup

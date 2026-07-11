@@ -107,12 +107,20 @@ function Options2NavCondTrigger:Constructor(navWin, trigData, trigType, trigIdx,
     self.MouseLeave = function()
         if not self.selected then self:SetBackColor(nil) end
     end
+    self.MouseDown = function(sender, args)
+        if args.Button == Turbine.UI.MouseButton.Left then navWin:_DragBegin(self, args) end
+    end
+    self.MouseMove = function(sender, args) navWin:_DragMove(self, args) end
+    self.MouseUp = function(sender, args)
+        if args.Button == Turbine.UI.MouseButton.Left then navWin:_DragFinish(self, args) end
+    end
     self.MouseDoubleClick = function(sender, args)
         if args.Button ~= Turbine.UI.MouseButton.Right then
             navWin:_ToggleExpand(self)
         end
     end
     self.MouseClick = function(sender, args)
+        if navWin._drag_just_ended then navWin._drag_just_ended = false; return end
         if args.Button == Turbine.UI.MouseButton.Right then
             navWin:ItemRightClicked(self)
         else

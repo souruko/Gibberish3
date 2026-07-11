@@ -113,6 +113,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.scrollbar:SetParent(self)
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
     self.listbox:SetVerticalScrollBar(self.scrollbar)
+    self:_InitDrag()
 end
 
 function Options2.Window.Nav.Constructor:SizeChanged()
@@ -143,6 +144,13 @@ function Options2.Window.Nav.Constructor:SizeChanged()
 
     for _, item in ipairs(self.items) do
         item:SetWidth(list_w)
+    end
+
+    if self._drag_ghost ~= nil then
+        self._drag_ghost:SetWidth(list_w)
+        self._drag_ghost_lbl:SetWidth(list_w - 8)
+        self._drag_indicator:SetWidth(list_w)
+        self._drag_folder_hl:SetWidth(list_w)
     end
 end
 
@@ -604,6 +612,13 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             Options2.ShowExport(td, ImportType.Trigger)
         end))
         menu:AddSeperator()
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Trigger.Copy(td)
+            if fd[tt] == nil then fd[tt] = {} end
+            table.insert(fd[tt], ti + 1, copy)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(fd, ti, tt)
@@ -642,6 +657,12 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             Options2.ShowExport(wd, ImportType.Window)
         end))
         menu:AddSeperator()
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local new_wi = Window.Copy(wi)
+            Windows.EnabledChanged(new_wi)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(wd.name or "(window)", function()
                 Options.DeleteWindow(wi)
@@ -664,6 +685,13 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             Options2.ShowExport(td, ImportType.Trigger)
         end))
         menu:AddSeperator()
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Trigger.Copy(td)
+            if wd[tt] == nil then wd[tt] = {} end
+            table.insert(wd[tt], ti + 1, copy)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(wd, ti, tt)
@@ -696,6 +724,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         menu:AddSeperator()
         local tname = (tmd.description ~= nil and tmd.description ~= "")
             and tmd.description or "(timer)"
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Timer.Copy(tmd)
+            local tlist = Data.window[wi].timerList
+            table.insert(tlist, tmi + 1, copy)
+            Options.SaveData()
+            Options.DataChanged(wi)
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(tname, function()
                 local wd = Data.window[wi]
@@ -720,6 +756,13 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             Options2.ShowExport(td, ImportType.Trigger)
         end))
         menu:AddSeperator()
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Trigger.Copy(td)
+            if tmd[tt] == nil then tmd[tt] = {} end
+            table.insert(tmd[tt], ti + 1, copy)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(tmd, ti, tt)
@@ -746,6 +789,13 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         menu:AddSeperator()
         local cname = (cd.description ~= nil and cd.description ~= "")
             and cd.description or "(condition)"
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Condition.Copy(cd)
+            if tmd.conditionList == nil then tmd.conditionList = {} end
+            table.insert(tmd.conditionList, ci + 1, copy)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(cname, function()
                 Options.DeleteConditions(tmd, ci)
@@ -766,6 +816,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local desc = (td.description ~= nil and td.description ~= "") and td.description
             or ((lang.triggerType and lang.triggerType[tt]) or "trigger")
 
+        menu:AddSeperator()
+        menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
+            local copy = Trigger.Copy(td)
+            if cd[tt] == nil then cd[tt] = {} end
+            table.insert(cd[tt], ti + 1, copy)
+            Options.SaveData()
+            nav:Rebuild()
+        end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(cd, ti, tt)
@@ -777,4 +835,509 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
     end
 
     menu:Show()
+end
+
+-- ── drag and drop ──────────────────────────────────────────────────────────────
+
+local DRAG_THRESH = 5
+
+function Options2.Window.Nav.Constructor:_InitDrag()
+    self._drag = {
+        pending=false, active=false, item=nil, startY=0,
+        dropAfterIdx=0, valid=false,
+        dropMode="between",       -- "between" or "into"
+        dropIntoFolderItem=nil,
+    }
+    self._drag_just_ended = false
+
+    self._drag_ghost = Turbine.UI.Control()
+    self._drag_ghost:SetParent(self)
+    self._drag_ghost:SetHeight(ITEM_H)
+    self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+    self._drag_ghost:SetZOrder(500)
+    self._drag_ghost:SetVisible(false)
+    self._drag_ghost:SetMouseVisible(false)
+
+    self._drag_ghost_lbl = Turbine.UI.Label()
+    self._drag_ghost_lbl:SetParent(self._drag_ghost)
+    self._drag_ghost_lbl:SetPosition(8, 0)
+    self._drag_ghost_lbl:SetHeight(ITEM_H)
+    self._drag_ghost_lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self._drag_ghost_lbl:SetFont(Options.Defaults.window.font)
+    self._drag_ghost_lbl:SetForeColor(Options.Defaults.window.textcolor)
+    self._drag_ghost_lbl:SetMouseVisible(false)
+
+    self._drag_indicator = Turbine.UI.Control()
+    self._drag_indicator:SetParent(self)
+    self._drag_indicator:SetHeight(2)
+    self._drag_indicator:SetBackColor(Turbine.UI.Color(1.0, 0.85, 0.2))
+    self._drag_indicator:SetZOrder(499)
+    self._drag_indicator:SetVisible(false)
+    self._drag_indicator:SetMouseVisible(false)
+
+    self._drag_folder_hl = Turbine.UI.Control()
+    self._drag_folder_hl:SetParent(self)
+    self._drag_folder_hl:SetHeight(ITEM_H)
+    self._drag_folder_hl:SetBackColor(Turbine.UI.Color(0.3, 0.25, 0.6, 0.5))
+    self._drag_folder_hl:SetZOrder(499)
+    self._drag_folder_hl:SetVisible(false)
+    self._drag_folder_hl:SetMouseVisible(false)
+end
+
+function Options2.Window.Nav.Constructor:_DragBegin(item, args)
+    local nt = item.nodeData.nodeType
+    if nt ~= "folder" and nt ~= "window" and nt ~= "timer" and nt ~= "condition"
+        and nt ~= "foldertrigger" and nt ~= "windowtrigger"
+        and nt ~= "trigger" and nt ~= "conditiontrigger" then return end
+    self._drag.pending = true
+    self._drag.active  = false
+    self._drag.item    = item
+    self._drag.startY  = args.Y
+end
+
+function Options2.Window.Nav.Constructor:_DragMove(item, args)
+    if not self._drag.pending or self._drag.item ~= item then return end
+
+    if not self._drag.active then
+        if math.abs(args.Y - self._drag.startY) < DRAG_THRESH then return end
+        local nd = item.nodeData
+        local w  = self.listbox:GetWidth()
+        self._drag_ghost_lbl:SetText(nd.data.name or nd.data.description or "")
+        self._drag_ghost:SetWidth(w)
+        self._drag_ghost_lbl:SetWidth(w - 8)
+        self._drag_indicator:SetWidth(w)
+        self._drag_ghost:SetVisible(true)
+        self._drag.active = true
+    end
+
+    -- GetItemAt handles scrolling internally; list_y is in listbox visual coords
+    local lx, list_y = self.listbox:GetMousePosition()
+    local hover      = self.listbox:GetItemAt(lx, list_y)
+
+    -- Ghost follows mouse in nav coords (listbox sits at TOOLBAR_H)
+    self._drag_ghost:SetTop(TOOLBAR_H + list_y - math.floor(ITEM_H / 2))
+
+    local nodeType = item.nodeData.nodeType
+
+    -- "Drop into folder" when hovering over a folder row while dragging a folder or window
+    local drop_into = hover ~= nil
+        and hover.nodeData.nodeType == "folder"
+        and (nodeType == "folder" or nodeType == "window")
+        and hover ~= item
+
+    if drop_into then
+        self._drag.dropMode           = "into"
+        self._drag.dropIntoFolderItem = hover
+        self._drag.valid              = true
+        local _, iy    = hover:GetMousePosition()
+        local item_top = list_y - iy
+        self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
+        self._drag_folder_hl:SetVisible(true)
+        self._drag_indicator:SetVisible(false)
+        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+        return
+    end
+
+    -- "Drop to root" when hovering over empty space below all items while dragging a folder or window
+    if hover == nil and list_y > 0 and (nodeType == "folder" or nodeType == "window") then
+        self._drag.dropMode           = "toroot"
+        self._drag.dropIntoFolderItem = nil
+        self._drag.valid              = true
+        self._drag_folder_hl:SetVisible(false)
+        self._drag_indicator:SetTop(TOOLBAR_H + list_y - 1)
+        self._drag_indicator:SetVisible(true)
+        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+        return
+    end
+
+    -- "Drop between" items
+    self._drag.dropMode           = "between"
+    self._drag.dropIntoFolderItem = nil
+    self._drag_folder_hl:SetVisible(false)
+
+    local dropAfterIdx = 0
+    local ind_list_y   = 0
+
+    if hover ~= nil then
+        local hover_idx = 0
+        for i, it in ipairs(self.items) do
+            if it == hover then hover_idx = i; break end
+        end
+        if hover_idx > 0 then
+            local _, iy    = hover:GetMousePosition()
+            local item_top = list_y - iy
+            if iy >= math.floor(ITEM_H / 2) then
+                dropAfterIdx = hover_idx
+                ind_list_y   = item_top + ITEM_H
+            else
+                dropAfterIdx = hover_idx - 1
+                ind_list_y   = item_top
+            end
+        end
+    elseif list_y > 0 then
+        dropAfterIdx = #self.items
+        ind_list_y   = list_y
+    end
+
+    self._drag.dropAfterIdx = dropAfterIdx
+    local valid = self:_IsValidDrop(nodeType, dropAfterIdx)
+    self._drag.valid = valid
+
+    if valid then
+        self._drag_indicator:SetTop(TOOLBAR_H + ind_list_y - 1)
+        self._drag_indicator:SetVisible(true)
+        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+    else
+        self._drag_indicator:SetVisible(false)
+        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
+    end
+end
+
+function Options2.Window.Nav.Constructor:_DragFinish(item, args)
+    if not self._drag.pending or self._drag.item ~= item then return end
+
+    local was_active      = self._drag.active
+    self._drag.pending    = false
+    self._drag.active     = false
+    self._drag_ghost:SetVisible(false)
+    self._drag_indicator:SetVisible(false)
+    self._drag_folder_hl:SetVisible(false)
+    self._drag_just_ended = was_active
+
+    if not was_active or not self._drag.valid then return end
+
+    local nd           = item.nodeData
+    local dropAfterIdx = self._drag.dropAfterIdx
+
+    if self._drag.dropMode == "into" and self._drag.dropIntoFolderItem ~= nil then
+        self:_CommitDropIntoFolder(nd, self._drag.dropIntoFolderItem.nodeData.folderIndex)
+    elseif self._drag.dropMode == "toroot" then
+        self:_CommitDropToRoot(nd)
+    elseif nd.nodeType == "folder" or nd.nodeType == "window" then
+        self:_CommitFolderWindowDrop(nd, dropAfterIdx)
+    elseif nd.nodeType == "timer" then
+        self:_CommitTimerDrop(nd, dropAfterIdx)
+    elseif nd.nodeType == "condition" then
+        self:_CommitConditionDrop(nd, dropAfterIdx)
+    elseif nd.nodeType == "foldertrigger" or nd.nodeType == "windowtrigger"
+        or nd.nodeType == "trigger" or nd.nodeType == "conditiontrigger" then
+        self:_CommitTriggerDrop(nd, dropAfterIdx)
+    end
+
+    Options.SaveData()
+    self:Rebuild()
+end
+
+function Options2.Window.Nav.Constructor:_IsValidDrop(nodeType, dropAfterIdx)
+    local dragged = self._drag.item
+    local before  = dropAfterIdx > 0 and self.items[dropAfterIdx] or nil
+    local after   = self.items[dropAfterIdx + 1]
+
+    if before == dragged or after == dragged then return false end
+
+    if nodeType == "folder" or nodeType == "window" then
+        local ok_before = before == nil
+            or before.nodeData.nodeType == "folder"
+            or before.nodeData.nodeType == "window"
+        local ok_after = after == nil
+            or after.nodeData.nodeType == "folder"
+            or after.nodeData.nodeType == "window"
+        if not (ok_before and ok_after) then return false end
+        local p_before = before and before.nodeData.data.folder
+        local p_after  = after  and after.nodeData.data.folder
+        if before ~= nil and after ~= nil and p_before ~= p_after then return false end
+        return true
+
+    elseif nodeType == "timer" then
+        local ok_before = before == nil
+            or before.nodeData.nodeType == "timer"
+            or before.nodeData.nodeType == "window"
+            or before.nodeData.nodeType == "windowtrigger"
+        local ok_after = after == nil
+            or after.nodeData.nodeType == "timer"
+            or after.nodeData.nodeType == "window"
+        return ok_before and ok_after
+
+    elseif nodeType == "condition" then
+        local ok_before = before == nil
+            or before.nodeData.nodeType == "condition"
+            or before.nodeData.nodeType == "timer"
+            or before.nodeData.nodeType == "trigger"
+        local ok_after = after == nil
+            or after.nodeData.nodeType == "condition"
+            or after.nodeData.nodeType == "timer"
+        return ok_before and ok_after
+
+    elseif nodeType == "foldertrigger" or nodeType == "windowtrigger"
+        or nodeType == "trigger" or nodeType == "conditiontrigger" then
+        local same = function(it)
+            return it ~= nil and it.nodeData.nodeType == nodeType
+        end
+        return same(before) or same(after)
+    end
+
+    return false
+end
+
+function Options2.Window.Nav.Constructor:_CommitTimerDrop(nd, dropAfterIdx)
+    local src_wi  = nd.windowIndex
+    local src_tmi = nd.timerIndex
+    local data    = nd.data
+
+    local after_item = self.items[dropAfterIdx + 1]
+    local tgt_wi, tgt_pos
+
+    if after_item and after_item.nodeData.nodeType == "timer" then
+        tgt_wi  = after_item.nodeData.windowIndex
+        tgt_pos = after_item.nodeData.timerIndex
+    else
+        for i = dropAfterIdx, 1, -1 do
+            local it = self.items[i]
+            local nt = it.nodeData.nodeType
+            if nt == "timer" then
+                tgt_wi  = it.nodeData.windowIndex
+                tgt_pos = it.nodeData.timerIndex + 1
+                break
+            elseif nt == "window" or nt == "windowtrigger" then
+                tgt_wi  = it.nodeData.windowIndex
+                tgt_pos = 1
+                break
+            end
+        end
+    end
+
+    if tgt_wi == nil then return end
+
+    table.remove(Data.window[src_wi].timerList, src_tmi)
+
+    if tgt_wi == src_wi and src_tmi < tgt_pos then
+        tgt_pos = tgt_pos - 1
+    end
+
+    local tgt_list = Data.window[tgt_wi].timerList
+    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_list + 1))
+    table.insert(tgt_list, tgt_pos, data)
+end
+
+function Options2.Window.Nav.Constructor:_CommitConditionDrop(nd, dropAfterIdx)
+    local src_wi  = nd.windowIndex
+    local src_tmi = nd.timerIndex
+    local src_ci  = nd.conditionIndex
+    local data    = nd.data
+
+    local after_item = self.items[dropAfterIdx + 1]
+    local tgt_wi, tgt_tmi, tgt_pos
+
+    if after_item and after_item.nodeData.nodeType == "condition" then
+        tgt_wi  = after_item.nodeData.windowIndex
+        tgt_tmi = after_item.nodeData.timerIndex
+        tgt_pos = after_item.nodeData.conditionIndex
+    else
+        for i = dropAfterIdx, 1, -1 do
+            local it = self.items[i]
+            local nt = it.nodeData.nodeType
+            if nt == "condition" then
+                tgt_wi  = it.nodeData.windowIndex
+                tgt_tmi = it.nodeData.timerIndex
+                tgt_pos = it.nodeData.conditionIndex + 1
+                break
+            elseif nt == "trigger" or nt == "timer" then
+                tgt_wi  = it.nodeData.windowIndex
+                tgt_tmi = it.nodeData.timerIndex
+                tgt_pos = 1
+                break
+            end
+        end
+    end
+
+    if tgt_wi == nil then return end
+
+    table.remove(Data.window[src_wi].timerList[src_tmi].conditionList, src_ci)
+
+    if tgt_wi == src_wi and tgt_tmi == src_tmi and src_ci < tgt_pos then
+        tgt_pos = tgt_pos - 1
+    end
+
+    local tgt_list = Data.window[tgt_wi].timerList[tgt_tmi].conditionList
+    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_list + 1))
+    table.insert(tgt_list, tgt_pos, data)
+end
+
+function Options2.Window.Nav.Constructor:_CommitDropIntoFolder(nd, targetFolderIdx)
+    local dragged_data = nd.data
+
+    -- Find the highest sortIndex among existing children of the target folder
+    local max_sort = -1
+    for _, fd in ipairs(Data.folder) do
+        if fd.folder == targetFolderIdx and fd ~= dragged_data then
+            max_sort = math.max(max_sort, fd.sortIndex or 0)
+        end
+    end
+    for _, wd in ipairs(Data.window) do
+        if wd.folder == targetFolderIdx and wd ~= dragged_data then
+            max_sort = math.max(max_sort, wd.sortIndex or 0)
+        end
+    end
+
+    dragged_data.folder    = targetFolderIdx
+    dragged_data.sortIndex = max_sort + 1
+
+    -- Expand the target folder so the moved item is immediately visible
+    local key = "f_" .. targetFolderIdx
+    self.expanded[key] = true
+    Data.folder[targetFolderIdx].collapsed = false
+end
+
+function Options2.Window.Nav.Constructor:_CommitDropToRoot(nd)
+    local dragged_data = nd.data
+
+    local max_sort = -1
+    for _, fd in ipairs(Data.folder) do
+        if fd.folder == nil and fd ~= dragged_data then
+            max_sort = math.max(max_sort, fd.sortIndex or 0)
+        end
+    end
+    for _, wd in ipairs(Data.window) do
+        if wd.folder == nil and wd ~= dragged_data then
+            max_sort = math.max(max_sort, wd.sortIndex or 0)
+        end
+    end
+
+    dragged_data.folder    = nil
+    dragged_data.sortIndex = max_sort + 1
+end
+
+function Options2.Window.Nav.Constructor:_GetTriggerArray(ref_nd, nt, tt)
+    if nt == "foldertrigger" then
+        local fi = ref_nd.folderIndex
+        if Data.folder[fi][tt] == nil then Data.folder[fi][tt] = {} end
+        return Data.folder[fi][tt]
+    elseif nt == "windowtrigger" then
+        local wi = ref_nd.windowIndex
+        if Data.window[wi][tt] == nil then Data.window[wi][tt] = {} end
+        return Data.window[wi][tt]
+    elseif nt == "trigger" then
+        local tmd = Data.window[ref_nd.windowIndex].timerList[ref_nd.timerIndex]
+        if tmd[tt] == nil then tmd[tt] = {} end
+        return tmd[tt]
+    elseif nt == "conditiontrigger" then
+        local cd = Data.window[ref_nd.windowIndex].timerList[ref_nd.timerIndex].conditionList[ref_nd.conditionIndex]
+        if cd[tt] == nil then cd[tt] = {} end
+        return cd[tt]
+    end
+end
+
+function Options2.Window.Nav.Constructor:_CommitTriggerDrop(nd, dropAfterIdx)
+    local src_tt  = nd.triggerType
+    local src_ti  = nd.triggerIndex
+    local data    = nd.data
+    local nt      = nd.nodeType
+
+    local src_arr = self:_GetTriggerArray(nd, nt, src_tt)
+
+    -- Resolve target (triggerType may differ from source for cross-type moves)
+    local after_item = self.items[dropAfterIdx + 1]
+    local tgt_nd, tgt_pos, tgt_tt
+
+    if after_item and after_item.nodeData.nodeType == nt then
+        tgt_nd  = after_item.nodeData
+        tgt_tt  = tgt_nd.triggerType
+        tgt_pos = tgt_nd.triggerIndex
+    else
+        for i = dropAfterIdx, 1, -1 do
+            local it = self.items[i]
+            if it.nodeData.nodeType == nt then
+                tgt_nd  = it.nodeData
+                tgt_tt  = tgt_nd.triggerType
+                tgt_pos = it.nodeData.triggerIndex + 1
+                break
+            end
+        end
+    end
+
+    if tgt_nd == nil then return end
+
+    local tgt_arr = self:_GetTriggerArray(tgt_nd, nt, tgt_tt)
+
+    table.remove(src_arr, src_ti)
+
+    if tgt_arr == src_arr and src_ti < tgt_pos then
+        tgt_pos = tgt_pos - 1
+    end
+
+    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_arr + 1))
+    table.insert(tgt_arr, tgt_pos, data)
+
+    self:_ResetActionIfInvalid(data, nt, tgt_nd)
+end
+
+function Options2.Window.Nav.Constructor:_ResetActionIfInvalid(trigData, nt, tgt_nd)
+    local a = trigData.action
+    if nt == "foldertrigger" then
+        if a ~= Action.Enable and a ~= Action.Disable and a ~= Action.Reset then
+            trigData.action = Action.Enable
+        end
+    elseif nt == "windowtrigger" then
+        if a ~= Action.Enable and a ~= Action.Disable and a ~= Action.Clear and a ~= Action.Reset then
+            trigData.action = Action.Enable
+        end
+    elseif nt == "trigger" then
+        local wi = tgt_nd.windowIndex
+        local is_counter = Data.window[wi] and Data.window[wi].timerType == Timer.Types.COUNTER_BAR
+        if a ~= Action.Add and a ~= Action.Remove and a ~= Action.Enable and a ~= Action.Disable
+            and not (is_counter and a == Action.Subtract) then
+            trigData.action = Action.Add
+        end
+    elseif nt == "conditiontrigger" then
+        if a ~= Action.Add and a ~= Action.Remove then
+            trigData.action = Action.Add
+        end
+    end
+end
+
+function Options2.Window.Nav.Constructor:_CommitFolderWindowDrop(nd, dropAfterIdx)
+    local dragged_data = nd.data
+
+    local before = dropAfterIdx > 0 and self.items[dropAfterIdx] or nil
+    local after  = self.items[dropAfterIdx + 1]
+
+    local new_parent = nil
+    if before and (before.nodeData.nodeType == "folder" or before.nodeData.nodeType == "window") then
+        new_parent = before.nodeData.data.folder
+    elseif after and (after.nodeData.nodeType == "folder" or after.nodeData.nodeType == "window") then
+        new_parent = after.nodeData.data.folder
+    end
+
+    dragged_data.folder = new_parent
+
+    -- Build ordered sibling list from the current visual order, excluding dragged
+    local ordered = {}
+    for _, item in ipairs(self.items) do
+        local nt = item.nodeData.nodeType
+        if (nt == "folder" or nt == "window")
+            and item.nodeData.data.folder == new_parent
+            and item.nodeData.data ~= dragged_data
+        then
+            ordered[#ordered + 1] = item.nodeData.data
+        end
+    end
+
+    -- Count how many siblings appear before the drop slot to find insert position
+    local seen = 0
+    for i = 1, dropAfterIdx do
+        local item = self.items[i]
+        local nt = item.nodeData.nodeType
+        if (nt == "folder" or nt == "window")
+            and item.nodeData.data.folder == new_parent
+            and item.nodeData.data ~= dragged_data
+        then
+            seen = seen + 1
+        end
+    end
+
+    table.insert(ordered, seen + 1, dragged_data)
+
+    for i, data in ipairs(ordered) do
+        data.sortIndex = i - 1
+    end
 end
