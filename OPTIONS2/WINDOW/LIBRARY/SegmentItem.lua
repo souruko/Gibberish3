@@ -98,9 +98,11 @@ end
 
 function Options2.Library.SegmentItem:FillContent(text)
     self.listbox:ClearItems()
+    local w     = self:GetWidth()
     local lower = string.lower(text)
     for _, ctrl in ipairs(self.controls) do
         if string.find(string.lower(ctrl.data.token or ""), lower, 1, true) then
+            if w > 0 then ctrl:SetWidth(w - 10) end
             self.listbox:AddItem(ctrl)
         end
     end

@@ -29,6 +29,13 @@ function Options2.Window.Constructor:Constructor()
     )
     self:SetPosition(old_left + 40, old_top + 40)
 
+    self:SetWantsKeyEvents(true)
+    self.KeyDown = function(sender, args)
+        if args.Action == Turbine.UI.Lotro.Action.Escape then
+            self:SetVisible(false)
+        end
+    end
+
     self:SetVisible(true)
 
     -- populate nav tree after first layout (SetSize fires SizeChanged first)

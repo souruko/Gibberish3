@@ -70,12 +70,13 @@ local function refresh_paste(plist)
     end
 end
 
--- Sizes rows, shrinking those with a paste button to leave room for it.
+-- Sizes rows, shrinking those with a visible paste button to leave room for it.
 local function size_paste(rows, plist, w)
     local marked = {}
     for _, p in ipairs(plist) do marked[p.row] = p end
     for _, r in ipairs(rows) do
-        if marked[r] then
+        local p = marked[r]
+        if p and p.btn:IsVisible() then
             r:SetWidth(w - LEFT - 5 - PASTE_W - 4)
         else
             r:SetWidth(w - LEFT - 5)
@@ -535,4 +536,6 @@ end
 
 function Options2.Window.TriggerEditor:ClipboardChanged()
     refresh_paste(self._paste_list)
+    local w = self:GetWidth()
+    if w > 0 then self._size(w) end
 end
