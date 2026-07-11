@@ -56,9 +56,14 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
     self.MouseLeave = function()
         if not self.selected then self:SetBackColor(nil) end
     end
+    self.MouseDoubleClick = function(sender, args)
+        if args.Button ~= Turbine.UI.MouseButton.Right then
+            navWin:_ToggleExpand(self)
+        end
+    end
     self.MouseClick = function(sender, args)
         if args.Button == Turbine.UI.MouseButton.Right then
-            navWin:ShowContextMenu(self.nodeData)
+            navWin:ItemRightClicked(self)
         else
             navWin:ItemClicked(self)
         end

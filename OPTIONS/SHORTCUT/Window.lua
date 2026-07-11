@@ -101,9 +101,7 @@ function Options.Shortcut.Constructor:Constructor()
 
     -- right click options 2
     self.rc_options2 = Options.Elements.Row( "shortcut", "options2", function ()
-            if Options2.Window.Object ~= nil then
-                Options2.Window.Object:SetVisible( not Options2.Window.Object:IsVisible() )
-            end
+            Options2.ToggleWindow()
         end,
         Options.Defaults.rc_menu.item_height)
 

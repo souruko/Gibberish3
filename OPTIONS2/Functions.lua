@@ -25,9 +25,31 @@ function Options2.ClearClipboard()
     Options2.NotifyClipboardChanged()
 end
 
+local _cached_nav_key = nil
+
 function Options2.StartUp()
-    Options2.Window.Object         = Options2.Window.Constructor()
+    -- PluginData.Load is only synchronous during the plugin load phase; cache it now.
+    local state = Turbine.PluginData.Load(Turbine.DataScope.Character, "gibberish_options2_nav", nil)
+    if state ~= nil and type(state.selectedKey) == "string" then
+        _cached_nav_key = state.selectedKey
+    end
+
     Options2.Window.ImportDialogObject = Options2.Window.ImportDialog()
+    if Data.options.window.open2 == true then
+        Options2.Window.Object = Options2.Window.Constructor()
+    end
+end
+
+function Options2.ToggleWindow()
+    if Options2.Window.Object == nil then
+        Options2.Window.Object = Options2.Window.Constructor()
+        Data.options.window.open2 = true
+    else
+        local now_visible = not Options2.Window.Object:IsVisible()
+        Options2.Window.Object:SetVisible(now_visible)
+        Data.options.window.open2 = now_visible
+    end
+    Options.SaveData()
 end
 
 function Options2.ShowExport(data, importType, index)
@@ -41,12 +63,11 @@ function Options2.ShowImport(context_nd)
 end
 
 function Options2.SaveNavState(selectedKey)
+    _cached_nav_key = selectedKey
     Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_options2_nav",
         { selectedKey = selectedKey }, nil)
 end
 
 function Options2.LoadNavState()
-    local state = Turbine.PluginData.Load(Turbine.DataScope.Character, "gibberish_options2_nav", nil)
-    if state == nil or type(state.selectedKey) ~= "string" then return nil end
-    return state.selectedKey
+    return _cached_nav_key
 end

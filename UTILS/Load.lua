@@ -177,9 +177,12 @@ function Options.OverwriteCharData( global_data, char_data )
     global_data.autoReload                 = char_data.autoReload           
     global_data.options.shortcut.left      = char_data.options.shortcut.left
     global_data.options.shortcut.top       = char_data.options.shortcut.top 
-    global_data.options.window.left        = char_data.options.window.left  
-    global_data.options.window.top         = char_data.options.window.top   
-    global_data.options.window.open        = char_data.options.window.open  
+    global_data.options.window.left        = char_data.options.window.left
+    global_data.options.window.top         = char_data.options.window.top
+    global_data.options.window.open        = char_data.options.window.open
+    global_data.options.window.open2       = char_data.options.window.open2
+    global_data.options.window.left2       = char_data.options.window.left2
+    global_data.options.window.top2        = char_data.options.window.top2
 
     return global_data
 

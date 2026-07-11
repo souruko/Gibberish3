@@ -414,41 +414,52 @@ end
 
 -- ── interaction ────────────────────────────────────────────────────────────────
 
-function Options2.Window.Nav.Constructor:ItemClicked(item)
+function Options2.Window.Nav.Constructor:_SelectItem(item)
     if self.selectedItem ~= nil and self.selectedItem ~= item then
         self.selectedItem:SetSelected(false)
     end
-
     self.selectedKey  = item:GetKey()
     self.selectedItem = item
     item:SetSelected(true)
     Options2.SaveNavState(self.selectedKey)
-
     Options2.selectedNode = item.nodeData
-
     if Options2.Window.Object ~= nil and Options2.Window.Object.editor_panel ~= nil then
         Options2.Window.Object.editor_panel:SetNode(item.nodeData)
     end
+end
 
-    if item:IsExpandable() then
-        local key = item:GetKey()
-        if self.filter == "" then
-            local now_expanded = not (self.expanded[key] == true)
-            self.expanded[key] = now_expanded
-            local nd = item.nodeData
-            local collapsed = not now_expanded
-            if nd.nodeType == "folder" then
-                Data.folder[nd.folderIndex].collapsed = collapsed
-            elseif nd.nodeType == "window" then
-                Data.window[nd.windowIndex].collapsed = collapsed
-            elseif nd.nodeType == "timer" then
-                Data.window[nd.windowIndex].timerList[nd.timerIndex].collapsed = collapsed
-            elseif nd.nodeType == "condition" then
-                Data.window[nd.windowIndex].timerList[nd.timerIndex].conditionList[nd.conditionIndex].collapsed = collapsed
-            end
-        end
-        self:Rebuild()
+function Options2.Window.Nav.Constructor:_ToggleExpand(item)
+    if not item:IsExpandable() or self.filter ~= "" then return end
+    local key = item:GetKey()
+    local now_expanded = not (self.expanded[key] == true)
+    self.expanded[key] = now_expanded
+    local nd = item.nodeData
+    local collapsed = not now_expanded
+    if nd.nodeType == "folder" then
+        Data.folder[nd.folderIndex].collapsed = collapsed
+    elseif nd.nodeType == "window" then
+        Data.window[nd.windowIndex].collapsed = collapsed
+    elseif nd.nodeType == "timer" then
+        Data.window[nd.windowIndex].timerList[nd.timerIndex].collapsed = collapsed
+    elseif nd.nodeType == "condition" then
+        Data.window[nd.windowIndex].timerList[nd.timerIndex].conditionList[nd.conditionIndex].collapsed = collapsed
     end
+    self:Rebuild()
+end
+
+function Options2.Window.Nav.Constructor:ItemClicked(item)
+    if self.selectedItem ~= item then
+        self:_SelectItem(item)
+    else
+        self:_ToggleExpand(item)
+    end
+end
+
+function Options2.Window.Nav.Constructor:ItemRightClicked(item)
+    if self.selectedItem ~= item then
+        self:_SelectItem(item)
+    end
+    self:ShowContextMenu(item.nodeData)
 end
 
 function Options2.Window.Nav.Constructor:CollapseAll()

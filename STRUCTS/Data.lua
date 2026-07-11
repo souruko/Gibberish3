@@ -59,6 +59,9 @@ function DataFunction.New()
     data.options.window.height      = Options.Defaults.window.min_height
     
     data.options.window.open        = false
+    data.options.window.open2       = false
+    data.options.window.left2       = 0.23
+    data.options.window.top2        = 0.23
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
     

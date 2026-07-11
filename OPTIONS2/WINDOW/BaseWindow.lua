@@ -22,18 +22,22 @@ function Options2.Window.Constructor:Constructor()
     self:SetResizable(true)
     self:SetSize(Options.Defaults.window.min_width, Options.Defaults.window.min_height)
 
-    -- Offset 40px from the old window
-    local old_left, old_top = UTILS.ScreenRatioToPixel(
-        Data.options.window.left,
-        Data.options.window.top
-    )
-    self:SetPosition(old_left + 40, old_top + 40)
+    local l2 = Data.options.window.left2 or Data.options.window.left
+    local t2 = Data.options.window.top2  or Data.options.window.top
+    self:SetPosition(UTILS.ScreenRatioToPixel(l2, t2))
 
     self:SetWantsKeyEvents(true)
     self.KeyDown = function(sender, args)
         if args.Action == Turbine.UI.Lotro.Action.Escape then
             self:SetVisible(false)
+            Data.options.window.open2 = false
+            Options.SaveData()
         end
+    end
+
+    self.Closed = function()
+        Data.options.window.open2 = false
+        Options.SaveData()
     end
 
     self:SetVisible(true)
@@ -56,6 +60,13 @@ function Options2.Window.Constructor:LanguageChanged()
     if self.library ~= nil and self.library.LanguageChanged ~= nil then
         self.library:LanguageChanged()
     end
+end
+
+function Options2.Window.Constructor:PositionChanged()
+    local left, top = UTILS.PixelToScreenRatio(self:GetPosition())
+    Data.options.window.left2 = left
+    Data.options.window.top2  = top
+    Options.SaveData()
 end
 
 function Options2.Window.Constructor:SizeChanged()
