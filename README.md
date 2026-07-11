@@ -10,6 +10,11 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.1
+- fixed OPTIONS2 window always opening on plugin load (now only opens if it was open when the plugin was last unloaded)
+- fixed error when opening OPTIONS2 window after plugin load (`PluginData.Load` called outside synchronous context); nav state is now cached during startup
+- added OPTIONS2 window position persistence; falls back to the old options window position on first use
+
 ### 3.3.0
 - added new options panel (OPTIONS2) with a full 4-level navigation tree (Folder → Window → Timer → Trigger/Condition → ConditionTrigger)
 - nav selection is now persistent across plugin reloads (saved to character PluginData)
