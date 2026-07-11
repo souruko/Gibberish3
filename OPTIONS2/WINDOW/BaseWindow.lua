@@ -31,13 +31,11 @@ function Options2.Window.Constructor:Constructor()
         if args.Action == Turbine.UI.Lotro.Action.Escape then
             self:SetVisible(false)
             Data.options.window.open2 = false
-            Options.SaveData()
         end
     end
 
     self.Closed = function()
         Data.options.window.open2 = false
-        Options.SaveData()
     end
 
     self:SetVisible(true)
@@ -66,7 +64,6 @@ function Options2.Window.Constructor:PositionChanged()
     local left, top = UTILS.PixelToScreenRatio(self:GetPosition())
     Data.options.window.left2 = left
     Data.options.window.top2  = top
-    Options.SaveData()
 end
 
 function Options2.Window.Constructor:SizeChanged()

@@ -49,7 +49,6 @@ function Options2.ToggleWindow()
         Options2.Window.Object:SetVisible(now_visible)
         Data.options.window.open2 = now_visible
     end
-    Options.SaveData()
 end
 
 function Options2.ShowExport(data, importType, index)
