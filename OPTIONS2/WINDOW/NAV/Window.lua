@@ -478,7 +478,11 @@ end
 
 function Options2.Window.Nav.Constructor:ItemClicked(item)
     if self.selectedItem ~= item then
+        local collapsed = not (self.expanded[item:GetKey()] == true)
         self:_SelectItem(item)
+        if collapsed then
+            self:_ToggleExpand(item)
+        end
     else
         self:_ToggleExpand(item)
     end
