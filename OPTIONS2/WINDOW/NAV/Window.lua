@@ -305,15 +305,15 @@ function Options2.Window.Nav.Constructor:Rebuild()
     local roots = {}
     for fi, fd in ipairs(Data.folder) do
         if fd.folder == nil then
-            roots[#roots + 1] = { kind = "folder", idx = fi, data = fd, si = fd.sortIndex or 0 }
+            roots[#roots + 1] = { kind = "folder", idx = fi, data = fd }
         end
     end
     for wi, wd in ipairs(Data.window) do
         if wd.folder == nil then
-            roots[#roots + 1] = { kind = "window", idx = wi, data = wd, si = wd.sortIndex or 0 }
+            roots[#roots + 1] = { kind = "window", idx = wi, data = wd }
         end
     end
-    table.sort(roots, function(a, b) return a.si < b.si end)
+    table.sort(roots, function(a, b) return (a.data.name or ""):lower() < (b.data.name or ""):lower() end)
 
     for _, entry in ipairs(roots) do
         if entry.kind == "folder" then
@@ -367,15 +367,15 @@ function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
     local children = {}
     for fi2, fd2 in ipairs(Data.folder) do
         if fd2.folder == fi then
-            children[#children + 1] = { kind = "folder", idx = fi2, data = fd2, si = fd2.sortIndex or 0 }
+            children[#children + 1] = { kind = "folder", idx = fi2, data = fd2 }
         end
     end
     for wi, wd in ipairs(Data.window) do
         if wd.folder == fi then
-            children[#children + 1] = { kind = "window", idx = wi, data = wd, si = wd.sortIndex or 0 }
+            children[#children + 1] = { kind = "window", idx = wi, data = wd }
         end
     end
-    table.sort(children, function(a, b) return a.si < b.si end)
+    table.sort(children, function(a, b) return (a.data.name or ""):lower() < (b.data.name or ""):lower() end)
     for _, entry in ipairs(children) do
         if entry.kind == "folder" then
             self:_AddFolder(entry.idx, entry.data, w, depth + 1)
@@ -404,8 +404,15 @@ function Options2.Window.Nav.Constructor:_AddWindow(wi, wd, w, depth)
         end
     end
 
+    local timer_sorted = {}
     for tmi, tmd in ipairs(wd.timerList or {}) do
-        self:_AddTimer(wi, tmi, tmd, w, depth + 1)
+        timer_sorted[#timer_sorted + 1] = { tmi = tmi, tmd = tmd }
+    end
+    table.sort(timer_sorted, function(a, b)
+        return (a.tmd.description or ""):lower() < (b.tmd.description or ""):lower()
+    end)
+    for _, entry in ipairs(timer_sorted) do
+        self:_AddTimer(wi, entry.tmi, entry.tmd, w, depth + 1)
     end
 end
 
@@ -427,8 +434,15 @@ function Options2.Window.Nav.Constructor:_AddTimer(wi, tmi, tmd, w, depth)
         end
     end
 
+    local cond_sorted = {}
     for ci, cd in ipairs(tmd.conditionList or {}) do
-        self:_AddCondition(wi, tmi, ci, cd, w, depth + 1)
+        cond_sorted[#cond_sorted + 1] = { ci = ci, cd = cd }
+    end
+    table.sort(cond_sorted, function(a, b)
+        return (a.cd.description or ""):lower() < (b.cd.description or ""):lower()
+    end)
+    for _, entry in ipairs(cond_sorted) do
+        self:_AddCondition(wi, tmi, entry.ci, entry.cd, w, depth + 1)
     end
 end
 
@@ -1036,52 +1050,85 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         return
     end
 
-    -- "Drop between" items
-    local dropAfterIdx = 0
-    local ind_list_y   = 0
-
-    if hover ~= nil then
-        local hover_idx = 0
-        for i, it in ipairs(self.items) do
-            if it == hover then hover_idx = i; break end
+    -- Folder/window drags only support "into" and "toroot"
+    if nodeType == "folder" or nodeType == "window" then
+        if self._drag.dropMode ~= "fw_invalid" then
+            self._drag.dropMode           = "fw_invalid"
+            self._drag.dropIntoFolderItem = nil
+            self._drag.valid              = false
+            self._drag_folder_hl:SetVisible(false)
+            self._drag_indicator:SetVisible(false)
+            self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
         end
-        if hover_idx > 0 then
-            local _, iy    = hover:GetMousePosition()
-            local item_top = list_y - iy
-            if iy >= math.floor(ITEM_H / 2) then
-                dropAfterIdx = hover_idx
-                ind_list_y   = item_top + ITEM_H
-            else
-                dropAfterIdx = hover_idx - 1
-                ind_list_y   = item_top
-            end
-        end
-    elseif list_y > 0 then
-        dropAfterIdx = #self.items
-        ind_list_y   = list_y
-    end
-
-    -- Skip validation and UI updates when the drop slot hasn't changed
-    if dropAfterIdx == self._drag.dropAfterIdx and self._drag.dropMode == "between" then
         return
     end
 
-    self._drag.dropAfterIdx       = dropAfterIdx
-    self._drag.dropMode           = "between"
-    self._drag.dropIntoFolderItem = nil
-    self._drag_folder_hl:SetVisible(false)
-
-    local valid = self:_IsValidDrop(nodeType, dropAfterIdx)
-    self._drag.valid = valid
-
-    if valid then
-        self._drag_indicator:SetTop(TOOLBAR_H + SEP_H + ind_list_y - 1)
-        self._drag_indicator:SetVisible(true)
-        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
-    else
-        self._drag_indicator:SetVisible(false)
-        self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
+    -- Timer drags: drop onto a window row only
+    if nodeType == "timer" then
+        local target = nil
+        for _, it in ipairs(self.items) do
+            if it.nodeData ~= nil and it.nodeData.nodeType == "window" then
+                local _, iy = it:GetMousePosition()
+                if iy >= 0 and iy < ITEM_H then target = it; break end
+            end
+        end
+        if target then
+            if target ~= self._drag.dropIntoFolderItem or self._drag.dropMode ~= "into" then
+                self._drag.dropMode           = "into"
+                self._drag.dropIntoFolderItem = target
+                self._drag.valid              = true
+                local _, iy    = target:GetMousePosition()
+                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + list_y - iy)
+                self._drag_folder_hl:SetVisible(true)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+            end
+        else
+            if self._drag.dropMode ~= "timer_invalid" then
+                self._drag.dropMode           = "timer_invalid"
+                self._drag.dropIntoFolderItem = nil
+                self._drag.valid              = false
+                self._drag_folder_hl:SetVisible(false)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
+            end
+        end
+        return
     end
+
+    -- Condition drags: drop onto a timer row only
+    if nodeType == "condition" then
+        local target = nil
+        for _, it in ipairs(self.items) do
+            if it.nodeData ~= nil and it.nodeData.nodeType == "timer" then
+                local _, iy = it:GetMousePosition()
+                if iy >= 0 and iy < ITEM_H then target = it; break end
+            end
+        end
+        if target then
+            if target ~= self._drag.dropIntoFolderItem or self._drag.dropMode ~= "into" then
+                self._drag.dropMode           = "into"
+                self._drag.dropIntoFolderItem = target
+                self._drag.valid              = true
+                local _, iy    = target:GetMousePosition()
+                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + list_y - iy)
+                self._drag_folder_hl:SetVisible(true)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
+            end
+        else
+            if self._drag.dropMode ~= "cond_invalid" then
+                self._drag.dropMode           = "cond_invalid"
+                self._drag.dropIntoFolderItem = nil
+                self._drag.valid              = false
+                self._drag_folder_hl:SetVisible(false)
+                self._drag_indicator:SetVisible(false)
+                self._drag_ghost:SetBackColor(Turbine.UI.Color(0.4, 0.25, 0.25, 0.5))
+            end
+        end
+        return
+    end
+
 end
 
 function Options2.Window.Nav.Constructor:_DragFinish(item, args)
@@ -1097,201 +1144,40 @@ function Options2.Window.Nav.Constructor:_DragFinish(item, args)
 
     if not was_active or not self._drag.valid then return end
 
-    local nd           = item.nodeData
-    local dropAfterIdx = self._drag.dropAfterIdx
+    local nd = item.nodeData
 
     if self._drag.dropMode == "into" and self._drag.dropIntoFolderItem ~= nil then
-        if nd.nodeType == "foldertrigger" or nd.nodeType == "windowtrigger"
-            or nd.nodeType == "trigger" or nd.nodeType == "conditiontrigger" then
-            self:_CommitTriggerMove(nd, self._drag.dropIntoFolderItem.nodeData)
+        local nt     = nd.nodeType
+        local tgt_nd = self._drag.dropIntoFolderItem.nodeData
+        if nt == "foldertrigger" or nt == "windowtrigger"
+            or nt == "trigger" or nt == "conditiontrigger" then
+            self:_CommitTriggerMove(nd, tgt_nd)
+        elseif nt == "timer" then
+            table.remove(Data.window[nd.windowIndex].timerList, nd.timerIndex)
+            table.insert(Data.window[tgt_nd.windowIndex].timerList, nd.data)
+        elseif nt == "condition" then
+            table.remove(Data.window[nd.windowIndex].timerList[nd.timerIndex].conditionList, nd.conditionIndex)
+            table.insert(Data.window[tgt_nd.windowIndex].timerList[tgt_nd.timerIndex].conditionList, nd.data)
         else
-            self:_CommitDropIntoFolder(nd, self._drag.dropIntoFolderItem.nodeData.folderIndex)
+            self:_CommitDropIntoFolder(nd, tgt_nd.folderIndex)
         end
     elseif self._drag.dropMode == "toroot" then
         self:_CommitDropToRoot(nd)
-    elseif nd.nodeType == "folder" or nd.nodeType == "window" then
-        self:_CommitFolderWindowDrop(nd, dropAfterIdx)
-    elseif nd.nodeType == "timer" then
-        self:_CommitTimerDrop(nd, dropAfterIdx)
-    elseif nd.nodeType == "condition" then
-        self:_CommitConditionDrop(nd, dropAfterIdx)
     end
 
     Options.SaveData()
     self:Rebuild()
 end
 
-function Options2.Window.Nav.Constructor:_IsValidDrop(nodeType, dropAfterIdx)
-    local dragged = self._drag.item
-    local before  = dropAfterIdx > 0 and self.items[dropAfterIdx] or nil
-    local after   = self.items[dropAfterIdx + 1]
-
-    if before == dragged or after == dragged then return false end
-
-    if nodeType == "folder" or nodeType == "window" then
-        local ok_before = before == nil
-            or before.nodeData.nodeType == "folder"
-            or before.nodeData.nodeType == "window"
-        local ok_after = after == nil
-            or after.nodeData.nodeType == "folder"
-            or after.nodeData.nodeType == "window"
-        if not (ok_before and ok_after) then return false end
-        local p_before = before and before.nodeData.data.folder
-        local p_after  = after  and after.nodeData.data.folder
-        if before ~= nil and after ~= nil and p_before ~= p_after then return false end
-        return true
-
-    elseif nodeType == "timer" then
-        local ok_before = before == nil
-            or before.nodeData.nodeType == "timer"
-            or before.nodeData.nodeType == "window"
-            or before.nodeData.nodeType == "windowtrigger"
-        local ok_after = after == nil
-            or after.nodeData.nodeType == "timer"
-            or after.nodeData.nodeType == "window"
-        return ok_before and ok_after
-
-    elseif nodeType == "condition" then
-        local ok_before = before == nil
-            or before.nodeData.nodeType == "condition"
-            or before.nodeData.nodeType == "timer"
-            or before.nodeData.nodeType == "trigger"
-        local ok_after = after == nil
-            or after.nodeData.nodeType == "condition"
-            or after.nodeData.nodeType == "timer"
-        return ok_before and ok_after
-
-    end
-
-    return false
-end
-
-function Options2.Window.Nav.Constructor:_CommitTimerDrop(nd, dropAfterIdx)
-    local src_wi  = nd.windowIndex
-    local src_tmi = nd.timerIndex
-    local data    = nd.data
-
-    local after_item = self.items[dropAfterIdx + 1]
-    local tgt_wi, tgt_pos
-
-    if after_item and after_item.nodeData.nodeType == "timer" then
-        tgt_wi  = after_item.nodeData.windowIndex
-        tgt_pos = after_item.nodeData.timerIndex
-    else
-        for i = dropAfterIdx, 1, -1 do
-            local it = self.items[i]
-            local nt = it.nodeData.nodeType
-            if nt == "timer" then
-                tgt_wi  = it.nodeData.windowIndex
-                tgt_pos = it.nodeData.timerIndex + 1
-                break
-            elseif nt == "window" or nt == "windowtrigger" then
-                tgt_wi  = it.nodeData.windowIndex
-                tgt_pos = 1
-                break
-            end
-        end
-    end
-
-    if tgt_wi == nil then return end
-
-    table.remove(Data.window[src_wi].timerList, src_tmi)
-
-    if tgt_wi == src_wi and src_tmi < tgt_pos then
-        tgt_pos = tgt_pos - 1
-    end
-
-    local tgt_list = Data.window[tgt_wi].timerList
-    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_list + 1))
-    table.insert(tgt_list, tgt_pos, data)
-end
-
-function Options2.Window.Nav.Constructor:_CommitConditionDrop(nd, dropAfterIdx)
-    local src_wi  = nd.windowIndex
-    local src_tmi = nd.timerIndex
-    local src_ci  = nd.conditionIndex
-    local data    = nd.data
-
-    local after_item = self.items[dropAfterIdx + 1]
-    local tgt_wi, tgt_tmi, tgt_pos
-
-    if after_item and after_item.nodeData.nodeType == "condition" then
-        tgt_wi  = after_item.nodeData.windowIndex
-        tgt_tmi = after_item.nodeData.timerIndex
-        tgt_pos = after_item.nodeData.conditionIndex
-    else
-        for i = dropAfterIdx, 1, -1 do
-            local it = self.items[i]
-            local nt = it.nodeData.nodeType
-            if nt == "condition" then
-                tgt_wi  = it.nodeData.windowIndex
-                tgt_tmi = it.nodeData.timerIndex
-                tgt_pos = it.nodeData.conditionIndex + 1
-                break
-            elseif nt == "trigger" or nt == "timer" then
-                tgt_wi  = it.nodeData.windowIndex
-                tgt_tmi = it.nodeData.timerIndex
-                tgt_pos = 1
-                break
-            end
-        end
-    end
-
-    if tgt_wi == nil then return end
-
-    table.remove(Data.window[src_wi].timerList[src_tmi].conditionList, src_ci)
-
-    if tgt_wi == src_wi and tgt_tmi == src_tmi and src_ci < tgt_pos then
-        tgt_pos = tgt_pos - 1
-    end
-
-    local tgt_list = Data.window[tgt_wi].timerList[tgt_tmi].conditionList
-    tgt_pos = math.max(1, math.min(tgt_pos, #tgt_list + 1))
-    table.insert(tgt_list, tgt_pos, data)
-end
-
 function Options2.Window.Nav.Constructor:_CommitDropIntoFolder(nd, targetFolderIdx)
-    local dragged_data = nd.data
-
-    -- Find the highest sortIndex among existing children of the target folder
-    local max_sort = -1
-    for _, fd in ipairs(Data.folder) do
-        if fd.folder == targetFolderIdx and fd ~= dragged_data then
-            max_sort = math.max(max_sort, fd.sortIndex or 0)
-        end
-    end
-    for _, wd in ipairs(Data.window) do
-        if wd.folder == targetFolderIdx and wd ~= dragged_data then
-            max_sort = math.max(max_sort, wd.sortIndex or 0)
-        end
-    end
-
-    dragged_data.folder    = targetFolderIdx
-    dragged_data.sortIndex = max_sort + 1
-
-    -- Expand the target folder so the moved item is immediately visible
+    nd.data.folder = targetFolderIdx
     local key = "f_" .. targetFolderIdx
     self.expanded[key] = true
     Data.folder[targetFolderIdx].collapsed = false
 end
 
 function Options2.Window.Nav.Constructor:_CommitDropToRoot(nd)
-    local dragged_data = nd.data
-
-    local max_sort = -1
-    for _, fd in ipairs(Data.folder) do
-        if fd.folder == nil and fd ~= dragged_data then
-            max_sort = math.max(max_sort, fd.sortIndex or 0)
-        end
-    end
-    for _, wd in ipairs(Data.window) do
-        if wd.folder == nil and wd ~= dragged_data then
-            max_sort = math.max(max_sort, wd.sortIndex or 0)
-        end
-    end
-
-    dragged_data.folder    = nil
-    dragged_data.sortIndex = max_sort + 1
+    nd.data.folder = nil
 end
 
 function Options2.Window.Nav.Constructor:_GetTriggerArray(ref_nd, nt, tt)
@@ -1353,49 +1239,3 @@ function Options2.Window.Nav.Constructor:_ResetActionIfInvalid(trigData, nt, tgt
     end
 end
 
-function Options2.Window.Nav.Constructor:_CommitFolderWindowDrop(nd, dropAfterIdx)
-    local dragged_data = nd.data
-
-    local before = dropAfterIdx > 0 and self.items[dropAfterIdx] or nil
-    local after  = self.items[dropAfterIdx + 1]
-
-    local new_parent = nil
-    if before and (before.nodeData.nodeType == "folder" or before.nodeData.nodeType == "window") then
-        new_parent = before.nodeData.data.folder
-    elseif after and (after.nodeData.nodeType == "folder" or after.nodeData.nodeType == "window") then
-        new_parent = after.nodeData.data.folder
-    end
-
-    dragged_data.folder = new_parent
-
-    -- Build ordered sibling list from the current visual order, excluding dragged
-    local ordered = {}
-    for _, item in ipairs(self.items) do
-        local nt = item.nodeData.nodeType
-        if (nt == "folder" or nt == "window")
-            and item.nodeData.data.folder == new_parent
-            and item.nodeData.data ~= dragged_data
-        then
-            ordered[#ordered + 1] = item.nodeData.data
-        end
-    end
-
-    -- Count how many siblings appear before the drop slot to find insert position
-    local seen = 0
-    for i = 1, dropAfterIdx do
-        local item = self.items[i]
-        local nt = item.nodeData.nodeType
-        if (nt == "folder" or nt == "window")
-            and item.nodeData.data.folder == new_parent
-            and item.nodeData.data ~= dragged_data
-        then
-            seen = seen + 1
-        end
-    end
-
-    table.insert(ordered, seen + 1, dragged_data)
-
-    for i, data in ipairs(ordered) do
-        data.sortIndex = i - 1
-    end
-end
