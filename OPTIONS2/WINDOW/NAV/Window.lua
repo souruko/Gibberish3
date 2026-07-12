@@ -313,7 +313,10 @@ function Options2.Window.Nav.Constructor:Rebuild()
             roots[#roots + 1] = { kind = "window", idx = wi, data = wd }
         end
     end
-    table.sort(roots, function(a, b) return (a.data.name or ""):lower() < (b.data.name or ""):lower() end)
+    table.sort(roots, function(a, b)
+        if a.kind ~= b.kind then return a.kind == "folder" end
+        return (a.data.name or ""):lower() < (b.data.name or ""):lower()
+    end)
 
     for _, entry in ipairs(roots) do
         if entry.kind == "folder" then
@@ -375,7 +378,10 @@ function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
             children[#children + 1] = { kind = "window", idx = wi, data = wd }
         end
     end
-    table.sort(children, function(a, b) return (a.data.name or ""):lower() < (b.data.name or ""):lower() end)
+    table.sort(children, function(a, b)
+        if a.kind ~= b.kind then return a.kind == "folder" end
+        return (a.data.name or ""):lower() < (b.data.name or ""):lower()
+    end)
     for _, entry in ipairs(children) do
         if entry.kind == "folder" then
             self:_AddFolder(entry.idx, entry.data, w, depth + 1)

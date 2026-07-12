@@ -10,6 +10,9 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.6
+- OPTIONS2 nav now sorts folders before windows at every level of the tree, then alphabetically within each group
+
 ### 3.3.5
 - added `tag` field to all trigger types; use `&tag` as a placeholder in the timer's Custom Text or Custom Duration fields to substitute the trigger's tag value at runtime
 
