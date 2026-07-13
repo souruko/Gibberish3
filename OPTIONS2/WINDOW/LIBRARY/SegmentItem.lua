@@ -4,10 +4,14 @@ Options2.Library.SegmentItem = class(Turbine.UI.Control)
 function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, typeIdx, toggle_fn)
     Turbine.UI.Control.Constructor(self)
 
-    self.library     = library
-    self.typeIdx     = typeIdx
-    self.controls    = {}
-    self._collecting = false
+    self.library      = library
+    self.typeIdx      = typeIdx
+    self.controls     = {}
+    self._collecting  = false
+    self._nameCtrl    = nameCtrl
+    self._nameDesc    = nameDesc
+    self._baseText    = UTILS.GetText(nameCtrl, nameDesc)
+    self._count       = 0
 
     self.header = Turbine.UI.Label()
     self.header:SetParent(self)
@@ -16,7 +20,7 @@ function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, t
     self.header:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.header:SetBackColor(Options.Defaults.window.basecolor)
     self.header:SetForeColor(Options.Defaults.window.textcolor)
-    self.header:SetText(UTILS.GetText(nameCtrl, nameDesc))
+    self.header:SetText(self._baseText)
     self.header.MouseEnter = function()
         self.header:SetBackColor(Options.Defaults.window.w_window_hover)
     end
@@ -59,6 +63,18 @@ function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, t
     self:SetHeight(SEG_H)
 end
 
+function Options2.Library.SegmentItem:_UpdateCount(n)
+    self._count = n or 0
+    local txt = self._baseText
+    if self._count > 0 then txt = txt .. " (" .. self._count .. ")" end
+    self.header:SetText(txt)
+end
+
+function Options2.Library.SegmentItem:LanguageChanged()
+    self._baseText = UTILS.GetText(self._nameCtrl, self._nameDesc)
+    self:_UpdateCount(self._count)
+end
+
 function Options2.Library.SegmentItem:SetToggleActive(active)
     if self.toggle_btn == nil then return end
     self._collecting = active
@@ -93,6 +109,7 @@ function Options2.Library.SegmentItem:SetList(list, filter)
         self.controls[#self.controls + 1] =
             Options2.Library.LibraryItem(data, self.typeIdx, self.library)
     end
+    self:_UpdateCount(#list)
     self:FillContent(filter or "")
 end
 

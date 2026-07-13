@@ -296,7 +296,7 @@ L[ Language.French ].collection.sub_window_trigger         = "Déclencheur de fe
 L[ Language.French ].segment = {}
 L[ Language.French ].segment.effects                       = "- Effets -"
 L[ Language.French ].segment.skills                        = "- Compétences -"
-L[ Language.French ].segment.chat                          = "- Messages de chat -"
+L[ Language.French ].segment.chat                          = "- Chat -"
 
 --tab
 L[ Language.French ].tab = {}

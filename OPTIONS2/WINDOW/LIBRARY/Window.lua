@@ -5,6 +5,13 @@ local BTN_ICON  = 16
 local CLIP_H    = 54
 local SEG_H     = Options.Defaults.window.segment_height
 
+local EFFECT_TYPES = {
+    [Trigger.Types.EffectSelf]       = true,
+    [Trigger.Types.EffectGroup]      = true,
+    [Trigger.Types.EffectTarget]     = true,
+    [Trigger.Types.EffectRemoveSelf] = true,
+}
+
 Options2.Library.Window = class(Turbine.UI.Control)
 function Options2.Library.Window:Constructor()
     Turbine.UI.Control.Constructor(self)
@@ -77,7 +84,7 @@ function Options2.Library.Window:Constructor()
         if Options.CollectEffects then
             local effects = LocalPlayer:GetEffects()
             for i = 1, effects:GetCount() do
-                Trigger.AddToEffectCollection(effects:Get(i))
+                Trigger.AddToEffectCollection(effects:Get(i), "Self")
             end
             self:_FillEffects()
         end
@@ -153,6 +160,21 @@ function Options2.Library.Window:SegmentClicked(seg)
     self:_ApplyLayout()
 end
 
+function Options2.Library.Window:SetContext(triggerType)
+    local target
+    if EFFECT_TYPES[triggerType] then
+        target = self.effect_seg
+    elseif triggerType == Trigger.Types.Skill then
+        target = self.skill_seg
+    elseif triggerType == Trigger.Types.Chat then
+        target = self.chat_seg
+    end
+    if target ~= nil and target ~= self._openSeg then
+        self._openSeg = target
+        self:_ApplyLayout()
+    end
+end
+
 function Options2.Library.Window:SelectItem(item)
     local prev = self._selectedItem
     self._selectedItem = item
@@ -170,6 +192,12 @@ function Options2.Library.Window:ClipboardChanged()
         self._selectedItem = nil
         prev:_Refresh()
     end
+end
+
+function Options2.Library.Window:LanguageChanged()
+    self.skill_seg:LanguageChanged()
+    self.effect_seg:LanguageChanged()
+    self.chat_seg:LanguageChanged()
 end
 
 function Options2.Library.Window:SizeChanged()

@@ -125,7 +125,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- add to collection
 ---------------------------------------------------------------------------------------------------
-Trigger.AddToEffectCollection = function( effect )
+Trigger.AddToEffectCollection = function( effect, originType )
 
     -- stop if not collecting
     if Options.CollectEffects == false then
@@ -161,10 +161,11 @@ Trigger.AddToEffectCollection = function( effect )
     local index = #Options.Collection.Effects + 1
 
     Options.Collection.Effects[ index ] = {}
-    Options.Collection.Effects[ index ].token  = name
-    Options.Collection.Effects[ index ].source = nil
-    Options.Collection.Effects[ index ].icon = icon
-    Options.Collection.Effects[ index ].timer = duration
+    Options.Collection.Effects[ index ].token      = name
+    Options.Collection.Effects[ index ].source     = nil
+    Options.Collection.Effects[ index ].originType = originType or nil
+    Options.Collection.Effects[ index ].icon       = icon
+    Options.Collection.Effects[ index ].timer      = duration
     Options.Collection.Effects[ index ].persistent = false
 
     Options.EffectCollectionChanged()

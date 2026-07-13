@@ -1,6 +1,22 @@
 Options2.clipboard    = { item = nil, itemType = nil }
 Options2.selectedNode = nil
 
+function Options2.EffectCollectionChanged()
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.library ~= nil then
+        obj.library:_FillEffects()
+        obj.library:_ApplyLayout()
+    end
+end
+
+function Options2.ChatCollectionChanged()
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.library ~= nil then
+        obj.library:_FillChat()
+        obj.library:_ApplyLayout()
+    end
+end
+
 function Options2.NotifyClipboardChanged()
     if Options2.Window.Object == nil then return end
     local obj = Options2.Window.Object

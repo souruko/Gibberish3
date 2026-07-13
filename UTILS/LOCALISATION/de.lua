@@ -296,7 +296,7 @@ L[ Language.German ].collection.sub_window_trigger          = "Fenster Auslöser
 L[ Language.German ].segment = {}               
 L[ Language.German ].segment.effects                        = "- Effekte -"
 L[ Language.German ].segment.skills                         = "- Fertigkeiten -"
-L[ Language.German ].segment.chat                           = "- Chat Nachrichten -"
+L[ Language.German ].segment.chat                           = "- Chat -"
 
 --tab               
 L[ Language.German ].tab = {}               

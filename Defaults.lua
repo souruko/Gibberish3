@@ -115,10 +115,10 @@ Options.Defaults.dropdown                    = {}
 Options.Defaults.dropdown.base_height        = 20
 Options.Defaults.dropdown.item_height        = 20
 Options.Defaults.dropdown.spacing            = 2
-Options.Defaults.dropdown.base_color         = Turbine.UI.Color(0.4,0.4,0.4)
-Options.Defaults.dropdown.show_color         = Turbine.UI.Color( 0.6, 0.6, 0.6 )
-Options.Defaults.dropdown.back_color         = Turbine.UI.Color(0.1,0.1,0.1)
-Options.Defaults.dropdown.hover_color        = Turbine.UI.Color(0.18,0.18,0.18)
-Options.Defaults.dropdown.selected_color     = Turbine.UI.Color(0.5,0.5,0.5)
+Options.Defaults.dropdown.base_color         = Turbine.UI.Color(0.24, 0.20, 0.15)
+Options.Defaults.dropdown.show_color         = Turbine.UI.Color(0.28, 0.24, 0.18)
+Options.Defaults.dropdown.back_color         = Turbine.UI.Color(0.14, 0.12, 0.09)
+Options.Defaults.dropdown.hover_color        = Turbine.UI.Color(0.28, 0.24, 0.18)
+Options.Defaults.dropdown.selected_color     = Turbine.UI.Color(0.62, 0.54, 0.40)
 Options.Defaults.dropdown.nselected_color    = Turbine.UI.Color.White
 ---------------------------------------------------------------------------------------------------

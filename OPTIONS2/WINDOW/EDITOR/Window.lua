@@ -181,6 +181,9 @@ function Options2.Window.Editor.Constructor:SetNode(nodeData)
     elseif nt == "trigger" or nt == "conditiontrigger"
         or nt == "foldertrigger" or nt == "windowtrigger" then
         self.content = Options2.Window.TriggerEditor(nodeData)
+        if Options2.Window.Object ~= nil and Options2.Window.Object.library ~= nil then
+            Options2.Window.Object.library:SetContext(nodeData.triggerType)
+        end
     else
         self.placeholder:SetVisible(true)
         return

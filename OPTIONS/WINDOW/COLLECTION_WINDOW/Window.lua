@@ -360,7 +360,7 @@ function Options.Elements.CollectionWindow:CreateToolbar()
 			local effects = LocalPlayer:GetEffects()
 
 			for index=1, effects:GetCount(), 1 do
-				Trigger.AddToEffectCollection( effects:Get(index) )
+				Trigger.AddToEffectCollection( effects:Get(index), "Self" )
 			end
 
 		else

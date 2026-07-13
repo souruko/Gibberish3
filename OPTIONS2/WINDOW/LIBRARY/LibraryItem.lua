@@ -34,8 +34,29 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.sub_label:SetTextAlignment(Turbine.UI.ContentAlignment.BottomLeft)
     self.sub_label:SetForeColor(Options.Defaults.window.textdark)
     self.sub_label:SetMouseVisible(false)
-    if data.timer ~= nil then
+    if typeIdx == 2 and data.originType ~= nil then
+        self.sub_label:SetText(data.originType)
+    elseif data.timer ~= nil then
         self.sub_label:SetText(data.timer .. "s")
+    end
+
+    -- pin button anchored to right edge (★ = pinned, · = not pinned)
+    self.pin_btn = Turbine.UI.Button()
+    self.pin_btn:SetParent(self)
+    self.pin_btn:SetSize(18, 18)
+    self.pin_btn:SetFont(Options.Defaults.window.font)
+    self.pin_btn:SetMouseVisible(true)
+    self:_RefreshPin()
+    self.pin_btn.Click = function()
+        self.data.persistent = not self.data.persistent
+        if self.data.persistent then
+            Options.KeepInCollection(self.data, self.typeIdx)
+        else
+            Options.RemoveFromCollection(
+                Options.CheckForIndexInCollection(self.data, self.typeIdx))
+        end
+        self:_RefreshPin()
+        self:_Refresh()
     end
 
     self:SetHeight(ITEM_H)
@@ -50,11 +71,7 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
         self:_Refresh()
     end
     self.MouseClick = function(sender, args)
-        if args.Button == Turbine.UI.MouseButton.Right
-           or self.library._selectedItem == self then
-            self.library:SelectItem(self)
-        else
-            -- pin toggle
+        if args.Button == Turbine.UI.MouseButton.Right then
             self.data.persistent = not self.data.persistent
             if self.data.persistent then
                 Options.KeepInCollection(self.data, self.typeIdx)
@@ -62,17 +79,34 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
                 Options.RemoveFromCollection(
                     Options.CheckForIndexInCollection(self.data, self.typeIdx))
             end
+            self:_RefreshPin()
             self:_Refresh()
+        else
+            self.library:SelectItem(self)
         end
     end
 end
 
 function Options2.Library.LibraryItem:SizeChanged()
     local w, h = self:GetSize()
+    local pin_w  = 18
+    local pin_x  = w - pin_w - 2
+    local text_w = pin_x - 38 - 4
     self.token_label:SetPosition(38, 0)
-    self.token_label:SetSize(w - 42, h)
+    self.token_label:SetSize(text_w, h)
     self.sub_label:SetPosition(38, 0)
-    self.sub_label:SetSize(w - 42, h)
+    self.sub_label:SetSize(text_w, h)
+    self.pin_btn:SetPosition(pin_x, math.floor((h - pin_w) / 2))
+end
+
+function Options2.Library.LibraryItem:_RefreshPin()
+    if self.data.persistent then
+        self.pin_btn:SetText("*")
+        self.pin_btn:SetForeColor(Turbine.UI.Color(1.0, 0.85, 0.2))
+    else
+        self.pin_btn:SetText("o")
+        self.pin_btn:SetForeColor(Options.Defaults.window.textdark)
+    end
 end
 
 function Options2.Library.LibraryItem:_Refresh()

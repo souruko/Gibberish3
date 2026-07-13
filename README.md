@@ -10,6 +10,19 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.9
+- adjusted OPTIONS2 dropdown colors to be more visible against the dark background while staying within the warm brown theme
+
+### 3.3.8
+- effects in the library panel now show their origin type ("Self", "Group", "Target") as the subtitle instead of duration
+- library items now have a dedicated pin button (★/·) on the right edge; left-click always selects, right-click toggles pin
+- segment headers show item count in parentheses (e.g. "- Effects - (5)")
+- library panel auto-switches to the relevant segment (Effects/Skills/Chat) when a trigger editor is opened
+- added "← Apply" button to the trigger editor header; applies all matching clipboard fields at once when a clipboard item is compatible
+- OPTIONS2 library now refreshes automatically when the effect or chat collection changes
+- `LanguageChanged` now correctly propagates to all library segment headers
+- shortened "- Chat Messages -" to "- Chat -" in all three locales (EN/DE/FR)
+
 ### 3.3.7
 - updated OPTIONS2 default color palette to a warm LotRO-themed scheme (brown/gold tones replacing neutral gray)
 - active tab in timer and window editors now shows a type-specific accent color strip

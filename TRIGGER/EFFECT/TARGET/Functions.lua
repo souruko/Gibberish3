@@ -37,7 +37,7 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
 
                                                             local effect = effects:Get( args.Index )
 
-                                                            Trigger.AddToEffectCollection( effect )
+                                                            Trigger.AddToEffectCollection( effect, "Target" )
                                                             
                                                             -- all groups
                                                             for windowIndex, windowData in ipairs(Data.window) do

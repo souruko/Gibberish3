@@ -465,6 +465,8 @@ function Options.EffectCollectionChanged()
         Options.Window.Object:EffectCollectionChanged()
     end
 
+    Options2.EffectCollectionChanged()
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -476,6 +478,8 @@ function Options.ChatCollectionChanged()
     if Data.options.window.open == true then
         Options.Window.Object:ChatCollectionChanged()
     end
+
+    Options2.ChatCollectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -502,10 +506,11 @@ function Options.KeepInCollection( data, type )
 
     local index = #list + 1
     list[ index ] = {}
-    list[ index ].token = data.token
-    list[ index ].source = data.source
-    list[ index ].icon = data.icon
-    list[ index ].timer = data.timer
+    list[ index ].token      = data.token
+    list[ index ].source     = data.source
+    list[ index ].originType = data.originType
+    list[ index ].icon       = data.icon
+    list[ index ].timer      = data.timer
     list[ index ].persistent = true
 
 end

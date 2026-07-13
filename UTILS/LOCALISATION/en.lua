@@ -297,7 +297,7 @@ L[ Language.English ].collection.sub_window_trigger         = "Window Trigger"
 L[ Language.English ].segment = {}
 L[ Language.English ].segment.effects                       = "- Effects -"
 L[ Language.English ].segment.skills                        = "- Skills -"
-L[ Language.English ].segment.chat                          = "- Chat Messages -"
+L[ Language.English ].segment.chat                          = "- Chat -"
 
 --tab
 L[ Language.English ].tab = {}

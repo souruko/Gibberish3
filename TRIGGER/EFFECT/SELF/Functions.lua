@@ -21,7 +21,7 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
 
         local effect = effects:Get(args.Index)
         
-        Trigger.AddToEffectCollection( effect )
+        Trigger.AddToEffectCollection( effect, "Self" )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do

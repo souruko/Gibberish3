@@ -40,7 +40,7 @@ local PASTE_W = 26
 local PASTE_H = 20
 
 -- Creates a [<-] button that pastes a clipboard attribute into a row field.
--- Returns a descriptor used by refresh_paste / size_paste.
+-- Returns a descriptor used by refresh_paste / size_paste / ApplyClipboard.
 local function paste_btn(panel, row, attr, types, set_fn)
     local btn = Turbine.UI.Button()
     btn:SetParent(panel)
@@ -53,7 +53,7 @@ local function paste_btn(panel, row, attr, types, set_fn)
         local item = Options2.clipboard.item
         if item ~= nil and item[attr] ~= nil then set_fn(item[attr]) end
     end
-    return { btn = btn, row = row, attr = attr, types = types }
+    return { btn = btn, row = row, attr = attr, types = types, apply = set_fn }
 end
 
 -- Shows/hides paste buttons based on current clipboard content.
@@ -468,6 +468,9 @@ local TIMER_TYPES = {
     [Trigger.Types.TimerThreshold] = true,
 }
 
+local APPLY_W = 54
+local APPLY_H = 20
+
 Options2.Window.TriggerEditor = class(Turbine.UI.Control)
 function Options2.Window.TriggerEditor:Constructor(nodeData)
     Turbine.UI.Control.Constructor(self)
@@ -490,6 +493,16 @@ function Options2.Window.TriggerEditor:Constructor(nodeData)
     self.type_label:SetForeColor(Options.Defaults.window.color_trigger)
     self.type_label:SetText(type_name)
     self.type_label:SetMouseVisible(false)
+
+    -- "← Apply" button: applies all matching clipboard fields at once
+    self.apply_btn = Turbine.UI.Button()
+    self.apply_btn:SetParent(self)
+    self.apply_btn:SetSize(APPLY_W, APPLY_H)
+    self.apply_btn:SetFont(Options.Defaults.window.font)
+    self.apply_btn:SetText("<- Apply")
+    self.apply_btn:SetForeColor(Turbine.UI.Color(0.5, 0.9, 0.5))
+    self.apply_btn:SetVisible(false)
+    self.apply_btn.Click = function() self:ApplyClipboard() end
 
     -- form panel below header
     local panel, load_fn, save_fn, lang_fn, size_fn, plist
@@ -524,12 +537,17 @@ function Options2.Window.TriggerEditor:Constructor(nodeData)
     self._paste_list = plist
 
     refresh_paste(self._paste_list)
+    self.apply_btn:SetVisible(self:_HasAnyPaste())
 end
 
 function Options2.Window.TriggerEditor:SizeChanged()
     if self.form_panel == nil then return end
     local w, h = self:GetSize()
-    self.type_label:SetWidth(w - LEFT - 5)
+    self.apply_btn:SetPosition(w - APPLY_W - LEFT - 5, 4)
+    local label_w = self.apply_btn:IsVisible()
+        and (w - LEFT - 5 - APPLY_W - 6)
+        or  (w - LEFT - 5)
+    self.type_label:SetWidth(label_w)
     local form_h = h - HDR_H
     self.form_panel:SetSize(w, form_h)
     self._size(w)
@@ -559,8 +577,40 @@ function Options2.Window.TriggerEditor:LanguageChanged()
     self._lang()
 end
 
+function Options2.Window.TriggerEditor:ApplyClipboard()
+    local clip = Options2.clipboard
+    if clip.item == nil then return end
+    for _, p in ipairs(self._paste_list) do
+        if clip.item[p.attr] ~= nil then
+            for _, t in ipairs(p.types) do
+                if t == clip.itemType then
+                    p.apply(clip.item[p.attr])
+                    break
+                end
+            end
+        end
+    end
+end
+
+function Options2.Window.TriggerEditor:_HasAnyPaste()
+    local clip = Options2.clipboard
+    if clip.item == nil then return false end
+    for _, p in ipairs(self._paste_list) do
+        if clip.item[p.attr] ~= nil then
+            for _, t in ipairs(p.types) do
+                if t == clip.itemType then return true end
+            end
+        end
+    end
+    return false
+end
+
 function Options2.Window.TriggerEditor:ClipboardChanged()
     refresh_paste(self._paste_list)
+    local show = self:_HasAnyPaste()
+    self.apply_btn:SetVisible(show)
     local w = self:GetWidth()
-    if w > 0 then self._size(w) end
+    if w > 0 then
+        self:SizeChanged()
+    end
 end
