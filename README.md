@@ -10,6 +10,14 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.7
+- updated OPTIONS2 default color palette to a warm LotRO-themed scheme (brown/gold tones replacing neutral gray)
+- active tab in timer and window editors now shows a type-specific accent color strip
+- increased nav stripe width from 4 to 8px for clearer visual hierarchy
+- added "Load All" / "Unload All" to the folder context menu in OPTIONS2 nav; enables or disables all windows in the folder and its sub-folders recursively
+- increased editor breadcrumb font from Verdana12 to Verdana14
+- fixed library window crashing when clicking a new item while the previous item's refresh was still pending
+
 ### 3.3.6
 - OPTIONS2 nav now sorts folders before windows at every level of the tree, then alphabetically within each group
 

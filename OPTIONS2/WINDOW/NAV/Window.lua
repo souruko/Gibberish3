@@ -641,6 +641,30 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_trigger", trg_sub, h), trg_sub)
 
         menu:AddSeperator()
+        local load_all_lbl   = (lang.selection and lang.selection.load_all)   or "Load All"
+        local unload_all_lbl = (lang.selection and lang.selection.unload_all) or "Unload All"
+
+        menu:AddRow(raw_row(load_all_lbl, function()
+            local indices = Folder.GetWindowIndices(fi)
+            for _, wi in ipairs(indices) do
+                Data.window[wi].enabled = true
+                Windows.EnabledChanged(wi)
+            end
+            Options.SaveData()
+            nav:Rebuild()
+        end))
+
+        menu:AddRow(raw_row(unload_all_lbl, function()
+            local indices = Folder.GetWindowIndices(fi)
+            for _, wi in ipairs(indices) do
+                Data.window[wi].enabled = false
+                Windows.EnabledChanged(wi)
+            end
+            Options.SaveData()
+            nav:Rebuild()
+        end))
+
+        menu:AddSeperator()
         menu:AddRow(raw_row(export_lbl, function()
             Options2.ShowExport(fd, ImportType.Folder, fi)
         end))

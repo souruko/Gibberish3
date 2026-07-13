@@ -1,5 +1,5 @@
 local H = 28
-local STRIPE = 4
+local STRIPE = 8
 local INDENT = 12
 local ARROW_W = 18
 local ICON_SIZE = 20

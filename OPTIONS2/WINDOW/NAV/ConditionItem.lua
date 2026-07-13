@@ -1,5 +1,5 @@
 local H = 28
-local STRIPE = 4
+local STRIPE = 8
 local INDENT = 12
 local ARROW_W = 18
 local COLOR_COND = Turbine.UI.Color(0.55, 0.18, 0.75)

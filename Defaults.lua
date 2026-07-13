@@ -51,11 +51,11 @@ Options.Defaults.window.frame        = 2
 Options.Defaults.window.top_spacing  = 35
 Options.Defaults.window.outer_spacing= 10
 Options.Defaults.window.font         = Turbine.UI.Lotro.Font.Verdana12
-Options.Defaults.window.basecolor    = Turbine.UI.Color( 0.18, 0.18, 0.18 )
-Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
-Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.1, 0.1, 0.1 )--Turbine.UI.Color( 0.18, 0.18, 0.18 )
-Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.6, 0.6, 0.6 )
-Options.Defaults.window.hovercolor   = Turbine.UI.Color( 0.22, 0.22, 0.22 )
+Options.Defaults.window.basecolor    = Turbine.UI.Color( 0.16, 0.13, 0.10 )
+Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.09, 0.08, 0.07 )
+Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.09, 0.08, 0.07 )
+Options.Defaults.window.framecolor   = Turbine.UI.Color( 0.44, 0.37, 0.22 )
+Options.Defaults.window.hovercolor   = Turbine.UI.Color( 0.21, 0.18, 0.14 )
 Options.Defaults.window.collecting   = Turbine.UI.Color.DarkGreen
 Options.Defaults.window.textcolor    = Turbine.UI.Color.White--Turbine.UI.Color( 0.6, 0.6, 0.6 )
 Options.Defaults.window.segmenthover = Turbine.UI.Color( 0.15, 0.15, 0.15 )
@@ -64,7 +64,7 @@ Options.Defaults.window.tab_height   = 25
 Options.Defaults.window.tab_width    = 132
 Options.Defaults.window.tab_c_left   = 5
 Options.Defaults.window.tab_c_top    = 10
-Options.Defaults.window.textdark     =  Turbine.UI.Color( 0.6, 0.6, 0.6 )
+Options.Defaults.window.textdark     =  Turbine.UI.Color( 0.62, 0.54, 0.40 )
 
 Options.Defaults.window.g_content_top  = - 2
 

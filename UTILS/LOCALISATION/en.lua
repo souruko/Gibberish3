@@ -203,6 +203,8 @@ L[ Language.English ].selection.paste                       = "Paste"
 L[ Language.English ].selection.new_folder                  = "New Folder "
 L[ Language.English ].selection.new_window                  = "New Window "
 L[ Language.English ].selection.cancel                      = "Cancel"
+L[ Language.English ].selection.load_all                    = "Load All"
+L[ Language.English ].selection.unload_all                  = "Unload All"
 
 -- options
 L[ Language.English ].options = {}

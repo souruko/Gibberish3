@@ -203,6 +203,8 @@ L[ Language.German ].selection.paste                        = "Einfügen"
 L[ Language.German ].selection.new_folder                   = "Neuer Ordner "
 L[ Language.German ].selection.new_window                   = "Neues Fenster "
 L[ Language.German ].selection.cancel                       = "Abbrechen"
+L[ Language.German ].selection.load_all                     = "Alle laden"
+L[ Language.German ].selection.unload_all                   = "Alle entladen"
 
 -- options
 L[ Language.German ].options = {}

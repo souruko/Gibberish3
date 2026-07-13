@@ -203,6 +203,8 @@ L[ Language.French ].selection.paste                       = "Coller"
 L[ Language.French ].selection.new_folder                  = "Nouveau dossier "
 L[ Language.French ].selection.new_window                  = "Nouvelle fenêtre "
 L[ Language.French ].selection.cancel                      = "Annuler"
+L[ Language.French ].selection.load_all                    = "Tout charger"
+L[ Language.French ].selection.unload_all                  = "Tout décharger"
 
 -- options
 L[ Language.French ].options = {}

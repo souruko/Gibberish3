@@ -175,3 +175,30 @@ function Folder.GetListOfWindows( folder_index )
 
 end
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns a list of Data.window indices for all windows in folder_index and its sub-folders
+---------------------------------------------------------------------------------------------------
+function Folder.GetWindowIndices( folder_index )
+
+    local list = {}
+
+    for index, window_data in ipairs(Data.window) do
+        if window_data.folder == folder_index then
+            list[#list+1] = index
+        end
+    end
+
+    for index, folder_data in ipairs(Data.folder) do
+        if folder_data.folder == folder_index then
+            local sub = Folder.GetWindowIndices( index )
+            for _, wi in ipairs(sub) do
+                list[#list+1] = wi
+            end
+        end
+    end
+
+    return list
+
+end
+---------------------------------------------------------------------------------------------------

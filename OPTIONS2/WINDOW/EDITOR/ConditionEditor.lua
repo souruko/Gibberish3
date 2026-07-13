@@ -3,8 +3,8 @@ local DESC_H = 50
 local LEFT   = 5
 local TOP    = 8
 
-local BC_ODD  = Turbine.UI.Color(0.18, 0.18, 0.18)
-local BC_EVEN = Turbine.UI.Color(0.13, 0.13, 0.13)
+local BC_ODD  = Turbine.UI.Color(0.16, 0.13, 0.10)
+local BC_EVEN = Turbine.UI.Color(0.12, 0.10, 0.08)
 
 Options2.Window.ConditionEditor = class(Turbine.UI.Control)
 function Options2.Window.ConditionEditor:Constructor(nodeData)

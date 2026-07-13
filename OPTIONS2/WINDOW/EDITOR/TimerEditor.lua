@@ -5,8 +5,8 @@ local LEFT   = 5
 local TOP    = 8
 local TAB_W  = 100
 
-local BC_ODD  = Turbine.UI.Color(0.18, 0.18, 0.18)
-local BC_EVEN = Turbine.UI.Color(0.13, 0.13, 0.13)
+local BC_ODD  = Turbine.UI.Color(0.16, 0.13, 0.10)
+local BC_EVEN = Turbine.UI.Color(0.12, 0.10, 0.08)
 
 -- ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -344,6 +344,7 @@ function Options2.Window.TimerEditor:Constructor(nodeData)
     self.tabs:AddTab(gp, "tab", "general")
     self.tabs:AddTab(sp, "tab", "style")
     self.tabs:AddTab(ap, "tab", "animation")
+    self.tabs:SetAccentColor(Options.Defaults.window.color_timer)
 
     self._tab_load = { gl, sl, al }
     self._tab_save = { gs, ss, as }

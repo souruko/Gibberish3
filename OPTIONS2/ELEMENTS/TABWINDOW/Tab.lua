@@ -60,6 +60,10 @@ function Options2Tab:Constructor(index, name_control, name_description, parent, 
     self:LanguageChanged()
 end
 
+function Options2Tab:SetAccentColor(color)
+    self.accent:SetBackColor(color)
+end
+
 function Options2Tab:SizeChanged()
     if self.accent == nil then return end
     local w = self:GetWidth()

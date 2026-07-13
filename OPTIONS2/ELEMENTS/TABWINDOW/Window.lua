@@ -64,12 +64,22 @@ function Options2.Elements.TabWindow:ChangeSelection(index)
     for i, entry in ipairs(self.tabs) do
         entry.tab:Select(index)
     end
+    if self.tabs[index] and self.accent_color ~= nil then
+        self.tabs[index].tab:SetAccentColor(self.accent_color)
+    end
     if self.tabs[index] then
         self.tabs[index].content:SetVisible(true)
     end
     local parent = self:GetParent()
     if parent ~= nil and parent.TabSelectionChanged ~= nil then
         parent:TabSelectionChanged(index)
+    end
+end
+
+function Options2.Elements.TabWindow:SetAccentColor(color)
+    self.accent_color = color
+    if self.selected ~= 0 and self.tabs[self.selected] then
+        self.tabs[self.selected].tab:SetAccentColor(color)
     end
 end
 

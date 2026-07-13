@@ -154,10 +154,11 @@ function Options2.Library.Window:SegmentClicked(seg)
 end
 
 function Options2.Library.Window:SelectItem(item)
-    if self._selectedItem ~= nil then
-        self._selectedItem:_Refresh()
-    end
+    local prev = self._selectedItem
     self._selectedItem = item
+    if prev ~= nil then
+        prev:_Refresh()
+    end
     item:_Refresh()
     Options2.SetClipboard(item.data, item.typeIdx)
 end
