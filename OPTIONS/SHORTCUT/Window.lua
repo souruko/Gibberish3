@@ -94,12 +94,6 @@ function Options.Shortcut.Constructor:Constructor()
         Options.Defaults.rc_menu.item_height)
 
     -- right click options
-    self.rc_options = Options.Elements.Row( "shortcut", "options", function ()
-            Options.OptionsWindow()
-        end,
-        Options.Defaults.rc_menu.item_height)
-
-    -- right click options 2
     self.rc_options2 = Options.Elements.Row( "shortcut", "options2", function ()
             Options2.ToggleWindow()
         end,
@@ -132,7 +126,6 @@ function Options.Shortcut.Constructor:Constructor()
     -- add items to rightclick menu
     self.rightClickMenu:AddRow( self.rc_reset )
     self.rightClickMenu:AddRow( self.rc_reload )
-    self.rightClickMenu:AddRow( self.rc_options )
     self.rightClickMenu:AddRow( self.rc_options2 )
     self.rightClickMenu:AddSeperator()
     self.rightClickMenu:AddCheckRow( self.rc_move )
@@ -230,7 +223,6 @@ end
 function Options.Shortcut.Constructor.KeyDown( sender, args )
 
     if args.Action == Turbine.UI.Lotro.Action.Escape then
-        Options.OptionsWindow( false )
         Options.MoveChanged( false )
     end
 

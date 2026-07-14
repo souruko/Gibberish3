@@ -16,7 +16,7 @@ function Options2.Window.Constructor:Constructor()
     self.library = Options2.Library.Window()
     self.library:SetParent(self)
 
-    self:SetText("Gibberish - Options 2")
+    self:SetText("Gibberish")
     self:SetMinimumSize(Options.Defaults.window.min_width, Options.Defaults.window.min_height)
     self:SetMaximumWidth(Options.Defaults.window.max_width)
     self:SetResizable(true)

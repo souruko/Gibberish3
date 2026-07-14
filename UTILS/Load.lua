@@ -253,14 +253,8 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.StartUp()
 
-    if Data.options.window.open == true then
-        Options.OptionsWindow( Data.options.window.open )
-
-    end
-
     if Data.moveMode == true then
         Options.MoveChanged( Data.moveMode )
-        
     end
 
 end

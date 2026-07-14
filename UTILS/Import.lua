@@ -56,7 +56,9 @@ function StringToData( text, insert )
 
     end
 
-	Options.Window.Object:ResetSelectedContent()
+	if Options.Window.Object ~= nil then
+		Options.Window.Object:ResetSelectedContent()
+	end
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -14,34 +14,19 @@ function Options.SelectionChanged( index )
     -- index = 0: clear selection
     -- index > 0: window selected
     -- index < 0: folder selected
-    
-    -- do nothing if selection didnt change
+
     if index == Data.selectedIndex or index == nil then
         return
     end
 
-    -- save new selection
     Data.selectedIndex = index
-
-    Options.TimerSelectionChanged( 1 )
-
-    Options.TriggerSelectionChanged( 0, 0 )
-    Options.Trigger2SelectionChanged( 0, 0 )
 
     Windows.SelectionChanged()
 
-    -- if moving then call movewindow
     if Data.moveMode == true then
         Options.Move.Object:SelectionChanged()
     end
 
-    
-    -- window
-    if Data.options.window.open == true then
-        Options.Window.Object:SelectionChanged()
-     
-    end
-    
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -50,19 +35,11 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.TimerSelectionChanged( index )
 
-    -- do nothing if selection didnt change
     if (index ~= 1 and index == Data.selectedTimerIndex) or index == nil then
         return
     end
 
     Data.selectedTimerIndex = index
-
-    Options.TriggerSelectionChanged( 0, 0 )
-    Options.ConditionsSelectionChanged( 0 )
-
-    if Data.options.window.open == true then
-        Options.Window.Object:TimerSelectionChanged()
-    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -72,17 +49,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.TriggerSelectionChanged( index, type )
 
-    -- do nothing if selection didnt change
-    if (index == Data.selectedTriggerIndex and type == Data.selectedTriggerType) or index == nil  then
+    if (index == Data.selectedTriggerIndex and type == Data.selectedTriggerType) or index == nil then
         return
     end
 
     Data.selectedTriggerIndex = index
     Data.selectedTriggerType  = type
-
-    if Data.options.window.open == true then
-        Options.Window.Object:TriggerSelectionChanged()
-    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -92,17 +64,12 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Trigger2SelectionChanged( index, type )
 
-    -- do nothing if selection didnt change
-    if (index == Data.selectedTriggerIndex2 and type == Data.selectedTriggerType2) or index == nil  then
+    if (index == Data.selectedTriggerIndex2 and type == Data.selectedTriggerType2) or index == nil then
         return
     end
 
     Data.selectedTriggerIndex2 = index
     Data.selectedTriggerType2  = type
-
-    if Data.options.window.open == true then
-        Options.Window.Object:Trigger2SelectionChanged()
-    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -193,28 +160,18 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.LanguageChanged( value )
 
-    -- do nothing if move didnt change
     if value == Data.options.language or value == nil then
         return
     end
 
     Data.options.language = value
 
-    -- move
     if Data.moveMode == true then
         Options.Move.Object:LanguageChanged()
-     
     end
 
-    -- window
-    if Data.options.window.open == true then
-        Options.Window.Object:LanguageChanged()
-     
-    end
-
-    -- shortcut
     Options.Shortcut.Object:LanguageChanged()
-     
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -226,38 +183,11 @@ function Options.MoveWindow()
     if Data.moveMode == true and Options.Move.Object == nil then
 
         Options.Move.Object = Options.Move.Constructor()
-        
+
     elseif Options.Move.Object ~= nil then
 
         Options.Move.Object:Close()
         Options.Move.Object = nil
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- move changed
----------------------------------------------------------------------------------------------------
-function Options.OptionsWindow( value )
-
-    -- either use value or change the current value
-    if value == nil then
-        Data.options.window.open = not( Data.options.window.open )
-
-    else
-        Data.options.window.open = value
-
-    end
-
-    -- open/close window
-    if Data.options.window.open == true then
-        Options.Window.Object = Options.Window.Constructor()
-        
-    elseif Options.Window.Object ~= nil then
-        Options.Window.Object:Close()
-        Options.Window.Object = nil
 
     end
 
@@ -401,10 +331,6 @@ function Options.ConditionsSelectionChanged( index )
     Data.selectedConditionsIndex = index
     Options.ConditionTriggerSelectionChanged( 0, 0 )
 
-    if Data.options.window.open == true and Options.Window.Object ~= nil then
-        Options.Window.Object:ConditionsSelectionChanged()
-    end
-
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -416,10 +342,6 @@ function Options.ConditionTriggerSelectionChanged( index, type )
     if (index == (Data.selectedConditionTriggerIndex or 0) and type == (Data.selectedConditionTriggerType or 0)) or index == nil then return end
     Data.selectedConditionTriggerIndex = index
     Data.selectedConditionTriggerType  = type
-
-    if Data.options.window.open == true and Options.Window.Object ~= nil then
-        Options.Window.Object:ConditionTriggerSelectionChanged()
-    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -447,10 +369,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.DataChanged( index )
 
-    if Data.options.window.open == true then
-        Options.Window.Object:DataChanged( index )
-    end
-
     Windows.DataChanged( index )
 
 end
@@ -461,10 +379,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.EffectCollectionChanged()
 
-    if Data.options.window.open == true then
-        Options.Window.Object:EffectCollectionChanged()
-    end
-
     Options2.EffectCollectionChanged()
 
 end
@@ -474,10 +388,6 @@ end
 -- Chat Collection Changed
 ---------------------------------------------------------------------------------------------------
 function Options.ChatCollectionChanged()
-
-    if Data.options.window.open == true then
-        Options.Window.Object:ChatCollectionChanged()
-    end
 
     Options2.ChatCollectionChanged()
 
