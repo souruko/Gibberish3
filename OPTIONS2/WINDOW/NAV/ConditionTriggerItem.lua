@@ -69,7 +69,7 @@ function Options2NavCondTrigger:Constructor(navWin, trigData, trigType, trigIdx,
     self.label:SetPosition(cx + ARROW_W, 0)
     self.label:SetHeight(H)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Options.Defaults.window.font)
+    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
     self.label:SetForeColor(COLOR_CT)
     self.label:SetText(lbl)
     self.label:SetMouseVisible(false)

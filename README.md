@@ -10,6 +10,9 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.10
+- trigger type labels in the OPTIONS2 nav sidebar now use Verdana10 instead of Verdana12 so that longer type names like "Self Effect Removed" fit within the row height without clipping
+
 ### 3.3.9
 - adjusted OPTIONS2 dropdown colors to be more visible against the dark background while staying within the warm brown theme
 
