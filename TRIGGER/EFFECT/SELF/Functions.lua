@@ -390,18 +390,18 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
 
     end
 
-    -- duration  
+    -- duration
     if timerData.useCustomTimer == true then
-            
+
         duration = timerData.timerValue
 
         for index, value in pairs(placeholder) do
 
-            duration = string.gsub ( duration, index, value)
+            duration = string.gsub( tostring(duration), index, value)
 
         end
 
-        duration = tonumber( duration )
+        duration = tonumber( duration ) or duration
 
     else
 

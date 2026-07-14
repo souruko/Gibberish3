@@ -302,7 +302,7 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
             end
 
         end
-        duration = tonumber( duration )
+        duration = tonumber( duration ) or duration
 
     end
 

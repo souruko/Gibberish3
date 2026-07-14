@@ -66,6 +66,7 @@ function GeneralOptions:Constructor( data )
     self.timerValue = Options.Elements.TextBoxRow( Options.Defaults.window.basecolor, "options", "timerValue", "tim_timer_value", 30 )
     self.timerValue:SetParent( self )
     self.timerValue:SetPosition( left, top )
+    self.timerValue:SetMarkupEnabled( true )
     
     top = top + 35
 

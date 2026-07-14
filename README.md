@@ -12,6 +12,11 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.12
+- added `SetMarkupEnabled()` to `TextBoxRow` widget, proxying to the underlying textbox
+- enabled markup on the timer value (Custom Duration) field in General options for BAR, CIRCEL, ICON, and TEXT timer types
+- custom duration now falls back to the raw string if `tonumber` returns nil in both Chat and Effect Self triggers, so non-numeric placeholders (e.g. `&tag`) survive to runtime resolution instead of becoming nil
+
 ### 3.3.11
 - removed the legacy OPTIONS/WINDOW panel; OPTIONS2 is now the sole options panel
 - shortcut right-click menu now has a single "Options" entry opening OPTIONS2 (removed "Open Options"); label renamed from "Open Options 2" to "Options" in all three locales (EN/DE/FR)
