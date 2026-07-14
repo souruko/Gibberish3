@@ -12,6 +12,10 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.14
+- added language dropdown to the OPTIONS2 panel editor toolbar (right side); selecting a language updates the UI immediately, the same as the dropdown in the old panel
+- language names in the dropdown are now shown in full (`English / German / French`) instead of the previous two-letter codes (`en / de / fr`); German and French locales use their native names (`Deutsch`, `Français`, etc.)
+
 ### 3.3.13
 - fixed context menu not closing when an item in a submenu is clicked; `Row`, `CheckRow`, and `raw_row` now call `Used()` instead of `Hide()` on their parent, so the close signal propagates from the submenu up to the root `RightClickMenu`
 - added `Used()` to `RightClickMenu` so the same code path works for rows in the main menu
