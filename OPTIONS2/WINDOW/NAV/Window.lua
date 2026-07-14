@@ -920,6 +920,13 @@ end
 
 local DRAG_THRESH = 5
 
+local CONTAINER_TO_TRIGGER_NT = {
+    folder    = "foldertrigger",
+    window    = "windowtrigger",
+    timer     = "trigger",
+    condition = "conditiontrigger",
+}
+
 function Options2.Window.Nav.Constructor:_InitDrag()
     self._drag = {
         pending=false, active=false, item=nil, startY=0,
@@ -1231,18 +1238,19 @@ function Options2.Window.Nav.Constructor:_GetTriggerArray(ref_nd, nt, tt)
 end
 
 function Options2.Window.Nav.Constructor:_CommitTriggerMove(nd, tgt_parent_nd)
-    local src_tt = nd.triggerType
-    local src_ti = nd.triggerIndex
-    local data   = nd.data
-    local nt     = nd.nodeType
+    local src_tt  = nd.triggerType
+    local src_ti  = nd.triggerIndex
+    local data    = nd.data
+    local src_nt  = nd.nodeType
+    local tgt_nt  = CONTAINER_TO_TRIGGER_NT[tgt_parent_nd.nodeType]
 
-    local src_arr = self:_GetTriggerArray(nd,            nt, src_tt)
-    local tgt_arr = self:_GetTriggerArray(tgt_parent_nd, nt, src_tt)
+    local src_arr = self:_GetTriggerArray(nd,            src_nt, src_tt)
+    local tgt_arr = self:_GetTriggerArray(tgt_parent_nd, tgt_nt, src_tt)
 
     table.remove(src_arr, src_ti)
     table.insert(tgt_arr, data)
 
-    self:_ResetActionIfInvalid(data, nt, tgt_parent_nd)
+    self:_ResetActionIfInvalid(data, tgt_nt, tgt_parent_nd)
 end
 
 function Options2.Window.Nav.Constructor:_ResetActionIfInvalid(trigData, nt, tgt_nd)

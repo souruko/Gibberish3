@@ -1,5 +1,7 @@
 # Gibberish
 
+Gibberish is a Lord of the Rings Online plugin for tracking cooldowns, effects, and counters as customisable HUD overlays. Set up timers that respond to game events — effects applied to yourself, your group, or your target; skills used; chat messages; or combat state — and display them as bars, icons, circles, text labels, or counters. Timers can be gated behind conditions so they only appear when the right circumstances are met. Everything is configured through a built-in options panel without leaving the game.
+
 ## Installation
 
 ...\Documents\The Lord of the Rings Online\plugins\Gibberish3
@@ -11,23 +13,11 @@ https://lotro-gibberish.com/  || by mydnic
 ## Changlog
 
 ### 3.3.11
-- removed the old OPTIONS/WINDOW panel; OPTIONS2 is now the sole options panel
-- the shortcut right-click menu now has a single "Options" entry that opens OPTIONS2 directly (removed the old "Open Options" entry)
+- removed the legacy OPTIONS/WINDOW panel; OPTIONS2 is now the sole options panel
+- shortcut right-click menu now has a single "Options" entry opening OPTIONS2 (removed "Open Options"); label renamed from "Open Options 2" to "Options" in all three locales (EN/DE/FR)
 - options window title changed from "Gibberish - Options 2" to "Gibberish"
 - removed unused element imports from OPTIONS (TABWINDOW, TRIGGERLISTBOX, TIMERLISTBOX, CONDITIONLISTBOX, CONDITIONTRIGGERLISTBOX)
-- Escape key no longer attempts to close the old options window
-- added nil-guard in the import pipeline for `Options.Window.Object` so importing works without the old panel
-- removed startup code that re-opened the old options window on plugin load
-- simplified selection-changed functions by removing dead forwards to the old options window
-
-### 3.3.11
-- removed the legacy OPTIONS/WINDOW panel entirely; OPTIONS2 is now the sole options panel
-- removed the "Open Options" entry from the shortcut right-click menu; the remaining "Options" entry opens OPTIONS2 directly
-- renamed the "Open Options 2" shortcut label to "Options" in all three locales (EN/DE/FR)
-- renamed the OPTIONS2 window title from "Gibberish - Options 2" to "Gibberish"
-- cleaned up all internal selection-change callbacks and startup logic that routed to the removed panel
-- added `Options.Window = { Object = nil }` stub so import logic stays safe without the old panel loaded
-- removed unused imports (TABWINDOW, TRIGGERLISTBOX, TIMERLISTBOX, CONDITIONLISTBOX, CONDITIONTRIGGERLISTBOX) from OPTIONS/__init__.lua
+- added nil-guard for `Options.Window.Object` in import pipeline and a stub table in OPTIONS/__init__.lua so importing works without the old panel
 
 ### 3.3.10
 - trigger type labels in the OPTIONS2 nav sidebar now use Verdana10 instead of Verdana12 so that longer type names like "Self Effect Removed" fit within the row height without clipping

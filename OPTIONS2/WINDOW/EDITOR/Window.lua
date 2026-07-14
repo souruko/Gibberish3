@@ -155,6 +155,13 @@ end
 
 function Options2.Window.Editor.Constructor:SetNode(nodeData)
     self:_HideSaved()
+
+    local prev_tab = nil
+    local prev_nt  = self.nodeData and self.nodeData.nodeType
+    if self.content ~= nil and self.content.tabs ~= nil then
+        prev_tab = self.content.tabs.selected
+    end
+
     self:_CloseContent()
     self.nodeData = nodeData
 
@@ -192,6 +199,11 @@ function Options2.Window.Editor.Constructor:SetNode(nodeData)
     self.content:SetParent(self.content_area)
     self.content:SetPosition(0, 0)
     self.content:SetSize(w, h)
+
+    if prev_tab ~= nil and prev_nt == nt
+        and self.content.tabs ~= nil and prev_tab <= #self.content.tabs.tabs then
+        self.content.tabs:ChangeSelection(prev_tab)
+    end
 end
 
 function Options2.Window.Editor.Constructor:_CloseContent()
