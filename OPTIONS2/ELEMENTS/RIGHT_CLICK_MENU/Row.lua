@@ -23,7 +23,7 @@ end
 
 function Options2.Elements.Row:MouseClick(sender, args)
     self.func()
-    self.parent:Hide()
+    self.parent:Used()
 end
 
 function Options2.Elements.Row:MouseEnter(sender, args)

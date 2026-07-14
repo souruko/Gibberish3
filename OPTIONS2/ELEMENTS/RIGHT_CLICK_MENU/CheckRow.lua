@@ -29,7 +29,7 @@ end
 function Options2.Elements.CheckRow:MouseClick(sender, args)
     self.checkbox:SetChecked(not self.checkbox:IsChecked())
     self.func(self.checkbox:IsChecked())
-    self.parent:Hide()
+    self.parent:Used()
 end
 
 function Options2.Elements.CheckRow:MouseEnter(sender, args)

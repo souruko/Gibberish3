@@ -59,6 +59,10 @@ function Options2.Elements.RightClickMenu:FocusLost()
     self:Hide()
 end
 
+function Options2.Elements.RightClickMenu:Used()
+    self:Hide()
+end
+
 function Options2.Elements.RightClickMenu:AddRow(row)
     row:SetWidth(self.width)
     row:SetSuper(self)

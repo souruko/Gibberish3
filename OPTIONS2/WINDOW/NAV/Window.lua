@@ -566,7 +566,7 @@ local function raw_row(text, fn)
     lbl:SetText(text)
     lbl:SetMouseVisible(false)
 
-    function row:MouseClick()    self._fn(); self.parent:Hide() end
+    function row:MouseClick()    self._fn(); self.parent:Used() end
     function row:MouseEnter()
         self:SetBackColor(Options.Defaults.rc_menu.hover_color)
         self.parent:HoverChanged(self)
