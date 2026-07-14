@@ -108,7 +108,8 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
     add(protect)
     local useCustomTimer = Options2.Elements.CheckBoxRow(bc, "options", "useCustomTimer", "tim_use_custom_timer", ROW_H)
     add(useCustomTimer)
-    local timerValue = Options2.Elements.NumberBoxRow(bc, "options", "timerValue", "tim_timer_value", ROW_H)
+    local timerValue = Options2.Elements.TextBoxRow(bc, "options", "timerValue", "tim_timer_value", ROW_H, false)
+    timerValue:SetMarkupEnabled(true)
     add(timerValue)
     plist[#plist+1] = paste_btn(panel, timerValue, "timer", {1,2},
         function(v) timerValue:SetText(tostring(v)) end)
@@ -163,7 +164,7 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
         reset:SetChecked(data.reset == true)
         protect:SetChecked(data.protect == true)
         useCustomTimer:SetChecked(data.useCustomTimer == true)
-        timerValue:SetText(tostring(data.timerValue or 10))
+        timerValue:SetText(tostring(data.timerValue ~= nil and data.timerValue or 10))
     end
     local function save()
         data.description    = desc:GetText()
@@ -174,7 +175,8 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
         data.reset          = reset:IsChecked()
         data.protect        = protect:IsChecked()
         data.useCustomTimer = useCustomTimer:IsChecked()
-        data.timerValue     = timerValue:GetText() or 10
+        local tv = timerValue:GetText()
+        data.timerValue     = (tv ~= "") and tv or 10
     end
 
     load()

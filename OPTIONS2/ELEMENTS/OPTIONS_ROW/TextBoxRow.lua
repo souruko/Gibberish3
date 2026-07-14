@@ -41,6 +41,10 @@ function Options2.Elements.TextBoxRow:SizeChanged()
     self.textbox:SetWidth(width - 130 - 3 * Options.Defaults.window.spacing)
 end
 
+function Options2.Elements.TextBoxRow:SetMarkupEnabled(enabled)
+    self.textbox:SetMarkupEnabled(enabled)
+end
+
 function Options2.Elements.TextBoxRow:SetText(value)
     self.textbox:SetText(value)
 end

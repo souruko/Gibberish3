@@ -13,9 +13,9 @@ https://lotro-gibberish.com/  || by mydnic
 ## Changlog
 
 ### 3.3.12
-- added `SetMarkupEnabled()` to `TextBoxRow` widget, proxying to the underlying textbox
-- enabled markup on the timer value (Custom Duration) field in General options for BAR, CIRCEL, ICON, and TEXT timer types
-- custom duration now falls back to the raw string if `tonumber` returns nil in both Chat and Effect Self triggers, so non-numeric placeholders (e.g. `&tag`) survive to runtime resolution instead of becoming nil
+- the Custom Duration field in the timer editor now accepts placeholder strings (e.g. `&tag`, `&1`) in addition to numbers; previously the field used `NumberBoxRow` which converted any non-numeric input to `nil` via `tonumber` and silently fell back to `10` on save
+- added `SetMarkupEnabled(true)` to the Custom Duration textbox so that `&` can be typed (the Turbine textbox strips `&` when markup is disabled)
+- fixed Effect Self trigger not using `tostring()` before `string.gsub` on the duration value, and missing `or duration` fallback after `tonumber`, making it inconsistent with all other trigger types
 
 ### 3.3.11
 - removed the legacy OPTIONS/WINDOW panel; OPTIONS2 is now the sole options panel
