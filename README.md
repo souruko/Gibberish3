@@ -10,6 +10,16 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.11
+- removed the old OPTIONS/WINDOW panel; OPTIONS2 is now the sole options panel
+- the shortcut right-click menu now has a single "Options" entry that opens OPTIONS2 directly (removed the old "Open Options" entry)
+- options window title changed from "Gibberish - Options 2" to "Gibberish"
+- removed unused element imports from OPTIONS (TABWINDOW, TRIGGERLISTBOX, TIMERLISTBOX, CONDITIONLISTBOX, CONDITIONTRIGGERLISTBOX)
+- Escape key no longer attempts to close the old options window
+- added nil-guard in the import pipeline for `Options.Window.Object` so importing works without the old panel
+- removed startup code that re-opened the old options window on plugin load
+- simplified selection-changed functions by removing dead forwards to the old options window
+
 ### 3.3.10
 - trigger type labels in the OPTIONS2 nav sidebar now use Verdana10 instead of Verdana12 so that longer type names like "Self Effect Removed" fit within the row height without clipping
 
