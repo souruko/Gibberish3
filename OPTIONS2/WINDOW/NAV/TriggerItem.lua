@@ -128,7 +128,7 @@ function Options2NavTrigger:Constructor(navWin, trigData, trigType, trigIdx, win
 end
 
 function Options2NavTrigger:SizeChanged()
-    if self.label == nil then return end
+    if self.label == nil or self.toggle == nil then return end
     local w  = self:GetWidth()
     local cx = STRIPE + self.depth * INDENT
     self.label:SetWidth(w - cx - ARROW_W - BADGE_W - TOG_W - 2)
