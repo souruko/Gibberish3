@@ -41,6 +41,8 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.items        = {}
     self.filter       = ""
     self._initial_restore = (self.selectedKey ~= nil)
+    self._itemCache   = {}
+    self._last_list_w = -1
 
     self.trig_types = {}
     for _, t in pairs(Trigger.Types) do
@@ -96,7 +98,7 @@ function Options2.Window.Nav.Constructor:Constructor()
         function()
             Folder.New("New Folder")
             Options.SaveData()
-            self:Rebuild()
+            self:RebuildFresh()
         end)
 
     self.add_window_btn = make_nav_btn(self.toolbar,
@@ -104,7 +106,7 @@ function Options2.Window.Nav.Constructor:Constructor()
         function()
             Window.New("New Window", Window.Types.TIMER_WINDOW)
             Options.SaveData()
-            self:Rebuild()
+            self:RebuildFresh()
         end)
 
     self.collapse_btn = make_nav_btn(self.toolbar,
@@ -138,6 +140,28 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.listbox:SetVerticalScrollBar(self.scrollbar)
     self:_InitDrag()
 end
+
+-- ── item cache ─────────────────────────────────────────────────────────────────
+
+function Options2.Window.Nav.Constructor:ClearItemCache()
+    self._itemCache = {}
+end
+
+-- Returns the cached item for key, creating it if absent.
+-- constructor_fn must return a new item when called with no args.
+-- Calls item:Refresh(expanded, depth) to update display state.
+function Options2.Window.Nav.Constructor:_GetOrCreate(key, constructor_fn, expanded, depth)
+    local item = self._itemCache[key]
+    if item == nil then
+        item = constructor_fn()
+        self._itemCache[key] = item
+    else
+        item:Refresh(expanded, depth)
+    end
+    return item
+end
+
+-- ── size ───────────────────────────────────────────────────────────────────────
 
 function Options2.Window.Nav.Constructor:SizeChanged()
     local w, h = self:GetSize()
@@ -173,8 +197,11 @@ function Options2.Window.Nav.Constructor:SizeChanged()
     self.scrollbar:SetPosition(list_w, list_top)
     self.scrollbar:SetSize(SCROLL_W, view_h)
 
-    for _, item in ipairs(self.items) do
-        item:SetWidth(list_w)
+    if list_w ~= self._last_list_w then
+        self._last_list_w = list_w
+        for _, item in ipairs(self.items) do
+            item:SetWidth(list_w)
+        end
     end
 
     if self._drag_ghost ~= nil then
@@ -183,6 +210,13 @@ function Options2.Window.Nav.Constructor:SizeChanged()
         self._drag_indicator:SetWidth(list_w)
         self._drag_folder_hl:SetWidth(list_w)
     end
+end
+
+-- Called after structural changes (add/delete/drag/duplicate) so stale cached
+-- items for shifted indices are not reused.
+function Options2.Window.Nav.Constructor:RebuildFresh()
+    self:ClearItemCache()
+    self:Rebuild()
 end
 
 function Options2.Window.Nav.Constructor:CollapseAll()
@@ -356,14 +390,20 @@ function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
     end
     local expanded = self:_IsExpanded(key)
 
-    self:_AddItem(Options2NavFolder(self, fi, fd, key, expanded, depth), w)
+    local nav = self
+    self:_AddItem(self:_GetOrCreate(key,
+        function() return Options2NavFolder(nav, fi, fd, key, expanded, depth) end,
+        expanded, depth), w)
 
     if not expanded then return end
 
     for _, tt in ipairs(self.trig_types) do
         for ti, td in ipairs(fd[tt] or {}) do
             local tkey = "ft_" .. fi .. "_" .. tt .. "_" .. ti
-            self:_AddItem(Options2NavFolderTrigger(self, td, tt, ti, fi, tkey, depth + 1), w)
+            local td_cap, tt_cap, ti_cap, fi_cap, tkey_cap, d1 = td, tt, ti, fi, tkey, depth + 1
+            self:_AddItem(self:_GetOrCreate(tkey,
+                function() return Options2NavFolderTrigger(nav, td_cap, tt_cap, ti_cap, fi_cap, tkey_cap, d1) end,
+                false, d1), w)
         end
     end
 
@@ -399,14 +439,20 @@ function Options2.Window.Nav.Constructor:_AddWindow(wi, wd, w, depth)
     end
     local expanded = self:_IsExpanded(key)
 
-    self:_AddItem(Options2NavWindow(self, wi, wd, key, expanded, depth), w)
+    local nav = self
+    self:_AddItem(self:_GetOrCreate(key,
+        function() return Options2NavWindow(nav, wi, wd, key, expanded, depth) end,
+        expanded, depth), w)
 
     if not expanded then return end
 
     for _, tt in ipairs(self.trig_types) do
         for ti, td in ipairs(wd[tt] or {}) do
             local tkey = "wt_" .. wi .. "_" .. tt .. "_" .. ti
-            self:_AddItem(Options2NavWindowTrigger(self, td, tt, ti, wi, tkey, depth + 1), w)
+            local td_cap, tt_cap, ti_cap, wi_cap, tkey_cap, d1 = td, tt, ti, wi, tkey, depth + 1
+            self:_AddItem(self:_GetOrCreate(tkey,
+                function() return Options2NavWindowTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tkey_cap, d1) end,
+                false, d1), w)
         end
     end
 
@@ -429,14 +475,20 @@ function Options2.Window.Nav.Constructor:_AddTimer(wi, tmi, tmd, w, depth)
     end
     local expanded = self:_IsExpanded(key)
 
-    self:_AddItem(Options2NavTimer(self, wi, tmi, tmd, key, expanded, depth), w)
+    local nav = self
+    self:_AddItem(self:_GetOrCreate(key,
+        function() return Options2NavTimer(nav, wi, tmi, tmd, key, expanded, depth) end,
+        expanded, depth), w)
 
     if not expanded then return end
 
     for _, tt in ipairs(self.trig_types) do
         for ti, td in ipairs(tmd[tt] or {}) do
             local tkey = "tt_" .. wi .. "_" .. tmi .. "_" .. tt .. "_" .. ti
-            self:_AddItem(Options2NavTrigger(self, td, tt, ti, wi, tmi, tkey, depth + 1), w)
+            local td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, tkey_cap, d1 = td, tt, ti, wi, tmi, tkey, depth + 1
+            self:_AddItem(self:_GetOrCreate(tkey,
+                function() return Options2NavTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, tkey_cap, d1) end,
+                false, d1), w)
         end
     end
 
@@ -459,19 +511,39 @@ function Options2.Window.Nav.Constructor:_AddCondition(wi, tmi, ci, cd, w, depth
     end
     local expanded = self:_IsExpanded(key)
 
-    self:_AddItem(Options2NavCondition(self, wi, tmi, ci, cd, key, expanded, depth), w)
+    local nav = self
+    self:_AddItem(self:_GetOrCreate(key,
+        function() return Options2NavCondition(nav, wi, tmi, ci, cd, key, expanded, depth) end,
+        expanded, depth), w)
 
     if not expanded then return end
 
     for _, tt in ipairs(self.trig_types) do
         for ti, td in ipairs(cd[tt] or {}) do
             local tkey = "ct_" .. wi .. "_" .. tmi .. "_" .. ci .. "_" .. tt .. "_" .. ti
-            self:_AddItem(Options2NavCondTrigger(self, td, tt, ti, wi, tmi, ci, tkey, depth + 1), w)
+            local td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, ci_cap, tkey_cap, d1 = td, tt, ti, wi, tmi, ci, tkey, depth + 1
+            self:_AddItem(self:_GetOrCreate(tkey,
+                function() return Options2NavCondTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, ci_cap, tkey_cap, d1) end,
+                false, d1), w)
         end
     end
 end
 
 -- ── interaction ────────────────────────────────────────────────────────────────
+
+function Options2.Window.Nav.Constructor:SelectWindowByIndex(wi)
+    local key = "w_" .. wi
+    for _, item in ipairs(self.items) do
+        if item:GetKey() == key then
+            self:_SelectItem(item)
+            return
+        end
+    end
+    -- window node not currently visible — expand ancestors and rebuild
+    self:_EnsureKeyVisible(key)
+    self.selectedKey = key
+    self:Rebuild()
+end
 
 function Options2.Window.Nav.Constructor:_SelectItem(item)
     if self.selectedItem ~= nil and self.selectedItem ~= item then
@@ -607,7 +679,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 table.insert(pd_cap[tt_cap], td)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end))
         end
         return sub
@@ -621,7 +693,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             local fi2 = Folder.New("New Folder")
             Data.folder[fi2].folder = fi
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
 
         local win_sub = Options2.Elements.RightClickSubMenu(172)
@@ -632,7 +704,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 local wi = Window.New("New Window", wt_cap)
                 Data.window[wi].folder = fi
                 Options.SaveData()
-                nav:Rebuild()
+                nav:RebuildFresh()
             end))
         end
         menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_window", win_sub, h), win_sub)
@@ -651,7 +723,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 Windows.EnabledChanged(wi)
             end
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end))
 
         menu:AddRow(raw_row(unload_all_lbl, function()
@@ -661,7 +733,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 Windows.EnabledChanged(wi)
             end
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end))
 
         menu:AddSeperator()
@@ -674,7 +746,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 Options.DeleteFolder(fi)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -696,14 +768,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if fd[tt] == nil then fd[tt] = {} end
             table.insert(fd[tt], ti + 1, copy)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(fd, ti, tt)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -722,7 +794,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                     local tmd = Timer.New(tt_cap)
                     Window.AddTimer(wi, tmd)
                     Options.SaveData()
-                    nav:Rebuild()
+                    nav:RebuildFresh()
                 end))
             end
             menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_timer", timer_sub, h), timer_sub)
@@ -740,14 +812,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             local new_wi = Window.Copy(wi)
             Windows.EnabledChanged(new_wi)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(wd.name or "(window)", function()
                 Options.DeleteWindow(wi)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -769,14 +841,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if wd[tt] == nil then wd[tt] = {} end
             table.insert(wd[tt], ti + 1, copy)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(wd, ti, tt)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -793,7 +865,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if tmd.conditionList == nil then tmd.conditionList = {} end
             table.insert(tmd.conditionList, cd)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
 
         menu:AddSeperator()
@@ -809,7 +881,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             table.insert(tlist, tmi + 1, copy)
             Options.SaveData()
             Options.DataChanged(wi)
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(tname, function()
@@ -817,7 +889,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
                 Options.DeleteTimer(wd, tmi)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -840,14 +912,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if tmd[tt] == nil then tmd[tt] = {} end
             table.insert(tmd[tt], ti + 1, copy)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(tmd, ti, tt)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -873,14 +945,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if tmd.conditionList == nil then tmd.conditionList = {} end
             table.insert(tmd.conditionList, ci + 1, copy)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(cname, function()
                 Options.DeleteConditions(tmd, ci)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
 
@@ -901,14 +973,14 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             if cd[tt] == nil then cd[tt] = {} end
             table.insert(cd[tt], ti + 1, copy)
             Options.SaveData()
-            nav:Rebuild()
+            nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
             Options2.ConfirmDelete(desc, function()
                 Trigger.Delete(cd, ti, tt)
                 Options.SaveData()
                 nav.selectedKey = nil
-                nav:Rebuild()
+                nav:RebuildFresh()
             end)
         end, h))
     end
@@ -1203,7 +1275,7 @@ function Options2.Window.Nav.Constructor:_DragFinish(item, args)
     end
 
     Options.SaveData()
-    self:Rebuild()
+    self:RebuildFresh()
 end
 
 function Options2.Window.Nav.Constructor:_CommitDropIntoFolder(nd, targetFolderIdx)

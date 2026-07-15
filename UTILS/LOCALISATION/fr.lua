@@ -271,9 +271,9 @@ L[ Language.French ].options.opacityPassiv                 = "Opacité passive"
 L[ Language.French ].general = {}
 L[ Language.French ].general.show_tooltip                  = "Afficher l'infobulle"
 L[ Language.French ].general.language                      = "Langue"
-L[ Language.French ].general.english                       = "en"
-L[ Language.French ].general.german                        = "de"
-L[ Language.French ].general.french                        = "fr"
+L[ Language.French ].general.english                       = "Anglais"
+L[ Language.French ].general.german                        = "Allemand"
+L[ Language.French ].general.french                        = "Français"
 
 -- collection
 L[ Language.French ].collection = {}

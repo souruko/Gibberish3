@@ -272,9 +272,9 @@ L[ Language.English ].options.opacityPassiv                 = "Opacity Passiv"
 L[ Language.English ].general = {}
 L[ Language.English ].general.show_tooltip                  = "Show Tooltip"
 L[ Language.English ].general.language                      = "Language"
-L[ Language.English ].general.english                       = "en"
-L[ Language.English ].general.german                        = "de"
-L[ Language.English ].general.french                        = "fr"
+L[ Language.English ].general.english                       = "English"
+L[ Language.English ].general.german                        = "German"
+L[ Language.English ].general.french                        = "French"
 
 -- collection
 L[ Language.English ].collection = {}

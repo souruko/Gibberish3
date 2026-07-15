@@ -145,3 +145,22 @@ function Options2NavTimer:IsExpandable() return true end
 function Options2NavTimer:SetExpanded(v)
     self.arrow:SetBackground(v and "Gibberish3/RESOURCES/nav_arrow_down.tga" or "Gibberish3/RESOURCES/nav_arrow_right.tga")
 end
+
+function Options2NavTimer:Refresh(expanded, depth)
+    if depth ~= self.depth then
+        self.depth = depth
+        local cx = STRIPE + depth * INDENT
+        self.arrow:SetPosition(cx + math.floor((ARROW_W - ICON_S) / 2), math.floor((H - ICON_S) / 2))
+        self.label:SetPosition(cx + ARROW_W, 0)
+        local win_line_x = STRIPE + (depth - 1) * INDENT + math.floor((ARROW_W - 2) / 2)
+        self.win_line:SetPosition(win_line_x, 0)
+    end
+    local tmd = self.nodeData.data
+    self.label:SetText(tmd.description ~= "" and tmd.description or "(timer)")
+    self.toggle:SetBackColor(tmd.enabled == true and COL_ON or COL_OFF)
+    self.arrow:SetBackground(expanded
+        and "Gibberish3/RESOURCES/nav_arrow_down.tga"
+        or  "Gibberish3/RESOURCES/nav_arrow_right.tga")
+    self.selected = false
+    self:SetBackColor(nil)
+end

@@ -88,4 +88,5 @@ function Options2.Window.Constructor:SizeChanged()
     local lib_left = editor_left + editor_width + sp
     self.library:SetPosition(lib_left, top_sp)
     self.library:SetSize(lib_width, content_height)
+
 end

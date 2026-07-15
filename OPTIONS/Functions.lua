@@ -27,6 +27,10 @@ function Options.SelectionChanged( index )
         Options.Move.Object:SelectionChanged()
     end
 
+    if index > 0 and Options2.Window.Object ~= nil then
+        Options2.Window.Object.nav:SelectWindowByIndex( index )
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 
@@ -171,6 +175,10 @@ function Options.LanguageChanged( value )
     end
 
     Options.Shortcut.Object:LanguageChanged()
+
+    if Options2.Window.Object ~= nil and Options2.Window.Object.LanguageChanged ~= nil then
+        Options2.Window.Object:LanguageChanged()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

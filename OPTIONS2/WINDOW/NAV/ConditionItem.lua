@@ -131,3 +131,24 @@ function Options2NavCondition:IsExpandable() return true end
 function Options2NavCondition:SetExpanded(v)
     self.arrow:SetBackground(v and "Gibberish3/RESOURCES/nav_arrow_down.tga" or "Gibberish3/RESOURCES/nav_arrow_right.tga")
 end
+
+function Options2NavCondition:Refresh(expanded, depth)
+    if depth ~= self.depth then
+        self.depth = depth
+        local cx = STRIPE + depth * INDENT
+        self.arrow:SetPosition(cx + math.floor((ARROW_W - ICON_S) / 2), math.floor((H - ICON_S) / 2))
+        self.label:SetPosition(cx + ARROW_W, 0)
+        local win_line_x = STRIPE + (depth - 2) * INDENT + math.floor((ARROW_W - 2) / 2)
+        self.win_line:SetPosition(win_line_x, 0)
+    end
+    local cd = self.nodeData.data
+    self.label:SetText(
+        (cd.description ~= nil and cd.description ~= "") and cd.description or "(condition)"
+    )
+    self.toggle:SetBackColor(cd.enabled == true and COL_ON or COL_OFF)
+    self.arrow:SetBackground(expanded
+        and "Gibberish3/RESOURCES/nav_arrow_down.tga"
+        or  "Gibberish3/RESOURCES/nav_arrow_right.tga")
+    self.selected = false
+    self:SetBackColor(nil)
+end

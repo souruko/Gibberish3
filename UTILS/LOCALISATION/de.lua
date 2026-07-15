@@ -271,9 +271,9 @@ L[ Language.German ].options.opacityPassiv                  = "Deckkraft Passiv"
 L[ Language.German ].general = {}
 L[ Language.German ].general.show_tooltip                   = "Tooltip Anzeigen"
 L[ Language.German ].general.language                       = "Sprache"
-L[ Language.German ].general.english                        = "en"
-L[ Language.German ].general.german                         = "de"
-L[ Language.German ].general.french                         = "fr"
+L[ Language.German ].general.english                        = "Englisch"
+L[ Language.German ].general.german                         = "Deutsch"
+L[ Language.German ].general.french                         = "Französisch"
 
 -- collection
 L[ Language.German ].collection = {}

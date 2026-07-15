@@ -147,3 +147,23 @@ end
 function Options2NavCondTrigger:GetKey()       return self.key end
 function Options2NavCondTrigger:IsExpandable() return false end
 function Options2NavCondTrigger:SetExpanded(v) end
+
+function Options2NavCondTrigger:Refresh(_, depth)
+    if depth ~= self.depth then
+        self.depth = depth
+        local cx = STRIPE + depth * INDENT
+        local win_line_x = STRIPE + (depth - 3) * INDENT + math.floor((ARROW_W - 2) / 2)
+        self.win_line:SetPosition(win_line_x, 0)
+        self.spacer:SetPosition(cx, 0)
+        self.label:SetPosition(cx + ARROW_W, 0)
+    end
+    local td = self.nodeData.data
+    local lang = L[Language.Local] or L[Language.English]
+    local tt   = self.nodeData.triggerType
+    local type_name = (lang.triggerType and lang.triggerType[tt]) or ("Type " .. tostring(tt))
+    self.label:SetText((td.description ~= nil and td.description ~= "") and td.description or type_name)
+    self.badge:SetText(truncate(td.token))
+    self.toggle:SetBackColor(td.enabled == true and COL_ON or COL_OFF)
+    self.selected = false
+    self:SetBackColor(nil)
+end

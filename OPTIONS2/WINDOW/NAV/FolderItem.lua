@@ -98,3 +98,18 @@ function Options2NavFolder:IsExpandable() return true end
 function Options2NavFolder:SetExpanded(v)
     self.arrow:SetBackground(v and "Gibberish3/RESOURCES/nav_arrow_down.tga" or "Gibberish3/RESOURCES/nav_arrow_right.tga")
 end
+
+function Options2NavFolder:Refresh(expanded, depth)
+    if depth ~= self.depth then
+        self.depth = depth
+        local cx = STRIPE + depth * INDENT
+        self.arrow:SetPosition(cx + math.floor((ARROW_W - ICON_S) / 2), math.floor((H - ICON_S) / 2))
+        self.label:SetPosition(cx + ARROW_W, 0)
+    end
+    self.label:SetText(self.nodeData.data.name or "(folder)")
+    self.arrow:SetBackground(expanded
+        and "Gibberish3/RESOURCES/nav_arrow_down.tga"
+        or  "Gibberish3/RESOURCES/nav_arrow_right.tga")
+    self.selected = false
+    self:SetBackColor(nil)
+end
