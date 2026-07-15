@@ -12,6 +12,12 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.15
+- OPTIONS2 nav tree now uses surgical listbox updates instead of clearing and rebuilding on expand/collapse, selection restore, and folder/window drags; reduces flicker and improves responsiveness in large trees
+- collapse now removes only the descendant rows from the listbox instead of wiping everything; expand and navigation calls use a new `_SurgicalUpdate()` that diffs old vs new item sets (add missing, remove gone, re-sort in place)
+- `SelectWindowByIndex` no longer calls a full `Rebuild()` when it needs to expand ancestors; it calls `_SurgicalUpdate()` instead
+- folder and window drag-and-drop uses `_SurgicalUpdate()`; timer, trigger, and condition drags still use `RebuildFresh()` because their array-index shifts invalidate cached items
+
 ### 3.3.14
 - added language dropdown to the OPTIONS2 panel editor toolbar (right side); selecting a language updates the UI immediately, the same as the dropdown in the old panel
 - language names in the dropdown are now shown in full (`English / German / French`) instead of the previous two-letter codes (`en / de / fr`); German and French locales use their native names (`Deutsch`, `Français`, etc.)

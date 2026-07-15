@@ -43,6 +43,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self._initial_restore = (self.selectedKey ~= nil)
     self._itemCache   = {}
     self._last_list_w = -1
+    self._add_mode    = "listbox"
 
     self.trig_types = {}
     for _, t in pairs(Trigger.Types) do
@@ -329,9 +330,37 @@ function Options2.Window.Nav.Constructor:Rebuild()
         self._initial_restore = false
     end
 
+    local new_items, list_w = self:_ComputeVisibleItems()
+
     self.listbox:ClearItems()
-    self.items        = {}
     self.selectedItem = nil
+
+    for _, item in ipairs(new_items) do
+        item:SetWidth(list_w)
+        self.listbox:AddItem(item)
+    end
+    self.items = new_items
+
+    self:_RestoreSelection()
+end
+
+-- ── tree builders ──────────────────────────────────────────────────────────────
+
+function Options2.Window.Nav.Constructor:_AddItem(item, w)
+    if self._add_mode == "collect" then
+        self._collected[#self._collected + 1] = item
+        return
+    end
+    item:SetWidth(w)
+    self.listbox:AddItem(item)
+    self.items[#self.items + 1] = item
+end
+
+-- Run the tree traversal in collect mode and return an ordered array of visible
+-- items (using the cache) plus the current list width.  Does not touch the listbox.
+function Options2.Window.Nav.Constructor:_ComputeVisibleItems()
+    self._add_mode = "collect"
+    self._collected = {}
 
     local list_w = self.listbox:GetWidth()
     if list_w <= 0 then list_w = 260 end
@@ -351,7 +380,6 @@ function Options2.Window.Nav.Constructor:Rebuild()
         if a.kind ~= b.kind then return a.kind == "folder" end
         return (a.data.name or ""):lower() < (b.data.name or ""):lower()
     end)
-
     for _, entry in ipairs(roots) do
         if entry.kind == "folder" then
             self:_AddFolder(entry.idx, entry.data, list_w)
@@ -360,7 +388,47 @@ function Options2.Window.Nav.Constructor:Rebuild()
         end
     end
 
-    -- restore selection highlight and editor content
+    local result   = self._collected
+    self._add_mode = "listbox"
+    self._collected = nil
+    return result, list_w
+end
+
+-- Update the listbox by diffing the current items against new_items.
+-- Removes items that disappeared, adds items that are new, sorts by position.
+-- Does not call ClearItems.
+function Options2.Window.Nav.Constructor:_SurgicalUpdate()
+    local new_items, list_w = self:_ComputeVisibleItems()
+
+    local in_new = {}
+    for i, it in ipairs(new_items) do
+        in_new[it] = true
+        it._sort_order = i
+    end
+
+    for _, it in ipairs(self.items) do
+        if not in_new[it] then
+            self.listbox:RemoveItem(it)
+        end
+    end
+
+    local in_old = {}
+    for _, it in ipairs(self.items) do in_old[it] = true end
+
+    for _, it in ipairs(new_items) do
+        if not in_old[it] then
+            it:SetWidth(list_w)
+            self.listbox:AddItem(it)
+        end
+    end
+
+    self.listbox:Sort(function(a, b) return a._sort_order < b._sort_order end)
+    self.items = new_items
+    self:_RestoreSelection()
+end
+
+function Options2.Window.Nav.Constructor:_RestoreSelection()
+    self.selectedItem = nil
     for _, item in ipairs(self.items) do
         if item:GetKey() == self.selectedKey then
             item:SetSelected(true)
@@ -368,17 +436,9 @@ function Options2.Window.Nav.Constructor:Rebuild()
             if Options2.Window.Object ~= nil and Options2.Window.Object.editor_panel ~= nil then
                 Options2.Window.Object.editor_panel:SetNode(item.nodeData)
             end
-            break
+            return
         end
     end
-end
-
--- ── tree builders ──────────────────────────────────────────────────────────────
-
-function Options2.Window.Nav.Constructor:_AddItem(item, w)
-    item:SetWidth(w)
-    self.listbox:AddItem(item)
-    self.items[#self.items + 1] = item
 end
 
 function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
@@ -539,10 +599,10 @@ function Options2.Window.Nav.Constructor:SelectWindowByIndex(wi)
             return
         end
     end
-    -- window node not currently visible — expand ancestors and rebuild
+    -- window node not currently visible — expand ancestors and show it
     self:_EnsureKeyVisible(key)
     self.selectedKey = key
-    self:Rebuild()
+    self:_SurgicalUpdate()
 end
 
 function Options2.Window.Nav.Constructor:_SelectItem(item)
@@ -575,7 +635,25 @@ function Options2.Window.Nav.Constructor:_ToggleExpand(item)
     elseif nd.nodeType == "condition" then
         Data.window[nd.windowIndex].timerList[nd.timerIndex].conditionList[nd.conditionIndex].collapsed = collapsed
     end
-    self:Rebuild()
+
+    if not now_expanded then
+        -- Surgical collapse: just remove descendants from the listbox.
+        item:SetExpanded(false)
+        local d = item.depth
+        local start = nil
+        for i = 1, #self.items do
+            if self.items[i] == item then start = i + 1; break end
+        end
+        if start then
+            while start <= #self.items and self.items[start].depth > d do
+                self.listbox:RemoveItem(self.items[start])
+                table.remove(self.items, start)
+            end
+        end
+    else
+        -- Surgical expand: add newly-visible children and sort into position.
+        self:_SurgicalUpdate()
+    end
 end
 
 function Options2.Window.Nav.Constructor:ItemClicked(item)
@@ -1275,7 +1353,16 @@ function Options2.Window.Nav.Constructor:_DragFinish(item, args)
     end
 
     Options.SaveData()
-    self:RebuildFresh()
+    local nt = item.nodeData.nodeType
+    if nt == "folder" or nt == "window" then
+        -- Folder/window drags only change the .folder parent reference — no array
+        -- index shifts — so cached items remain valid.  A surgical update is enough.
+        self:_SurgicalUpdate()
+    else
+        -- Timer/trigger/condition drags do table.remove/insert which shifts array
+        -- indices, making index-based cache keys stale.
+        self:RebuildFresh()
+    end
 end
 
 function Options2.Window.Nav.Constructor:_CommitDropIntoFolder(nd, targetFolderIdx)
