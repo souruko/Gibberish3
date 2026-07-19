@@ -1,5 +1,12 @@
 # Changelog
 
+### 3.3.18
+- removed the dead per-timer-type/per-window-type OPTIONS tab classes (`UI_ELEMENTS/TIMER/*/OPTIONS/`, `UI_ELEMENTS/WINDOWS/*/OPTIONS/`) and their `TRIGGER/**/Options.lua` hooks; these were leftover from the 3.3.11 legacy panel removal and were never instantiated (~10,000 lines removed)
+- removed orphaned stub file `UTILS/ChatCommands.lua` (never imported anywhere)
+- removed a leftover duplicate `Options` table definition in `Variables.lua` that was immediately overwritten
+- removed dead debug branches in the French combat chat parser gated on a `printDebug` global that was never set anywhere
+- misc cleanup: removed stale commented-out code in `Constants.lua` and `COUNTER_WINDOW/Element.lua`, clarified a stale TODO comment in `Load.lua`
+
 ### 3.3.17
 - removed the legacy `OPTIONS/` panel entirely; it was already fully dead code (its own load path was cut in 3.3.11) except for the shortcut toolbar button, the drag-to-move overlay, and a handful of shared `Options.*` state functions, which were relocated to `OPTIONS2/SHORTCUT/` and `OPTIONS2/MOVE/`
 - the shortcut button's right-click menu now uses OPTIONS2's own `RightClickMenu`/`Row`/`CheckRow` widgets instead of the removed legacy ones

@@ -244,28 +244,6 @@ end
 ---------------------------------------------------------------------------------------------------
 function CounterWindowElement:DataChanged()
 
-    -- -- window data
-    -- -- get position from screen ratio
-    -- self:SetPosition( UTILS.ScreenRatioToPixel( self.data.left, self.data.top ) )
-
-    -- -- resize depending from children
-    -- self:Resize()
-
-    -- -- set the fill direction for children
-    -- self.timerListBox:SetReverseFill    (self.data.direction)
-    -- self.timerListBox:SetFlippedLayout  (self.data.direction)
-
-    -- -- set dragLabel text to name
-    -- self.dragLabel:SetText( self.data.name )
-
-    -- -- timer data calls
-    -- for index, child in pairs( self.children ) do
-    --     child:DataChanged()
-    -- end
-
-
-
-
 
 
 

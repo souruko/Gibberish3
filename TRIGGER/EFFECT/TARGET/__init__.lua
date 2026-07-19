@@ -9,5 +9,4 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.TRIGGER.EFFECT.TARGET.Functions"
 import "Gibberish3.TRIGGER.EFFECT.TARGET.Defaults"
-import "Gibberish3.TRIGGER.EFFECT.TARGET.Options"
 ---------------------------------------------------------------------------------------------------

@@ -9,5 +9,4 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.TRIGGER.TIMER.Functions"
 import "Gibberish3.TRIGGER.TIMER.Defaults"
-import "Gibberish3.TRIGGER.TIMER.Options"
 ---------------------------------------------------------------------------------------------------

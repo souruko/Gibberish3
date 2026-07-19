@@ -9,5 +9,4 @@
 ---------------------------------------------------------------------------------------------------
 import "Gibberish3.TRIGGER.CHAT.Functions"
 import "Gibberish3.TRIGGER.CHAT.Defaults"
-import "Gibberish3.TRIGGER.CHAT.Options"
 ---------------------------------------------------------------------------------------------------

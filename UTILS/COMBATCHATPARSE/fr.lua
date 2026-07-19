@@ -28,9 +28,6 @@ function Trigger.ParseCombatChat(line)
 			
 		-- skillName = string.match(skillName,"^ avec (.*)$") or L.DirectDamage; -- (as of v4.1.0)
 
-    if (printDebug) then
-       Turbine.Shell.WriteLine( "damage by "..initiatorName.." skill "..skillName );
-    end		
 		-- damage was absorbed
 		if targetName == nil then
 			targetName = string.gsub(targetNameAmountAndType,"^[Tt]he ","");
@@ -200,10 +197,6 @@ function Trigger.ParseCombatChat(line)
 			string.gsub(initiator_name, " a$", "");
 		target_name = (target_name == "" and LocalPlayer.name or target_name);
 
-		if (printDebug) then
-  		Turbine.Shell.WriteLine("root_broken", line, "ini_name: " .. initiator_name .. " tgt_name: " .. target_name);
-		end
-
 		return 16, nil, trim_articles(target_name), nil;
 	end
 	
@@ -216,10 +209,6 @@ function Trigger.ParseCombatChat(line)
 			string.match(initiator_name, " vous a$") and string.gsub(initiator_name, " vous a$", "") or
 			string.gsub(initiator_name, " a$", "");
 		target_name = (target_name == "" and LocalPlayer.name or target_name);
-
-		if (printDebug) then
-		  Turbine.Shell.WriteLine("daze_broken", line, "ini_name: " .. initiator_name .. " tgt_name: " .. target_name);
-		end
 
 		return 16, nil, target_name, nil;
 	end

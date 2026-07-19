@@ -89,7 +89,7 @@ function Options.OverwriteCharData( global_data, char_data )
             window_data.thresholdFontSize = window_data.fontSize
         end
 
-        -- new options 3.1.3 TODO delte
+        -- backfill trigger fields added in 3.1.3 for saves from older versions
         for i, timer in ipairs(window_data.timerList) do
 
             for j, triggerType in ipairs(timer) do

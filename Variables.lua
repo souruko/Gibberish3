@@ -41,13 +41,6 @@ Windows     = {}
 Options     = {}
 Options.CollectEffects = false
 Options.CollectChat    = false
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- options
-Options     = {}
-Options.CollectEffects = false
-Options.CollectChat    = false
 Options.OnlyDebuffs    = false
 Options.OnlySay        = false
 
