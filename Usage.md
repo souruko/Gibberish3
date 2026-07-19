@@ -251,7 +251,7 @@ Fire when another timer in the plugin starts, ends, or crosses its threshold. Th
 
 | Field | What it does |
 |---|---|
-| **Token** | The **Description** of the source timer to watch. Must match exactly. |
+| **Token** | The source timer to watch, picked from a dropdown listing every timer as `Window / Timer`. |
 
 ---
 
