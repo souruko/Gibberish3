@@ -9,13 +9,13 @@ function Options2.Elements.CheckRow:Constructor(text_control, text_description, 
 
     self.checkbox = Options2.Elements.CheckBox()
     self.checkbox:SetParent(self)
-    self.checkbox:SetPosition(Options.Defaults.rc_menu.text_left, (height - 32) / 2)
+    self.checkbox:SetPosition(0, (height - 32) / 2)
     self.checkbox:SetMouseVisible(false)
 
     self.text = Turbine.UI.Label()
     self.text:SetParent(self)
     self.text:SetHeight(height)
-    self.text:SetLeft(Options.Defaults.rc_menu.text_left + 36)
+    self.text:SetLeft(Options.Defaults.rc_menu.text_left)
     self.text:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.text:SetFont(Options.Defaults.rc_menu.font)
     self.text:SetMouseVisible(false)
@@ -58,6 +58,7 @@ function Options2.Elements.CheckRow:LanguageChanged()
 end
 
 function Options2.Elements.CheckRow:SizeChanged()
+    self.text:SetWidth(self:GetWidth() - Options.Defaults.rc_menu.text_left)
 end
 
 function Options2.Elements.CheckRow:SetSuper(parent)

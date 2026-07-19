@@ -29,5 +29,13 @@ import "Gibberish3.OPTIONS2.WINDOW.LIBRARY"
 -- startup and clipboard helpers (must be last)
 import "Gibberish3.OPTIONS2.Functions"
 
+-- shared Options.* state, shortcut button, and move-window mode
+import "Gibberish3.OPTIONS2.SHORTCUT.Functions"
+import "Gibberish3.OPTIONS2.MOVE.Window"
+import "Gibberish3.OPTIONS2.SHORTCUT.Window"
+
 -- singleton tooltip used by all row widgets
 Options2.Elements.TooltipObject = Options2.Elements.Tooltip()
+
+-- create objects
+Options.Shortcut.Object = Options.Shortcut.Constructor()

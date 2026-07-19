@@ -64,11 +64,7 @@ Trigger.InitAll()
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- shortcut button, move mode, shared option functions
-import "Gibberish3.OPTIONS"
-
----------------------------------------------------------------------------------------------------
--- main options panel
+-- main options panel (also includes the shortcut button, move mode, and shared option functions)
 import "Gibberish3.OPTIONS2"
 
 ---------------------------------------------------------------------------------------------------
