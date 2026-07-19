@@ -1,5 +1,12 @@
 # Changelog
 
+### 3.3.19
+- fixed Counter windows drifting position after being dragged then resized (e.g. adding/removing a counter) when using a reverse fill direction; the drag handler now compensates for `left_shift`/`top_shift` and keeps `base_left`/`base_top` in sync, matching Timer windows
+- fixed the move panel (arrow buttons and the left/top textboxes + update button) not saving position changes to disk; only live mouse-dragging saved before, so panel-only repositioning could be lost on crash or relog
+- fixed move mode on/off not saving immediately when toggled from the shortcut menu
+- dragging a window with the mouse is now clamped to the screen so it can no longer be moved fully off-screen
+- the move panel's edge clamp now uses the selected window's actual size instead of a hardcoded 20px margin, so larger windows can no longer be nudged mostly off-screen via the arrows/textboxes
+
 ### 3.3.18
 - removed the dead per-timer-type/per-window-type OPTIONS tab classes (`UI_ELEMENTS/TIMER/*/OPTIONS/`, `UI_ELEMENTS/WINDOWS/*/OPTIONS/`) and their `TRIGGER/**/Options.lua` hooks; these were leftover from the 3.3.11 legacy panel removal and were never instantiated (~10,000 lines removed)
 - removed orphaned stub file `UTILS/ChatCommands.lua` (never imported anywhere)
