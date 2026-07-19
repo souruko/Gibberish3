@@ -367,7 +367,16 @@ local function make_timer_form(data, bc, nodeData)
 
     local desc = Options2.Elements.TextBoxRow(bc, "options", "description", "trg_description", DESC_H, true)
     add(desc, DESC_H)
-    local token = Options2.Elements.TextBoxRow(bc, "options", "token", "trg_token", ROW_H, false)
+
+    local token = Options2.Elements.DropDownRow(bc, "options", "token", "trg_token", ROW_H, 2)
+    for _, wd in ipairs(Data.window) do
+        local wname = (wd.name ~= nil and wd.name ~= "") and wd.name or "(window)"
+        for _, tmd in ipairs(wd.timerList or {}) do
+            local tname = (tmd.description ~= nil and tmd.description ~= "") and tmd.description or "(timer)"
+            token:AddItem(nil, wname .. " / " .. tname, tmd.id)
+        end
+    end
+    token:SortAlpha()
     add(token)
 
     local action = build_action_dd(bc, nodeData)
@@ -384,14 +393,14 @@ local function make_timer_form(data, bc, nodeData)
 
     local function load()
         desc:SetText(data.description or "")
-        token:SetText(data.token or "")
+        token:SetSelection(data.token)
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
         tagRow:SetText(data.tag or "")
     end
     local function save()
         data.description = desc:GetText()
-        data.token       = token:GetText()
+        data.token       = token:GetSelectedValue() or ""
         data.action      = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
         data.tag = tagRow:GetText()

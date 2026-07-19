@@ -1,5 +1,5 @@
 Options2DropdownItem = class(Turbine.UI.Control)
-function Options2DropdownItem:Constructor(parent, width, text_control, text_description, value)
+function Options2DropdownItem:Constructor(parent, width, text_control, text_description, value, height)
     Turbine.UI.Control.Constructor(self)
 
     self.parent           = parent
@@ -8,12 +8,13 @@ function Options2DropdownItem:Constructor(parent, width, text_control, text_desc
     self.value            = value
     self.selected         = false
 
-    self:SetSize(width, Options.Defaults.dropdown.item_height)
+    self:SetSize(width, height)
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
-    self.label:SetSize(width - 15, Options.Defaults.dropdown.item_height)
+    self.label:SetSize(width - 15, height)
     self.label:SetLeft(5)
+    self.label:SetMultiline(true)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetFont(Options.Defaults.window.font)
     self.label:SetMouseVisible(false)

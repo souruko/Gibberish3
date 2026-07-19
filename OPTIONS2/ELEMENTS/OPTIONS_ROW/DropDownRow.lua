@@ -1,5 +1,5 @@
 Options2.Elements.DropDownRow = class(Turbine.UI.Control)
-function Options2.Elements.DropDownRow:Constructor(back_color, label_control, label_description, tooltip_description, height)
+function Options2.Elements.DropDownRow:Constructor(back_color, label_control, label_description, tooltip_description, height, lines)
     Turbine.UI.Control.Constructor(self)
 
     self.label_control     = label_control
@@ -15,7 +15,7 @@ function Options2.Elements.DropDownRow:Constructor(back_color, label_control, la
     self.label:SetFont(Options.Defaults.window.font)
     Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
 
-    self.dropdown = Options2.Elements.Dropdown(150)
+    self.dropdown = Options2.Elements.Dropdown(150, lines)
     self.dropdown:SetParent(self)
     self.dropdown:SetPosition(145, sp)
     self.dropdown:SetHeight(height - 2 * sp)

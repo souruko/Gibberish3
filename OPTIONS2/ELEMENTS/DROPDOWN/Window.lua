@@ -1,11 +1,14 @@
+local SCROLL_W    = 10
+local MAX_POPUP_H = 240
+
 Options2.Elements.Dropdown = class(Turbine.UI.Control)
-function Options2.Elements.Dropdown:Constructor(width)
+function Options2.Elements.Dropdown:Constructor(width, lines)
     Turbine.UI.Control.Constructor(self)
 
-    self.items          = {}
     self.selected_item  = nil
     self.selected_index = 0
     self.popup_open     = false
+    self.item_height    = Options.Defaults.dropdown.item_line_height * (lines or 1)
 
     self.background = Turbine.UI.Control()
     self.background:SetParent(self)
@@ -15,6 +18,7 @@ function Options2.Elements.Dropdown:Constructor(width)
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
     self.label:SetLeft(5)
+    self.label:SetMultiline(false)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetFont(Options.Defaults.window.font)
     self.label:SetMouseVisible(false)
@@ -39,6 +43,11 @@ function Options2.Elements.Dropdown:Constructor(width)
     self.popup_list:SetParent(self.popup)
     self.popup_list:SetPosition(0, 0)
 
+    self.scrollbar = Turbine.UI.Lotro.ScrollBar()
+    self.scrollbar:SetParent(self.popup)
+    self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
+    self.popup_list:SetVerticalScrollBar(self.scrollbar)
+
     self:SetWidth(width)
     self:SetHeight(Options.Defaults.dropdown.item_height)
 
@@ -57,15 +66,17 @@ end
 function Options2.Elements.Dropdown:Show(value)
     self.popup_open = value
     if value == true then
-        local list_height = Options.Defaults.dropdown.item_height * #self.items
-        if list_height > 200 then
-            list_height = 200
-        end
+        local item_count  = self.popup_list:GetItemCount()
+        local list_height = math.min(item_count * self.item_height, MAX_POPUP_H)
         local popup_width = self:GetWidth()
+        local list_w      = popup_width - SCROLL_W
         local sx, sy = self:PointToScreen(0, self:GetHeight())
         self.popup:SetPosition(sx, sy)
         self.popup:SetSize(popup_width, list_height)
-        self.popup_list:SetSize(popup_width, list_height)
+        self.popup_list:SetPosition(0, 0)
+        self.popup_list:SetSize(list_w, list_height)
+        self.scrollbar:SetPosition(list_w, 0)
+        self.scrollbar:SetSize(SCROLL_W, list_height)
         self.popup:SetVisible(true)
         self.popup:Activate()
     else
@@ -78,20 +89,12 @@ function Options2.Elements.Dropdown:Close()
 end
 
 function Options2.Elements.Dropdown:AddItem(text_control, text_description, value)
-    local item = Options2DropdownItem(self, self:GetWidth(), text_control, text_description, value)
-    item:SetParent(self.popup_list)
-    local count = #self.items
-    item:SetPosition(0, count * Options.Defaults.dropdown.item_height)
-    table.insert(self.items, item)
-    self.popup_list:SetSize(self:GetWidth(), (#self.items) * Options.Defaults.dropdown.item_height)
+    local item = Options2DropdownItem(self, self:GetWidth() - SCROLL_W, text_control, text_description, value, self.item_height)
+    self.popup_list:AddItem(item)
 end
 
 function Options2.Elements.Dropdown:ClearItems()
-    for _, item in ipairs(self.items) do
-        item:SetParent(nil)
-        item:SetVisible(false)
-    end
-    self.items          = {}
+    self.popup_list:ClearItems()
     self.selected_item  = nil
     self.selected_index = 0
     self.label:SetText("")
@@ -99,7 +102,8 @@ function Options2.Elements.Dropdown:ClearItems()
 end
 
 function Options2.Elements.Dropdown:SetSelection(value)
-    for i, item in ipairs(self.items) do
+    for i = 1, self.popup_list:GetItemCount() do
+        local item = self.popup_list:GetItem(i)
         if item.value == value then
             self:ChangeSelection(item)
             return
@@ -118,38 +122,27 @@ function Options2.Elements.Dropdown:ChangeSelection(child)
     if self.selected_item ~= nil then
         self.selected_item:Select(false)
     end
-    self.selected_item = child
+    self.selected_item  = child
+    self.selected_index = self.popup_list:IndexOfItem(child)
     child:Select(true)
-    for i, item in ipairs(self.items) do
-        if item == child then
-            self.selected_index = i
-            break
-        end
-    end
     self.label:SetText(child.label:GetText())
     self:Show(false)
     self.SelectionChanged(self, self.selected_index, child.value)
 end
 
 function Options2.Elements.Dropdown:Sort()
-    table.sort(self.items, function(a, b) return a.value < b.value end)
-    for i, item in ipairs(self.items) do
-        item:SetTop((i - 1) * Options.Defaults.dropdown.item_height)
-    end
+    self.popup_list:Sort(function(a, b) return a.value < b.value end)
 end
 
 function Options2.Elements.Dropdown:SortAlpha()
-    table.sort(self.items, function(a, b)
+    self.popup_list:Sort(function(a, b)
         return (a.label:GetText() or "") < (b.label:GetText() or "")
     end)
-    for i, item in ipairs(self.items) do
-        item:SetTop((i - 1) * Options.Defaults.dropdown.item_height)
-    end
 end
 
 function Options2.Elements.Dropdown:LanguageChanged()
-    for _, item in ipairs(self.items) do
-        item:LanguageChanged()
+    for i = 1, self.popup_list:GetItemCount() do
+        self.popup_list:GetItem(i):LanguageChanged()
     end
     if self.selected_item ~= nil then
         self.label:SetText(self.selected_item.label:GetText())

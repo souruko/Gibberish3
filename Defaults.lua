@@ -114,6 +114,7 @@ Options.Defaults.tooltip.activation_delay   = 1
 Options.Defaults.dropdown                    = {}
 Options.Defaults.dropdown.base_height        = 20
 Options.Defaults.dropdown.item_height        = 20
+Options.Defaults.dropdown.item_line_height   = 25
 Options.Defaults.dropdown.spacing            = 2
 Options.Defaults.dropdown.base_color         = Turbine.UI.Color(0.24, 0.20, 0.15)
 Options.Defaults.dropdown.show_color         = Turbine.UI.Color(0.28, 0.24, 0.18)

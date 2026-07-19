@@ -12,6 +12,12 @@ https://lotro-gibberish.com/  || by mydnic
 
 ## Changlog
 
+### 3.3.16
+- fixed OPTIONS2 nav crashing when expanding a Timer/Window/Folder/Condition with a TimerStart/TimerEnd/TimerThreshold trigger; their `token` field holds a numeric timer id, and the nav row badge's `truncate()` was calling `#` on it directly (only valid on strings)
+- the `token` field for TimerStart/TimerEnd/TimerThreshold triggers in the OPTIONS2 trigger editor is now a dropdown listing every timer ("Window / Timer"), matching the legacy panel; selecting one fills in the correct id automatically instead of requiring free-text entry
+- fixed OPTIONS2 dropdown popups not scrolling past ~10 items; items were manually parented/positioned instead of added through the native ListBox item API, so the attached scrollbar had no range to track
+- OPTIONS2 dropdown items no longer clip 2-line labels; item height is now a constructor parameter (`Dropdown(width, lines)` / `DropDownRow(..., lines)`) defaulting to 1 line everywhere, with the timer-token dropdown opting into 2
+
 ### 3.3.15
 - OPTIONS2 nav tree expand/collapse and drag-and-drop no longer clear and rebuild the whole list; only affected rows are added or removed, reducing flicker
 

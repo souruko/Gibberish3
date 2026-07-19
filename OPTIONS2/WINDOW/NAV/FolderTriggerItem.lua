@@ -10,6 +10,7 @@ local COL_OFF = Turbine.UI.Color(0.25, 0.25, 0.25)
 
 local function truncate(s)
     if s == nil or s == "" then return "" end
+    s = tostring(s)
     if #s <= 24 then return s end
     return s:sub(1, 23) .. "…"
 end
