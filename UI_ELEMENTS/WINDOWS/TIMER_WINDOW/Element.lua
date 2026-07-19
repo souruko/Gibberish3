@@ -88,6 +88,13 @@ function TimerWindowElement:Constructor( index )
 			x = x + ( args.X - self.dragStartX )
             y = y + ( args.Y - self.dragStartY )
 
+            -- clamp to screen bounds
+            local width, height = self:GetSize()
+            if x < 0 then x = 0 end
+            if y < 0 then y = 0 end
+            if x > Options.ScreenWidth  - width  then x = Options.ScreenWidth  - width  end
+            if y > Options.ScreenHeight - height then y = Options.ScreenHeight - height end
+
             -- set new position
             self:SetPosition( x, y )
 

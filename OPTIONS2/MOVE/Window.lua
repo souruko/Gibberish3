@@ -88,7 +88,7 @@ function Options.Move.Constructor:Constructor()
         self:ArrowDown( 0, -1 )
     end
     self.up_button.MouseUp = function ()
-        self:SetWantsUpdates( false )
+        self:ArrowUp()
     end
 
     
@@ -111,7 +111,7 @@ function Options.Move.Constructor:Constructor()
         self:ArrowDown( -1, 0 )
     end
     self.left_button.MouseUp = function ()
-        self:SetWantsUpdates( false )
+        self:ArrowUp()
     end
 
     self.right_back = Turbine.UI.Control()
@@ -133,7 +133,7 @@ function Options.Move.Constructor:Constructor()
         self:ArrowDown( 1, 0 )
     end
     self.right_button.MouseUp = function ()
-        self:SetWantsUpdates( false )
+        self:ArrowUp()
     end
     
     self.down_back = Turbine.UI.Control()
@@ -155,7 +155,7 @@ function Options.Move.Constructor:Constructor()
         self:ArrowDown( 0, 1 )
     end
     self.down_button.MouseUp = function ()
-        self:SetWantsUpdates( false )
+        self:ArrowUp()
     end
     
 
@@ -239,6 +239,7 @@ function Options.Move.Constructor:UpdateClicked()
     end
 
     self:UpdateChanges( left, top )
+    Options.SaveData()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -276,6 +277,15 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+function Options.Move.Constructor:ArrowUp()
+
+    self:SetWantsUpdates( false )
+    Options.SaveData()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:Update()
 
     local time = Turbine.Engine.GetGameTime()
@@ -299,18 +309,23 @@ function Options.Move.Constructor:UpdateChanges( left, top )
         -- selected data
         local selected  = Data.window[ Data.selectedIndex ]
 
-        -- fix 
+        -- clamp to screen bounds, using the window's actual size where available
+        local width, height = 20, 20
+        if Windows[ Data.selectedIndex ] ~= nil then
+            width, height = Windows[ Data.selectedIndex ]:GetSize()
+        end
+
         if left < 0 then
             left = 0
         end
         if top < 0 then
             top = 0
         end
-        if left > Options.ScreenWidth - 20 then
-           left =  Options.ScreenWidth - 20
+        if left > Options.ScreenWidth - width then
+           left =  Options.ScreenWidth - width
         end
-        if top > Options.ScreenHeight - 20 then
-            top = Options.ScreenHeight - 20
+        if top > Options.ScreenHeight - height then
+            top = Options.ScreenHeight - height
         end
 
         -- update data

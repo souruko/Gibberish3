@@ -66,6 +66,7 @@ function Options.MoveChanged( value )
 
     -- save new selection
     Data.moveMode = value
+    Options.SaveData()
 
     -- change movestate of windows
     Windows.MoveChanged()
