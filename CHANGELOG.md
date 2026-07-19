@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.3.17
+- removed the legacy `OPTIONS/` panel entirely; it was already fully dead code (its own load path was cut in 3.3.11) except for the shortcut toolbar button, the drag-to-move overlay, and a handful of shared `Options.*` state functions, which were relocated to `OPTIONS2/SHORTCUT/` and `OPTIONS2/MOVE/`
+- the shortcut button's right-click menu now uses OPTIONS2's own `RightClickMenu`/`Row`/`CheckRow` widgets instead of the removed legacy ones
+- fixed `OPTIONS2.Elements.CheckRow` (previously unused, so untested): the checkbox was positioned at `text_left` instead of flush left, pushing it and the label out of alignment with plain menu rows; and `SizeChanged` was a no-op so the label never got a width, leaving it far short of the row's full width
+
 ### 3.3.16
 - fixed OPTIONS2 nav crashing when expanding a Timer/Window/Folder/Condition with a TimerStart/TimerEnd/TimerThreshold trigger; their `token` field holds a numeric timer id, and the nav row badge's `truncate()` was calling `#` on it directly (only valid on strings)
 - the `token` field for TimerStart/TimerEnd/TimerThreshold triggers in the OPTIONS2 trigger editor is now a dropdown listing every timer ("Window / Timer"), matching the legacy panel; selecting one fills in the correct id automatically instead of requiring free-text entry
