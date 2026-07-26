@@ -138,6 +138,10 @@ function TextToColor( text )
     local g = tonumber( list[2] )
     local b = tonumber( list[3] )
 
+    if r == nil or g == nil or b == nil then
+        return nil
+    end
+
     -- fix values
     if r > 255 then
         r = 255
