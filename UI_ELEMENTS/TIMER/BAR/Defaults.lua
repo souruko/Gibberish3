@@ -25,6 +25,7 @@ Timer[Timer.Types.BAR].Defaults.useCustomTimer      = false
 Timer[Timer.Types.BAR].Defaults.direction           = Direction.Descending
 
 Timer[Timer.Types.BAR].Defaults.icon                = 1091637312
+Timer[Timer.Types.BAR].Defaults.useExternalImage     = false
 Timer[Timer.Types.BAR].Defaults.showIcon            = true
 Timer[Timer.Types.BAR].Defaults.textValue           = ""
 Timer[Timer.Types.BAR].Defaults.textOption          = TimerTextOptions.NoText

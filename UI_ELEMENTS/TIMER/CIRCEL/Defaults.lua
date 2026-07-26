@@ -25,6 +25,7 @@ Timer[Timer.Types.CIRCEL].Defaults.useCustomTimer      = false
 Timer[Timer.Types.CIRCEL].Defaults.direction           = Direction.Descending
 
 Timer[Timer.Types.CIRCEL].Defaults.icon                = 1091637312
+Timer[Timer.Types.CIRCEL].Defaults.useExternalImage     = false
 Timer[Timer.Types.CIRCEL].Defaults.showIcon            = true
 Timer[Timer.Types.CIRCEL].Defaults.textValue           = ""
 Timer[Timer.Types.CIRCEL].Defaults.textOption          = TimerTextOptions.NoText

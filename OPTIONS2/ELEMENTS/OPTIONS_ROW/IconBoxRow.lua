@@ -35,6 +35,8 @@ function Options2.Elements.IconBoxRow:Constructor(back_color, label_control, lab
         self:SetIcon()
     end
 
+    self.externalMode = false
+
     self:SetHeight(height)
     self:SetBackColor(back_color)
     self:LanguageChanged()
@@ -55,15 +57,24 @@ function Options2.Elements.IconBoxRow:SetText(value)
 end
 
 function Options2.Elements.IconBoxRow:GetText()
+    if self.externalMode then
+        return self.textbox:GetText()
+    end
     return tonumber(self.textbox:GetText())
 end
 
+function Options2.Elements.IconBoxRow:SetExternalMode(value)
+    self.externalMode = value == true
+    self:SetIcon()
+end
+
 function Options2.Elements.IconBoxRow:SetIcon()
-    local icon_id = tonumber(self.textbox:GetText())
-    if icon_id == nil then
+    local icon_id = self.externalMode and self.textbox:GetText() or tonumber(self.textbox:GetText())
+    if icon_id == nil or icon_id == "" then
         self.icon:SetBackground()
         return
     end
-    self.icon:SetSize(UTILS.GetImageSize(icon_id))
-    self.icon:SetBackground(icon_id)
+    local resolved = UTILS.ResolveTimerIcon(icon_id, self.externalMode)
+    self.icon:SetSize(UTILS.GetImageSize(resolved))
+    self.icon:SetBackground(resolved)
 end

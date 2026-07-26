@@ -182,9 +182,10 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
     -- reset icon
     if self.data.showIcon == true then
 
-        self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
+        local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
+        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
         self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( icon )
+        self.iconControl:SetBackground( resolvedIcon )
         self.iconControl:SetSize( 32, 32 )
         self.iconControl:SetVisible(true)
 

@@ -37,6 +37,7 @@ function Timer.New(type)
     
     -- style
     timer.icon                  = Timer[type].Defaults.icon
+    timer.useExternalImage      = Timer[type].Defaults.useExternalImage
     timer.showIcon              = Timer[type].Defaults.showIcon
     timer.textOption            = Timer[type].Defaults.textOption
     timer.textValue             = Timer[type].Defaults.textValue
@@ -93,8 +94,9 @@ function Timer.Copy( data )
     timer.counterSTART          = data.counterSTART  
     
     -- text / icon
-    timer.icon                  = data.icon      
-    timer.showIcon              = data.showIcon  
+    timer.icon                  = data.icon
+    timer.useExternalImage      = data.useExternalImage
+    timer.showIcon              = data.showIcon
     timer.textOption            = data.textOption
     timer.textValue             = data.textValue 
 

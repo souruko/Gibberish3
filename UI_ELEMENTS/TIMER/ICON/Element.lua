@@ -179,9 +179,10 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
     -- reset icon
     if self.data.showIcon == true then
 
-        self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
+        local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
+        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
         self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( icon )
+        self.iconControl:SetBackground( resolvedIcon )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
         self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
         self.iconControl:SetVisible(true)

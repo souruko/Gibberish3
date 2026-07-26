@@ -159,9 +159,10 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
     -- reset icon
     if self.data.showIcon == true then
 
-        self.iconControl:SetSize( UTILS.GetImageSize( icon ) )
+        local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
+        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
         self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( icon )
+        self.iconControl:SetBackground( resolvedIcon )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
         self.iconControl:SetVisible(true)
 

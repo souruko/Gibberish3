@@ -63,14 +63,14 @@ function Options2NavTimer:Constructor(navWin, winIdx, timerIdx, timerData, key, 
     self.label:SetText(timerData.description ~= "" and timerData.description or "(timer)")
     self.label:SetMouseVisible(false)
 
-    local has_icon = timerData.icon ~= nil and timerData.icon ~= 0
+    local has_icon = timerData.icon ~= nil and timerData.icon ~= 0 and timerData.icon ~= ""
     self.icon_preview = Turbine.UI.Control()
     self.icon_preview:SetParent(self)
     self.icon_preview:SetSize(ICON_SIZE, ICON_SIZE)
     self.icon_preview:SetTop(math.floor((H - ICON_SIZE) / 2))
     self.icon_preview:SetMouseVisible(false)
     if has_icon then
-        self.icon_preview:SetBackground(timerData.icon)
+        self.icon_preview:SetBackground(UTILS.ResolveTimerIcon(timerData.icon, timerData.useExternalImage))
         self.icon_preview:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     else
         self.icon_preview:SetVisible(false)

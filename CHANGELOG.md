@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.3.20
+- added external image support to Timer > Style > Icon: a new "Use External Image" checkbox lets the Icon field take an image filename (instead of a numeric icon ID), resolved from the `Gibberish3/IMAGES/` folder at render time; the stored value stays a plain filename, the `Gibberish3/IMAGES/` prefix is only added when actually drawing/previewing the icon
+- confirmed supported external image formats: `.tga`, `.dds`, `.png`, `.jpg`
+- the Trigger editor's icon override field is unaffected and still numeric-only
+
 ### 3.3.19
 - fixed `TextToColor` crashing (`attempt to compare number with nil`) while typing a color value with a trailing/empty comma segment (e.g. `255, 255,`); the comma count matched 3 but `tonumber("")` gave `nil`, which then hit a numeric comparison. It now returns `nil` if any component fails to parse
 - fixed Counter windows drifting position after being dragged then resized (e.g. adding/removing a counter) when using a reverse fill direction; the drag handler now compensates for `left_shift`/`top_shift` and keeps `base_left`/`base_top` in sync, matching Timer windows

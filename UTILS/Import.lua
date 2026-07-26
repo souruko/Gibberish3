@@ -561,9 +561,13 @@ function StringToTimer( text, parent )
     end
     
     if timer_attributes["icon"] ~= nil then
-        data.icon              = tonumber(timer_attributes["icon"])
+        data.icon              = tonumber(timer_attributes["icon"]) or timer_attributes["icon"]
     end
-    
+
+    if timer_attributes["useExternalImage"] ~= nil then
+        data.useExternalImage              = ToBool(timer_attributes["useExternalImage"])
+    end
+
     if timer_attributes["showIcon"] ~= nil then
         data.showIcon              = ToBool(timer_attributes["showIcon"])
     end

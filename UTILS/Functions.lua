@@ -61,7 +61,21 @@ function GetImageSize( image )
 	size_item:SetStretchMode(2)
 
 	return size_item:GetSize()
-    
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- resolve a timer icon value, applying the external-image path prefix if enabled
+---------------------------------------------------------------------------------------------------
+function ResolveTimerIcon( icon, useExternalImage )
+
+    if useExternalImage == true and type( icon ) == "string" and icon ~= "" then
+        return "Gibberish3/IMAGES/" .. icon
+    end
+
+    return icon
+
 end
 ---------------------------------------------------------------------------------------------------
 
