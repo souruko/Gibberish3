@@ -227,7 +227,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Shortcut.Constructor.KeyDown( sender, args )
 
-    if args.Action == Turbine.UI.Lotro.Action.Escape then
+    if args.Action == Turbine.UI.Lotro.Action.Escape and Data.moveMode == true then
         Options.MoveChanged( false )
     end
 

@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.4.1
+- fixed pressing Escape briefly freezing the game, especially noticeable when the settings window wasn't even open — it was saving all plugin data every time Escape was pressed
+
 ### 3.4.0
 - added a Settings panel (new gear button in the options editor toolbar) that gathers language, shortcut button size, auto-reload, and tooltip visibility in one place
 - the shortcut button used to open the options window can now be resized between 30 and 80 pixels from the new Settings panel
