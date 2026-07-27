@@ -274,6 +274,7 @@ L[ Language.English ].general = {}
 L[ Language.English ].general.show_tooltip                  = "Show Tooltip"
 L[ Language.English ].general.language                      = "Language"
 L[ Language.English ].general.shortcut_size                 = "Shortcut Size"
+L[ Language.English ].general.show_tooltips                 = "Show Tooltips"
 L[ Language.English ].general.english                       = "English"
 L[ Language.English ].general.german                        = "German"
 L[ Language.English ].general.french                        = "French"

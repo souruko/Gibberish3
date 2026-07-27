@@ -273,6 +273,7 @@ L[ Language.French ].general = {}
 L[ Language.French ].general.show_tooltip                  = "Afficher l'infobulle"
 L[ Language.French ].general.language                      = "Langue"
 L[ Language.French ].general.shortcut_size                 = "Taille du raccourci"
+L[ Language.French ].general.show_tooltips                 = "Afficher les infobulles"
 L[ Language.French ].general.english                       = "Anglais"
 L[ Language.French ].general.german                        = "Allemand"
 L[ Language.French ].general.french                        = "Français"

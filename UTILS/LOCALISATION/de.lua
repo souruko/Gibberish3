@@ -273,6 +273,7 @@ L[ Language.German ].general = {}
 L[ Language.German ].general.show_tooltip                   = "Tooltip Anzeigen"
 L[ Language.German ].general.language                       = "Sprache"
 L[ Language.German ].general.shortcut_size                  = "Größe der Verknüpfung"
+L[ Language.German ].general.show_tooltips                  = "Tooltips anzeigen"
 L[ Language.German ].general.english                        = "Englisch"
 L[ Language.German ].general.german                         = "Deutsch"
 L[ Language.German ].general.french                         = "Französisch"

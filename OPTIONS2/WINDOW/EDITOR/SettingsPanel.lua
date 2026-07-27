@@ -108,6 +108,18 @@ function Options2.Window.SettingsPanel:Constructor()
     self.auto_reload:SetCallback(function(value)
         Options.AutoReloadChanged()
     end)
+
+    -- ── show tooltips ────────────────────────────────────────────────────────
+    self.show_tooltips = Options2.Elements.CheckBoxRow(
+        Options.Defaults.window.basecolor,
+        "general", "show_tooltips", "cb_show_tooltips", ROW_H
+    )
+    self.show_tooltips:SetParent(self)
+    self.show_tooltips:SetPosition(LEFT, TOP + 3 * (ROW_H + ROW_GAP))
+    self.show_tooltips:SetChecked(Data.showTooltips)
+    self.show_tooltips:SetCallback(function(value)
+        Data.showTooltips = value
+    end)
 end
 
 function Options2.Window.SettingsPanel:_RefreshShortcutSize()
@@ -137,6 +149,7 @@ function Options2.Window.SettingsPanel:SizeChanged()
     self.language:SetWidth(w)
     self.shortcut_row:SetWidth(w)
     self.auto_reload:SetWidth(w)
+    self.show_tooltips:SetWidth(w)
 end
 
 function Options2.Window.SettingsPanel:LanguageChanged()
@@ -146,6 +159,7 @@ function Options2.Window.SettingsPanel:LanguageChanged()
     self.language:SetSelection(Data.options.language)
     self.shortcut_label:SetText(UTILS.GetText("general", "shortcut_size"))
     self.auto_reload:LanguageChanged()
+    self.show_tooltips:LanguageChanged()
 end
 
 function Options2.Window.SettingsPanel:AutoReloadChanged()
