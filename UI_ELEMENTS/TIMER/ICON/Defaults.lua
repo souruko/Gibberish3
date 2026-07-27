@@ -12,6 +12,9 @@ Timer[Timer.Types.ICON].Defaults                     = {}
 
 Timer[Timer.Types.ICON].Defaults.description         = ""
 
+Timer[Timer.Types.ICON].Defaults.width               = 32
+Timer[Timer.Types.ICON].Defaults.height              = 32
+
 Timer[Timer.Types.ICON].Defaults.stacking            = Stacking.Multi
 Timer[Timer.Types.ICON].Defaults.reset               = false
 Timer[Timer.Types.ICON].Defaults.loop                = false

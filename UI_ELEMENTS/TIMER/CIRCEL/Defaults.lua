@@ -12,6 +12,9 @@ Timer[Timer.Types.CIRCEL].Defaults                     = {}
 
 Timer[Timer.Types.CIRCEL].Defaults.description         = ""
 
+Timer[Timer.Types.CIRCEL].Defaults.width               = 100
+Timer[Timer.Types.CIRCEL].Defaults.height              = 100
+
 Timer[Timer.Types.CIRCEL].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.CIRCEL].Defaults.reset               = false
 Timer[Timer.Types.CIRCEL].Defaults.loop                = false

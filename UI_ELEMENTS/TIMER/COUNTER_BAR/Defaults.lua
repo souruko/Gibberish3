@@ -12,6 +12,8 @@ Timer[Timer.Types.COUNTER_BAR].Defaults                     = {}
 
 Timer[Timer.Types.COUNTER_BAR].Defaults.description         = ""
 
+Timer[Timer.Types.COUNTER_BAR].Defaults.width                = 150
+Timer[Timer.Types.COUNTER_BAR].Defaults.height               = 20
 
 Timer[Timer.Types.COUNTER_BAR].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.COUNTER_BAR].Defaults.reset               = false

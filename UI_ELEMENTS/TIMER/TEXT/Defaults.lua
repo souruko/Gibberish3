@@ -12,6 +12,9 @@ Timer[Timer.Types.TEXT].Defaults                     = {}
 
 Timer[Timer.Types.TEXT].Defaults.description         = ""
 
+Timer[Timer.Types.TEXT].Defaults.width               = 150
+Timer[Timer.Types.TEXT].Defaults.height              = 20
+
 Timer[Timer.Types.TEXT].Defaults.stacking            = Stacking.Single
 Timer[Timer.Types.TEXT].Defaults.reset               = false
 Timer[Timer.Types.TEXT].Defaults.loop                = false

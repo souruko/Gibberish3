@@ -105,9 +105,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.add_window_btn = make_nav_btn(self.toolbar,
         "Gibberish3/RESOURCES/nav_btn_window.tga",
         function()
-            Window.New("New Window", Window.Types.TIMER_WINDOW)
-            Options.SaveData()
-            self:RebuildFresh()
+            self:ShowAddWindowMenu()
         end)
 
     self.collapse_btn = make_nav_btn(self.toolbar,
@@ -733,6 +731,35 @@ local function raw_row(text, fn)
     return row
 end
 
+local function AddWindowTypeRows(container, lang, on_pick)
+    for _, wt in ipairs({ Window.Types.TIMER_WINDOW, Window.Types.COUNTER_WINDOW }) do
+        local allowed = Window[wt] and Window[wt].Defaults and Window[wt].Defaults.allowedTimers or {}
+        for _, ttype in ipairs(allowed) do
+            local label = (wt == Window.Types.COUNTER_WINDOW)
+                and ((lang.windowType and lang.windowType[wt]) or "Counter")
+                or  (((lang.type and lang.type[ttype]) or ("Type " .. ttype)) .. " Timer")
+            local wt_cap, tt_cap = wt, ttype
+            container:AddRow(raw_row(label, function() on_pick(wt_cap, tt_cap) end))
+        end
+    end
+end
+
+function Options2.Window.Nav.Constructor:ShowAddWindowMenu()
+    local menu = Options2.Elements.RightClickMenu(172)
+    self._current_menu = menu
+
+    local lang = L[Language.Local] or L[Language.English]
+    local nav  = self
+
+    AddWindowTypeRows(menu, lang, function(wt, tt)
+        Window.New("New Window", wt, tt)
+        Options.SaveData()
+        nav:RebuildFresh()
+    end)
+
+    menu:Show()
+end
+
 function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
     self._current_menu = nil
 
@@ -775,16 +802,12 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         end, h))
 
         local win_sub = Options2.Elements.RightClickSubMenu(172)
-        for _, wt in ipairs({ Window.Types.TIMER_WINDOW, Window.Types.COUNTER_WINDOW }) do
-            local wname = (lang.windowType and lang.windowType[wt]) or "Window"
-            local wt_cap = wt
-            win_sub:AddRow(raw_row(wname, function()
-                local wi = Window.New("New Window", wt_cap)
-                Data.window[wi].folder = fi
-                Options.SaveData()
-                nav:RebuildFresh()
-            end))
-        end
+        AddWindowTypeRows(win_sub, lang, function(wt, tt)
+            local wi = Window.New("New Window", wt, tt)
+            Data.window[wi].folder = fi
+            Options.SaveData()
+            nav:RebuildFresh()
+        end)
         menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_window", win_sub, h), win_sub)
 
         local trg_sub = trig_submenu(fd)
@@ -861,22 +884,12 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local wi = nd.windowIndex
         local wd = nd.data
 
-        local allowed = Window[wd.type] and Window[wd.type].Defaults
-            and Window[wd.type].Defaults.allowedTimers
-        if allowed ~= nil and #allowed > 0 then
-            local timer_sub = Options2.Elements.RightClickSubMenu(172)
-            for _, ttype in ipairs(allowed) do
-                local tname = (lang.type and lang.type[ttype]) or ("Timer " .. ttype)
-                local tt_cap = ttype
-                timer_sub:AddRow(raw_row(tname, function()
-                    local tmd = Timer.New(tt_cap)
-                    Window.AddTimer(wi, tmd)
-                    Options.SaveData()
-                    nav:RebuildFresh()
-                end))
-            end
-            menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_timer", timer_sub, h), timer_sub)
-        end
+        menu:AddRow(Options2.Elements.Row("nav_menu", "add_timer", function()
+            local tmd = Timer.New(wd.timerType)
+            Window.AddTimer(wi, tmd)
+            Options.SaveData()
+            nav:RebuildFresh()
+        end, h))
 
         local trg_sub = trig_submenu(wd)
         menu:AddSubRow(Options2.Elements.SubRow("nav_menu", "add_trigger", trg_sub, h), trg_sub)

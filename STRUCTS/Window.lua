@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------------------------------------
 -- create new window struct and return index
 ---------------------------------------------------------------------------------------------------
-function Window.New(name, type)
+function Window.New(name, type, timerType)
 
     local window = {}
 
@@ -33,6 +33,15 @@ function Window.New(name, type)
     window.top                   = Window[type].Defaults.top
     window.width                 = Window[type].Defaults.width
     window.height                = Window[type].Defaults.height
+
+    if timerType ~= nil then
+        local td = Timer[timerType] and Timer[timerType].Defaults
+        if td ~= nil and td.width ~= nil and td.height ~= nil then
+            window.width  = td.width
+            window.height = td.height
+        end
+    end
+
     window.frame                 = Window[type].Defaults.frame
     window.spacing               = Window[type].Defaults.spacing
     window.direction             = Window[type].Defaults.direction
@@ -66,7 +75,7 @@ function Window.New(name, type)
     window.thresholdFont         = Window[type].Defaults.thresholdFont
     window.thresholdFontSize     = Window[type].Defaults.thresholdFontSize
 
-    window.timerType             = Window[type].Defaults.allowedTimers[1]
+    window.timerType             = timerType or Window[type].Defaults.allowedTimers[1]
     window.timerList             = {}
 
     -- create trigger tables

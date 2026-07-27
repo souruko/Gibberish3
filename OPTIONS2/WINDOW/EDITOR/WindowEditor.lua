@@ -78,6 +78,10 @@ local function make_general_tab(data, bc)
                     td.type = newTimerType
                 end
             end
+            local newDefaults = Timer[newTimerType] and Timer[newTimerType].Defaults
+            if newDefaults ~= nil and newDefaults.width ~= nil and newDefaults.height ~= nil then
+                data._pendingSizeReset = { width = newDefaults.width, height = newDefaults.height }
+            end
         end
         data.description           = desc:GetText()
         data.saveGlobaly           = saveGlobaly:IsChecked()
@@ -395,6 +399,13 @@ end
 
 function Options2.Window.WindowEditor:Save()
     for _, fn in ipairs(self._tab_save) do fn() end
+
+    if self.data._pendingSizeReset ~= nil then
+        self.data.width  = self.data._pendingSizeReset.width
+        self.data.height = self.data._pendingSizeReset.height
+        self.data._pendingSizeReset = nil
+        self._tab_load[2]()
+    end
 
     Options.SaveData()
     Options.DataChanged(self.winIndex)
