@@ -87,8 +87,11 @@ function Options.AutoReloadChanged()
 
     Data.autoReload = not( Data.autoReload )
 
-    -- shortcut
-    Options.Shortcut.Object:AutoReloadChanged()
+    -- settings panel
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.editor_panel ~= nil and obj.editor_panel.settings_panel ~= nil then
+        obj.editor_panel.settings_panel:AutoReloadChanged()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

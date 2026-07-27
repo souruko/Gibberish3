@@ -272,6 +272,7 @@ L[ Language.German ].options.opacityPassiv                  = "Deckkraft Passiv"
 L[ Language.German ].general = {}
 L[ Language.German ].general.show_tooltip                   = "Tooltip Anzeigen"
 L[ Language.German ].general.language                       = "Sprache"
+L[ Language.German ].general.shortcut_size                  = "Größe der Verknüpfung"
 L[ Language.German ].general.english                        = "Englisch"
 L[ Language.German ].general.german                         = "Deutsch"
 L[ Language.German ].general.french                         = "Französisch"
@@ -362,8 +363,10 @@ L[ Language.German ].tooltip.button_collect_chat            = "Eingehende Chatna
 L[ Language.German ].tooltip.cb_only_debuffs                = "Beim Sammeln von Effekten nur Debuffs aufzeichnen. Buffs werden ignoriert."
 L[ Language.German ].tooltip.cb_only_say                    = "Beim Sammeln von Nachrichten nur Nachrichten aus dem Sagen-Kanal aufzeichnen."
 L[ Language.German ].tooltip.cb_show_tooltips               = "Tooltips im Optionsfenster ein- oder ausblenden."
+L[ Language.German ].tooltip.cb_auto_reload                 = "Lädt das Plugin automatisch neu, wenn im Chat eine passende Neuladen-Anfrage erkannt wird."
 
 L[ Language.German ].tooltip.dd_language                    = "Legt die Anzeigesprache des Optionsfensters fest. Hat keinen Einfluss auf die Sprache des Spielclients."
+L[ Language.German ].tooltip.dd_shortcut_size                = "Größe in Pixeln der verschiebbaren Verknüpfungsschaltfläche, mit der dieses Optionsfenster geöffnet wird."
 
 L[ Language.German ].tooltip.trg_description                = "Internes Label, das in der Auslöserliste angezeigt wird. Hat keinen Einfluss auf das Verhalten."
 L[ Language.German ].tooltip.trg_token                      = "Der Text oder das Muster, gegen das dieser Auslöser abgeglichen wird.\nFür Chat-Auslöser: gegen den Nachrichtentext geprüft.\nFür Effekt-Auslöser: gegen den Effektnamen geprüft."

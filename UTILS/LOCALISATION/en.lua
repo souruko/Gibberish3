@@ -273,6 +273,7 @@ L[ Language.English ].options.opacityPassiv                 = "Opacity Passiv"
 L[ Language.English ].general = {}
 L[ Language.English ].general.show_tooltip                  = "Show Tooltip"
 L[ Language.English ].general.language                      = "Language"
+L[ Language.English ].general.shortcut_size                 = "Shortcut Size"
 L[ Language.English ].general.english                       = "English"
 L[ Language.English ].general.german                        = "German"
 L[ Language.English ].general.french                        = "French"
@@ -363,8 +364,10 @@ L[ Language.English ].tooltip.button_collect_chat           = "Record incoming c
 L[ Language.English ].tooltip.cb_only_debuffs               = "Only record debuffs when collecting effects. Buffs will be ignored."
 L[ Language.English ].tooltip.cb_only_say                   = "Only record messages from the Say channel when collecting chat."
 L[ Language.English ].tooltip.cb_show_tooltips              = "Show or hide tooltips throughout the options panel."
+L[ Language.English ].tooltip.cb_auto_reload                = "Automatically reload the plugin when a matching reload request message is seen in chat."
 
 L[ Language.English ].tooltip.dd_language                   = "Sets the display language of the options panel. Does not affect the game client language."
+L[ Language.English ].tooltip.dd_shortcut_size               = "Size in pixels of the draggable shortcut button used to open this options panel."
 
 L[ Language.English ].tooltip.trg_description               = "Internal label shown in the trigger list. Has no effect on behaviour."
 L[ Language.English ].tooltip.trg_token                     = "The text or pattern this trigger matches against.\nFor Chat triggers: matched against the message text.\nFor Effect triggers: matched against the effect name."

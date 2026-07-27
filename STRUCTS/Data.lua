@@ -50,6 +50,7 @@ function DataFunction.New()
     data.options.shortcut           = {}
     data.options.shortcut.left      = 0.2
     data.options.shortcut.top       = 0.2
+    data.options.shortcut.size      = Options.Defaults.shortcut.size
 
     -- options window savedata
     data.options.window             = {}

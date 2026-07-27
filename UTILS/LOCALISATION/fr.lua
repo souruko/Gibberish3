@@ -272,6 +272,7 @@ L[ Language.French ].options.opacityPassiv                 = "Opacité passive"
 L[ Language.French ].general = {}
 L[ Language.French ].general.show_tooltip                  = "Afficher l'infobulle"
 L[ Language.French ].general.language                      = "Langue"
+L[ Language.French ].general.shortcut_size                 = "Taille du raccourci"
 L[ Language.French ].general.english                       = "Anglais"
 L[ Language.French ].general.german                        = "Allemand"
 L[ Language.French ].general.french                        = "Français"
@@ -362,8 +363,10 @@ L[ Language.French ].tooltip.button_collect_chat           = "Enregistrer les me
 L[ Language.French ].tooltip.cb_only_debuffs               = "N'enregistrer que les effets négatifs lors de la collecte. Les buffs seront ignorés."
 L[ Language.French ].tooltip.cb_only_say                   = "N'enregistrer que les messages du canal Dire lors de la collecte de chat."
 L[ Language.French ].tooltip.cb_show_tooltips              = "Afficher ou masquer les infobulles dans le panneau d'options."
+L[ Language.French ].tooltip.cb_auto_reload                = "Recharge automatiquement le plugin lorsqu'un message de demande de rechargement correspondant est vu dans le chat."
 
 L[ Language.French ].tooltip.dd_language                   = "Définit la langue d'affichage du panneau d'options. N'affecte pas la langue du client de jeu."
+L[ Language.French ].tooltip.dd_shortcut_size               = "Taille en pixels du bouton de raccourci déplaçable utilisé pour ouvrir ce panneau d'options."
 
 L[ Language.French ].tooltip.trg_description               = "Label interne affiché dans la liste des déclencheurs. N'a aucun effet sur le comportement."
 L[ Language.French ].tooltip.trg_token                     = "Le texte ou le motif auquel ce déclencheur est comparé.\nPour les déclencheurs de chat : comparé au texte du message.\nPour les déclencheurs d'effets : comparé au nom de l'effet."

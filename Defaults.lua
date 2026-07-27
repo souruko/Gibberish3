@@ -27,6 +27,9 @@ Options.Defaults.timer.labelSpacing  = 4
 -- shortcut
 Options.Defaults.shortcut            = {}
 Options.Defaults.shortcut.size       = 50
+Options.Defaults.shortcut.min_size   = 30
+Options.Defaults.shortcut.max_size   = 80
+Options.Defaults.shortcut.size_step  = 5
 Options.Defaults.shortcut.menu_width = 125
 
 -- move window

@@ -12,10 +12,13 @@ Options.Shortcut.Constructor = class(Turbine.UI.Window)
 function Options.Shortcut.Constructor:Constructor()
 	Turbine.UI.Window.Constructor( self )
 
-    -- set self
+    -- set self (control must start at the image's native size before the
+    -- background/stretch mode are applied, then be resized to the saved size)
+    local size = Data.options.shortcut.size or Options.Defaults.shortcut.size
     self:SetSize( Options.Defaults.shortcut.size, Options.Defaults.shortcut.size )
     self:SetPosition( UTILS.ScreenRatioToPixel( Data.options.shortcut.left, Data.options.shortcut.top ) )
     self:SetBackground("Gibberish3/RESOURCES/gibberish_new_icon.tga")
+    self:SetStretchMode(1)
 
     -- mouse interaction
     self.dragging = false
@@ -106,13 +109,6 @@ function Options.Shortcut.Constructor:Constructor()
         Options.Defaults.rc_menu.item_height )
     self.rc_move:SetChecked( Data.moveMode )
 
-    -- right click auto_reload
-    self.rc_auto = Options2.Elements.CheckRow( "shortcut", "auto_reload", function ()
-            Options.AutoReloadChanged()
-        end,
-        Options.Defaults.rc_menu.item_height )
-    self.rc_auto:SetChecked( Data.autoReload )
-
     -- right click track_group
     self.rc_group = Options2.Elements.CheckRow( "shortcut", "track_group", function ()
             Options.TrackGroupChanged()
@@ -133,12 +129,14 @@ function Options.Shortcut.Constructor:Constructor()
     self.rightClickMenu:AddRow( self.rc_options2 )
     self.rightClickMenu:AddSeperator()
     self.rightClickMenu:AddCheckRow( self.rc_move )
-    self.rightClickMenu:AddCheckRow( self.rc_auto )
     self.rightClickMenu:AddSeperator()
     self.rightClickMenu:AddCheckRow( self.rc_group )
     self.rightClickMenu:AddCheckRow( self.rc_target )
 
     self.menu_height = self.rightClickMenu.background:GetHeight()
+
+    -- resize to the saved target size now that background/stretch mode are set
+    self:SetIconSize( size )
 
     self:SetWantsKeyEvents(true)
     self:SetVisible( true )
@@ -151,6 +149,7 @@ function Options.Shortcut.Constructor:GetMenuPos()
 
     -- get shortcut position
     local left, top = self:GetPosition()
+    local size = self:GetWidth()
     local orientation = nil
 
     local horizontal = Options.ScreenWidth  / 2
@@ -163,18 +162,18 @@ function Options.Shortcut.Constructor:GetMenuPos()
 
     elseif left <= horizontal and top > vertical then
         orientation = Turbine.UI.ContentAlignment.BottomLeft
-        left = left + Options.Defaults.shortcut.size
+        left = left + size
         top = top - 1000
 
     elseif left <= horizontal and top <= vertical then
         orientation = Turbine.UI.ContentAlignment.TopLeft
-        left = left + Options.Defaults.shortcut.size
-        top = top + Options.Defaults.shortcut.size
+        left = left + size
+        top = top + size
 
     elseif left > horizontal and top <= vertical then
         orientation = Turbine.UI.ContentAlignment.TopRight
         left = left - 1000
-        top = top + Options.Defaults.shortcut.size
+        top = top + size
 
     end
 
@@ -192,14 +191,6 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Shortcut.Constructor:AutoReloadChanged()
-
-    self.rc_auto:SetChecked( Data.autoReload )
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
 function Options.Shortcut.Constructor:TrackGroupChanged()
 
     self.rc_group:SetChecked( Data.trackGroupEffects )
@@ -211,6 +202,16 @@ end
 function Options.Shortcut.Constructor:TrackTargetChanged()
 
     self.rc_target:SetChecked( Data.trackTargetEffects )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function Options.Shortcut.Constructor:SetIconSize( size )
+
+    self:SetSize( size, size )
 
 end
 ---------------------------------------------------------------------------------------------------

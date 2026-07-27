@@ -4,7 +4,6 @@ local BTN_SIZE        = 26
 local BTN_ICON        = 16
 local BTN_TOP         = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
 local SPACING         = 6
-local LANG_DROPDOWN_W = 90
 
 local function make_editor_btn(parent, icon_path, click_fn)
     local btn = Turbine.UI.Control()
@@ -93,20 +92,12 @@ function Options2.Window.Editor.Constructor:Constructor()
     self.saved_label:SetVisible(false)
     self.saved_label:SetMouseVisible(false)
 
-    -- language dropdown on the right side of the toolbar
-    local lang_top = math.floor((TOOLBAR_H - 20) / 2)
-
-    self.lang_dropdown = Options2.Elements.Dropdown(LANG_DROPDOWN_W)
-    self.lang_dropdown:SetParent(self.toolbar)
-    self.lang_dropdown:SetTop(lang_top)
-    self.lang_dropdown:SetHeight(20)
-    self.lang_dropdown:AddItem("general", "english", Language.English)
-    self.lang_dropdown:AddItem("general", "german",  Language.German)
-    self.lang_dropdown:AddItem("general", "french",  Language.French)
-    self.lang_dropdown:SetSelection(Data.options.language)
-    self.lang_dropdown.SelectionChanged = function(sender, index, value)
-        Options.LanguageChanged(value)
-    end
+    -- settings button on the right side of the toolbar
+    self.btn_settings = make_editor_btn(self.toolbar,
+        "Gibberish3/RESOURCES/settings.tga",
+        function()
+            self:_ToggleSettings()
+        end)
 
     -- separator line below toolbar
     self.toolbar_sep = Turbine.UI.Control()
@@ -127,6 +118,11 @@ function Options2.Window.Editor.Constructor:Constructor()
     self.placeholder:SetForeColor(Options.Defaults.window.textdark)
     self.placeholder:SetText(UTILS.GetText("options2", "no_selection"))
     self.placeholder:SetMouseVisible(false)
+
+    -- ── settings panel (overlays content area, toggled by btn_settings) ────────
+    self.settings_panel = Options2.Window.SettingsPanel()
+    self.settings_panel:SetParent(self)
+    self.settings_panel:SetVisible(false)
 end
 
 function Options2.Window.Editor.Constructor:SizeChanged()
@@ -140,10 +136,10 @@ function Options2.Window.Editor.Constructor:SizeChanged()
 
     local vdiv_left  = SPACING * 3 + BTN_SIZE * 2
     self.vdiv:SetLeft(vdiv_left)
-    local crumb_left  = vdiv_left + SPACING + 4
-    local lang_left   = w - SPACING - LANG_DROPDOWN_W
-    self.lang_dropdown:SetLeft(lang_left)
-    local crumb_right = lang_left - SPACING
+    local crumb_left    = vdiv_left + SPACING + 4
+    local settings_left = w - SPACING - BTN_SIZE
+    self.btn_settings:SetLeft(settings_left)
+    local crumb_right = settings_left - SPACING
     self.breadcrumb:SetPosition(crumb_left, 0)
     self.breadcrumb:SetWidth(crumb_right - crumb_left)
     self.saved_label:SetPosition(crumb_left, 0)
@@ -152,6 +148,9 @@ function Options2.Window.Editor.Constructor:SizeChanged()
     self.content_area:SetPosition(0, content_top)
     self.content_area:SetSize(w, content_h)
     self.placeholder:SetSize(w, content_h)
+
+    self.settings_panel:SetPosition(0, content_top)
+    self.settings_panel:SetSize(w, content_h)
 
     if self.content ~= nil then
         self.content:SetSize(w, content_h)
@@ -170,10 +169,21 @@ function Options2.Window.Editor.Constructor:_HideSaved()
     self.breadcrumb:SetVisible(true)
 end
 
+-- ── settings panel ────────────────────────────────────────────────────────────
+
+function Options2.Window.Editor.Constructor:_ToggleSettings()
+    self.settings_panel:SetVisible(not self.settings_panel:IsVisible())
+end
+
+function Options2.Window.Editor.Constructor:_HideSettings()
+    self.settings_panel:SetVisible(false)
+end
+
 -- ── node switching ────────────────────────────────────────────────────────────
 
 function Options2.Window.Editor.Constructor:SetNode(nodeData)
     self:_HideSaved()
+    self:_HideSettings()
 
     local prev_tab = nil
     local prev_nt  = self.nodeData and self.nodeData.nodeType
@@ -321,8 +331,7 @@ end
 
 function Options2.Window.Editor.Constructor:LanguageChanged()
     if self.toolbar == nil then return end
-    self.lang_dropdown:LanguageChanged()
-    self.lang_dropdown:SetSelection(Data.options.language)
+    self.settings_panel:LanguageChanged()
     self.placeholder:SetText(UTILS.GetText("options2", "no_selection"))
     if self.content ~= nil and self.content.LanguageChanged ~= nil then
         self.content:LanguageChanged()
