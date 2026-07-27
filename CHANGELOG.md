@@ -1,5 +1,16 @@
 # Changelog
 
+### 3.4.0
+- added a Settings panel (new gear button in the options editor toolbar) that gathers language, shortcut button size, auto-reload, and tooltip visibility in one place
+- the shortcut button used to open the options window can now be resized between 30 and 80 pixels from the new Settings panel
+- added a "Show Tooltips" toggle to hide tooltips throughout the options panel if you don't want them
+- the auto-reload toggle moved from the shortcut button's right-click menu into the new Settings panel
+- the language dropdown moved from the options editor toolbar into the new Settings panel
+- adding a new window from the Nav tree now opens a menu to pick its type and starting timer type, instead of always creating a blank default window
+- new windows and timers now start at a sensible default size for their type instead of one fixed size for everything
+- changing a window's timer type in the editor now also resizes it to match that type's default dimensions
+- right-click "Add Timer" on a window now adds a timer directly instead of prompting for a type first
+
 ### 3.3.20
 - added external image support to Timer > Style > Icon: a new "Use External Image" checkbox lets the Icon field take an image filename (instead of a numeric icon ID), resolved from the `Gibberish3/IMAGES/` folder at render time; the stored value stays a plain filename, the `Gibberish3/IMAGES/` prefix is only added when actually drawing/previewing the icon
 - confirmed supported external image formats: `.tga`, `.dds`, `.png`, `.jpg`
