@@ -169,11 +169,11 @@ function Options2.Window.Constructor:Constructor()
 
     -- ── title bar extras (left of the close button) ─────────────────────────
     self.btn_structure = make_title_btn(self.titlebar,
-        "Gibberish3/RESOURCES/arrow_left.tga", "o2_structure",
+        "Gibberish3/RESOURCES/col_structure.tga", "o2_structure",
         function() self:_SetStructureCollapsed(not self.structureCollapsed) end)
 
     self.btn_library = make_title_btn(self.titlebar,
-        "Gibberish3/RESOURCES/arrow_right.tga", "o2_library",
+        "Gibberish3/RESOURCES/col_library.tga", "o2_library",
         function() self:_SetLibraryCollapsed(not self.libraryCollapsed) end)
 
     -- centred path of whatever the editor is showing

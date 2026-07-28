@@ -29,7 +29,7 @@ function Options2ContentCondition:Constructor(contentWin, winIdx, timerIdx, cond
     self.sel_rail:SetWidth(P.RAIL_W)
     self.sel_rail:SetVisible(false)
 
-    self.mark = P.MakeChildMark(self, Options.Defaults.window.color_cond)
+    self.mark = P.MakeIcon(self, P.ICON.condition, P.CHILD_H)
     self.mark:SetLeft(P.CHILD_TEXT_X)
 
     self.label = P.MakeChildLabel(self, Turbine.UI.Lotro.Font.Verdana10,
@@ -77,7 +77,7 @@ function Options2ContentCondition:_Layout()
     local w = self:GetWidth()
     if w <= 0 then return end
 
-    local text_left = P.CHILD_TEXT_X + P.CHILD_MARK + P.CHILD_GAP
+    local text_left = P.CHILD_TEXT_X + P.ICON_SIZE + P.CHILD_GAP
 
     local x = w - P.CHILD_PAD - P.CHILD_DOT
     self.box:SetLeft(x)

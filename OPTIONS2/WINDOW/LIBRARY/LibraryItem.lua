@@ -9,11 +9,9 @@ local ICON_SZ = 32          -- native size of a game icon; never scaled
 local ITEM_H  = ICON_SZ + 4
 local PAD     = 8
 local GAP     = 8
-local PIN_W   = 14
+local PIN_W   = 16
 local USE_W   = 34
 local USE_H   = 20
-
-local COL_PINNED = Turbine.UI.Color(1.0, 0.85, 0.2)
 
 Options2.Library.LibraryItem = class(Turbine.UI.Control)
 function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
@@ -55,12 +53,11 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     end
 
     -- pin star: keeps the entry in the persistent collection
-    self.pin_btn = Turbine.UI.Button()
+    self.pin_btn = Turbine.UI.Control()
     self.pin_btn:SetParent(self)
     self.pin_btn:SetSize(PIN_W, PIN_W)
-    self.pin_btn:SetFont(Turbine.UI.Lotro.Font.Verdana12)
     self.pin_btn:SetMouseVisible(true)
-    self.pin_btn.Click = function() self:_TogglePin() end
+    self.pin_btn.MouseClick = function() self:_TogglePin() end
 
     -- shown on the selected row: writes this entry into the armed field
     self.use_btn = Turbine.UI.Control()
@@ -137,13 +134,9 @@ function Options2.Library.LibraryItem:SizeChanged()
 end
 
 function Options2.Library.LibraryItem:_RefreshPin()
-    if self.data.persistent then
-        self.pin_btn:SetText("*")
-        self.pin_btn:SetForeColor(COL_PINNED)
-    else
-        self.pin_btn:SetText("o")
-        self.pin_btn:SetForeColor(Options.Defaults.window.off_border)
-    end
+    self.pin_btn:SetBackground(self.data.persistent
+        and "Gibberish3/RESOURCES/pin_on.tga"
+        or  "Gibberish3/RESOURCES/pin_off.tga")
 end
 
 function Options2.Library.LibraryItem:_Refresh()

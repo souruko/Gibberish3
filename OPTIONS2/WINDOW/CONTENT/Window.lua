@@ -11,7 +11,7 @@ local SEP_H    = 1
 local SCROLL_W = 10
 local PAD      = 10
 local GAP      = 8
-local MARK     = 11
+local MARK     = 16
 local BTN_H    = 20
 local BTN_GAP  = 4
 local BTN_PAD  = 8
@@ -108,11 +108,7 @@ function Options2.Window.Content.Constructor:Constructor()
     self.head_rail:SetVisible(false)
     self.head_rail:SetMouseVisible(false)
 
-    self.head_mark = Turbine.UI.Control()
-    self.head_mark:SetParent(self.header)
-    self.head_mark:SetSize(MARK, MARK)
-    self.head_mark:SetTop(math.floor((HEADER_H - MARK) / 2))
-    self.head_mark:SetMouseVisible(false)
+    self.head_mark = Options2.Elements.RowParts.MakeIcon(self.header, nil, HEADER_H)
 
     self.head_name = Turbine.UI.Label()
     self.head_name:SetParent(self.header)
@@ -486,7 +482,7 @@ function Options2.Window.Content.Constructor:_RefreshHeader()
     local c = self.container
 
     if c == nil then
-        self.head_mark:SetBackColor(nil)
+        self.head_mark:SetVisible(false)
         self.head_name:SetText("")
         self.head_meta:SetText("")
         self.btn_timer:SetVisible(false)
@@ -496,8 +492,8 @@ function Options2.Window.Content.Constructor:_RefreshHeader()
     end
 
     local is_window = (c.nodeType == "window")
-    self.head_mark:SetBackColor(is_window and Options.Defaults.window.color_window
-                                          or  Options.Defaults.window.color_folder)
+    self.head_mark:SetBackground(Options2.Elements.RowParts.IconForNode(c.nodeType))
+    self.head_mark:SetVisible(true)
 
     local name = c.data.name
     if name == nil or name == "" then

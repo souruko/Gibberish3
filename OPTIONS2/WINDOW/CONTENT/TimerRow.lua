@@ -33,7 +33,7 @@ function Options2ContentTimer:Constructor(contentWin, winIdx, timerIdx, timerDat
 
     -- the timer's own marker, in the timer colour: the window owns the display
     -- type, so there is nothing per-timer to distinguish here
-    self.marker = P.MakeSquare(self, MARK, MARK, Options.Defaults.window.color_timer)
+    self.marker = P.MakeIcon(self, P.ICON.timer, H, MARK)
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)

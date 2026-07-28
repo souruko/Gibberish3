@@ -15,10 +15,9 @@ RowParts.PAD         = 8
 RowParts.GAP         = 6
 RowParts.RAIL_W      = 3
 RowParts.RAIL_IDLE_W = 2
-RowParts.CHEVRON     = 11   -- slot width for the expand marker
-RowParts.NODE_ICON   = 13   -- slot width for the node marker
-RowParts.CHEV_SQUARE = 7
-RowParts.NODE_SQUARE = 11
+RowParts.CHEVRON     = 16   -- slot width for the expand marker
+RowParts.NODE_ICON   = 16   -- slot width for the node marker
+RowParts.ICON_SIZE   = 16   -- every panel glyph is authored at this size
 RowParts.BOX         = 9
 RowParts.BOLT        = 4
 
@@ -237,6 +236,45 @@ function RowParts.ApplySelected(row, selected)
     row.selected = selected
     row.rail:SetWidth(selected and RowParts.RAIL_W or RowParts.RAIL_IDLE_W)
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
+end
+
+-- Panel glyphs, all 16x16 and authored in their node colour.
+RowParts.ICON = {
+    folder    = "Gibberish3/RESOURCES/node_folder.tga",
+    window    = "Gibberish3/RESOURCES/node_window.tga",
+    timer     = "Gibberish3/RESOURCES/node_timer.tga",
+    trigger   = "Gibberish3/RESOURCES/node_trigger.tga",
+    condition = "Gibberish3/RESOURCES/node_condition.tga",
+    expanded  = "Gibberish3/RESOURCES/chevron_down.tga",
+    collapsed = "Gibberish3/RESOURCES/chevron_right.tga",
+}
+
+-- the glyph for a node type, for headers that show what is selected
+function RowParts.IconForNode(nodeType)
+    if nodeType == "folder"    then return RowParts.ICON.folder end
+    if nodeType == "window"    then return RowParts.ICON.window end
+    if nodeType == "timer"     then return RowParts.ICON.timer end
+    if nodeType == "condition" then return RowParts.ICON.condition end
+    return RowParts.ICON.trigger
+end
+
+-- A panel glyph, drawn at its native 16x16 inside a slot.
+--
+-- No stretch (these live in scrolled ListBoxes) and no Overlay blend: the art
+-- is already coloured, and Overlay would render it invisible on the dark panel.
+function RowParts.MakeIcon(row, path, row_h, slot)
+    local S = RowParts.ICON_SIZE
+    local icon = Turbine.UI.Control()
+    icon:SetParent(row)
+    icon:SetSize(S, S)
+    icon:SetTop(math.floor(((row_h or RowParts.ROW_H) - S) / 2))
+    icon:SetMouseVisible(false)
+    if path ~= nil then icon:SetBackground(path) end
+
+    icon._inset = math.floor(((slot or S) - S) / 2)
+    function icon:SetSlotLeft(x) self:SetLeft(x + self._inset) end
+
+    return icon
 end
 
 -- Draw a Turbine image at its native size, with no stretching.

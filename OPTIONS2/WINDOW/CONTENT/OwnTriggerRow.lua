@@ -37,12 +37,7 @@ function Options2ContentOwnTrigger:Constructor(contentWin, nodeType, ownerIdx, t
     self.rail = P.MakeRailAt(self, 0, Options.Defaults.window.color_trigger, H)
     self.rail:SetWidth(P.RAIL_IDLE_W)
 
-    self.bolt = Turbine.UI.Control()
-    self.bolt:SetParent(self)
-    self.bolt:SetSize(BOLT, BOLT)
-    self.bolt:SetTop(math.floor((H - BOLT) / 2))
-    self.bolt:SetBackColor(Options.Defaults.window.color_trigger)
-    self.bolt:SetMouseVisible(false)
+    self.bolt = P.MakeIcon(self, P.ICON.trigger, H)
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
@@ -98,7 +93,7 @@ function Options2ContentOwnTrigger:_Layout()
     if w <= 0 then return end
 
     self.bolt:SetLeft(PAD)
-    local text_left = PAD + BOLT + GAP
+    local text_left = PAD + Options2.Elements.RowParts.ICON_SIZE + GAP
 
     local x = w - PAD - BOX
     self.box:SetLeft(x)

@@ -47,13 +47,9 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
 
     self.rail = P.MakeRail(self, Options.Defaults.window.color_folder)
 
-    -- filled square = expanded, hollow square = collapsed
-    self.chevron = P.MakeSquare(self, P.CHEV_SQUARE, P.CHEVRON,
-        Options.Defaults.window.color_folder)
-    self.chevron:SetFilled(expanded)
-
-    self.icon = P.MakeSquare(self, P.NODE_SQUARE, P.NODE_ICON,
-        Options.Defaults.window.color_folder)
+    self.chevron = P.MakeIcon(self,
+        expanded and P.ICON.expanded or P.ICON.collapsed, P.ROW_H, P.CHEVRON)
+    self.icon = P.MakeIcon(self, P.ICON.folder, P.ROW_H, P.NODE_ICON)
 
     self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_folder,
         Turbine.UI.ContentAlignment.MiddleLeft)
@@ -61,7 +57,8 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
     self.count = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
         Turbine.UI.ContentAlignment.MiddleRight)
 
-    self.bolt = P.MakeBolt(self)
+    self.bolt = P.MakeIcon(self, P.ICON.trigger, P.ROW_H)
+    self.bolt:SetVisible(false)
 
     self.box = P.MakeEnableBox(self, function()
         local indices = Folder.GetWindowIndices(folderIdx)
@@ -84,7 +81,7 @@ function Options2NavFolder:_Sync(expanded)
     local fd = self.nodeData.data
     local fi = self.nodeData.folderIndex
 
-    self.chevron:SetFilled(expanded)
+    self.chevron:SetBackground(expanded and P.ICON.expanded or P.ICON.collapsed)
     self._name = (fd.name ~= nil and fd.name ~= "") and fd.name
         or UTILS.GetText("options2", "unnamed_folder")
     self.count:SetText(tostring(child_count(fi)))
@@ -113,7 +110,7 @@ function Options2NavFolder:_Layout()
     self.count:SetWidth(22)
 
     if self.bolt:IsVisible() then
-        x = x - P.GAP - P.BOLT
+        x = x - P.GAP - P.ICON_SIZE
         self.bolt:SetLeft(x)
     end
 
@@ -136,7 +133,8 @@ function Options2NavFolder:GetKey()       return self.key end
 function Options2NavFolder:IsExpandable() return true end
 
 function Options2NavFolder:SetExpanded(v)
-    self.chevron:SetFilled(v)
+    local P = Options2.Elements.RowParts
+    self.chevron:SetBackground(v and P.ICON.expanded or P.ICON.collapsed)
 end
 
 function Options2NavFolder:RefreshEnabled()

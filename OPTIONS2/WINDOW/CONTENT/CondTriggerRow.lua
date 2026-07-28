@@ -34,7 +34,7 @@ function Options2ContentCondTrigger:Constructor(contentWin, winIdx, timerIdx, co
     self.sel_rail:SetWidth(P.RAIL_W)
     self.sel_rail:SetVisible(false)
 
-    self.mark = P.MakeChildMark(self, Options.Defaults.window.color_trigger)
+    self.mark = P.MakeIcon(self, P.ICON.trigger, P.CHILD_H)
     self.mark:SetLeft(P.COND_TEXT_X)
 
     self.label = P.MakeChildLabel(self, Turbine.UI.Lotro.Font.Verdana10,
@@ -79,7 +79,7 @@ function Options2ContentCondTrigger:_Layout()
     local w = self:GetWidth()
     if w <= 0 then return end
 
-    local text_left = P.COND_TEXT_X + P.CHILD_MARK + P.CHILD_GAP
+    local text_left = P.COND_TEXT_X + P.ICON_SIZE + P.CHILD_GAP
 
     local x = w - P.CHILD_PAD - P.CHILD_DOT
     self.box:SetLeft(x)

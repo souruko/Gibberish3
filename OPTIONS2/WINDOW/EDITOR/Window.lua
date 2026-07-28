@@ -2,7 +2,7 @@ local HEADER_H = 34
 local SEP_H    = 1
 local PAD      = 10
 local GAP      = 8
-local MARK     = 11
+local MARK     = 16
 local BTN_H    = 22
 
 -- Save / Revert: a bordered pill, Save picked out in the accent colour
@@ -49,15 +49,6 @@ local function make_action_btn(parent, border, fg, click_fn, tooltip)
     return btn
 end
 
--- node marker colour per node type, matching the two list columns
-local function node_color(nt)
-    if nt == "folder" then return Options.Defaults.window.color_folder end
-    if nt == "window" then return Options.Defaults.window.color_window end
-    if nt == "timer"  then return Options.Defaults.window.color_timer end
-    if nt == "condition" then return Options.Defaults.window.color_cond end
-    return Options.Defaults.window.color_trigger
-end
-
 Options2.Window.Editor = {}
 Options2.Window.Editor.Constructor = class(Turbine.UI.Control)
 
@@ -75,12 +66,9 @@ function Options2.Window.Editor.Constructor:Constructor()
     self.toolbar:SetBackColor(Options.Defaults.window.bg_sunken)
     self.toolbar:SetMouseVisible(false)
 
-    self.head_mark = Turbine.UI.Control()
-    self.head_mark:SetParent(self.toolbar)
-    self.head_mark:SetSize(MARK, MARK)
-    self.head_mark:SetPosition(PAD, math.floor((HEADER_H - MARK) / 2))
+    self.head_mark = Options2.Elements.RowParts.MakeIcon(self.toolbar, nil, HEADER_H)
+    self.head_mark:SetLeft(PAD)
     self.head_mark:SetVisible(false)
-    self.head_mark:SetMouseVisible(false)
 
     self.head_name = Turbine.UI.Label()
     self.head_name:SetParent(self.toolbar)
@@ -225,7 +213,7 @@ function Options2.Window.Editor.Constructor:_UpdateHeader(nd)
     end
 
     local nt = nd.nodeType
-    self.head_mark:SetBackColor(node_color(nt))
+    self.head_mark:SetBackground(Options2.Elements.RowParts.IconForNode(nt))
     self.head_mark:SetVisible(true)
 
     local name = nd.data.name

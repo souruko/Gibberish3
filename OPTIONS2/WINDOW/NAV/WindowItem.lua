@@ -42,8 +42,7 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
     self:SetHeight(P.ROW_H)
 
     self.rail = P.MakeRail(self, Options.Defaults.window.color_window)
-    self.icon = P.MakeSquare(self, P.NODE_SQUARE, P.NODE_ICON,
-        Options.Defaults.window.color_window)
+    self.icon = P.MakeIcon(self, P.ICON.window, P.ROW_H, P.NODE_ICON)
 
     self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_window,
         Turbine.UI.ContentAlignment.MiddleLeft)
@@ -51,7 +50,8 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
     self.tag = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
         Turbine.UI.ContentAlignment.MiddleRight)
 
-    self.bolt = P.MakeBolt(self)
+    self.bolt = P.MakeIcon(self, P.ICON.trigger, P.ROW_H)
+    self.bolt:SetVisible(false)
 
     self.box = P.MakeEnableBox(self, function()
         winData.enabled = not winData.enabled
@@ -95,7 +95,7 @@ function Options2NavWindow:_Layout()
     self.box:SetLeft(x)
 
     if self.bolt:IsVisible() then
-        x = x - P.GAP - P.BOLT
+        x = x - P.GAP - P.ICON_SIZE
         self.bolt:SetLeft(x)
     end
 
