@@ -25,7 +25,9 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.icon_ctrl:SetParent(self)
     self.icon_ctrl:SetPosition(PAD, math.floor((ITEM_H - ICON_SZ) / 2))
     self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
-    self.icon_ctrl:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    -- no Overlay blend here: these are full-colour game icons, and Overlay
+    -- against the dark panel renders them invisible. Overlay is only for the
+    -- monochrome .tga glyphs.
     self.icon_ctrl:SetMouseVisible(false)
     if not Options2.Elements.RowParts.SetScaledIcon(self.icon_ctrl, data.icon, ICON_SZ) then
         self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)

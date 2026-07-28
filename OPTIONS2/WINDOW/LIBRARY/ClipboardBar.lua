@@ -36,7 +36,7 @@ function Options2.Library.ClipboardBar:Constructor()
     self.icon_ctrl:SetParent(self)
     self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
     self.icon_ctrl:SetTop(math.floor((BAR_H - ICON_SZ) / 2))
-    self.icon_ctrl:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    -- full-colour game icon, so no Overlay blend (see LibraryItem)
     self.icon_ctrl:SetMouseVisible(false)
 
     self.label = Turbine.UI.Label()
