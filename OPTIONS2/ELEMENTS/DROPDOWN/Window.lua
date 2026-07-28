@@ -10,17 +10,21 @@ function Options2.Elements.Dropdown:Constructor(width, lines)
     self.popup_open     = false
     self.item_height    = Options.Defaults.dropdown.item_line_height * (lines or 1)
 
+    self:SetBackColor(Options.Defaults.dropdown.border_color)
+
     self.background = Turbine.UI.Control()
     self.background:SetParent(self)
+    self.background:SetPosition(1, 1)
     self.background:SetBackColor(Options.Defaults.dropdown.base_color)
     self.background:SetMouseVisible(false)
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
-    self.label:SetLeft(5)
+    self.label:SetLeft(8)
     self.label:SetMultiline(false)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Options.Defaults.window.font)
+    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetForeColor(Options.Defaults.window.text)
     self.label:SetMouseVisible(false)
 
     self.arrow = Turbine.UI.Control()
@@ -31,7 +35,7 @@ function Options2.Elements.Dropdown:Constructor(width, lines)
     self.arrow:SetMouseVisible(false)
 
     self.popup = Turbine.UI.Window()
-    self.popup:SetBackColor(Options.Defaults.dropdown.back_color)
+    self.popup:SetBackColor(Options.Defaults.dropdown.border_color)
     self.popup:SetVisible(false)
     self.popup:SetWantsKeyEvents(false)
 
@@ -42,6 +46,7 @@ function Options2.Elements.Dropdown:Constructor(width, lines)
     self.popup_list = Turbine.UI.ListBox()
     self.popup_list:SetParent(self.popup)
     self.popup_list:SetPosition(0, 0)
+    self.popup_list:SetBackColor(Options.Defaults.dropdown.back_color)
 
     self.scrollbar = Turbine.UI.Lotro.ScrollBar()
     self.scrollbar:SetParent(self.popup)
@@ -58,9 +63,9 @@ end
 
 function Options2.Elements.Dropdown:SizeChanged()
     local width, height = self:GetSize()
-    self.background:SetSize(width, height)
-    self.label:SetSize(width - 23, height)
-    self.arrow:SetPosition(width - 12, math.floor((height - 10) / 2))
+    self.background:SetSize(math.max(0, width - 2), math.max(0, height - 2))
+    self.label:SetSize(math.max(0, width - 26), height)
+    self.arrow:SetPosition(width - 14, math.floor((height - 10) / 2))
 end
 
 function Options2.Elements.Dropdown:Show(value)

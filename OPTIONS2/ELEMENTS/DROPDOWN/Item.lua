@@ -13,10 +13,10 @@ function Options2DropdownItem:Constructor(parent, width, text_control, text_desc
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
     self.label:SetSize(width - 15, height)
-    self.label:SetLeft(5)
+    self.label:SetLeft(8)
     self.label:SetMultiline(true)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Options.Defaults.window.font)
+    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
     self.label:SetMouseVisible(false)
 
     self:LanguageChanged()
@@ -30,7 +30,7 @@ function Options2DropdownItem:Constructor(parent, width, text_control, text_desc
     end
     self.MouseEnter = function()
         if self.selected == false then
-            self:SetBackColor(Options.Defaults.dropdown.base_color)
+            self:SetBackColor(Options.Defaults.dropdown.hover_color)
         end
     end
     self.MouseLeave = function()

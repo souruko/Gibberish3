@@ -153,22 +153,52 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
     plist[#plist+1] = paste_btn(panel, timerValue, "timer", {1,2},
         function(v) timerValue:SetText(tostring(v)) end)
 
-    local testBtn = Turbine.UI.Lotro.Button()
+    -- drawn rather than a Lotro.Button so it carries the panel theme
+    local testBtn = Turbine.UI.Control()
     testBtn:SetParent(panel)
-    testBtn:SetWidth(150)
-    testBtn:SetText("Test Timer")
-    testBtn:SetEnabled(Windows[windowIndex] ~= nil)
+    testBtn:SetSize(120, 22)
+    testBtn:SetBackColor(Options.Defaults.window.line)
+    testBtn:SetMouseVisible(true)
+
+    local test_fill = Turbine.UI.Control()
+    test_fill:SetParent(testBtn)
+    test_fill:SetPosition(1, 1)
+    test_fill:SetSize(118, 20)
+    test_fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    test_fill:SetMouseVisible(false)
+
+    local test_label = Turbine.UI.Label()
+    test_label:SetParent(test_fill)
+    test_label:SetSize(118, 20)
+    test_label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    test_label:SetForeColor(Options.Defaults.window.text_muted)
+    test_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    test_label:SetMouseVisible(false)
+    testBtn._label = test_label
+    testBtn.LanguageChanged = function()
+        test_label:SetText(UTILS.GetText("options2", "test_timer"))
+    end
+    testBtn.LanguageChanged()
+
+    local test_enabled = (Windows[windowIndex] ~= nil)
+    if not test_enabled then
+        test_label:SetForeColor(Options.Defaults.window.text_faint)
+    end
+    testBtn.MouseEnter = function()
+        if test_enabled then test_fill:SetBackColor(Options.Defaults.window.select) end
+    end
+    testBtn.MouseLeave = function()
+        test_fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    end
     do
-        local count = #rows + 1
-        local bc_btn = count % 2 == 1 and BC_ODD or BC_EVEN
-        local y_btn  = TOP
+        local y_btn = TOP
         for _, r in ipairs(rows) do
-            y_btn = y_btn + r:GetHeight() + 5
+            y_btn = y_btn + r:GetHeight() + 2
         end
         testBtn:SetPosition(LEFT, y_btn)
-        testBtn:SetBackColor(bc_btn)
     end
     testBtn.MouseClick = function()
+        if not test_enabled then return end
         if Windows[windowIndex] == nil then return end
         local fakeTriggerData = {}
         fakeTriggerData.action = Action.Add
@@ -220,7 +250,7 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
 
     load()
     return panel, load, save,
-        function() lang_rows(rows) end,
+        function() lang_rows(rows) testBtn.LanguageChanged() end,
         function(w) size_paste(rows, plist, w) end,
         plist
 end
