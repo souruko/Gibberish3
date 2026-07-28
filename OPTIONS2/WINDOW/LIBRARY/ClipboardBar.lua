@@ -86,16 +86,17 @@ function Options2.Library.ClipboardBar:ClipboardChanged()
     end
 
     self:SetVisible(true)
-    if clip.item.icon ~= nil then
-        self.icon_ctrl:SetBackground(clip.item.icon)
-        self.icon_ctrl:SetStretchMode(1)
+    local P = Options2.Elements.RowParts
+    if P.SetScaledIcon(self.icon_ctrl, clip.item.icon, ICON_SZ) then
         self.icon_ctrl:SetBackColor(nil)
     else
         self.icon_ctrl:SetBackground(nil)
         self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)
     end
+    -- SetScaledIcon resizes the control, so re-place it
+    self.icon_ctrl:SetTop(math.floor((BAR_H - ICON_SZ) / 2))
+    self.icon_ctrl:SetLeft(PAD + TAG_W + GAP)
 
-    local P = Options2.Elements.RowParts
     local w = math.max(0, self.label:GetWidth())
     self.label:SetText(P.Truncate(clip.item.token or "", P.CharBudget(w)))
 end

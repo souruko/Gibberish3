@@ -239,6 +239,21 @@ function RowParts.ApplySelected(row, selected)
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
 end
 
+-- Draw a Turbine image (icon id or path) scaled into a control.
+--
+-- The order is not optional: the control has to be at the image's native size
+-- before the stretch mode and background are applied, and only then resized.
+-- Any other order leaves the control blank. Same sequence as the timer
+-- elements in UI_ELEMENTS/TIMER/*/Element.lua.
+function RowParts.SetScaledIcon(control, image, size)
+    if image == nil then return false end
+    control:SetSize(UTILS.GetImageSize(image))
+    control:SetStretchMode(1)
+    control:SetBackground(image)
+    control:SetSize(size, size)
+    return true
+end
+
 -- ── trigger presentation, shared by every row that shows one ────────────────
 
 -- trigger types whose whole purpose is matching a token, so an empty one is

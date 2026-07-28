@@ -27,12 +27,11 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
     self.icon_ctrl:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.icon_ctrl:SetMouseVisible(false)
-    if data.icon ~= nil then
-        self.icon_ctrl:SetBackground(data.icon)
-        self.icon_ctrl:SetStretchMode(1)
-    else
+    if not Options2.Elements.RowParts.SetScaledIcon(self.icon_ctrl, data.icon, ICON_SZ) then
         self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)
     end
+    -- SetScaledIcon resizes the control, so re-centre it
+    self.icon_ctrl:SetPosition(PAD, math.floor((ITEM_H - ICON_SZ) / 2))
 
     self.token_label = Turbine.UI.Label()
     self.token_label:SetParent(self)
