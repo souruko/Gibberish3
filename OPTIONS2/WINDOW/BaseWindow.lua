@@ -49,7 +49,9 @@ local function add_hover_tooltip(control, description, enter_fn, leave_fn)
     end
 end
 
-local function make_title_btn(parent, icon_path, description, click_fn)
+-- rest_color fills the button when it is neither hovered nor active; pass nil
+-- for a toggle that should read as empty when off.
+local function make_title_btn(parent, icon_path, description, click_fn, rest_color)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_SIZE, BTN_SIZE)
@@ -69,6 +71,7 @@ local function make_title_btn(parent, icon_path, description, click_fn)
     btn.icon    = icon
     btn.active  = false
     btn.hovered = false
+    btn.rest    = rest_color
 
     -- active/hover is carried by the fill only; the .tga glyphs are not tinted
     -- anywhere else in this panel either.
@@ -78,7 +81,7 @@ local function make_title_btn(parent, icon_path, description, click_fn)
         elseif self.active then
             self:SetBackColor(Options.Defaults.window.select)
         else
-            self:SetBackColor(nil)
+            self:SetBackColor(self.rest)
         end
     end
 
@@ -169,9 +172,12 @@ function Options2.Window.Constructor:Constructor()
     self.title_div:SetBackColor(Options.Defaults.window.line)
     self.title_div:SetMouseVisible(false)
 
+    -- the gear is not a toggle, so it carries a resting fill rather than an
+    -- active state
     self.btn_settings = make_title_btn(self.titlebar,
         "Gibberish3/RESOURCES/settings.tga", "o2_settings",
-        function() Options2.ToggleSettingsWindow() end)
+        function() Options2.ToggleSettingsWindow() end,
+        Options.Defaults.window.select)
 
     -- ── column 1: structure ─────────────────────────────────────────────────
     self.nav = Options2.Window.Nav.Constructor()

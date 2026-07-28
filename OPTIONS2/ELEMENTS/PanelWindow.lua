@@ -77,6 +77,7 @@ function Options2.Elements.PanelWindow:Constructor(config)
     self.btn_close = Turbine.UI.Control()
     self.btn_close:SetParent(self.titlebar)
     self.btn_close:SetSize(BTN_SIZE, BTN_SIZE)
+    self.btn_close:SetBackColor(Options.Defaults.window.select)
     self.btn_close:SetMouseVisible(true)
 
     local close_icon = Turbine.UI.Control()
@@ -94,7 +95,9 @@ function Options2.Elements.PanelWindow:Constructor(config)
     self.btn_close.MouseEnter = function()
         self.btn_close:SetBackColor(Options.Defaults.window.line)
     end
-    self.btn_close.MouseLeave = function() self.btn_close:SetBackColor(nil) end
+    self.btn_close.MouseLeave = function()
+        self.btn_close:SetBackColor(Options.Defaults.window.select)
+    end
     self.btn_close.MouseClick = function() self:CloseWindow() end
 
     self.title_sep = Turbine.UI.Control()
