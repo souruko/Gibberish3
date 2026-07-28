@@ -1,10 +1,14 @@
--- Library row: 24x24 icon, name over sub-label, then either the Use action on
+-- Library row: game icon, name over sub-label, then either the Use action on
 -- the selected row or the pin star.
+--
+-- The row is sized around the icon rather than the icon scaled to the row:
+-- stretching inside a ListBox that has a scrollbar draws the image outside the
+-- list. That makes the row 36 high instead of the spec's 32.
 
-local ITEM_H  = 32
+local ICON_SZ = 32          -- native size of a game icon; never scaled
+local ITEM_H  = ICON_SZ + 4
 local PAD     = 8
 local GAP     = 8
-local ICON_SZ = 24
 local PIN_W   = 14
 local USE_W   = 34
 local USE_H   = 20
@@ -24,15 +28,10 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.icon_ctrl = Turbine.UI.Control()
     self.icon_ctrl:SetParent(self)
     self.icon_ctrl:SetPosition(PAD, math.floor((ITEM_H - ICON_SZ) / 2))
-    self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
-    -- no Overlay blend here: these are full-colour game icons, and Overlay
-    -- against the dark panel renders them invisible. Overlay is only for the
-    -- monochrome .tga glyphs.
     self.icon_ctrl:SetMouseVisible(false)
-    if not Options2.Elements.RowParts.SetScaledIcon(self.icon_ctrl, data.icon, ICON_SZ) then
+    if not Options2.Elements.RowParts.SetNativeIcon(self.icon_ctrl, data.icon) then
         self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)
     end
-    -- SetScaledIcon resizes the control, so re-centre it
     self.icon_ctrl:SetPosition(PAD, math.floor((ITEM_H - ICON_SZ) / 2))
 
     self.token_label = Turbine.UI.Label()

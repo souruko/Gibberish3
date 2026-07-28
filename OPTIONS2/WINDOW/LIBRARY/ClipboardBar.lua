@@ -1,10 +1,11 @@
 -- "Copied" footer at the bottom of the library: what is on the clipboard, and
 -- an x to drop it.
 
-local BAR_H   = 34
+-- sized around the icon, which is never scaled (see RowParts.SetNativeIcon)
+local ICON_SZ = 32
+local BAR_H   = ICON_SZ + 4
 local PAD     = 8
 local GAP     = 8
-local ICON_SZ = 20
 local TAG_W   = 46
 local BTN_SZ  = 18
 
@@ -36,7 +37,6 @@ function Options2.Library.ClipboardBar:Constructor()
     self.icon_ctrl:SetParent(self)
     self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
     self.icon_ctrl:SetTop(math.floor((BAR_H - ICON_SZ) / 2))
-    -- full-colour game icon, so no Overlay blend (see LibraryItem)
     self.icon_ctrl:SetMouseVisible(false)
 
     self.label = Turbine.UI.Label()
@@ -87,13 +87,12 @@ function Options2.Library.ClipboardBar:ClipboardChanged()
 
     self:SetVisible(true)
     local P = Options2.Elements.RowParts
-    if P.SetScaledIcon(self.icon_ctrl, clip.item.icon, ICON_SZ) then
+    if P.SetNativeIcon(self.icon_ctrl, clip.item.icon) then
         self.icon_ctrl:SetBackColor(nil)
     else
         self.icon_ctrl:SetBackground(nil)
         self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)
     end
-    -- SetScaledIcon resizes the control, so re-place it
     self.icon_ctrl:SetTop(math.floor((BAR_H - ICON_SZ) / 2))
     self.icon_ctrl:SetLeft(PAD + TAG_W + GAP)
 

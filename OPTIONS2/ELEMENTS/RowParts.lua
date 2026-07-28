@@ -239,18 +239,19 @@ function RowParts.ApplySelected(row, selected)
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
 end
 
--- Draw a Turbine image (icon id or path) scaled into a control.
+-- Draw a Turbine image at its native size, with no stretching.
 --
--- The order is not optional: the control has to be at the image's native size
--- before the stretch mode and background are applied, and only then resized.
--- Any other order leaves the control blank. Same sequence as the timer
--- elements in UI_ELEMENTS/TIMER/*/Element.lua.
-function RowParts.SetScaledIcon(control, image, size)
+-- Do not stretch an icon inside a ListBox row: with a scrollbar attached the
+-- stretch is applied wrongly and the image ends up drawn outside the list.
+-- Size the row around the icon instead. Game icons are 32x32.
+-- Overlay blend is for the monochrome .tga glyphs only — it renders a
+-- full-colour game icon invisible against the dark panel.
+RowParts.ICON_NATIVE = 32
+
+function RowParts.SetNativeIcon(control, image)
+    control:SetSize(RowParts.ICON_NATIVE, RowParts.ICON_NATIVE)
     if image == nil then return false end
-    control:SetSize(UTILS.GetImageSize(image))
-    control:SetStretchMode(1)
     control:SetBackground(image)
-    control:SetSize(size, size)
     return true
 end
 
