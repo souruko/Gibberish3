@@ -71,12 +71,34 @@ function Options2.Window.Content.Constructor:Constructor()
     self:SetBackColor(Options.Defaults.window.bg)
 
     -- ── header ───────────────────────────────────────────────────
+    -- the header doubles as the row for the container itself, so its own
+    -- settings stay reachable after picking something inside it
     self.header = Turbine.UI.Control()
     self.header:SetParent(self)
     self.header:SetPosition(0, 0)
     self.header:SetHeight(HEADER_H)
     self.header:SetBackColor(Options.Defaults.window.bg_sunken)
-    self.header:SetMouseVisible(false)
+    self.header:SetMouseVisible(true)
+    self.header.MouseEnter = function()
+        if not self._header_selected then
+            self.header:SetBackColor(Options.Defaults.window.row_odd)
+        end
+    end
+    self.header.MouseLeave = function() self:_UpdateHeaderState() end
+    self.header.MouseClick = function(sender, args)
+        if args ~= nil and args.Button == Turbine.UI.MouseButton.Right then
+            self:_RightClickContainer()
+        else
+            self:SelectContainer()
+        end
+    end
+
+    self.head_rail = Turbine.UI.Control()
+    self.head_rail:SetParent(self.header)
+    self.head_rail:SetPosition(0, 0)
+    self.head_rail:SetSize(Options2.Elements.RowParts.RAIL_W, HEADER_H)
+    self.head_rail:SetVisible(false)
+    self.head_rail:SetMouseVisible(false)
 
     self.head_mark = Turbine.UI.Control()
     self.head_mark:SetParent(self.header)
@@ -164,6 +186,7 @@ function Options2.Window.Content.Constructor:SizeChanged()
         x = x - BTN_GAP
     end
 
+    self.head_rail:SetHeight(HEADER_H)
     self.head_mark:SetLeft(PAD)
     local name_left = PAD + MARK + GAP
     local avail     = math.max(0, x - GAP - name_left)
@@ -222,6 +245,45 @@ function Options2.Window.Content.Constructor:ClearSelection()
     end
     self.selectedKey = nil
     Options2.SaveContentState(nil)
+    self:_UpdateHeaderState()
+end
+
+-- ── the container's own row ────────────────────────────────────────────────────
+
+-- With no row selected, the editor is showing the container, so the header is
+-- what reads as selected.
+function Options2.Window.Content.Constructor:_UpdateHeaderState()
+    self._header_selected = (self.container ~= nil and self.selectedItem == nil)
+
+    if self._header_selected then
+        self.header:SetBackColor(Options.Defaults.window.select)
+        self.head_rail:SetBackColor(self.container.nodeType == "window"
+            and Options.Defaults.window.color_window
+            or  Options.Defaults.window.color_folder)
+        self.head_rail:SetVisible(true)
+    else
+        self.header:SetBackColor(Options.Defaults.window.bg_sunken)
+        self.head_rail:SetVisible(false)
+    end
+end
+
+-- clicking the header puts the folder or window itself back in the editor
+function Options2.Window.Content.Constructor:SelectContainer()
+    if self.container == nil then return end
+
+    self:ClearSelection()
+    Options2.selectedNode = self.container
+
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.editor_panel ~= nil then
+        obj.editor_panel:SetNode(self.container)
+    end
+end
+
+function Options2.Window.Content.Constructor:_RightClickContainer()
+    if self.container == nil then return end
+    self:SelectContainer()
+    Options2.ShowContextMenu(self.container)
 end
 
 -- ── row cache ──────────────────────────────────────────────────────────────────
@@ -288,6 +350,7 @@ function Options2.Window.Content.Constructor:Rebuild()
     local c = self.container
     if c == nil then
         self.placeholder:SetVisible(true)
+        self:_UpdateHeaderState()
         return
     end
     self.placeholder:SetVisible(false)
@@ -299,6 +362,7 @@ function Options2.Window.Content.Constructor:Rebuild()
     end
 
     self:_RestoreSelection()
+    self:_UpdateHeaderState()
 end
 
 function Options2.Window.Content.Constructor:_Add(item, w)
@@ -474,6 +538,7 @@ function Options2.Window.Content.Constructor:_RestoreSelection()
             if obj ~= nil and obj.editor_panel ~= nil then
                 obj.editor_panel:SetNode(item.nodeData)
             end
+            self:_UpdateHeaderState()
             return
         end
     end
@@ -493,6 +558,7 @@ function Options2.Window.Content.Constructor:_Select(item)
     if obj ~= nil and obj.editor_panel ~= nil then
         obj.editor_panel:SetNode(item.nodeData)
     end
+    self:_UpdateHeaderState()
 end
 
 function Options2.Window.Content.Constructor:RowClicked(item)
