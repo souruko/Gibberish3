@@ -88,9 +88,8 @@ function Options.AutoReloadChanged()
     Data.autoReload = not( Data.autoReload )
 
     -- settings panel
-    local obj = Options2.Window.Object
-    if obj ~= nil and obj.editor_panel ~= nil and obj.editor_panel.settings_panel ~= nil then
-        obj.editor_panel.settings_panel:AutoReloadChanged()
+    if Options2.Window.SettingsWindowObject ~= nil then
+        Options2.Window.SettingsWindowObject:AutoReloadChanged()
     end
 
 end
@@ -141,6 +140,10 @@ function Options.LanguageChanged( value )
 
     if Options2.Window.Object ~= nil and Options2.Window.Object.LanguageChanged ~= nil then
         Options2.Window.Object:LanguageChanged()
+    end
+
+    if Options2.Window.SettingsWindowObject ~= nil then
+        Options2.Window.SettingsWindowObject:LanguageChanged()
     end
 
 end

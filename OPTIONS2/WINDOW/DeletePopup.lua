@@ -112,12 +112,10 @@ local function _make()
 
         local parent = Options2.Window.Object
         if parent ~= nil then
-            overlay:SetParent(parent)
-            local pw, ph = parent:GetSize()
-            local top_sp = Options.Defaults.window.top_spacing
-            local outer  = Options.Defaults.window.outer_spacing
-            overlay:SetPosition(outer, top_sp)
-            overlay:SetSize(pw - 2 * outer, ph - top_sp - outer)
+            -- covers the panel's client area, leaving its title bar reachable
+            overlay:SetParent(parent.client)
+            overlay:SetPosition(0, 0)
+            overlay:SetSize(parent.client:GetSize())
         end
         overlay:SetVisible(true)
     end

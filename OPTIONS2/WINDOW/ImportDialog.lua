@@ -66,13 +66,15 @@ end
 
 -- ── ImportDialog ──────────────────────────────────────────────────────────────
 
-Options2.Window.ImportDialog = class(Turbine.UI.Lotro.Window)
+Options2.Window.ImportDialog = class(Options2.Elements.PanelWindow)
 
 function Options2.Window.ImportDialog:Constructor()
-    Turbine.UI.Lotro.Window.Constructor(self)
+    Options2.Elements.PanelWindow.Constructor(self, {
+        min_width  = DLG_W,
+        min_height = DLG_H,
+    })
 
     self:SetSize(DLG_W, DLG_H)
-    self:SetResizable(false)
     self:SetVisible(false)
 
     self._mode       = "export"
@@ -80,19 +82,19 @@ function Options2.Window.ImportDialog:Constructor()
 
     -- TextBox
     self.textbox = Turbine.UI.Lotro.TextBox()
-    self.textbox:SetParent(self)
+    self.textbox:SetParent(self.client)
     self.textbox:SetBackColor(Options.Defaults.window.backcolor2)
     self.textbox:SetFont(Options.Defaults.move.headerfont)
     self.textbox:SetMultiline(true)
 
     self.scrollbar = Turbine.UI.Lotro.ScrollBar()
-    self.scrollbar:SetParent(self)
+    self.scrollbar:SetParent(self.client)
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
     self.scrollbar:SetWidth(SCROLL)
     self.textbox:SetVerticalScrollBar(self.scrollbar)
 
     -- Buttons (import mode only)
-    self.btn_create = make_btn(self, "Create New", function()
+    self.btn_create = make_btn(self.client, "Create New", function()
         local text = self.textbox:GetText()
         if text ~= "" then
             call_string_to_data(text, false, nil)
@@ -100,7 +102,7 @@ function Options2.Window.ImportDialog:Constructor()
         end
     end)
 
-    self.btn_insert = make_btn(self, "Insert Into Selection", function()
+    self.btn_insert = make_btn(self.client, "Insert Into Selection", function()
         local text = self.textbox:GetText()
         if text ~= "" then
             call_string_to_data(text, true, self._context_nd)
@@ -108,25 +110,23 @@ function Options2.Window.ImportDialog:Constructor()
         end
     end)
 
-    self:SizeChanged()
+    self:OnLayout(self.client:GetSize())
     self:LanguageChanged()
 end
 
-function Options2.Window.ImportDialog:SizeChanged()
+function Options2.Window.ImportDialog:OnLayout(w, h)
     if self.textbox == nil then return end
-    local w, h  = self:GetSize()
-    local top   = Options.Defaults.window.top_spacing
-    local sp    = Options.Defaults.window.outer_spacing
+    local sp    = PAD
     local txt_w = w - sp * 2 - SCROLL
-    local txt_h = h - top - sp - BTN_H - sp * 2
+    local txt_h = h - sp * 2 - BTN_H - sp
 
-    self.textbox:SetPosition(sp, top)
+    self.textbox:SetPosition(sp, sp)
     self.textbox:SetSize(txt_w, txt_h)
 
-    self.scrollbar:SetPosition(sp + txt_w, top)
+    self.scrollbar:SetPosition(sp + txt_w, sp)
     self.scrollbar:SetHeight(txt_h)
 
-    local btn_top = top + txt_h + sp
+    local btn_top = sp + txt_h + sp
     self.btn_insert:SetPosition(w - sp - BTN_W, btn_top)
     self.btn_create:SetPosition(w - sp - BTN_W * 2 - sp, btn_top)
 end
@@ -139,7 +139,7 @@ end
 
 function Options2.Window.ImportDialog:ShowExport(data, importType, index)
     self._mode = "export"
-    self:SetText(UTILS.GetText("import", "export"))
+    self:SetTitleText(UTILS.GetText("import", "export"))
     self.textbox:SetEnabled(false)
     self.textbox:SetText(UTILS.DataToStringV2(data, importType, index))
     self.btn_create:SetVisible(false)
@@ -154,7 +154,7 @@ end
 function Options2.Window.ImportDialog:ShowImport(context_nd)
     self._mode       = "import"
     self._context_nd = context_nd
-    self:SetText(UTILS.GetText("import", "import"))
+    self:SetTitleText(UTILS.GetText("import", "import"))
     self.textbox:SetEnabled(true)
     self.textbox:SetText("")
     self.btn_create:SetVisible(true)

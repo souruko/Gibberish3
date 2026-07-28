@@ -43,16 +43,13 @@ Options.Defaults.move.headercolor    = Turbine.UI.Color( 0.3, 0.3, 0.3 )
 
 -- optiosn window
 Options.Defaults.window              = {}
-Options.Defaults.window.min_width    = 1304
-Options.Defaults.window.max_width    = 1304
-Options.Defaults.window.min_height   = 700
+Options.Defaults.window.min_width    = 1168
+Options.Defaults.window.min_height   = 640
 Options.Defaults.window.ws_width     = 250
 Options.Defaults.window.c_width      = 200
 Options.Defaults.window.g_height     = 50
 Options.Defaults.window.spacing      = 5
 Options.Defaults.window.frame        = 2
-Options.Defaults.window.top_spacing  = 35
-Options.Defaults.window.outer_spacing= 10
 Options.Defaults.window.font         = Turbine.UI.Lotro.Font.Verdana12
 Options.Defaults.window.basecolor    = Turbine.UI.Color( 0.16, 0.13, 0.10 )
 Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.09, 0.08, 0.07 )
@@ -87,6 +84,24 @@ Options.Defaults.window.color_folder  = Turbine.UI.Color(0.72, 0.52, 0.08)
 Options.Defaults.window.color_window  = Turbine.UI.Color(0.14, 0.48, 0.72)
 Options.Defaults.window.color_timer   = Turbine.UI.Color(0.10, 0.62, 0.46)
 Options.Defaults.window.color_trigger = Turbine.UI.Color(0.82, 0.40, 0.08)
+Options.Defaults.window.color_cond    = Turbine.UI.Color(0.55, 0.18, 0.75)
+
+-- options panel palette (rework) --------------------------------------------
+Options.Defaults.window.bg           = Turbine.UI.Color(0.086, 0.094, 0.149) -- panel ground
+Options.Defaults.window.bg_sunken    = Turbine.UI.Color(0.071, 0.078, 0.122) -- columns, fields
+Options.Defaults.window.row_odd      = Turbine.UI.Color(0.114, 0.125, 0.196)
+Options.Defaults.window.row_even     = Turbine.UI.Color(0.102, 0.114, 0.173)
+Options.Defaults.window.select       = Turbine.UI.Color(0.137, 0.153, 0.255)
+Options.Defaults.window.line         = Turbine.UI.Color(0.180, 0.196, 0.314)
+Options.Defaults.window.text         = Turbine.UI.Color(0.914, 0.914, 0.929)
+Options.Defaults.window.text_muted   = Turbine.UI.Color(0.545, 0.561, 0.659)
+Options.Defaults.window.text_faint   = Turbine.UI.Color(0.361, 0.376, 0.463)
+Options.Defaults.window.accent       = Turbine.UI.Color(0.569, 0.518, 0.851)
+Options.Defaults.window.paste_border = Turbine.UI.Color(0.310, 0.647, 0.392)
+Options.Defaults.window.on           = Turbine.UI.Color(0.200, 0.749, 0.302)
+Options.Defaults.window.off_border   = Turbine.UI.Color(0.290, 0.306, 0.400)
+------------------------------------------------------------------------------
+
 Options.Defaults.window.menu_width      = 140
 Options.Defaults.window.file_width      = 130
 Options.Defaults.window.segment_height  = 25

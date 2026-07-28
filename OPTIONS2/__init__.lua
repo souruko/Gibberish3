@@ -1,6 +1,8 @@
 -- standalone controls
 import "Gibberish3.OPTIONS2.ELEMENTS.CheckBox"
 import "Gibberish3.OPTIONS2.ELEMENTS.Tooltip"
+-- frameless window chrome, base class for every options window
+import "Gibberish3.OPTIONS2.ELEMENTS.PanelWindow"
 
 -- compound controls (each subfolder has its own __init__)
 import "Gibberish3.OPTIONS2.ELEMENTS.DROPDOWN"
@@ -24,6 +26,8 @@ import "Gibberish3.OPTIONS2.WINDOW.ImportDialog"
 import "Gibberish3.OPTIONS2.WINDOW.NAV"
 -- editor panel (depends on NAV for node types, depends on elements for row widgets)
 import "Gibberish3.OPTIONS2.WINDOW.EDITOR"
+-- standalone settings window (hosts the settings panel defined under EDITOR)
+import "Gibberish3.OPTIONS2.WINDOW.SettingsWindow"
 -- library panel (skills / effects / chat + clipboard bar)
 import "Gibberish3.OPTIONS2.WINDOW.LIBRARY"
 -- startup and clipboard helpers (must be last)
