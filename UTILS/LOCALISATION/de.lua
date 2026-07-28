@@ -549,6 +549,7 @@ L[ Language.German ].options2.paste                    = "einfügen"
 L[ Language.German ].tooltip.o2_structure                  = "Strukturspalte ein- oder ausblenden."
 L[ Language.German ].tooltip.o2_library                    = "Bibliotheksspalte ein- oder ausblenden."
 L[ Language.German ].tooltip.o2_settings                   = "Plugin-Einstellungen öffnen."
+L[ Language.German ].tooltip.o2_reload              = "Plugin neu laden."
 
 L[ Language.German ].tooltip.cond_enabled                  = "Wenn deaktiviert, wird diese Bedingung ignoriert und der Timer wird immer angezeigt."
 L[ Language.German ].tooltip.tim_enabled                   = "Wenn deaktiviert, wird dieser Timer ausgeblendet und nie angezeigt."

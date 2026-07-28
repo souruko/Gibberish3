@@ -549,6 +549,7 @@ L[ Language.French ].options2.paste                    = "coller"
 L[ Language.French ].tooltip.o2_structure                  = "Afficher ou masquer la colonne structure."
 L[ Language.French ].tooltip.o2_library                    = "Afficher ou masquer la colonne bibliothèque."
 L[ Language.French ].tooltip.o2_settings                   = "Ouvrir les paramètres du plugin."
+L[ Language.French ].tooltip.o2_reload              = "Recharger le plugin."
 
 L[ Language.French ].tooltip.cond_enabled                  = "Lorsqu'elle est décochée, cette condition est ignorée et le minuteur s'affiche toujours."
 L[ Language.French ].tooltip.tim_enabled                   = "Lorsqu'il est décoché, ce minuteur est masqué et ne s'affiche jamais."

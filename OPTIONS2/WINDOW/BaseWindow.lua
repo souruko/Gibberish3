@@ -187,8 +187,13 @@ function Options2.Window.Constructor:Constructor()
     self.title_div:SetBackColor(Options.Defaults.window.line)
     self.title_div:SetMouseVisible(false)
 
-    -- the gear is not a toggle, so it carries a resting fill rather than an
-    -- active state
+    -- neither the gear nor reload is a toggle, so they carry a resting fill
+    -- rather than an active state
+    self.btn_reload = make_title_btn(self.titlebar,
+        "Gibberish3/RESOURCES/reload.tga", "o2_reload",
+        function() Options.Reload() end,
+        Options.Defaults.window.select)
+
     self.btn_settings = make_title_btn(self.titlebar,
         "Gibberish3/RESOURCES/gear.tga", "o2_settings",
         function() Options2.ToggleSettingsWindow() end,
@@ -346,6 +351,8 @@ function Options2.Window.Constructor:OnLayout(iw, ih)
     local btn_top = math.floor((TITLE_H - BTN_SIZE) / 2)
     local x = self:TitleBarRight() - BTN_SIZE
     self.btn_settings:SetPosition(x, btn_top)
+    x = x - GAP - BTN_SIZE
+    self.btn_reload:SetPosition(x, btn_top)
     x = x - GAP - SEP_W
     self.title_div:SetPosition(x, math.floor((TITLE_H - DIV_H) / 2))
     x = x - GAP - BTN_SIZE
