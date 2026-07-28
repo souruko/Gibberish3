@@ -4,7 +4,7 @@
 Options2ContentTrigger = class(Turbine.UI.Control)
 function Options2ContentTrigger:Constructor(contentWin, winIdx, timerIdx, trigData, trigType, trigIdx, key)
     Turbine.UI.Control.Constructor(self)
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
 
     self.contentWin = contentWin
     self.key        = key
@@ -52,7 +52,7 @@ function Options2ContentTrigger:Constructor(contentWin, winIdx, timerIdx, trigDa
 end
 
 function Options2ContentTrigger:_Sync()
-    local P  = Options2RowParts
+    local P  = Options2.Elements.RowParts
     local nd = self.nodeData
 
     self._label_text = P.TriggerLabel(nd.data, nd.triggerType)
@@ -71,7 +71,7 @@ function Options2ContentTrigger:_Sync()
 end
 
 function Options2ContentTrigger:_Layout()
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
     local w = self:GetWidth()
     if w <= 0 then return end
 
@@ -101,7 +101,7 @@ function Options2ContentTrigger:GetKey()       return self.key end
 function Options2ContentTrigger:IsSelectable() return true end
 
 function Options2ContentTrigger:SetSelected(v)
-    Options2RowParts.ApplyChildSelected(self, v, self.sel_rail)
+    Options2.Elements.RowParts.ApplyChildSelected(self, v, self.sel_rail)
 end
 
 function Options2ContentTrigger:Refresh()

@@ -12,7 +12,7 @@ local META_W = 60
 Options2ContentTimer = class(Turbine.UI.Control)
 function Options2ContentTimer:Constructor(contentWin, winIdx, timerIdx, timerData, key)
     Turbine.UI.Control.Constructor(self)
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
 
     self.contentWin = contentWin
     self.key        = key
@@ -71,7 +71,7 @@ function Options2ContentTimer:Constructor(contentWin, winIdx, timerIdx, timerDat
 end
 
 function Options2ContentTimer:_Sync()
-    local P  = Options2RowParts
+    local P  = Options2.Elements.RowParts
     local td = self.nodeData.data
 
     self._label_text = (td.description ~= nil and td.description ~= "")
@@ -93,7 +93,7 @@ function Options2ContentTimer:_Sync()
 end
 
 function Options2ContentTimer:_Layout()
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
     local w = self:GetWidth()
     if w <= 0 then return end
 
@@ -127,7 +127,7 @@ function Options2ContentTimer:IsSelectable() return true end
 
 function Options2ContentTimer:SetSelected(v)
     self.selected = v
-    self.rail:SetWidth(v and Options2RowParts.RAIL_W or Options2RowParts.RAIL_IDLE_W)
+    self.rail:SetWidth(v and Options2.Elements.RowParts.RAIL_W or Options2.Elements.RowParts.RAIL_IDLE_W)
     self:SetBackColor(v and Options.Defaults.window.select or nil)
 end
 

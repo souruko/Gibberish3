@@ -4,7 +4,7 @@
 Options2ContentCondition = class(Turbine.UI.Control)
 function Options2ContentCondition:Constructor(contentWin, winIdx, timerIdx, condIdx, condData, key)
     Turbine.UI.Control.Constructor(self)
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
 
     self.contentWin = contentWin
     self.key        = key
@@ -52,7 +52,7 @@ function Options2ContentCondition:Constructor(contentWin, winIdx, timerIdx, cond
 end
 
 function Options2ContentCondition:_Sync()
-    local P  = Options2RowParts
+    local P  = Options2.Elements.RowParts
     local cd = self.nodeData.data
 
     self._label_text = (cd.description ~= nil and cd.description ~= "")
@@ -73,7 +73,7 @@ function Options2ContentCondition:_Sync()
 end
 
 function Options2ContentCondition:_Layout()
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
     local w = self:GetWidth()
     if w <= 0 then return end
 
@@ -103,7 +103,7 @@ function Options2ContentCondition:GetKey()       return self.key end
 function Options2ContentCondition:IsSelectable() return true end
 
 function Options2ContentCondition:SetSelected(v)
-    Options2RowParts.ApplyChildSelected(self, v, self.sel_rail)
+    Options2.Elements.RowParts.ApplyChildSelected(self, v, self.sel_rail)
 end
 
 function Options2ContentCondition:Refresh()

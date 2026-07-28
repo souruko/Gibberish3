@@ -13,7 +13,7 @@ local TOKEN_W = 130
 Options2ContentOwnTrigger = class(Turbine.UI.Control)
 function Options2ContentOwnTrigger:Constructor(contentWin, nodeType, ownerIdx, trigData, trigType, trigIdx, key)
     Turbine.UI.Control.Constructor(self)
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
 
     self.contentWin = contentWin
     self.key        = key
@@ -69,12 +69,12 @@ function Options2ContentOwnTrigger:Constructor(contentWin, nodeType, ownerIdx, t
         end
     end, BOX, H)
 
-    Options2RowParts.WireContentRow(self, contentWin)
+    Options2.Elements.RowParts.WireContentRow(self, contentWin)
     self:_Sync()
 end
 
 function Options2ContentOwnTrigger:_Sync()
-    local P  = Options2RowParts
+    local P  = Options2.Elements.RowParts
     local nd = self.nodeData
 
     self._label_text = P.TriggerLabel(nd.data, nd.triggerType)
@@ -93,7 +93,7 @@ function Options2ContentOwnTrigger:_Sync()
 end
 
 function Options2ContentOwnTrigger:_Layout()
-    local P = Options2RowParts
+    local P = Options2.Elements.RowParts
     local w = self:GetWidth()
     if w <= 0 then return end
 
@@ -125,7 +125,7 @@ function Options2ContentOwnTrigger:IsSelectable() return true end
 
 function Options2ContentOwnTrigger:SetSelected(v)
     self.selected = v
-    self.rail:SetWidth(v and Options2RowParts.RAIL_W or Options2RowParts.RAIL_IDLE_W)
+    self.rail:SetWidth(v and Options2.Elements.RowParts.RAIL_W or Options2.Elements.RowParts.RAIL_IDLE_W)
     self:SetBackColor(v and Options.Defaults.window.select or nil)
 end
 

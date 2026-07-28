@@ -266,7 +266,7 @@ function Options2.Window.Content.Constructor:_TriggerEntries(container)
                 idx     = ti,
                 data    = td,
                 enabled = (td.enabled == true),
-                name    = Options2RowParts.TriggerLabel(td, tt),
+                name    = Options2.Elements.RowParts.TriggerLabel(td, tt),
             }
         end
     end

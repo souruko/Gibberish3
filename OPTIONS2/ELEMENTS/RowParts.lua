@@ -1,31 +1,38 @@
 -- Shared row chrome for the structure and contents columns.
 -- Row anatomy per SPEC-metrics "Column 1 — Structure" / "Column 2 — Contents".
+--
+-- Lives on Options2.Elements rather than in a global of its own: Turbine gives
+-- each package directory its own environment, so a bare global assigned here
+-- would be invisible to OPTIONS2/WINDOW/**. Options2 comes from Variables.lua
+-- at the root, so every package can see it.
 
-Options2RowParts = {}
+Options2.Elements.RowParts = {}
+local RowParts = Options2.Elements.RowParts
 
-Options2RowParts.ROW_H       = 26
-Options2RowParts.PAD         = 8
-Options2RowParts.GAP         = 6
-Options2RowParts.RAIL_W      = 3
-Options2RowParts.RAIL_IDLE_W = 2
-Options2RowParts.CHEVRON     = 11   -- slot width for the expand marker
-Options2RowParts.NODE_ICON   = 13   -- slot width for the node marker
-Options2RowParts.CHEV_SQUARE = 7
-Options2RowParts.NODE_SQUARE = 11
-Options2RowParts.BOX         = 9
-Options2RowParts.BOLT        = 4
+
+RowParts.ROW_H       = 26
+RowParts.PAD         = 8
+RowParts.GAP         = 6
+RowParts.RAIL_W      = 3
+RowParts.RAIL_IDLE_W = 2
+RowParts.CHEVRON     = 11   -- slot width for the expand marker
+RowParts.NODE_ICON   = 13   -- slot width for the node marker
+RowParts.CHEV_SQUARE = 7
+RowParts.NODE_SQUARE = 11
+RowParts.BOX         = 9
+RowParts.BOLT        = 4
 
 -- indent: 4px lead, then per level an 8px spacer plus a 1px guide line
 local INDENT_LEAD = 4
 local INDENT_STEP = 9
 local GUIDE_OFF   = 8   -- guide sits at the end of each level's spacer
 
-function Options2RowParts.ContentLeft(depth)
+function RowParts.ContentLeft(depth)
     return INDENT_LEAD + depth * INDENT_STEP + 5
 end
 
 -- utf-8 aware; Label clips mid-glyph, so never rely on clipping
-function Options2RowParts.Truncate(text, max_chars)
+function RowParts.Truncate(text, max_chars)
     if text == nil or text == "" then return "" end
     text = tostring(text)
     if max_chars < 1 then return "" end
@@ -39,12 +46,12 @@ function Options2RowParts.Truncate(text, max_chars)
 end
 
 -- Verdana12 is proportional; this is the budget used to decide truncation.
-function Options2RowParts.CharBudget(pixels)
+function RowParts.CharBudget(pixels)
     return math.floor(pixels / 6.5)
 end
 
 -- one 1px vertical guide per ancestor level, pooled on the row
-function Options2RowParts.LayoutGuides(row, depth)
+function RowParts.LayoutGuides(row, depth)
     row._guides = row._guides or {}
 
     for i = 1, depth do
@@ -58,7 +65,7 @@ function Options2RowParts.LayoutGuides(row, depth)
             row._guides[i] = guide
         end
         guide:SetPosition(INDENT_LEAD + (i - 1) * INDENT_STEP + GUIDE_OFF, 0)
-        guide:SetHeight(Options2RowParts.ROW_H)
+        guide:SetHeight(RowParts.ROW_H)
         guide:SetVisible(true)
     end
 
@@ -71,11 +78,11 @@ end
 -- a .tga background cannot be tinted (SetBackColor fills the control behind the
 -- glyph rather than colouring it), so the colour lives on primitives and text.
 -- Always visible, and widened while the row is selected.
-function Options2RowParts.MakeRail(row, color)
+function RowParts.MakeRail(row, color)
     local rail = Turbine.UI.Control()
     rail:SetParent(row)
     rail:SetPosition(0, 0)
-    rail:SetSize(Options2RowParts.RAIL_IDLE_W, Options2RowParts.ROW_H)
+    rail:SetSize(RowParts.RAIL_IDLE_W, RowParts.ROW_H)
     rail:SetBackColor(color)
     rail:SetMouseVisible(false)
     return rail
@@ -83,13 +90,13 @@ end
 
 -- Enable box: filled when on, 1px outline when off. 9x9 in the structure
 -- column, 8x8 for the contents column's child rows.
-function Options2RowParts.MakeEnableBox(row, click_fn, size, row_h)
-    local S = size or Options2RowParts.BOX
+function RowParts.MakeEnableBox(row, click_fn, size, row_h)
+    local S = size or RowParts.BOX
 
     local box = Turbine.UI.Control()
     box:SetParent(row)
     box:SetSize(S, S)
-    box:SetTop(math.floor(((row_h or Options2RowParts.ROW_H) - S) / 2))
+    box:SetTop(math.floor(((row_h or RowParts.ROW_H) - S) / 2))
     box:SetMouseVisible(true)
 
     local inner = Turbine.UI.Control()
@@ -114,12 +121,12 @@ end
 
 -- small square marking "this node has triggers of its own"; stands in for the
 -- node_trigger bolt glyph until that art exists
-function Options2RowParts.MakeBolt(row)
-    local S = Options2RowParts.BOLT
+function RowParts.MakeBolt(row)
+    local S = RowParts.BOLT
     local bolt = Turbine.UI.Control()
     bolt:SetParent(row)
     bolt:SetSize(S, S)
-    bolt:SetTop(math.floor((Options2RowParts.ROW_H - S) / 2))
+    bolt:SetTop(math.floor((RowParts.ROW_H - S) / 2))
     bolt:SetBackColor(Options.Defaults.window.color_trigger)
     bolt:SetVisible(false)
     bolt:SetMouseVisible(false)
@@ -130,11 +137,11 @@ end
 -- and the folder's expand state, because a .tga glyph cannot be coloured.
 -- slot is the horizontal space the square is centred in, so rows keep their
 -- alignment whatever size the square is.
-function Options2RowParts.MakeSquare(row, size, slot, color)
+function RowParts.MakeSquare(row, size, slot, color)
     local square = Turbine.UI.Control()
     square:SetParent(row)
     square:SetSize(size, size)
-    square:SetTop(math.floor((Options2RowParts.ROW_H - size) / 2))
+    square:SetTop(math.floor((RowParts.ROW_H - size) / 2))
     square:SetMouseVisible(false)
 
     local inner = Turbine.UI.Control()
@@ -161,10 +168,10 @@ function Options2RowParts.MakeSquare(row, size, slot, color)
     return square
 end
 
-function Options2RowParts.MakeLabel(row, size, color, alignment)
+function RowParts.MakeLabel(row, size, color, alignment)
     local label = Turbine.UI.Label()
     label:SetParent(row)
-    label:SetHeight(Options2RowParts.ROW_H)
+    label:SetHeight(RowParts.ROW_H)
     label:SetFont(size)
     label:SetForeColor(color)
     label:SetTextAlignment(alignment)
@@ -173,7 +180,7 @@ function Options2RowParts.MakeLabel(row, size, color, alignment)
 end
 
 -- selection / hover / drag / click wiring shared by both row types
-function Options2RowParts.WireRow(row, navWin)
+function RowParts.WireRow(row, navWin)
     row.MouseEnter = function()
         if not row.selected then
             row:SetBackColor(Options.Defaults.window.row_odd)
@@ -207,7 +214,7 @@ end
 -- Contents column rows: select on click, context menu on right click. They are
 -- not drag sources — the contents column shows one container at a time, so
 -- there is nowhere to drag to.
-function Options2RowParts.WireContentRow(row, contentWin)
+function RowParts.WireContentRow(row, contentWin)
     row:SetMouseVisible(true)
     row.MouseEnter = function()
         if not row.selected then
@@ -226,9 +233,9 @@ function Options2RowParts.WireContentRow(row, contentWin)
     end
 end
 
-function Options2RowParts.ApplySelected(row, selected)
+function RowParts.ApplySelected(row, selected)
     row.selected = selected
-    row.rail:SetWidth(selected and Options2RowParts.RAIL_W or Options2RowParts.RAIL_IDLE_W)
+    row.rail:SetWidth(selected and RowParts.RAIL_W or RowParts.RAIL_IDLE_W)
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
 end
 
@@ -253,7 +260,7 @@ local function token_types()
 end
 
 -- the trigger's own description, falling back to its localised type name
-function Options2RowParts.TriggerLabel(trigData, trigType)
+function RowParts.TriggerLabel(trigData, trigType)
     local desc = trigData and trigData.description
     if desc ~= nil and desc ~= "" then return desc end
     local lang = L[Language.Local] or L[Language.English]
@@ -261,7 +268,7 @@ function Options2RowParts.TriggerLabel(trigData, trigType)
 end
 
 -- returns the token to show plus whether it is a "nothing set yet" placeholder
-function Options2RowParts.TriggerToken(trigData, trigType)
+function RowParts.TriggerToken(trigData, trigType)
     local token = trigData and trigData.token
     if token ~= nil and token ~= "" then return token, false end
     if token_types()[trigType] then
@@ -271,7 +278,7 @@ function Options2RowParts.TriggerToken(trigData, trigType)
 end
 
 -- 1px vertical rail spanning the row, used to tie a timer's children together
-function Options2RowParts.MakeRailAt(row, x, color, height)
+function RowParts.MakeRailAt(row, x, color, height)
     local rail = Turbine.UI.Control()
     rail:SetParent(row)
     rail:SetPosition(x, 0)
@@ -282,7 +289,7 @@ function Options2RowParts.MakeRailAt(row, x, color, height)
 end
 
 -- true when the container holds at least one trigger of any type
-function Options2RowParts.HasTriggers(container, trig_types)
+function RowParts.HasTriggers(container, trig_types)
     for _, tt in ipairs(trig_types) do
         local list = container[tt]
         if list ~= nil and #list > 0 then return true end
@@ -295,32 +302,32 @@ end
 -- one continuous line down the whole timer block, including behind a condition
 -- and its own triggers. A condition trigger adds a second, purple rail inside
 -- that.
-Options2RowParts.CHILD_H          = 26
-Options2RowParts.CHILD_RAIL_X     = 18   -- timer rail, every child row
-Options2RowParts.CHILD_TEXT_X     = 27   -- rail + 8px margin
-Options2RowParts.COND_RAIL_X      = 31   -- timer rail + 12px margin
-Options2RowParts.COND_TEXT_X      = 40   -- condition rail + 8px margin
-Options2RowParts.CHILD_MARK       = 4
-Options2RowParts.CHILD_DOT        = 8
-Options2RowParts.CHILD_GAP        = 8
-Options2RowParts.CHILD_PAD        = 10
+RowParts.CHILD_H          = 26
+RowParts.CHILD_RAIL_X     = 18   -- timer rail, every child row
+RowParts.CHILD_TEXT_X     = 27   -- rail + 8px margin
+RowParts.COND_RAIL_X      = 31   -- timer rail + 12px margin
+RowParts.COND_TEXT_X      = 40   -- condition rail + 8px margin
+RowParts.CHILD_MARK       = 4
+RowParts.CHILD_DOT        = 8
+RowParts.CHILD_GAP        = 8
+RowParts.CHILD_PAD        = 10
 
 -- marker square standing in for the trigger bolt / condition funnel glyphs
-function Options2RowParts.MakeChildMark(row, color)
-    local S = Options2RowParts.CHILD_MARK
+function RowParts.MakeChildMark(row, color)
+    local S = RowParts.CHILD_MARK
     local mark = Turbine.UI.Control()
     mark:SetParent(row)
     mark:SetSize(S, S)
-    mark:SetTop(math.floor((Options2RowParts.CHILD_H - S) / 2))
+    mark:SetTop(math.floor((RowParts.CHILD_H - S) / 2))
     mark:SetBackColor(color)
     mark:SetMouseVisible(false)
     return mark
 end
 
-function Options2RowParts.MakeChildLabel(row, font, color, alignment)
+function RowParts.MakeChildLabel(row, font, color, alignment)
     local label = Turbine.UI.Label()
     label:SetParent(row)
-    label:SetHeight(Options2RowParts.CHILD_H)
+    label:SetHeight(RowParts.CHILD_H)
     label:SetFont(font)
     label:SetForeColor(color)
     label:SetTextAlignment(alignment)
@@ -329,7 +336,7 @@ function Options2RowParts.MakeChildLabel(row, font, color, alignment)
 end
 
 -- selection treatment shared by every contents child row
-function Options2RowParts.ApplyChildSelected(row, selected, sel_rail)
+function RowParts.ApplyChildSelected(row, selected, sel_rail)
     row.selected = selected
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
     sel_rail:SetVisible(selected)
