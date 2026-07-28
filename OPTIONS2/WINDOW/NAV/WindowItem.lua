@@ -1,22 +1,38 @@
-local H = 28
-local STRIPE = 8
-local INDENT = 12
-local ARROW_W = 18
-local BADGE_W = 52
-local ICON_S  = 10
-local TOG_W   = 18
-local TOG_S   = 10
-local COL_ON  = Turbine.UI.Color(0.2, 0.75, 0.3)
-local COL_OFF = Turbine.UI.Color(0.25, 0.25, 0.25)
+-- Structure column row: window.
+-- window icon · name · type tag · [bolt] · enable box
+-- Windows hold no children in this column, so they carry no chevron.
+
+local P = nil   -- resolved lazily; RowParts is imported before this file
+
+local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana12
+local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
+
+local ICON_WINDOW = "Gibberish3/RESOURCES/nav_btn_window.tga"
+local TAG_W       = 52
+
+-- "Bar" / "Counter" etc. from the tables in UI_ELEMENTS/__init__.lua, uppercased
+-- for the tag. string.upper is byte-wise, which is fine for these ASCII names.
+local function type_tag(wd)
+    local lang = L[Language.Local] or L[Language.English]
+    local name
+    if wd.type == Window.Types.COUNTER_WINDOW then
+        name = lang.windowType and lang.windowType[wd.type]
+    else
+        name = lang.type and wd.timerType and lang.type[wd.timerType]
+    end
+    if name == nil or name == "" then return "" end
+    return string.upper(name)
+end
 
 Options2NavWindow = class(Turbine.UI.Control)
 function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, depth)
     Turbine.UI.Control.Constructor(self)
+    P = Options2NavParts
 
     self.navWin   = navWin
     self.key      = key
     self.selected = false
-    self.depth    = depth or 1
+    self.depth    = depth or 0
     self.nodeData = {
         nodeType    = "window",
         key         = key,
@@ -24,128 +40,101 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
         windowIndex = winIdx,
     }
 
-    self:SetHeight(H)
+    self:SetHeight(P.ROW_H)
 
-    self.stripe = Turbine.UI.Control()
-    self.stripe:SetParent(self)
-    self.stripe:SetPosition(0, 0)
-    self.stripe:SetSize(STRIPE, H)
-    self.stripe:SetBackColor(Options.Defaults.window.color_window)
-    self.stripe:SetMouseVisible(false)
+    self.rail = P.MakeRail(self, Options.Defaults.window.color_window)
+    self.icon = P.MakeIcon(self, P.NODE_ICON, ICON_WINDOW)
 
-    local cx = STRIPE + self.depth * INDENT
+    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.text,
+        Turbine.UI.ContentAlignment.MiddleLeft)
 
-    self.arrow = Turbine.UI.Control()
-    self.arrow:SetParent(self)
-    self.arrow:SetPosition(cx + math.floor((ARROW_W - ICON_S) / 2), math.floor((H - ICON_S) / 2))
-    self.arrow:SetSize(ICON_S, ICON_S)
-    self.arrow:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.arrow:SetBackground(expanded and "Gibberish3/RESOURCES/nav_arrow_down.tga" or "Gibberish3/RESOURCES/nav_arrow_right.tga")
-    self.arrow:SetMouseVisible(false)
+    self.tag = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
+        Turbine.UI.ContentAlignment.MiddleRight)
 
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(cx + ARROW_W, 0)
-    self.label:SetHeight(H)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Options.Defaults.window.font)
-    self.label:SetForeColor(Options.Defaults.window.color_window)
-    self.label:SetText(winData.name or "(window)")
-    self.label:SetMouseVisible(false)
+    self.bolt = P.MakeBolt(self)
 
-    local lang = L[Language.Local] or L[Language.English]
-    local type_name  = (lang.type and winData.timerType and lang.type[winData.timerType]) or ""
-    local type_label = (winData.type == Window.Types.COUNTER_WINDOW and type_name ~= "")
-                       and ("Counter " .. type_name) or type_name
-
-    self.badge = Turbine.UI.Label()
-    self.badge:SetParent(self)
-    self.badge:SetHeight(H)
-    self.badge:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.badge:SetFont(Options.Defaults.window.font)
-    self.badge:SetForeColor(Options.Defaults.window.textdark)
-    self.badge:SetText(type_label)
-    self.badge:SetMouseVisible(false)
-
-    self.toggle = Turbine.UI.Control()
-    self.toggle:SetParent(self)
-    self.toggle:SetSize(TOG_S, TOG_S)
-    self.toggle:SetTop(math.floor((H - TOG_S) / 2))
-    self.toggle:SetMouseVisible(true)
-    self.toggle:SetBackColor(winData.enabled == true and COL_ON or COL_OFF)
-    self.toggle.MouseClick = function()
+    self.box = P.MakeEnableBox(self, function()
         winData.enabled = not winData.enabled
-        self.toggle:SetBackColor(winData.enabled and COL_ON or COL_OFF)
+        self.box:SetOn(winData.enabled == true)
         Options.SaveData()
         Options.DataChanged(winIdx)
         Windows.EnabledChanged(winIdx)
+        navWin:RefreshEnabledStates()
+    end)
+
+    P.WireRow(self, navWin)
+    self:_Sync()
+end
+
+function Options2NavWindow:_Sync()
+    local wd = self.nodeData.data
+
+    self._name = (wd.name ~= nil and wd.name ~= "") and wd.name
+        or UTILS.GetText("options2", "unnamed_window")
+    self.tag:SetText(type_tag(wd))
+    self.bolt:SetVisible(Options2NavParts.HasTriggers(wd, self.navWin.trig_types))
+    self.box:SetOn(wd.enabled == true)
+    self.label:SetForeColor(wd.enabled == true
+        and Options.Defaults.window.text
+        or  Options.Defaults.window.text_muted)
+
+    P.LayoutGuides(self, self.depth)
+    self:_Layout()
+end
+
+function Options2NavWindow:_Layout()
+    local w = self:GetWidth()
+    if w <= 0 then return end
+
+    local left = P.ContentLeft(self.depth)
+    self.icon:SetLeft(left)
+    local text_left = left + P.NODE_ICON + P.GAP
+
+    -- right to left: enable box, trigger bolt, type tag
+    local x = w - P.PAD - P.BOX
+    self.box:SetLeft(x)
+
+    if self.bolt:IsVisible() then
+        x = x - P.GAP - P.BOLT
+        self.bolt:SetLeft(x)
     end
 
-    self.MouseEnter = function()
-        if not self.selected then
-            self:SetBackColor(Options.Defaults.window.hovercolor)
-        end
-    end
-    self.MouseLeave = function()
-        if not self.selected then self:SetBackColor(nil) end
-    end
-    self.MouseDown = function(sender, args)
-        if args.Button == Turbine.UI.MouseButton.Left then navWin:_DragBegin(self, args) end
-    end
-    self.MouseMove = function(sender, args) navWin:_DragMove(self, args) end
-    self.MouseUp = function(sender, args)
-        if args.Button == Turbine.UI.MouseButton.Left then navWin:_DragFinish(self, args) end
-    end
-    self.MouseDoubleClick = function(sender, args)
-        if args.Button ~= Turbine.UI.MouseButton.Right then
-            navWin:_ToggleExpand(self)
-        end
-    end
-    self.MouseClick = function(sender, args)
-        if navWin._drag_just_ended then navWin._drag_just_ended = false; return end
-        if args.Button == Turbine.UI.MouseButton.Right then
-            navWin:ItemRightClicked(self)
-        else
-            navWin:ItemClicked(self)
-        end
-    end
+    x = x - P.GAP - TAG_W
+    self.tag:SetPosition(x, 0)
+    self.tag:SetWidth(TAG_W)
+
+    local text_w = math.max(0, x - P.GAP - text_left)
+    self.label:SetPosition(text_left, 0)
+    self.label:SetWidth(text_w)
+    self.label:SetText(P.Truncate(self._name, P.CharBudget(text_w)))
 end
 
 function Options2NavWindow:SizeChanged()
     if self.label == nil then return end
-    local w  = self:GetWidth()
-    local cx = STRIPE + self.depth * INDENT
-    self.label:SetWidth(w - cx - ARROW_W - BADGE_W - TOG_W - 2)
-    self.badge:SetPosition(w - BADGE_W - TOG_W - 2, 0)
-    self.badge:SetWidth(BADGE_W)
-    self.toggle:SetLeft(w - TOG_S - 4)
+    self:_Layout()
 end
 
 function Options2NavWindow:SetSelected(v)
-    self.selected = v
-    self:SetBackColor(v and Options.Defaults.window.w_window_select or nil)
+    Options2NavParts.ApplySelected(self, v)
 end
 
 function Options2NavWindow:GetKey()       return self.key end
-function Options2NavWindow:IsExpandable() return true end
 
-function Options2NavWindow:SetExpanded(v)
-    self.arrow:SetBackground(v and "Gibberish3/RESOURCES/nav_arrow_down.tga" or "Gibberish3/RESOURCES/nav_arrow_right.tga")
+-- windows own no rows in the structure column
+function Options2NavWindow:IsExpandable() return false end
+function Options2NavWindow:SetExpanded(v) end
+
+function Options2NavWindow:RefreshEnabled()
+    self.box:SetOn(self.nodeData.data.enabled == true)
+    self.label:SetForeColor(self.nodeData.data.enabled == true
+        and Options.Defaults.window.text
+        or  Options.Defaults.window.text_muted)
 end
 
 function Options2NavWindow:Refresh(expanded, depth)
-    if depth ~= self.depth then
-        self.depth = depth
-        local cx = STRIPE + depth * INDENT
-        self.arrow:SetPosition(cx + math.floor((ARROW_W - ICON_S) / 2), math.floor((H - ICON_S) / 2))
-        self.label:SetPosition(cx + ARROW_W, 0)
-    end
-    local wd = self.nodeData.data
-    self.label:SetText(wd.name or "(window)")
-    self.toggle:SetBackColor(wd.enabled == true and COL_ON or COL_OFF)
-    self.arrow:SetBackground(expanded
-        and "Gibberish3/RESOURCES/nav_arrow_down.tga"
-        or  "Gibberish3/RESOURCES/nav_arrow_right.tga")
+    self.depth = depth or 0
     self.selected = false
+    self.rail:SetVisible(false)
     self:SetBackColor(nil)
+    self:_Sync()
 end

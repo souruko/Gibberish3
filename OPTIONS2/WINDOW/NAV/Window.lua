@@ -1,17 +1,23 @@
-local TOOLBAR_H = 36
-local SEP_H     = 2
-local ITEM_H    = 28
+local HEADER_H  = 26
+local SEARCH_H  = 24
+local FOOTER_H  = 20
+local SEP_H     = 1
+local ITEM_H    = 26
 local SCROLL_W  = 10
-local BTN_SIZE  = 26
-local BTN_GAP   = 2
-local BTN_ICON  = 16
+local BTN_SIZE  = 18
+local BTN_GAP   = 4
+local BTN_ICON  = 14
+local PAD       = 8
+local LIST_TOP  = HEADER_H + SEARCH_H + SEP_H
+
+local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
+local FONT_BODY  = Turbine.UI.Lotro.Font.Verdana12
 
 local function make_nav_btn(parent, icon_path, click_fn)
-    local BTN_TOP = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_SIZE, BTN_SIZE)
-    btn:SetTop(BTN_TOP)
+    btn:SetTop(math.floor((HEADER_H - BTN_SIZE) / 2))
     btn:SetMouseVisible(true)
 
     local icon = Turbine.UI.Control()
@@ -20,9 +26,10 @@ local function make_nav_btn(parent, icon_path, click_fn)
     icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), math.floor((BTN_SIZE - BTN_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
+    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
-    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.hovercolor) end
+    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.select) end
     btn.MouseLeave = function() btn:SetBackColor(nil) end
     btn.MouseClick = click_fn
 
@@ -52,92 +59,162 @@ function Options2.Window.Nav.Constructor:Constructor()
     table.sort(self.trig_types)
 
 
-    self:SetBackColor(Options.Defaults.window.backcolor1)
+    self:SetBackColor(Options.Defaults.window.bg_sunken)
 
-    -- ── toolbar ──────────────────────────────────────────────────
-    self.toolbar = Turbine.UI.Control()
-    self.toolbar:SetParent(self)
-    self.toolbar:SetPosition(0, 0)
-    self.toolbar:SetBackColor(Options.Defaults.window.backcolor2)
+    -- ── header ───────────────────────────────────────────────────
+    self.header = Turbine.UI.Control()
+    self.header:SetParent(self)
+    self.header:SetPosition(0, 0)
+    self.header:SetHeight(HEADER_H)
+    self.header:SetBackColor(Options.Defaults.window.row_even)
+    self.header:SetMouseVisible(false)
 
-    self.search_box = Turbine.UI.TextBox()
-    self.search_box:SetParent(self.toolbar)
-    self.search_box:SetHeight(BTN_SIZE)
-    self.search_box:SetFont(Options.Defaults.window.font)
-    self.search_box:SetForeColor(Options.Defaults.window.textcolor)
-    self.search_box:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.search_box:SetMultiline(false)
-    self.search_box:SetSelectable(true)
-    self.search_box.TextChanged = function()
-        self.filter = self.search_box:GetText():lower()
-        self.search_clear:SetVisible(self.filter ~= "")
-        self:Rebuild()
-    end
+    self.header_label = Turbine.UI.Label()
+    self.header_label:SetParent(self.header)
+    self.header_label:SetPosition(PAD, 0)
+    self.header_label:SetHeight(HEADER_H)
+    self.header_label:SetFont(FONT_SMALL)
+    self.header_label:SetForeColor(Options.Defaults.window.text_muted)
+    self.header_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.header_label:SetMouseVisible(false)
 
-    self.search_icon = Turbine.UI.Control()
-    self.search_icon:SetParent(self.toolbar)
-    self.search_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.search_icon:SetBackground("Gibberish3/Resources/search.tga")
-    self.search_icon:SetMouseVisible(true)
-    self.search_icon.MouseClick = function() self.search_box:Focus() end
-
-    self.search_clear = Turbine.UI.Button()
-    self.search_clear:SetSize(20, 20)
-    self.search_clear:SetParent(self.search_box)
-    self.search_clear:SetText("x")
-    self.search_clear:SetFont(Options.Defaults.window.font)
-    self.search_clear:SetVisible(false)
-    self.search_clear.Click = function()
-        self.search_box:SetText("")
-        self.filter = ""
-        self.search_clear:SetVisible(false)
-        self:Rebuild()
-    end
-
-    self.add_folder_btn = make_nav_btn(self.toolbar,
+    self.add_folder_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_folder.tga",
         function()
-            Folder.New("New Folder")
+            Folder.New(UTILS.GetText("options2", "new_folder"))
             Options.SaveData()
             self:RebuildFresh()
         end)
 
-    self.add_window_btn = make_nav_btn(self.toolbar,
+    self.add_window_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_window.tga",
         function()
             self:ShowAddWindowMenu()
         end)
 
-    self.collapse_btn = make_nav_btn(self.toolbar,
-        "Gibberish3/RESOURCES/nav_btn_collapse.tga",
-        function()
-            self:CollapseAll()
-        end)
-
-    self.import_btn = make_nav_btn(self.toolbar,
+    self.import_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_import.tga",
         function()
             local nd = Options2.selectedNode
             Options2.ShowImport(nd)
         end)
 
-    -- separator line below toolbar
-    self.toolbar_sep = Turbine.UI.Control()
-    self.toolbar_sep:SetParent(self)
-    self.toolbar_sep:SetPosition(0, TOOLBAR_H)
-    self.toolbar_sep:SetBackColor(Options.Defaults.window.framecolor)
-    self.toolbar_sep:SetMouseVisible(false)
+    self.collapse_btn = make_nav_btn(self.header,
+        "Gibberish3/RESOURCES/nav_btn_collapse.tga",
+        function()
+            self:CollapseAll()
+        end)
+
+    -- ── search row ───────────────────────────────────────────────
+    self.search_row = Turbine.UI.Control()
+    self.search_row:SetParent(self)
+    self.search_row:SetPosition(0, HEADER_H)
+    self.search_row:SetHeight(SEARCH_H)
+    self.search_row:SetMouseVisible(false)
+
+    self.search_icon = Turbine.UI.Control()
+    self.search_icon:SetParent(self.search_row)
+    self.search_icon:SetSize(12, 12)
+    self.search_icon:SetTop(math.floor((SEARCH_H - 12) / 2))
+    self.search_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.search_icon:SetBackground("Gibberish3/RESOURCES/search.tga")
+    self.search_icon:SetStretchMode(1)
+    self.search_icon:SetMouseVisible(true)
+    self.search_icon.MouseClick = function() self.search_box:Focus() end
+
+    self.search_box = Turbine.UI.TextBox()
+    self.search_box:SetParent(self.search_row)
+    self.search_box:SetHeight(SEARCH_H - 4)
+    self.search_box:SetTop(2)
+    self.search_box:SetFont(FONT_BODY)
+    self.search_box:SetForeColor(Options.Defaults.window.text)
+    self.search_box:SetBackColor(nil)
+    self.search_box:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.search_box:SetMultiline(false)
+    self.search_box:SetSelectable(true)
+    self.search_box.TextChanged = function()
+        self.filter = self.search_box:GetText():lower()
+        self.search_clear:SetVisible(self.filter ~= "")
+        self.search_hint:SetVisible(self.filter == "")
+        self:Rebuild()
+    end
+
+    -- Turbine.UI.TextBox has no placeholder, so this label sits over the empty box
+    self.search_hint = Turbine.UI.Label()
+    self.search_hint:SetParent(self.search_row)
+    self.search_hint:SetHeight(SEARCH_H)
+    self.search_hint:SetFont(FONT_BODY)
+    self.search_hint:SetForeColor(Options.Defaults.window.text_faint)
+    self.search_hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.search_hint:SetMouseVisible(false)
+
+    self.search_clear = Turbine.UI.Button()
+    self.search_clear:SetSize(20, 20)
+    self.search_clear:SetParent(self.search_box)
+    self.search_clear:SetText("x")
+    self.search_clear:SetFont(FONT_BODY)
+    self.search_clear:SetVisible(false)
+    self.search_clear.Click = function()
+        self.search_box:SetText("")
+        self.filter = ""
+        self.search_clear:SetVisible(false)
+        self.search_hint:SetVisible(true)
+        self:Rebuild()
+    end
+
+    self.search_sep = Turbine.UI.Control()
+    self.search_sep:SetParent(self)
+    self.search_sep:SetPosition(0, HEADER_H + SEARCH_H)
+    self.search_sep:SetHeight(SEP_H)
+    self.search_sep:SetBackColor(Options.Defaults.window.line)
+    self.search_sep:SetMouseVisible(false)
 
     -- ── flat-list ListBox (right-click events reach items) ────────
     self.listbox = Turbine.UI.ListBox()
     self.listbox:SetParent(self)
-    self.listbox:SetBackColor(Options.Defaults.window.backcolor1)
+    self.listbox:SetBackColor(Options.Defaults.window.bg_sunken)
 
     self.scrollbar = Turbine.UI.Lotro.ScrollBar()
     self.scrollbar:SetParent(self)
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
     self.listbox:SetVerticalScrollBar(self.scrollbar)
+
+    -- ── footer ───────────────────────────────────────────────────
+    self.footer_sep = Turbine.UI.Control()
+    self.footer_sep:SetParent(self)
+    self.footer_sep:SetHeight(SEP_H)
+    self.footer_sep:SetBackColor(Options.Defaults.window.line)
+    self.footer_sep:SetMouseVisible(false)
+
+    self.footer = Turbine.UI.Label()
+    self.footer:SetParent(self)
+    self.footer:SetHeight(FOOTER_H)
+    self.footer:SetFont(FONT_SMALL)
+    self.footer:SetForeColor(Options.Defaults.window.text_faint)
+    self.footer:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.footer:SetMouseVisible(false)
+
+    self:_RefreshTexts()
     self:_InitDrag()
+end
+
+function Options2.Window.Nav.Constructor:_RefreshTexts()
+    self.header_label:SetText(UTILS.GetText("options2", "structure"))
+    self.search_hint:SetText(UTILS.GetText("options2", "find_folder_window"))
+    self:_RefreshFooter()
+end
+
+function Options2.Window.Nav.Constructor:_RefreshFooter()
+    if self.footer == nil then return end
+    self.footer:SetText(string.format(
+        UTILS.GetText("options2", "footer_counts"), #Data.folder, #Data.window))
+end
+
+-- repaint every visible row's enable box (a folder box reflects its subtree)
+function Options2.Window.Nav.Constructor:RefreshEnabledStates()
+    for _, item in ipairs(self.items) do
+        if item.RefreshEnabled ~= nil then item:RefreshEnabled() end
+    end
 end
 
 -- ── item cache ─────────────────────────────────────────────────────────────────
@@ -163,38 +240,51 @@ end
 -- ── size ───────────────────────────────────────────────────────────────────────
 
 function Options2.Window.Nav.Constructor:SizeChanged()
+    if self.header == nil then return end
     local w, h = self:GetSize()
+    if w <= 0 or h <= 0 then return end
     local list_w = w - SCROLL_W
 
-    self.toolbar:SetSize(w, TOOLBAR_H)
-    self.toolbar_sep:SetSize(w, SEP_H)
+    self.header:SetWidth(w)
 
-    local collapse_left   = w - 4 - BTN_SIZE
-    local add_window_left = collapse_left - BTN_GAP - BTN_SIZE
-    local add_folder_left = add_window_left - BTN_GAP - BTN_SIZE
-    local import_left     = add_folder_left - BTN_GAP - BTN_SIZE
-    self.import_btn:SetLeft(import_left)
-    self.add_folder_btn:SetLeft(add_folder_left)
-    self.add_window_btn:SetLeft(add_window_left)
-    self.collapse_btn:SetLeft(collapse_left)
+    -- header buttons, right to left
+    local x = w - PAD - BTN_SIZE
+    self.collapse_btn:SetLeft(x)
+    x = x - BTN_GAP - BTN_SIZE
+    self.import_btn:SetLeft(x)
+    x = x - BTN_GAP - BTN_SIZE
+    self.add_window_btn:SetLeft(x)
+    x = x - BTN_GAP - BTN_SIZE
+    self.add_folder_btn:SetLeft(x)
+    self.header_label:SetWidth(math.max(0, x - PAD - PAD))
 
-    local icon_top    = math.floor((TOOLBAR_H - BTN_ICON) / 2)
-    local btn_top     = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
-    local search_left = 4 + BTN_ICON + 2
-    local search_w    = import_left - search_left - 4
-    self.search_icon:SetPosition(4, icon_top)
-    self.search_icon:SetSize(BTN_ICON, BTN_ICON)
-    self.search_box:SetPosition(search_left, btn_top)
+    -- search row
+    self.search_row:SetWidth(w)
+    self.search_sep:SetWidth(w)
+    local search_left = PAD + 12 + 6
+    local search_w    = math.max(0, w - search_left - PAD)
+    self.search_icon:SetLeft(PAD)
+    self.search_box:SetPosition(search_left, 2)
     self.search_box:SetWidth(search_w)
-    self.search_clear:SetPosition(search_w - 26, math.floor((BTN_SIZE - 20) / 2))
+    self.search_hint:SetPosition(search_left + 2, 0)
+    self.search_hint:SetWidth(search_w)
+    self.search_clear:SetPosition(search_w - 24, math.floor((SEARCH_H - 4 - 20) / 2))
 
-    local list_top = TOOLBAR_H + SEP_H
-    local view_h   = h - list_top
+    -- list
+    local list_top   = HEADER_H + SEARCH_H + SEP_H
+    local footer_top = h - FOOTER_H
+    local view_h     = math.max(0, footer_top - SEP_H - list_top)
     self.listbox:SetPosition(0, list_top)
     self.listbox:SetSize(list_w, view_h)
 
     self.scrollbar:SetPosition(list_w, list_top)
     self.scrollbar:SetSize(SCROLL_W, view_h)
+
+    -- footer
+    self.footer_sep:SetPosition(0, footer_top - SEP_H)
+    self.footer_sep:SetWidth(w)
+    self.footer:SetPosition(PAD, footer_top)
+    self.footer:SetWidth(math.max(0, w - 2 * PAD))
 
     if list_w ~= self._last_list_w then
         self._last_list_w = list_w
@@ -215,11 +305,6 @@ end
 -- items for shifted indices are not reused.
 function Options2.Window.Nav.Constructor:RebuildFresh()
     self:ClearItemCache()
-    self:Rebuild()
-end
-
-function Options2.Window.Nav.Constructor:CollapseAll()
-    self.expanded = {}
     self:Rebuild()
 end
 
@@ -255,68 +340,28 @@ end
 
 -- ── ensure ancestor nodes are expanded so a key is visible ────────────────────
 
+-- Only folders nest in this column. Keys saved by an older version may name a
+-- timer or trigger; those simply resolve to nothing and the selection is
+-- dropped, which is why every lookup here is guarded.
 function Options2.Window.Nav.Constructor:_EnsureKeyVisible(key)
     if key == nil then return end
     local parts = {}
     for p in key:gmatch("[^_]+") do parts[#parts + 1] = p end
     local prefix = parts[1]
 
+    local parent_folder = nil
     if prefix == "f" then
         local fi = tonumber(parts[2])
-        if fi and Data.folder[fi] and Data.folder[fi].folder ~= nil then
-            local pkey = "f_" .. Data.folder[fi].folder
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "ft" then
-        local fi = tonumber(parts[2])
-        if fi then
-            local pkey = "f_" .. fi
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
+        if fi and Data.folder[fi] then parent_folder = Data.folder[fi].folder end
     elseif prefix == "w" then
         local wi = tonumber(parts[2])
-        if wi and Data.window[wi] and Data.window[wi].folder ~= nil then
-            local pkey = "f_" .. Data.window[wi].folder
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "wt" then
-        local wi = tonumber(parts[2])
-        if wi then
-            local pkey = "w_" .. wi
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "t" then
-        local wi = tonumber(parts[2])
-        if wi then
-            local pkey = "w_" .. wi
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "tt" then
-        local wi, tmi = tonumber(parts[2]), tonumber(parts[3])
-        if wi and tmi then
-            local pkey = "t_" .. wi .. "_" .. tmi
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "c" then
-        local wi, tmi = tonumber(parts[2]), tonumber(parts[3])
-        if wi and tmi then
-            local pkey = "t_" .. wi .. "_" .. tmi
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
-    elseif prefix == "ct" then
-        local wi, tmi, ci = tonumber(parts[2]), tonumber(parts[3]), tonumber(parts[4])
-        if wi and tmi and ci then
-            local pkey = "c_" .. wi .. "_" .. tmi .. "_" .. ci
-            self.expanded[pkey] = true
-            self:_EnsureKeyVisible(pkey)
-        end
+        if wi and Data.window[wi] then parent_folder = Data.window[wi].folder end
+    end
+
+    if parent_folder ~= nil then
+        local pkey = "f_" .. parent_folder
+        self.expanded[pkey] = true
+        self:_EnsureKeyVisible(pkey)
     end
 end
 
@@ -339,6 +384,7 @@ function Options2.Window.Nav.Constructor:Rebuild()
     end
     self.items = new_items
 
+    self:_RefreshFooter()
     self:_RestoreSelection()
 end
 
@@ -363,24 +409,9 @@ function Options2.Window.Nav.Constructor:_ComputeVisibleItems()
     local list_w = self.listbox:GetWidth()
     if list_w <= 0 then list_w = 260 end
 
-    local roots = {}
-    for fi, fd in ipairs(Data.folder) do
-        if fd.folder == nil then
-            roots[#roots + 1] = { kind = "folder", idx = fi, data = fd }
-        end
-    end
-    for wi, wd in ipairs(Data.window) do
-        if wd.folder == nil then
-            roots[#roots + 1] = { kind = "window", idx = wi, data = wd }
-        end
-    end
-    table.sort(roots, function(a, b)
-        if a.kind ~= b.kind then return a.kind == "folder" end
-        return (a.data.name or ""):lower() < (b.data.name or ""):lower()
-    end)
-    for _, entry in ipairs(roots) do
+    for _, entry in ipairs(self:_ChildrenOf(nil)) do
         if entry.kind == "folder" then
-            self:_AddFolder(entry.idx, entry.data, list_w)
+            self:_AddFolder(entry.idx, entry.data, list_w, 0)
         else
             self:_AddWindow(entry.idx, entry.data, list_w, 0)
         end
@@ -439,6 +470,52 @@ function Options2.Window.Nav.Constructor:_RestoreSelection()
     end
 end
 
+-- Direct children of a folder (nil = root level), ordered per SPEC:
+-- folders before windows, enabled before disabled, then A-Z case-insensitive.
+function Options2.Window.Nav.Constructor:_ChildrenOf(folderIdx)
+    local children = {}
+
+    for fi, fd in ipairs(Data.folder) do
+        if fd.folder == folderIdx then
+            children[#children + 1] = {
+                kind    = "folder",
+                idx     = fi,
+                data    = fd,
+                enabled = self:_FolderEnabled(fi),
+            }
+        end
+    end
+    for wi, wd in ipairs(Data.window) do
+        if wd.folder == folderIdx then
+            children[#children + 1] = {
+                kind    = "window",
+                idx     = wi,
+                data    = wd,
+                enabled = (wd.enabled == true),
+            }
+        end
+    end
+
+    table.sort(children, function(a, b)
+        if a.kind ~= b.kind then return a.kind == "folder" end
+        if a.enabled ~= b.enabled then return a.enabled end
+        local an, bn = (a.data.name or ""):lower(), (b.data.name or ""):lower()
+        if an ~= bn then return an < bn end
+        return a.idx < b.idx
+    end)
+
+    return children
+end
+
+-- A folder has no enabled flag of its own; it counts as enabled when any window
+-- in its subtree is.
+function Options2.Window.Nav.Constructor:_FolderEnabled(folderIdx)
+    for _, wi in ipairs(Folder.GetWindowIndices(folderIdx)) do
+        if Data.window[wi] ~= nil and Data.window[wi].enabled == true then return true end
+    end
+    return false
+end
+
 function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
     depth = depth or 0
     if not self:_FolderVisible(fi, fd) then return end
@@ -455,32 +532,7 @@ function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
 
     if not expanded then return end
 
-    for _, tt in ipairs(self.trig_types) do
-        for ti, td in ipairs(fd[tt] or {}) do
-            local tkey = "ft_" .. fi .. "_" .. tt .. "_" .. ti
-            local td_cap, tt_cap, ti_cap, fi_cap, tkey_cap, d1 = td, tt, ti, fi, tkey, depth + 1
-            self:_AddItem(self:_GetOrCreate(tkey,
-                function() return Options2NavFolderTrigger(nav, td_cap, tt_cap, ti_cap, fi_cap, tkey_cap, d1) end,
-                false, d1), w)
-        end
-    end
-
-    local children = {}
-    for fi2, fd2 in ipairs(Data.folder) do
-        if fd2.folder == fi then
-            children[#children + 1] = { kind = "folder", idx = fi2, data = fd2 }
-        end
-    end
-    for wi, wd in ipairs(Data.window) do
-        if wd.folder == fi then
-            children[#children + 1] = { kind = "window", idx = wi, data = wd }
-        end
-    end
-    table.sort(children, function(a, b)
-        if a.kind ~= b.kind then return a.kind == "folder" end
-        return (a.data.name or ""):lower() < (b.data.name or ""):lower()
-    end)
-    for _, entry in ipairs(children) do
+    for _, entry in ipairs(self:_ChildrenOf(fi)) do
         if entry.kind == "folder" then
             self:_AddFolder(entry.idx, entry.data, w, depth + 1)
         else
@@ -489,102 +541,16 @@ function Options2.Window.Nav.Constructor:_AddFolder(fi, fd, w, depth)
     end
 end
 
+-- Windows are leaves here: their timers, triggers and conditions live in the
+-- contents column.
 function Options2.Window.Nav.Constructor:_AddWindow(wi, wd, w, depth)
     if not self:_WindowVisible(wd) then return end
     local key = "w_" .. wi
-    if self.expanded[key] == nil then
-        self.expanded[key] = not (wd.collapsed == true)
-    end
-    local expanded = self:_IsExpanded(key)
 
     local nav = self
     self:_AddItem(self:_GetOrCreate(key,
-        function() return Options2NavWindow(nav, wi, wd, key, expanded, depth) end,
-        expanded, depth), w)
-
-    if not expanded then return end
-
-    for _, tt in ipairs(self.trig_types) do
-        for ti, td in ipairs(wd[tt] or {}) do
-            local tkey = "wt_" .. wi .. "_" .. tt .. "_" .. ti
-            local td_cap, tt_cap, ti_cap, wi_cap, tkey_cap, d1 = td, tt, ti, wi, tkey, depth + 1
-            self:_AddItem(self:_GetOrCreate(tkey,
-                function() return Options2NavWindowTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tkey_cap, d1) end,
-                false, d1), w)
-        end
-    end
-
-    local timer_sorted = {}
-    for tmi, tmd in ipairs(wd.timerList or {}) do
-        timer_sorted[#timer_sorted + 1] = { tmi = tmi, tmd = tmd }
-    end
-    table.sort(timer_sorted, function(a, b)
-        return (a.tmd.description or ""):lower() < (b.tmd.description or ""):lower()
-    end)
-    for _, entry in ipairs(timer_sorted) do
-        self:_AddTimer(wi, entry.tmi, entry.tmd, w, depth + 1)
-    end
-end
-
-function Options2.Window.Nav.Constructor:_AddTimer(wi, tmi, tmd, w, depth)
-    local key = "t_" .. wi .. "_" .. tmi
-    if self.expanded[key] == nil then
-        self.expanded[key] = not (tmd.collapsed == true)
-    end
-    local expanded = self:_IsExpanded(key)
-
-    local nav = self
-    self:_AddItem(self:_GetOrCreate(key,
-        function() return Options2NavTimer(nav, wi, tmi, tmd, key, expanded, depth) end,
-        expanded, depth), w)
-
-    if not expanded then return end
-
-    for _, tt in ipairs(self.trig_types) do
-        for ti, td in ipairs(tmd[tt] or {}) do
-            local tkey = "tt_" .. wi .. "_" .. tmi .. "_" .. tt .. "_" .. ti
-            local td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, tkey_cap, d1 = td, tt, ti, wi, tmi, tkey, depth + 1
-            self:_AddItem(self:_GetOrCreate(tkey,
-                function() return Options2NavTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, tkey_cap, d1) end,
-                false, d1), w)
-        end
-    end
-
-    local cond_sorted = {}
-    for ci, cd in ipairs(tmd.conditionList or {}) do
-        cond_sorted[#cond_sorted + 1] = { ci = ci, cd = cd }
-    end
-    table.sort(cond_sorted, function(a, b)
-        return (a.cd.description or ""):lower() < (b.cd.description or ""):lower()
-    end)
-    for _, entry in ipairs(cond_sorted) do
-        self:_AddCondition(wi, tmi, entry.ci, entry.cd, w, depth + 1)
-    end
-end
-
-function Options2.Window.Nav.Constructor:_AddCondition(wi, tmi, ci, cd, w, depth)
-    local key = "c_" .. wi .. "_" .. tmi .. "_" .. ci
-    if self.expanded[key] == nil then
-        self.expanded[key] = not (cd.collapsed == true)
-    end
-    local expanded = self:_IsExpanded(key)
-
-    local nav = self
-    self:_AddItem(self:_GetOrCreate(key,
-        function() return Options2NavCondition(nav, wi, tmi, ci, cd, key, expanded, depth) end,
-        expanded, depth), w)
-
-    if not expanded then return end
-
-    for _, tt in ipairs(self.trig_types) do
-        for ti, td in ipairs(cd[tt] or {}) do
-            local tkey = "ct_" .. wi .. "_" .. tmi .. "_" .. ci .. "_" .. tt .. "_" .. ti
-            local td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, ci_cap, tkey_cap, d1 = td, tt, ti, wi, tmi, ci, tkey, depth + 1
-            self:_AddItem(self:_GetOrCreate(tkey,
-                function() return Options2NavCondTrigger(nav, td_cap, tt_cap, ti_cap, wi_cap, tmi_cap, ci_cap, tkey_cap, d1) end,
-                false, d1), w)
-        end
-    end
+        function() return Options2NavWindow(nav, wi, wd, key, false, depth) end,
+        false, depth), w)
 end
 
 -- ── interaction ────────────────────────────────────────────────────────────────
@@ -623,15 +589,9 @@ function Options2.Window.Nav.Constructor:_ToggleExpand(item)
     local now_expanded = not (self.expanded[key] == true)
     self.expanded[key] = now_expanded
     local nd = item.nodeData
-    local collapsed = not now_expanded
+    -- only folders nest in this column
     if nd.nodeType == "folder" then
-        Data.folder[nd.folderIndex].collapsed = collapsed
-    elseif nd.nodeType == "window" then
-        Data.window[nd.windowIndex].collapsed = collapsed
-    elseif nd.nodeType == "timer" then
-        Data.window[nd.windowIndex].timerList[nd.timerIndex].collapsed = collapsed
-    elseif nd.nodeType == "condition" then
-        Data.window[nd.windowIndex].timerList[nd.timerIndex].conditionList[nd.conditionIndex].collapsed = collapsed
+        Data.folder[nd.folderIndex].collapsed = not now_expanded
     end
 
     if not now_expanded then
@@ -674,23 +634,15 @@ function Options2.Window.Nav.Constructor:ItemRightClicked(item)
 end
 
 function Options2.Window.Nav.Constructor:CollapseAll()
-    for fi, fd in ipairs(Data.folder) do
+    for _, fd in ipairs(Data.folder) do
         fd.collapsed = true
-    end
-    for wi, wd in ipairs(Data.window) do
-        wd.collapsed = true
-        for _, tmd in ipairs(wd.timerList or {}) do
-            tmd.collapsed = true
-            for _, cd in ipairs(tmd.conditionList or {}) do
-                cd.collapsed = true
-            end
-        end
     end
     self.expanded = {}
     self:Rebuild()
 end
 
 function Options2.Window.Nav.Constructor:LanguageChanged()
+    self:_RefreshTexts()
     self:Rebuild()
 end
 
@@ -736,8 +688,8 @@ local function AddWindowTypeRows(container, lang, on_pick)
         local allowed = Window[wt] and Window[wt].Defaults and Window[wt].Defaults.allowedTimers or {}
         for _, ttype in ipairs(allowed) do
             local label = (wt == Window.Types.COUNTER_WINDOW)
-                and ((lang.windowType and lang.windowType[wt]) or "Counter")
-                or  (((lang.type and lang.type[ttype]) or ("Type " .. ttype)) .. " Timer")
+                and ((lang.windowType and lang.windowType[wt]) or "")
+                or  ((lang.type and lang.type[ttype]) or "")
             local wt_cap, tt_cap = wt, ttype
             container:AddRow(raw_row(label, function() on_pick(wt_cap, tt_cap) end))
         end
@@ -752,7 +704,7 @@ function Options2.Window.Nav.Constructor:ShowAddWindowMenu()
     local nav  = self
 
     AddWindowTypeRows(menu, lang, function(wt, tt)
-        Window.New("New Window", wt, tt)
+        Window.New(UTILS.GetText("options2", "new_window"), wt, tt)
         Options.SaveData()
         nav:RebuildFresh()
     end)
@@ -775,7 +727,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
     local function trig_submenu(parent_data)
         local sub = Options2.Elements.RightClickSubMenu(172)
         for _, tt in ipairs(self.trig_types) do
-            local tname = (lang.triggerType and lang.triggerType[tt]) or ("T" .. tt)
+            local tname = (lang.triggerType and lang.triggerType[tt]) or ""
             local tt_cap = tt
             local pd_cap = parent_data
             sub:AddRow(raw_row(tname, function()
@@ -795,7 +747,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local fd = nd.data
 
         menu:AddRow(Options2.Elements.Row("nav_menu", "add_folder", function()
-            local fi2 = Folder.New("New Folder")
+            local fi2 = Folder.New(UTILS.GetText("options2", "new_folder"))
             Data.folder[fi2].folder = fi
             Options.SaveData()
             nav:RebuildFresh()
@@ -803,7 +755,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
 
         local win_sub = Options2.Elements.RightClickSubMenu(172)
         AddWindowTypeRows(win_sub, lang, function(wt, tt)
-            local wi = Window.New("New Window", wt, tt)
+            local wi = Window.New(UTILS.GetText("options2", "new_window"), wt, tt)
             Data.window[wi].folder = fi
             Options.SaveData()
             nav:RebuildFresh()
@@ -843,7 +795,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         end))
         menu:AddSeperator()
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
-            Options2.ConfirmDelete(fd.name or "(folder)", function()
+            Options2.ConfirmDelete(fd.name or UTILS.GetText("options2", "unnamed_folder"), function()
                 Options.DeleteFolder(fi)
                 Options.SaveData()
                 nav.selectedKey = nil
@@ -858,7 +810,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local ti = nd.triggerIndex
         local td = nd.data
         local desc = (td.description ~= nil and td.description ~= "") and td.description
-            or ((lang.triggerType and lang.triggerType[tt]) or "trigger")
+            or ((lang.triggerType and lang.triggerType[tt]) or "")
 
         menu:AddRow(raw_row(export_lbl, function()
             Options2.ShowExport(td, ImportType.Trigger)
@@ -906,7 +858,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
             nav:RebuildFresh()
         end, h))
         menu:AddRow(Options2.Elements.Row("nav_menu", "delete", function()
-            Options2.ConfirmDelete(wd.name or "(window)", function()
+            Options2.ConfirmDelete(wd.name or UTILS.GetText("options2", "unnamed_window"), function()
                 Options.DeleteWindow(wi)
                 Options.SaveData()
                 nav.selectedKey = nil
@@ -921,7 +873,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local ti = nd.triggerIndex
         local td = nd.data
         local desc = (td.description ~= nil and td.description ~= "") and td.description
-            or ((lang.triggerType and lang.triggerType[tt]) or "trigger")
+            or ((lang.triggerType and lang.triggerType[tt]) or "")
 
         menu:AddRow(raw_row(export_lbl, function()
             Options2.ShowExport(td, ImportType.Trigger)
@@ -965,7 +917,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         end))
         menu:AddSeperator()
         local tname = (tmd.description ~= nil and tmd.description ~= "")
-            and tmd.description or "(timer)"
+            and tmd.description or UTILS.GetText("options2", "unnamed_timer")
         menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
             local copy = Timer.Copy(tmd)
             local tlist = Data.window[wi].timerList
@@ -992,7 +944,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local ti  = nd.triggerIndex
         local td  = nd.data
         local desc = (td.description ~= nil and td.description ~= "") and td.description
-            or ((lang.triggerType and lang.triggerType[tt]) or "trigger")
+            or ((lang.triggerType and lang.triggerType[tt]) or "")
 
         menu:AddRow(raw_row(export_lbl, function()
             Options2.ShowExport(td, ImportType.Trigger)
@@ -1030,7 +982,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         end))
         menu:AddSeperator()
         local cname = (cd.description ~= nil and cd.description ~= "")
-            and cd.description or "(condition)"
+            and cd.description or UTILS.GetText("options2", "unnamed_condition")
         menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
             local copy = Condition.Copy(cd)
             if tmd.conditionList == nil then tmd.conditionList = {} end
@@ -1056,7 +1008,7 @@ function Options2.Window.Nav.Constructor:ShowContextMenu(nd)
         local ti  = nd.triggerIndex
         local td  = nd.data
         local desc = (td.description ~= nil and td.description ~= "") and td.description
-            or ((lang.triggerType and lang.triggerType[tt]) or "trigger")
+            or ((lang.triggerType and lang.triggerType[tt]) or "")
 
         menu:AddSeperator()
         menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
@@ -1167,7 +1119,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
     local hover      = self.listbox:GetItemAt(lx, list_y)
 
     -- Ghost always tracks the mouse
-    self._drag_ghost:SetTop(TOOLBAR_H + SEP_H + list_y - math.floor(ITEM_H / 2))
+    self._drag_ghost:SetTop(LIST_TOP + list_y - math.floor(ITEM_H / 2))
 
     local nodeType = item.nodeData.nodeType
 
@@ -1197,7 +1149,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
                 self._drag.valid              = true
                 local _, iy    = target:GetMousePosition()
                 local item_top = list_y - iy
-                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + item_top)
+                self._drag_folder_hl:SetTop(LIST_TOP + item_top)
                 self._drag_folder_hl:SetVisible(true)
                 self._drag_indicator:SetVisible(false)
                 self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
@@ -1229,7 +1181,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
             self._drag.valid              = true
             local _, iy    = hover:GetMousePosition()
             local item_top = list_y - iy
-            self._drag_folder_hl:SetTop(TOOLBAR_H + item_top)
+            self._drag_folder_hl:SetTop(LIST_TOP + item_top)
             self._drag_folder_hl:SetVisible(true)
             self._drag_indicator:SetVisible(false)
             self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
@@ -1244,7 +1196,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         self._drag.dropIntoFolderItem = nil
         self._drag.valid              = true
         self._drag_folder_hl:SetVisible(false)
-        self._drag_indicator:SetTop(TOOLBAR_H + SEP_H + list_y - 1)
+        self._drag_indicator:SetTop(LIST_TOP + list_y - 1)
         self._drag_indicator:SetVisible(true)
         self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
         return
@@ -1278,7 +1230,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
                 self._drag.dropIntoFolderItem = target
                 self._drag.valid              = true
                 local _, iy    = target:GetMousePosition()
-                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + list_y - iy)
+                self._drag_folder_hl:SetTop(LIST_TOP + list_y - iy)
                 self._drag_folder_hl:SetVisible(true)
                 self._drag_indicator:SetVisible(false)
                 self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
@@ -1311,7 +1263,7 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
                 self._drag.dropIntoFolderItem = target
                 self._drag.valid              = true
                 local _, iy    = target:GetMousePosition()
-                self._drag_folder_hl:SetTop(TOOLBAR_H + SEP_H + list_y - iy)
+                self._drag_folder_hl:SetTop(LIST_TOP + list_y - iy)
                 self._drag_folder_hl:SetVisible(true)
                 self._drag_indicator:SetVisible(false)
                 self._drag_ghost:SetBackColor(Turbine.UI.Color(0.5, 0.3, 0.5, 0.6))
