@@ -11,7 +11,7 @@ local STATUS_H = 24
 local SEP_H    = 1
 local PAD      = 8
 local GAP      = 6
-local ICON_SZ  = 12
+local ICON_SZ  = 16
 local BTN_H    = 18
 
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
@@ -199,7 +199,6 @@ function Options2.Library.Window:Constructor()
     self.filter_icon:SetTop(math.floor((FILTER_H - ICON_SZ) / 2))
     self.filter_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.filter_icon:SetBackground("Gibberish3/RESOURCES/search.tga")
-    self.filter_icon:SetStretchMode(1)
     self.filter_icon:SetMouseVisible(true)
     self.filter_icon.MouseClick = function() self.filter:Focus() end
 

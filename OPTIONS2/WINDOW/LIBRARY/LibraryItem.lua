@@ -56,6 +56,7 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.pin_btn = Turbine.UI.Control()
     self.pin_btn:SetParent(self)
     self.pin_btn:SetSize(PIN_W, PIN_W)
+    self.pin_btn:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.pin_btn:SetMouseVisible(true)
     self.pin_btn.MouseClick = function() self:_TogglePin() end
 

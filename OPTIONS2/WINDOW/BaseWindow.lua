@@ -9,7 +9,7 @@ local SEP_W        = 1
 local PAD          = 8
 local GAP          = 8
 local BTN_SIZE     = 22
-local BTN_ICON     = 14
+local BTN_ICON     = 16
 local DIV_H        = 16
 local TITLE_H      = 30
 
@@ -21,7 +21,7 @@ local COL_EDIT_MIN = 200
 local COLLAPSED_W  = 30
 
 local STRIP_BTN    = 18
-local STRIP_ICON   = 12
+local STRIP_ICON   = 16
 
 -- "Library" -> "L\ni\nb\nr\na\ny", for the collapsed strips.
 -- Splits on utf-8 sequences so accented names stay intact.
@@ -59,12 +59,9 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 2)
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 1)
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
-    -- backgrounds are drawn at native size and clipped unless stretched, and
-    -- these glyphs are not all 16x16
-    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
     -- A .tga background cannot be tinted (SetBackColor fills the control behind
@@ -125,7 +122,6 @@ local function make_strip(parent, icon_path, expand_fn)
     icon:SetPosition(math.floor((STRIP_BTN - STRIP_ICON) / 2), math.floor((STRIP_BTN - STRIP_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
-    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
     local LABEL_TOP = PAD + STRIP_BTN + GAP
@@ -194,7 +190,7 @@ function Options2.Window.Constructor:Constructor()
     -- the gear is not a toggle, so it carries a resting fill rather than an
     -- active state
     self.btn_settings = make_title_btn(self.titlebar,
-        "Gibberish3/RESOURCES/settings.tga", "o2_settings",
+        "Gibberish3/RESOURCES/gear.tga", "o2_settings",
         function() Options2.ToggleSettingsWindow() end,
         Options.Defaults.window.select)
 
@@ -203,7 +199,7 @@ function Options2.Window.Constructor:Constructor()
     self.nav:SetParent(self.client)
 
     self.struct_strip = make_strip(self.client,
-        "Gibberish3/RESOURCES/arrow_right.tga",
+        "Gibberish3/RESOURCES/chevron_right.tga",
         function() self:_SetStructureCollapsed(false) end)
 
     self.sep1 = Turbine.UI.Control()
@@ -234,7 +230,7 @@ function Options2.Window.Constructor:Constructor()
     self.library:SetParent(self.client)
 
     self.lib_strip = make_strip(self.client,
-        "Gibberish3/RESOURCES/arrow_left.tga",
+        "Gibberish3/RESOURCES/chevron_left.tga",
         function() self:_SetLibraryCollapsed(false) end)
 
     self:_RefreshTexts()

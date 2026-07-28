@@ -14,7 +14,7 @@ local TITLE_H  = 30
 local PAD      = 8
 local GAP      = 8
 local BTN_SIZE = 22
-local BTN_ICON = 12
+local BTN_ICON = 16
 local GRIP     = 14
 
 Options2.Elements.PanelWindow = class(Turbine.UI.Window)
@@ -86,10 +86,7 @@ function Options2.Elements.PanelWindow:Constructor(config)
     close_icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2),
                            math.floor((BTN_SIZE - BTN_ICON) / 2))
     close_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    close_icon:SetBackground("Gibberish3/RESOURCES/cross.tga")
-    -- cross.tga is 25x25; without stretching, a background is drawn at its
-    -- native size and clipped, which hides a centred glyph completely.
-    close_icon:SetStretchMode(1)
+    close_icon:SetBackground("Gibberish3/RESOURCES/close.tga")
     close_icon:SetMouseVisible(false)
 
     self.btn_close.MouseEnter = function()

@@ -260,8 +260,9 @@ end
 
 -- A panel glyph, drawn at its native 16x16 inside a slot.
 --
--- No stretch (these live in scrolled ListBoxes) and no Overlay blend: the art
--- is already coloured, and Overlay would render it invisible on the dark panel.
+-- The recipe every icon in this plugin that renders correctly uses: authored at
+-- the size it is drawn, never stretched, and Overlay-blended. Without a blend
+-- mode the glyph's transparency punches through the window.
 function RowParts.MakeIcon(row, path, row_h, slot)
     local S = RowParts.ICON_SIZE
     local icon = Turbine.UI.Control()
@@ -269,6 +270,7 @@ function RowParts.MakeIcon(row, path, row_h, slot)
     icon:SetSize(S, S)
     icon:SetTop(math.floor(((row_h or RowParts.ROW_H) - S) / 2))
     icon:SetMouseVisible(false)
+    icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     if path ~= nil then icon:SetBackground(path) end
 
     icon._inset = math.floor(((slot or S) - S) / 2)

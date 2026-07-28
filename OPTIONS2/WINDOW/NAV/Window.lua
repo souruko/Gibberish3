@@ -4,9 +4,9 @@ local FOOTER_H  = 20
 local SEP_H     = 1
 local ITEM_H    = 26
 local SCROLL_W  = 10
-local BTN_SIZE  = 18
+local BTN_SIZE  = 20
 local BTN_GAP   = 4
-local BTN_ICON  = 14
+local BTN_ICON  = 16
 local PAD       = 8
 local LIST_TOP  = HEADER_H + SEARCH_H + SEP_H
 
@@ -34,10 +34,9 @@ local function make_nav_btn(parent, icon_path, click_fn, accent_color, tooltip)
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 1)
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 0)
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
-    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
     if accent_color ~= nil then
@@ -133,11 +132,10 @@ function Options2.Window.Nav.Constructor:Constructor()
 
     self.search_icon = Turbine.UI.Control()
     self.search_icon:SetParent(self.search_row)
-    self.search_icon:SetSize(12, 12)
-    self.search_icon:SetTop(math.floor((SEARCH_H - 12) / 2))
+    self.search_icon:SetSize(16, 16)
+    self.search_icon:SetTop(math.floor((SEARCH_H - 16) / 2))
     self.search_icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.search_icon:SetBackground("Gibberish3/RESOURCES/search.tga")
-    self.search_icon:SetStretchMode(1)
     self.search_icon:SetMouseVisible(true)
     self.search_icon.MouseClick = function() self.search_box:Focus() end
 
@@ -280,7 +278,7 @@ function Options2.Window.Nav.Constructor:SizeChanged()
     -- search row
     self.search_row:SetWidth(w)
     self.search_sep:SetWidth(w)
-    local search_left = PAD + 12 + 6
+    local search_left = PAD + 16 + 6
     local search_w    = math.max(0, w - search_left - PAD)
     self.search_icon:SetLeft(PAD)
     self.search_box:SetPosition(search_left, 2)
