@@ -156,6 +156,8 @@ end
 
 function Options2.Window.Editor.Constructor:SetNode(nodeData)
     self:_HideSaved()
+    -- the armed setter belongs to the editor being torn down
+    Options2.ClearArmedField()
 
     local prev_tab = nil
     local prev_nt  = self.nodeData and self.nodeData.nodeType

@@ -61,6 +61,60 @@ function Options2.NotifyClipboardChanged()
     end
 end
 
+-- ── armed field ────────────────────────────────────────────────────────────────
+--
+-- Clicking a paste button in the editor arms that field: the library names it,
+-- switches to a tab that can fill it, and the next library item clicked writes
+-- straight into it. Nothing is armed until the user asks for it.
+--   attr  - which library item attribute feeds the field ("token", "icon", ...)
+--   types - library tabs that can supply it (1 skills, 2 effects, 3 chat)
+--   label - localised field name, shown in the library header
+--   set   - receives the value
+Options2.armedField = nil
+
+function Options2.ArmField(spec)
+    Options2.armedField = spec
+    Options2.NotifyArmedFieldChanged()
+end
+
+function Options2.ClearArmedField()
+    if Options2.armedField == nil then return end
+    Options2.armedField = nil
+    Options2.NotifyArmedFieldChanged()
+end
+
+function Options2.NotifyArmedFieldChanged()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
+    if obj.library ~= nil and obj.library.ArmedFieldChanged ~= nil then
+        obj.library:ArmedFieldChanged()
+    end
+    local ep = obj.editor_panel
+    if ep ~= nil and ep.content ~= nil and ep.content.ArmedFieldChanged ~= nil then
+        ep.content:ArmedFieldChanged()
+    end
+end
+
+-- true when this library item could fill whatever is armed
+function Options2.CanFillArmedField(item, itemType)
+    local armed = Options2.armedField
+    if armed == nil or item == nil then return false end
+    if item[armed.attr] == nil then return false end
+    for _, t in ipairs(armed.types or {}) do
+        if t == itemType then return true end
+    end
+    return false
+end
+
+-- writes the item into the armed field and disarms; returns whether it did
+function Options2.FillArmedField(item, itemType)
+    if not Options2.CanFillArmedField(item, itemType) then return false end
+    local armed = Options2.armedField
+    armed.set(item[armed.attr])
+    Options2.ClearArmedField()
+    return true
+end
+
 function Options2.SetClipboard(item, itemType)
     Options2.clipboard.item     = item
     Options2.clipboard.itemType = itemType

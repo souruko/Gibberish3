@@ -1,104 +1,59 @@
-local SEG_H = Options.Defaults.window.segment_height  -- 25
+-- One library tab's contents. The tab button itself lives in LIBRARY/Window.lua;
+-- this is just the scrolling list behind it, shown only while its tab is active.
+
+local SCROLL_W = 10
 
 Options2.Library.SegmentItem = class(Turbine.UI.Control)
-function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, typeIdx, toggle_fn)
+function Options2.Library.SegmentItem:Constructor(nameCtrl, nameDesc, library, typeIdx)
     Turbine.UI.Control.Constructor(self)
 
-    self.library      = library
-    self.typeIdx      = typeIdx
-    self.controls     = {}
-    self._collecting  = false
-    self._nameCtrl    = nameCtrl
-    self._nameDesc    = nameDesc
-    self._baseText    = UTILS.GetText(nameCtrl, nameDesc)
-    self._count       = 0
+    self.library   = library
+    self.typeIdx   = typeIdx
+    self.controls  = {}
+    self._nameCtrl = nameCtrl
+    self._nameDesc = nameDesc
+    self._count    = 0
 
-    self.header = Turbine.UI.Label()
-    self.header:SetParent(self)
-    self.header:SetHeight(SEG_H)
-    self.header:SetFont(Turbine.UI.Lotro.Font.Verdana14)
-    self.header:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
-    self.header:SetBackColor(Options.Defaults.window.basecolor)
-    self.header:SetForeColor(Options.Defaults.window.textcolor)
-    self.header:SetText(self._baseText)
-    self.header.MouseEnter = function()
-        self.header:SetBackColor(Options.Defaults.window.w_window_hover)
-    end
-    self.header.MouseLeave = function()
-        if self._collecting then
-            self.header:SetBackColor(Options.Defaults.window.collecting)
-        else
-            self.header:SetBackColor(Options.Defaults.window.basecolor)
-        end
-    end
-    self.header.MouseClick = function()
-        self.library:SegmentClicked(self)
-    end
-
-    -- optional collect toggle button (Effects / Chat segments only)
-    if toggle_fn ~= nil then
-        self.toggle_btn = Turbine.UI.Control()
-        self.toggle_btn:SetParent(self.header)
-        self.toggle_btn:SetSize(32, 32)
-        self.toggle_btn:SetTop(math.floor((SEG_H - 32) / 2))
-        self.toggle_btn:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-        self.toggle_btn:SetBackground("Gibberish3/RESOURCES/switch_off.tga")
-        self.toggle_btn:SetMouseVisible(true)
-        self.toggle_btn.MouseClick = toggle_fn
-    end
+    self:SetVisible(false)
 
     self.listbox = Turbine.UI.ListBox()
     self.listbox:SetParent(self)
-    self.listbox:SetBackColor(Options.Defaults.window.backcolor1)
-    self.listbox:SetTop(SEG_H)
+    self.listbox:SetPosition(0, 0)
+    self.listbox:SetBackColor(Options.Defaults.window.bg_sunken)
     self.listbox:SetMouseVisible(false)
 
     self.scrollbar = Turbine.UI.Lotro.ScrollBar()
     self.scrollbar:SetParent(self)
-    self.scrollbar:SetTop(SEG_H)
+    self.scrollbar:SetPosition(0, 0)
     self.scrollbar:SetOrientation(Turbine.UI.Orientation.Vertical)
-    self.scrollbar:SetWidth(10)
+    self.scrollbar:SetWidth(SCROLL_W)
     self.listbox:SetVerticalScrollBar(self.scrollbar)
-
-    self:SetHeight(SEG_H)
 end
 
-function Options2.Library.SegmentItem:_UpdateCount(n)
-    self._count = n or 0
-    local txt = self._baseText
-    if self._count > 0 then txt = txt .. " (" .. self._count .. ")" end
-    self.header:SetText(txt)
+-- label for this segment's tab button, without the count
+function Options2.Library.SegmentItem:GetTabText()
+    return UTILS.GetText(self._nameCtrl, self._nameDesc)
+end
+
+function Options2.Library.SegmentItem:GetCount()
+    return self._count
 end
 
 function Options2.Library.SegmentItem:LanguageChanged()
-    self._baseText = UTILS.GetText(self._nameCtrl, self._nameDesc)
-    self:_UpdateCount(self._count)
-end
-
-function Options2.Library.SegmentItem:SetToggleActive(active)
-    if self.toggle_btn == nil then return end
-    self._collecting = active
-    if active then
-        self.toggle_btn:SetBackground("Gibberish3/RESOURCES/switch_on.tga")
-        self.header:SetBackColor(Options.Defaults.window.collecting)
-    else
-        self.toggle_btn:SetBackground("Gibberish3/RESOURCES/switch_off.tga")
-        self.header:SetBackColor(Options.Defaults.window.basecolor)
+    for _, ctrl in ipairs(self.controls) do
+        if ctrl.LanguageChanged ~= nil then ctrl:LanguageChanged() end
     end
 end
 
 function Options2.Library.SegmentItem:SizeChanged()
     local w, h = self:GetSize()
-    self.header:SetWidth(w)
-    if self.toggle_btn ~= nil then
-        self.toggle_btn:SetLeft(w - 32 - 3)
-    end
-    local lb_h = math.max(0, h - SEG_H)
-    self.listbox:SetSize(w - 10, lb_h)
-    self.scrollbar:SetLeft(w - 10)
-    self.scrollbar:SetHeight(lb_h)
+    if w <= 0 or h <= 0 then return end
+    local list_w = w - SCROLL_W
+    self.listbox:SetSize(list_w, h)
+    self.scrollbar:SetPosition(list_w, 0)
+    self.scrollbar:SetHeight(h)
     for i = 1, self.listbox:GetItemCount() do
-        self.listbox:GetItem(i):SetWidth(w - 10)
+        self.listbox:GetItem(i):SetWidth(list_w)
     end
 end
 
@@ -109,17 +64,17 @@ function Options2.Library.SegmentItem:SetList(list, filter)
         self.controls[#self.controls + 1] =
             Options2.Library.LibraryItem(data, self.typeIdx, self.library)
     end
-    self:_UpdateCount(#list)
+    self._count = #list
     self:FillContent(filter or "")
 end
 
 function Options2.Library.SegmentItem:FillContent(text)
     self.listbox:ClearItems()
-    local w     = self:GetWidth()
-    local lower = string.lower(text)
+    local list_w = math.max(0, self:GetWidth() - SCROLL_W)
+    local lower  = string.lower(text)
     for _, ctrl in ipairs(self.controls) do
         if string.find(string.lower(ctrl.data.token or ""), lower, 1, true) then
-            if w > 0 then ctrl:SetWidth(w - 10) end
+            if list_w > 0 then ctrl:SetWidth(list_w) end
             self.listbox:AddItem(ctrl)
         end
     end

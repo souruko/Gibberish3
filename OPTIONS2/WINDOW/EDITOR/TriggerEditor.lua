@@ -47,30 +47,39 @@ local function paste_btn(panel, row, attr, types, set_fn)
     btn:SetSize(PASTE_W, PASTE_H)
     btn:SetText("<-")
     btn:SetFont(Options.Defaults.window.font)
-    btn:SetForeColor(Turbine.UI.Color(0.5, 0.9, 0.5))
-    btn:SetVisible(false)
+    btn:SetForeColor(Options.Defaults.window.paste_border)
+
+    local entry = { btn = btn, row = row, attr = attr, types = types, set = set_fn }
+
     btn.Click = function()
-        local item = Options2.clipboard.item
-        if item ~= nil and item[attr] ~= nil then set_fn(item[attr]) end
+        -- aim the library at this field, so the next item clicked fills it
+        Options2.ArmField({
+            attr  = attr,
+            types = types,
+            label = UTILS.GetText(row.label_control, row.label_description),
+            set   = set_fn,
+        })
+        -- if something usable is already copied, take it straight away
+        Options2.FillArmedField(Options2.clipboard.item, Options2.clipboard.itemType)
     end
-    return { btn = btn, row = row, attr = attr, types = types, apply = set_fn }
+
+    return entry
 end
 
--- Shows/hides paste buttons based on current clipboard content.
+-- Paste buttons stay visible so a field can be armed with an empty clipboard;
+-- the armed one is marked in the accent colour.
 local function refresh_paste(plist)
-    local clip = Options2.clipboard
+    local armed = Options2.armedField
     for _, p in ipairs(plist) do
-        local show = false
-        if clip.item ~= nil and clip.item[p.attr] ~= nil then
-            for _, t in ipairs(p.types) do
-                if t == clip.itemType then show = true; break end
-            end
+        p.btn:SetVisible(true)
+        if armed ~= nil and armed.set == p.set then
+            p.btn:SetForeColor(Options.Defaults.window.accent)
+        else
+            p.btn:SetForeColor(Options.Defaults.window.paste_border)
         end
-        p.btn:SetVisible(show)
     end
 end
 
--- Sizes rows, shrinking those with a visible paste button to leave room for it.
 local function size_paste(rows, plist, w)
     local marked = {}
     for _, p in ipairs(plist) do marked[p.row] = p end
@@ -622,4 +631,8 @@ function Options2.Window.TriggerEditor:ClipboardChanged()
     if w > 0 then
         self:SizeChanged()
     end
+end
+
+function Options2.Window.TriggerEditor:ArmedFieldChanged()
+    refresh_paste(self._paste_list)
 end

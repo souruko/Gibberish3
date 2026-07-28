@@ -1,68 +1,81 @@
-local HDR_H   = 18
-local ITEM_H  = 36
-local TOTAL_H = HDR_H + ITEM_H
-local ICON_SZ = 28
-local BTN_SZ  = 24
+-- "Copied" footer at the bottom of the library: what is on the clipboard, and
+-- an x to drop it.
+
+local BAR_H   = 34
+local PAD     = 8
+local GAP     = 8
+local ICON_SZ = 20
+local TAG_W   = 46
+local BTN_SZ  = 18
 
 Options2.Library.ClipboardBar = class(Turbine.UI.Control)
 function Options2.Library.ClipboardBar:Constructor()
     Turbine.UI.Control.Constructor(self)
 
-    self:SetHeight(TOTAL_H)
+    self:SetHeight(BAR_H)
+    self:SetBackColor(Options.Defaults.window.row_odd)
     self:SetVisible(false)
 
-    -- header bar: "- Clipboard -"
-    self.header = Turbine.UI.Label()
-    self.header:SetParent(self)
-    self.header:SetPosition(0, 0)
-    self.header:SetHeight(HDR_H)
-    self.header:SetFont(Options.Defaults.window.font)
-    self.header:SetForeColor(Options.Defaults.window.textdark)
-    self.header:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
-    self.header:SetBackColor(Turbine.UI.Color(0.06, 0.06, 0.08))
-    self.header:SetText("- Copied -")
-    self.header:SetMouseVisible(false)
+    self.top_line = Turbine.UI.Control()
+    self.top_line:SetParent(self)
+    self.top_line:SetPosition(0, 0)
+    self.top_line:SetHeight(1)
+    self.top_line:SetBackColor(Options.Defaults.window.line)
+    self.top_line:SetMouseVisible(false)
 
-    -- item row
-    self.item_row = Turbine.UI.Control()
-    self.item_row:SetParent(self)
-    self.item_row:SetPosition(0, HDR_H)
-    self.item_row:SetHeight(ITEM_H)
-    self.item_row:SetBackColor(Turbine.UI.Color(0.08, 0.12, 0.18))
+    self.tag = Turbine.UI.Label()
+    self.tag:SetParent(self)
+    self.tag:SetPosition(PAD, 0)
+    self.tag:SetSize(TAG_W, BAR_H)
+    self.tag:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.tag:SetForeColor(Options.Defaults.window.text_faint)
+    self.tag:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.tag:SetMouseVisible(false)
 
     self.icon_ctrl = Turbine.UI.Control()
-    self.icon_ctrl:SetParent(self.item_row)
-    self.icon_ctrl:SetPosition(4, math.floor((ITEM_H - ICON_SZ) / 2))
+    self.icon_ctrl:SetParent(self)
     self.icon_ctrl:SetSize(ICON_SZ, ICON_SZ)
+    self.icon_ctrl:SetTop(math.floor((BAR_H - ICON_SZ) / 2))
     self.icon_ctrl:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     self.icon_ctrl:SetMouseVisible(false)
 
     self.label = Turbine.UI.Label()
-    self.label:SetParent(self.item_row)
-    self.label:SetTop(0)
-    self.label:SetHeight(ITEM_H)
-    self.label:SetFont(Options.Defaults.window.font)
-    self.label:SetForeColor(Options.Defaults.window.textcolor)
+    self.label:SetParent(self)
+    self.label:SetHeight(BAR_H)
+    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetForeColor(Options.Defaults.window.text)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetMouseVisible(false)
 
     self.clear_btn = Turbine.UI.Button()
-    self.clear_btn:SetParent(self.item_row)
+    self.clear_btn:SetParent(self)
     self.clear_btn:SetSize(BTN_SZ, BTN_SZ)
     self.clear_btn:SetText("x")
-    self.clear_btn:SetFont(Options.Defaults.window.font)
+    self.clear_btn:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.clear_btn:SetForeColor(Options.Defaults.window.text_muted)
     self.clear_btn.Click = function() Options2.ClearClipboard() end
+
+    self:LanguageChanged()
+end
+
+function Options2.Library.ClipboardBar:LanguageChanged()
+    self.tag:SetText(UTILS.GetText("options2", "copied"))
 end
 
 function Options2.Library.ClipboardBar:SizeChanged()
     if self.label == nil then return end
     local w = self:GetWidth()
-    self.header:SetWidth(w)
-    self.item_row:SetWidth(w)
-    local text_left = 4 + ICON_SZ + 4
+    if w <= 0 then return end
+
+    self.top_line:SetWidth(w)
+    self.clear_btn:SetPosition(w - PAD - BTN_SZ, math.floor((BAR_H - BTN_SZ) / 2))
+
+    local icon_left = PAD + TAG_W + GAP
+    self.icon_ctrl:SetLeft(icon_left)
+
+    local text_left = icon_left + ICON_SZ + GAP
     self.label:SetPosition(text_left, 0)
-    self.label:SetWidth(w - text_left - BTN_SZ - 8)
-    self.clear_btn:SetPosition(w - BTN_SZ - 4, math.floor((ITEM_H - BTN_SZ) / 2))
+    self.label:SetWidth(math.max(0, w - PAD - BTN_SZ - GAP - text_left))
 end
 
 function Options2.Library.ClipboardBar:ClipboardChanged()
@@ -71,13 +84,18 @@ function Options2.Library.ClipboardBar:ClipboardChanged()
         self:SetVisible(false)
         return
     end
+
     self:SetVisible(true)
     if clip.item.icon ~= nil then
         self.icon_ctrl:SetBackground(clip.item.icon)
+        self.icon_ctrl:SetStretchMode(1)
         self.icon_ctrl:SetBackColor(nil)
     else
         self.icon_ctrl:SetBackground(nil)
-        self.icon_ctrl:SetBackColor(Turbine.UI.Color(0.15, 0.15, 0.15))
+        self.icon_ctrl:SetBackColor(Options.Defaults.window.bg_sunken)
     end
-    self.label:SetText(clip.item.token or "")
+
+    local P = Options2.Elements.RowParts
+    local w = math.max(0, self.label:GetWidth())
+    self.label:SetText(P.Truncate(clip.item.token or "", P.CharBudget(w)))
 end
