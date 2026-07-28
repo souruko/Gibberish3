@@ -273,6 +273,7 @@ function Options2.Library.Window:Constructor()
     -- Effects and Chat are collected by listening to the game. This starts and
     -- stops that, and sits next to the banner it produces.
     self.status_btn = make_text_btn(self.status, function() self:_ToggleRecording() end)
+    Options2.Elements.Tooltip.AddTooltip(self.status_btn, "tooltip", "o2_record", false)
     self.status_btn:SetTop(math.floor((STATUS_H - BTN_H) / 2))
     self.status_btn:SetVisible(false)
 

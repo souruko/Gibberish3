@@ -16,7 +16,15 @@ local FONT_BODY  = Turbine.UI.Lotro.Font.Verdana12
 -- accent_color, when given, draws a 2px bar under the glyph. A .tga background
 -- cannot be tinted (SetBackColor fills the control behind it rather than
 -- colouring it), so a button's colour coding is carried by this bar.
-local function make_nav_btn(parent, icon_path, click_fn, accent_color)
+-- Tooltip.AddTooltip owns MouseEnter/MouseLeave, so wrap it to keep the hover
+local function add_hover_tooltip(control, description, enter_fn, leave_fn)
+    Options2.Elements.Tooltip.AddTooltip(control, "tooltip", description, false)
+    local tip_enter, tip_leave = control.MouseEnter, control.MouseLeave
+    control.MouseEnter = function(sender, args) tip_enter(sender, args) enter_fn() end
+    control.MouseLeave = function(sender, args) tip_leave(sender, args) leave_fn() end
+end
+
+local function make_nav_btn(parent, icon_path, click_fn, accent_color, tooltip)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_SIZE, BTN_SIZE)
@@ -41,8 +49,9 @@ local function make_nav_btn(parent, icon_path, click_fn, accent_color)
         accent:SetMouseVisible(false)
     end
 
-    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.select) end
-    btn.MouseLeave = function() btn:SetBackColor(nil) end
+    add_hover_tooltip(btn, tooltip,
+        function() btn:SetBackColor(Options.Defaults.window.select) end,
+        function() btn:SetBackColor(nil) end)
     btn.MouseClick = click_fn
 
     return btn
@@ -93,27 +102,27 @@ function Options2.Window.Nav.Constructor:Constructor()
             Options.SaveData()
             self:RebuildFresh()
         end,
-        Options.Defaults.window.color_folder)
+        Options.Defaults.window.color_folder, "o2_add_folder")
 
     self.add_window_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_window.tga",
         function()
             Options2.ShowAddWindowMenu(nil)
         end,
-        Options.Defaults.window.color_window)
+        Options.Defaults.window.color_window, "o2_add_window")
 
     self.import_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_import.tga",
         function()
             local nd = Options2.selectedNode
             Options2.ShowImport(nd)
-        end)
+        end, nil, "o2_import")
 
     self.collapse_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_collapse.tga",
         function()
             self:CollapseAll()
-        end)
+        end, nil, "o2_collapse_all")
 
     -- ── search row ───────────────────────────────────────────────
     self.search_row = Turbine.UI.Control()
@@ -702,7 +711,7 @@ function Options2.Window.Nav.Constructor:_InitDrag()
     self._drag_ghost_lbl:SetHeight(ITEM_H)
     self._drag_ghost_lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self._drag_ghost_lbl:SetFont(Options.Defaults.window.font)
-    self._drag_ghost_lbl:SetForeColor(Options.Defaults.window.textcolor)
+    self._drag_ghost_lbl:SetForeColor(Options.Defaults.window.text)
     self._drag_ghost_lbl:SetMouseVisible(false)
 
     self._drag_indicator = Turbine.UI.Control()

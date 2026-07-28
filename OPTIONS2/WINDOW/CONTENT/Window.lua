@@ -20,7 +20,7 @@ local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana14
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 
 -- 1px-bordered text button for the header's add actions
-local function make_add_btn(parent, click_fn)
+local function make_add_btn(parent, click_fn, tooltip)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetHeight(BTN_H)
@@ -40,8 +40,16 @@ local function make_add_btn(parent, click_fn)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)
 
-    btn.MouseEnter = function() fill:SetBackColor(Options.Defaults.window.select) end
-    btn.MouseLeave = function() fill:SetBackColor(Options.Defaults.window.bg) end
+    Options2.Elements.Tooltip.AddTooltip(btn, "tooltip", tooltip, false)
+    local tip_enter, tip_leave = btn.MouseEnter, btn.MouseLeave
+    btn.MouseEnter = function(sender, args)
+        tip_enter(sender, args)
+        fill:SetBackColor(Options.Defaults.window.select)
+    end
+    btn.MouseLeave = function(sender, args)
+        tip_leave(sender, args)
+        fill:SetBackColor(Options.Defaults.window.bg)
+    end
     btn.MouseClick = click_fn
 
     function btn:SetLabel(text)
@@ -129,11 +137,11 @@ function Options2.Window.Content.Constructor:Constructor()
         Window.AddTimer(c.windowIndex, Timer.New(wd.timerType))
         Options.SaveData()
         Options2.RefreshAll()
-    end)
+    end, "o2_add_timer")
 
     self.btn_trigger = make_add_btn(self.header, function()
         self:_ShowAddTriggerMenu()
-    end)
+    end, "o2_add_trigger")
 
     self.header_sep = Turbine.UI.Control()
     self.header_sep:SetParent(self)

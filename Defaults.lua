@@ -114,14 +114,16 @@ Options.Defaults.rc_menu.item_height        = 24
 Options.Defaults.rc_menu.seperator_height   = 10
 Options.Defaults.rc_menu.text_left          = 32
 Options.Defaults.rc_menu.font               = Turbine.UI.Lotro.Font.Verdana12
-Options.Defaults.rc_menu.back_color         = Turbine.UI.Color.Black--Turbine.UI.Color( 0.15, 0.15, 0.15 )
-Options.Defaults.rc_menu.hover_color        = Turbine.UI.Color( 0.23, 0.23, 0.23)
+Options.Defaults.rc_menu.back_color         = Options.Defaults.window.bg_sunken
+Options.Defaults.rc_menu.hover_color        = Options.Defaults.window.select
+Options.Defaults.rc_menu.border_color       = Options.Defaults.window.line
+Options.Defaults.rc_menu.text_color         = Options.Defaults.window.text
 
 -- tooltip
 Options.Defaults.tooltip                    = {}
-Options.Defaults.tooltip.backcolor1         = Turbine.UI.Color( 0.6, 0.6, 0.6 )
-Options.Defaults.tooltip.backcolor2         = Turbine.UI.Color.Black
-Options.Defaults.tooltip.frame              = 2
+Options.Defaults.tooltip.backcolor1         = Options.Defaults.window.line
+Options.Defaults.tooltip.backcolor2         = Options.Defaults.window.bg_sunken
+Options.Defaults.tooltip.frame              = 1
 Options.Defaults.tooltip.width              = 200
 Options.Defaults.tooltip.left_shift         = 70
 Options.Defaults.tooltip.top_shift          = 40

@@ -11,18 +11,18 @@ local function make_btn(parent, label, click_fn)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_W, BTN_H)
-    btn:SetBackColor(Options.Defaults.window.w_window_base)
+    btn:SetBackColor(Options.Defaults.window.bg_sunken)
     btn:SetMouseVisible(true)
     local lbl = Turbine.UI.Label()
     lbl:SetParent(btn)
     lbl:SetSize(BTN_W, BTN_H)
     lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     lbl:SetFont(Options.Defaults.window.font)
-    lbl:SetForeColor(Options.Defaults.window.textcolor)
+    lbl:SetForeColor(Options.Defaults.window.text)
     lbl:SetText(label)
     lbl:SetMouseVisible(false)
-    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.w_window_hover) end
-    btn.MouseLeave = function() btn:SetBackColor(Options.Defaults.window.w_window_base) end
+    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.select) end
+    btn.MouseLeave = function() btn:SetBackColor(Options.Defaults.window.bg_sunken) end
     btn.MouseClick = click_fn
     btn._lbl = lbl
     return btn
@@ -83,7 +83,7 @@ function Options2.Window.ImportDialog:Constructor()
     -- TextBox
     self.textbox = Turbine.UI.Lotro.TextBox()
     self.textbox:SetParent(self.client)
-    self.textbox:SetBackColor(Options.Defaults.window.backcolor2)
+    self.textbox:SetBackColor(Options.Defaults.window.bg_sunken)
     self.textbox:SetFont(Options.Defaults.move.headerfont)
     self.textbox:SetMultiline(true)
 

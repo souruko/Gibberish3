@@ -12,13 +12,13 @@ Options2.Window.SettingsPanel = class(Turbine.UI.Control)
 function Options2.Window.SettingsPanel:Constructor()
     Turbine.UI.Control.Constructor(self)
 
-    self:SetBackColor(Options.Defaults.window.backcolor1)
+    self:SetBackColor(Options.Defaults.window.bg)
 
     local sp = Options.Defaults.window.spacing
 
     -- ── language ─────────────────────────────────────────────────────────────
     self.language = Options2.Elements.DropDownRow(
-        Options.Defaults.window.basecolor,
+        Options.Defaults.window.row_odd,
         "general", "language", "dd_language", ROW_H, nil
     )
     self.language:SetParent(self)
@@ -36,7 +36,7 @@ function Options2.Window.SettingsPanel:Constructor()
     self.shortcut_row:SetParent(self)
     self.shortcut_row:SetPosition(LEFT, TOP + ROW_H + ROW_GAP)
     self.shortcut_row:SetHeight(ROW_H)
-    self.shortcut_row:SetBackColor(Options.Defaults.window.basecolor)
+    self.shortcut_row:SetBackColor(Options.Defaults.window.row_odd)
 
     self.shortcut_label = Turbine.UI.Label()
     self.shortcut_label:SetParent(self.shortcut_row)
@@ -44,7 +44,7 @@ function Options2.Window.SettingsPanel:Constructor()
     self.shortcut_label:SetSize(LABEL_W, ROW_H - sp)
     self.shortcut_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
     self.shortcut_label:SetFont(Options.Defaults.window.font)
-    self.shortcut_label:SetForeColor(Options.Defaults.window.textcolor)
+    self.shortcut_label:SetForeColor(Options.Defaults.window.text)
     self.shortcut_label:SetText(UTILS.GetText("general", "shortcut_size"))
     Options2.Elements.Tooltip.AddTooltip(self.shortcut_label, "tooltip", "dd_shortcut_size", false)
 
@@ -55,7 +55,7 @@ function Options2.Window.SettingsPanel:Constructor()
         btn:SetParent(self.shortcut_row)
         btn:SetSize(STEP_BTN_W, STEP_BTN_H)
         btn:SetTop(step_top)
-        btn:SetBackColor(Options.Defaults.window.backcolor2)
+        btn:SetBackColor(Options.Defaults.window.bg_sunken)
         btn:SetMouseVisible(true)
 
         local lbl = Turbine.UI.Label()
@@ -63,12 +63,12 @@ function Options2.Window.SettingsPanel:Constructor()
         lbl:SetSize(STEP_BTN_W, STEP_BTN_H)
         lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
         lbl:SetFont(Options.Defaults.window.font)
-        lbl:SetForeColor(Options.Defaults.window.textcolor)
+        lbl:SetForeColor(Options.Defaults.window.text)
         lbl:SetText(sign)
         lbl:SetMouseVisible(false)
 
-        btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.hovercolor) end
-        btn.MouseLeave = function() btn:SetBackColor(Options.Defaults.window.backcolor2) end
+        btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.select) end
+        btn.MouseLeave = function() btn:SetBackColor(Options.Defaults.window.bg_sunken) end
         btn.MouseClick = function() self:_StepShortcutSize(delta) end
 
         return btn
@@ -81,7 +81,7 @@ function Options2.Window.SettingsPanel:Constructor()
     self.shortcut_value_bg:SetParent(self.shortcut_row)
     self.shortcut_value_bg:SetSize(VAL_W, STEP_BTN_H)
     self.shortcut_value_bg:SetPosition(CTRL_LEFT + STEP_BTN_W + sp, step_top)
-    self.shortcut_value_bg:SetBackColor(Options.Defaults.window.backcolor2)
+    self.shortcut_value_bg:SetBackColor(Options.Defaults.window.bg_sunken)
     self.shortcut_value_bg:SetMouseVisible(false)
 
     self.shortcut_value = Turbine.UI.Label()
@@ -89,7 +89,7 @@ function Options2.Window.SettingsPanel:Constructor()
     self.shortcut_value:SetSize(VAL_W, STEP_BTN_H)
     self.shortcut_value:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.shortcut_value:SetFont(Options.Defaults.window.font)
-    self.shortcut_value:SetForeColor(Options.Defaults.window.textcolor)
+    self.shortcut_value:SetForeColor(Options.Defaults.window.text)
     self.shortcut_value:SetMouseVisible(false)
 
     self.shortcut_plus = make_step_btn("+", Options.Defaults.shortcut.size_step)
@@ -99,7 +99,7 @@ function Options2.Window.SettingsPanel:Constructor()
 
     -- ── auto reload ──────────────────────────────────────────────────────────
     self.auto_reload = Options2.Elements.CheckBoxRow(
-        Options.Defaults.window.basecolor,
+        Options.Defaults.window.row_odd,
         "shortcut", "auto_reload", "cb_auto_reload", ROW_H
     )
     self.auto_reload:SetParent(self)
@@ -111,7 +111,7 @@ function Options2.Window.SettingsPanel:Constructor()
 
     -- ── show tooltips ────────────────────────────────────────────────────────
     self.show_tooltips = Options2.Elements.CheckBoxRow(
-        Options.Defaults.window.basecolor,
+        Options.Defaults.window.row_odd,
         "general", "show_tooltips", "cb_show_tooltips", ROW_H
     )
     self.show_tooltips:SetParent(self)

@@ -543,10 +543,10 @@ function Options2.Window.TriggerEditor:Constructor(nodeData)
     self.apply_btn:SetParent(self)
     self.apply_btn:SetSize(APPLY_W, APPLY_H)
     self.apply_btn:SetFont(Options.Defaults.window.font)
-    self.apply_btn:SetText("<- Apply")
-    self.apply_btn:SetForeColor(Turbine.UI.Color(0.5, 0.9, 0.5))
+    self.apply_btn:SetForeColor(Options.Defaults.window.paste_border)
     self.apply_btn:SetVisible(false)
     self.apply_btn.Click = function() self:ApplyClipboard() end
+    self.apply_btn:SetText("← " .. UTILS.GetText("options2", "apply"))
 
     -- form panel below header
     local panel, load_fn, save_fn, lang_fn, size_fn, plist
@@ -657,6 +657,10 @@ function Options2.Window.TriggerEditor:ClipboardChanged()
     if w > 0 then
         self:SizeChanged()
     end
+end
+
+function Options2.Window.TriggerEditor:_RefreshApplyLabel()
+    self.apply_btn:SetText("← " .. UTILS.GetText("options2", "apply"))
 end
 
 function Options2.Window.TriggerEditor:ArmedFieldChanged()

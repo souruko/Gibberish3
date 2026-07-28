@@ -1,5 +1,22 @@
 # Changelog
 
+### 3.5.0
+- The options panel has been redesigned. It now opens at 1168x640, can be resized freely in both directions, and uses a flat dark theme throughout instead of the old parchment frame.
+- Navigation is split into two columns. The left column holds only your folders and windows; selecting one fills the second column with everything inside it — the window's own triggers, its timers, and each timer's triggers and conditions.
+- Clicking the header of the second column takes you back to the folder or window's own settings.
+- Folders and windows are now sorted with the enabled ones first, then alphabetically, at every level.
+- A folder's checkbox now loads or unloads every window inside it at once, and shows as ticked whenever any of them is loaded.
+- Windows now show their timer type at a glance, and folders show how many things they contain.
+- Both side columns can be collapsed to a narrow strip to give the editor more room, and stay that way after a reload.
+- The library is now three tabs (Skills, Effects and Chat) with a filter box, instead of the old stacked sections.
+- New: clicking a paste button next to a field now aims the library at that field. The library tells you which field it will fill and switches to a tab that can fill it; clicking any entry then drops the value straight in.
+- Effects and Chat now have a clear record button that turns into a stop button while collecting.
+- What you have copied is shown in a bar at the bottom of the library, with an x to clear it.
+- The plugin settings (language, shortcut size, auto-reload, tooltips) moved out of the editor into their own small window, opened from the gear in the panel's title bar.
+- The editor now names what you are editing at the top, with Save and Revert buttons, and shows the full path in the title bar.
+- Your selection in both columns is remembered across a reload.
+- Everything in the panel is now translatable; several buttons that were stuck in English, including Test Timer, now follow your chosen language.
+
 ### 3.4.1
 - fixed pressing Escape briefly freezing the game, especially noticeable when the settings window wasn't even open — it was saving all plugin data every time Escape was pressed
 

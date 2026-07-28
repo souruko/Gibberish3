@@ -19,7 +19,7 @@ local function raw_row(text, fn)
     lbl:SetLeft(Options.Defaults.rc_menu.text_left)
     lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     lbl:SetFont(Options.Defaults.rc_menu.font)
-    lbl:SetForeColor(Options.Defaults.window.textcolor)
+    lbl:SetForeColor(Options.Defaults.window.text)
     lbl:SetText(text)
     lbl:SetMouseVisible(false)
 

@@ -15,6 +15,39 @@ You create windows and timers in the options panel, then assign triggers to each
 
 ---
 
+## Finding your way around the options panel
+
+The panel has four columns. Both outer ones can be collapsed with the two buttons in the title bar, and stay collapsed until you open them again.
+
+| Column | What it holds |
+|---|---|
+| **Structure** | Your folders and windows only. Folders nest as deep as you like; windows are always the last level here. |
+| **Contents** | Everything inside whatever you picked on the left — a window's own triggers, then each of its timers with that timer's triggers and conditions. Picking a folder shows just the folder's own triggers. |
+| **Editor** | The settings for whatever you last clicked, with Save and Revert at the top. The full path is shown in the title bar. |
+| **Library** | Skills, collected effects and collected chat, for filling in trigger fields. |
+
+Some things worth knowing:
+
+- **Clicking the header of the Contents column** goes back to the folder or window's own settings, which is how you get out of a timer without using the left column.
+- Items are listed **enabled first, then alphabetically**, in both list columns.
+- **A folder's checkbox loads or unloads every window inside it**, and appears ticked whenever any of them is loaded.
+- The **+ Timer** and **+ Trigger** buttons at the top of the Contents column add to whatever that column is currently showing.
+- Right-clicking any row gives you the same menu it always did — add, duplicate, delete, export.
+
+### Filling a field from the library
+
+Instead of copying and then hunting for the right field, you can aim the library at a field first:
+
+1. Click the **← paste** button next to the field you want to fill. It turns purple, and the library header tells you which field it is about to fill.
+2. The library jumps to a tab that can supply that field.
+3. Click any entry in the list — the value drops straight into the field.
+
+Clicking an entry also copies it, so the old way still works: copy first, then press **← paste** on the field.
+
+To collect effects or chat lines, open the **Effects** or **Chat** tab and press **record**. The status line turns green while it is collecting, and the button becomes **stop**.
+
+---
+
 ## Window Settings
 
 ### General tab
@@ -286,8 +319,8 @@ Use the Collection to find the exact spelling of an effect name before writing a
 
 Windows, timers, triggers, and folders can all be exported as a text string and imported by another player or across characters.
 
-- **Export** — right-click a folder or window in the selection panel and choose Export → what to export. The string appears in a box; it is automatically selected for copying.
-- **Import** — click the Import button (bottom of the selection panel). Paste the string and choose whether to **Create New** (adds to the window list) or **Insert into Selection** (merges into the currently selected window or folder).
+- **Export** — right-click a folder or window in the Structure column, or a timer, trigger or condition in the Contents column, and choose Export. The string appears in a box, already selected for copying.
+- **Import** — click the Import button at the top of the Structure column. Paste the string and choose whether to **Create New** (adds to the window list) or **Insert into Selection** (merges into the currently selected window or folder).
 
 Community-shared configs are available at **https://lotro-gibberish.com/**
 

@@ -6,7 +6,7 @@ local MARK     = 11
 local BTN_H    = 22
 
 -- Save / Revert: a bordered pill, Save picked out in the accent colour
-local function make_action_btn(parent, border, fg, click_fn)
+local function make_action_btn(parent, border, fg, click_fn, tooltip)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetHeight(BTN_H)
@@ -26,8 +26,16 @@ local function make_action_btn(parent, border, fg, click_fn)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)
 
-    btn.MouseEnter = function() fill:SetBackColor(Options.Defaults.window.select) end
-    btn.MouseLeave = function() fill:SetBackColor(Options.Defaults.window.bg_sunken) end
+    Options2.Elements.Tooltip.AddTooltip(btn, "tooltip", tooltip, false)
+    local tip_enter, tip_leave = btn.MouseEnter, btn.MouseLeave
+    btn.MouseEnter = function(sender, args)
+        tip_enter(sender, args)
+        fill:SetBackColor(Options.Defaults.window.select)
+    end
+    btn.MouseLeave = function(sender, args)
+        tip_leave(sender, args)
+        fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    end
     btn.MouseClick = click_fn
 
     function btn:SetLabel(text)
@@ -98,7 +106,7 @@ function Options2.Window.Editor.Constructor:Constructor()
                 Options2.RefreshAll()
                 self:_ShowSaved()
             end
-        end)
+        end, "o2_save")
 
     self.btn_reset = make_action_btn(self.toolbar,
         Options.Defaults.window.line, Options.Defaults.window.text_muted,
@@ -107,7 +115,7 @@ function Options2.Window.Editor.Constructor:Constructor()
             if self.content ~= nil and self.content.Reset ~= nil then
                 self.content:Reset()
             end
-        end)
+        end, "o2_revert")
 
     self.saved_label = Turbine.UI.Label()
     self.saved_label:SetParent(self.toolbar)
