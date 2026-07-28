@@ -61,6 +61,9 @@ local function make_title_btn(parent, icon_path, description, click_fn)
     icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), math.floor((BTN_SIZE - BTN_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
+    -- backgrounds are drawn at native size and clipped unless stretched, and
+    -- these glyphs are not all 16x16
+    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
     btn.icon    = icon
@@ -109,6 +112,7 @@ local function make_strip(parent, icon_path, expand_fn)
     icon:SetPosition(math.floor((STRIP_BTN - STRIP_ICON) / 2), math.floor((STRIP_BTN - STRIP_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
+    icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
     local LABEL_TOP = PAD + STRIP_BTN + GAP
