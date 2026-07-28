@@ -22,7 +22,6 @@ local COLLAPSED_W  = 30
 
 local STRIP_BTN    = 18
 local STRIP_ICON   = 12
-local HEADER_H     = 34
 
 -- "Library" -> "L\ni\nb\nr\na\ny", for the collapsed strips.
 -- Splits on utf-8 sequences so accented names stay intact.
@@ -203,33 +202,9 @@ function Options2.Window.Constructor:Constructor()
     self.sep1:SetBackColor(Options.Defaults.window.line)
     self.sep1:SetMouseVisible(false)
 
-    -- ── column 2: contents (filled in phase 3) ──────────────────────────────
-    self.contents = Turbine.UI.Control()
+    -- ── column 2: contents ──────────────────────────────────────────────────
+    self.contents = Options2.Window.Content.Constructor()
     self.contents:SetParent(self.client)
-    self.contents:SetBackColor(Options.Defaults.window.bg)
-
-    self.contents_header = Turbine.UI.Control()
-    self.contents_header:SetParent(self.contents)
-    self.contents_header:SetPosition(0, 0)
-    self.contents_header:SetHeight(HEADER_H)
-    self.contents_header:SetBackColor(Options.Defaults.window.bg_sunken)
-    self.contents_header:SetMouseVisible(false)
-
-    self.contents_title = Turbine.UI.Label()
-    self.contents_title:SetParent(self.contents_header)
-    self.contents_title:SetPosition(PAD, 0)
-    self.contents_title:SetHeight(HEADER_H)
-    self.contents_title:SetFont(Options.Defaults.window.font)
-    self.contents_title:SetForeColor(Options.Defaults.window.text_muted)
-    self.contents_title:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.contents_title:SetMouseVisible(false)
-
-    self.contents_sep = Turbine.UI.Control()
-    self.contents_sep:SetParent(self.contents)
-    self.contents_sep:SetPosition(0, HEADER_H)
-    self.contents_sep:SetHeight(SEP_W)
-    self.contents_sep:SetBackColor(Options.Defaults.window.line)
-    self.contents_sep:SetMouseVisible(false)
 
     self.sep2 = Turbine.UI.Control()
     self.sep2:SetParent(self.client)
@@ -283,6 +258,7 @@ function Options2.Window.Constructor:Constructor()
     -- so Rebuild's restore loop can't call SetNode. Do it explicitly here.
     if self.nav.selectedItem ~= nil then
         self.editor_panel:SetNode(self.nav.selectedItem.nodeData)
+        self.contents:SetContainer(self.nav.selectedItem.nodeData)
     end
 end
 
@@ -316,7 +292,6 @@ end
 
 function Options2.Window.Constructor:_RefreshTexts()
     self:SetTitleText(UTILS.GetText("options2", "brand"))
-    self.contents_title:SetText(UTILS.GetText("options2", "contents"))
     self.struct_strip.label:SetText(stack_text(UTILS.GetText("options2", "structure")))
     self.lib_strip.label:SetText(stack_text(UTILS.GetText("options2", "library")))
 end
@@ -327,6 +302,7 @@ function Options2.Window.Constructor:LanguageChanged()
     if self.nav == nil then return end
     self:_RefreshTexts()
     self.nav:LanguageChanged()
+    if self.contents ~= nil then self.contents:LanguageChanged() end
     if self.editor_panel ~= nil and self.editor_panel.LanguageChanged ~= nil then
         self.editor_panel:LanguageChanged()
     end
@@ -406,9 +382,6 @@ function Options2.Window.Constructor:_ApplyLayout()
     local cont_w    = cont_slot - SEP_W
     self.contents:SetPosition(cont_left, 0)
     self.contents:SetSize(cont_w, ih)
-    self.contents_header:SetWidth(cont_w)
-    self.contents_title:SetWidth(math.max(0, cont_w - 2 * PAD))
-    self.contents_sep:SetWidth(cont_w)
 
     self.sep2:SetPosition(cont_left + cont_w, 0)
     self.sep2:SetSize(SEP_W, ih)

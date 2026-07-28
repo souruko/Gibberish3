@@ -26,7 +26,7 @@ end
 Options2NavWindow = class(Turbine.UI.Control)
 function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, depth)
     Turbine.UI.Control.Constructor(self)
-    P = Options2NavParts
+    P = Options2RowParts
 
     self.navWin   = navWin
     self.key      = key
@@ -72,7 +72,7 @@ function Options2NavWindow:_Sync()
     self._name = (wd.name ~= nil and wd.name ~= "") and wd.name
         or UTILS.GetText("options2", "unnamed_window")
     self.tag:SetText(type_tag(wd))
-    self.bolt:SetVisible(Options2NavParts.HasTriggers(wd, self.navWin.trig_types))
+    self.bolt:SetVisible(Options2RowParts.HasTriggers(wd, self.navWin.trig_types))
     self.box:SetOn(wd.enabled == true)
     self.label:SetForeColor(wd.enabled == true
         and Options.Defaults.window.color_window
@@ -115,7 +115,7 @@ function Options2NavWindow:SizeChanged()
 end
 
 function Options2NavWindow:SetSelected(v)
-    Options2NavParts.ApplySelected(self, v)
+    Options2RowParts.ApplySelected(self, v)
 end
 
 function Options2NavWindow:GetKey()       return self.key end
@@ -133,6 +133,6 @@ end
 
 function Options2NavWindow:Refresh(expanded, depth)
     self.depth = depth or 0
-    Options2NavParts.ApplySelected(self, false)
+    Options2RowParts.ApplySelected(self, false)
     self:_Sync()
 end

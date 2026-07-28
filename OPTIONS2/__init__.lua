@@ -1,6 +1,8 @@
 -- standalone controls
 import "Gibberish3.OPTIONS2.ELEMENTS.CheckBox"
 import "Gibberish3.OPTIONS2.ELEMENTS.Tooltip"
+-- shared row chrome for the structure and contents columns
+import "Gibberish3.OPTIONS2.ELEMENTS.RowParts"
 -- frameless window chrome, base class for every options window
 import "Gibberish3.OPTIONS2.ELEMENTS.PanelWindow"
 
@@ -22,8 +24,12 @@ import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.IconBoxRow"
 import "Gibberish3.OPTIONS2.WINDOW.BaseWindow"
 import "Gibberish3.OPTIONS2.WINDOW.DeletePopup"
 import "Gibberish3.OPTIONS2.WINDOW.ImportDialog"
--- navigation tree adds Options2.Window.Nav.* to the existing table
+-- right-click menus, shared by both list columns
+import "Gibberish3.OPTIONS2.WINDOW.ContextMenus"
+-- structure column adds Options2.Window.Nav.* to the existing table
 import "Gibberish3.OPTIONS2.WINDOW.NAV"
+-- contents column: everything inside the selected folder or window
+import "Gibberish3.OPTIONS2.WINDOW.CONTENT"
 -- editor panel (depends on NAV for node types, depends on elements for row widgets)
 import "Gibberish3.OPTIONS2.WINDOW.EDITOR"
 -- standalone settings window (hosts the settings panel defined under EDITOR)

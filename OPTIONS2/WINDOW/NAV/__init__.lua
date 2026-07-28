@@ -1,5 +1,3 @@
--- shared row chrome
-import "Gibberish3.OPTIONS2.WINDOW.NAV.RowParts"
 -- node rows: the structure column holds folders and windows only
 import "Gibberish3.OPTIONS2.WINDOW.NAV.FolderItem"
 import "Gibberish3.OPTIONS2.WINDOW.NAV.WindowItem"

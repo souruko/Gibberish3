@@ -30,7 +30,7 @@ end
 Options2NavFolder = class(Turbine.UI.Control)
 function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expanded, depth)
     Turbine.UI.Control.Constructor(self)
-    P = Options2NavParts
+    P = Options2RowParts
 
     self.navWin   = navWin
     self.key      = key
@@ -88,7 +88,7 @@ function Options2NavFolder:_Sync(expanded)
     self._name = (fd.name ~= nil and fd.name ~= "") and fd.name
         or UTILS.GetText("options2", "unnamed_folder")
     self.count:SetText(tostring(child_count(fi)))
-    self.bolt:SetVisible(Options2NavParts.HasTriggers(fd, self.navWin.trig_types))
+    self.bolt:SetVisible(Options2RowParts.HasTriggers(fd, self.navWin.trig_types))
     self.box:SetOn(folder_enabled(fi))
 
     P.LayoutGuides(self, self.depth)
@@ -129,7 +129,7 @@ function Options2NavFolder:SizeChanged()
 end
 
 function Options2NavFolder:SetSelected(v)
-    Options2NavParts.ApplySelected(self, v)
+    Options2RowParts.ApplySelected(self, v)
 end
 
 function Options2NavFolder:GetKey()       return self.key end
@@ -145,6 +145,6 @@ end
 
 function Options2NavFolder:Refresh(expanded, depth)
     self.depth = depth or 0
-    Options2NavParts.ApplySelected(self, false)
+    Options2RowParts.ApplySelected(self, false)
     self:_Sync(expanded)
 end

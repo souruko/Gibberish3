@@ -1,6 +1,38 @@
 Options2.clipboard    = { item = nil, itemType = nil }
 Options2.selectedNode = nil
 
+local _trigger_types = nil
+
+-- every Trigger.Types value, sorted, so menus and rows list them in one order
+function Options2.TriggerTypes()
+    if _trigger_types == nil then
+        _trigger_types = {}
+        for _, t in pairs(Trigger.Types) do
+            _trigger_types[#_trigger_types + 1] = t
+        end
+        table.sort(_trigger_types)
+    end
+    return _trigger_types
+end
+
+-- Rebuild both list columns. Adding or deleting anything shifts array indices,
+-- which invalidates the index-based row caches in both columns.
+function Options2.RefreshAll()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
+    if obj.nav ~= nil then obj.nav:RebuildFresh() end
+    if obj.contents ~= nil then obj.contents:RebuildFresh() end
+end
+
+-- drop the current selection in both columns and empty the editor
+function Options2.ClearSelection()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
+    if obj.nav ~= nil then obj.nav.selectedKey = nil end
+    if obj.contents ~= nil then obj.contents:ClearSelection() end
+    Options2.selectedNode = nil
+end
+
 function Options2.EffectCollectionChanged()
     local obj = Options2.Window.Object
     if obj ~= nil and obj.library ~= nil then
@@ -44,7 +76,8 @@ end
 -- Persisted panel state. Lives under the historic "gibberish_options2_nav" key and is
 -- extended, never replaced, so a save written by an older version still restores.
 local _panel_state = {
-    selectedKey        = nil,
+    selectedKey        = nil,   -- structure column
+    contentKey         = nil,   -- contents column
     structureCollapsed = false,
     libraryCollapsed   = false,
 }
@@ -52,6 +85,7 @@ local _panel_state = {
 local function _WritePanelState()
     Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_options2_nav", {
         selectedKey        = _panel_state.selectedKey,
+        contentKey         = _panel_state.contentKey,
         structureCollapsed = _panel_state.structureCollapsed,
         libraryCollapsed   = _panel_state.libraryCollapsed,
     }, nil)
@@ -63,6 +97,9 @@ function Options2.StartUp()
     if type(state) == "table" then
         if type(state.selectedKey) == "string" then
             _panel_state.selectedKey = state.selectedKey
+        end
+        if type(state.contentKey) == "string" then
+            _panel_state.contentKey = state.contentKey
         end
         if type(state.structureCollapsed) == "boolean" then
             _panel_state.structureCollapsed = state.structureCollapsed
@@ -112,6 +149,15 @@ end
 
 function Options2.LoadNavState()
     return _panel_state.selectedKey
+end
+
+function Options2.SaveContentState(contentKey)
+    _panel_state.contentKey = contentKey
+    _WritePanelState()
+end
+
+function Options2.LoadContentState()
+    return _panel_state.contentKey
 end
 
 -- read a persisted panel flag (structureCollapsed / libraryCollapsed)
