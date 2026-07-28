@@ -24,7 +24,7 @@ local function add_hover_tooltip(control, description, enter_fn, leave_fn)
     control.MouseLeave = function(sender, args) tip_leave(sender, args) leave_fn() end
 end
 
-local function make_nav_btn(parent, icon_path, click_fn, accent_color, tooltip)
+local function make_nav_btn(parent, icon_path, click_fn, tooltip)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_SIZE, BTN_SIZE)
@@ -34,19 +34,11 @@ local function make_nav_btn(parent, icon_path, click_fn, accent_color, tooltip)
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 0)
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2),
+                     math.floor((BTN_SIZE - BTN_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
     icon:SetMouseVisible(false)
-
-    if accent_color ~= nil then
-        local accent = Turbine.UI.Control()
-        accent:SetParent(btn)
-        accent:SetSize(BTN_ICON, 2)
-        accent:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), BTN_SIZE - 3)
-        accent:SetBackColor(accent_color)
-        accent:SetMouseVisible(false)
-    end
 
     add_hover_tooltip(btn, tooltip,
         function() btn:SetBackColor(Options.Defaults.window.select) end,
@@ -95,33 +87,31 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.header_label:SetMouseVisible(false)
 
     self.add_folder_btn = make_nav_btn(self.header,
-        "Gibberish3/RESOURCES/nav_btn_folder.tga",
+        "Gibberish3/RESOURCES/node_folder.tga",
         function()
             Folder.New(UTILS.GetText("options2", "new_folder"))
             Options.SaveData()
             self:RebuildFresh()
-        end,
-        Options.Defaults.window.color_folder, "o2_add_folder")
+        end, "o2_add_folder")
 
     self.add_window_btn = make_nav_btn(self.header,
-        "Gibberish3/RESOURCES/nav_btn_window.tga",
+        "Gibberish3/RESOURCES/node_window.tga",
         function()
             Options2.ShowAddWindowMenu(nil)
-        end,
-        Options.Defaults.window.color_window, "o2_add_window")
+        end, "o2_add_window")
 
     self.import_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_import.tga",
         function()
             local nd = Options2.selectedNode
             Options2.ShowImport(nd)
-        end, nil, "o2_import")
+        end, "o2_import")
 
     self.collapse_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_collapse.tga",
         function()
             self:CollapseAll()
-        end, nil, "o2_collapse_all")
+        end, "o2_collapse_all")
 
     -- ── search row ───────────────────────────────────────────────
     self.search_row = Turbine.UI.Control()
