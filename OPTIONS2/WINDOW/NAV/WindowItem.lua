@@ -7,7 +7,6 @@ local P = nil   -- resolved lazily; RowParts is imported before this file
 local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana12
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 
-local ICON_WINDOW = "Gibberish3/RESOURCES/nav_btn_window.tga"
 local TAG_W       = 52
 
 -- "Bar" / "Counter" etc. from the tables in UI_ELEMENTS/__init__.lua, uppercased
@@ -43,7 +42,8 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
     self:SetHeight(P.ROW_H)
 
     self.rail = P.MakeRail(self, Options.Defaults.window.color_window)
-    self.icon = P.MakeIcon(self, P.NODE_ICON, ICON_WINDOW)
+    self.icon = P.MakeSquare(self, P.NODE_SQUARE, P.NODE_ICON,
+        Options.Defaults.window.color_window)
 
     self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_window,
         Turbine.UI.ContentAlignment.MiddleLeft)
@@ -87,7 +87,7 @@ function Options2NavWindow:_Layout()
     if w <= 0 then return end
 
     local left = P.ContentLeft(self.depth)
-    self.icon:SetLeft(left)
+    self.icon:SetSlotLeft(left)
     local text_left = left + P.NODE_ICON + P.GAP
 
     -- right to left: enable box, trigger bolt, type tag

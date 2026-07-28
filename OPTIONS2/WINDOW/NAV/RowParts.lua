@@ -8,8 +8,10 @@ Options2NavParts.PAD         = 8
 Options2NavParts.GAP         = 6
 Options2NavParts.RAIL_W      = 3
 Options2NavParts.RAIL_IDLE_W = 2
-Options2NavParts.CHEVRON     = 11
-Options2NavParts.NODE_ICON   = 13
+Options2NavParts.CHEVRON     = 11   -- slot width for the expand marker
+Options2NavParts.NODE_ICON   = 13   -- slot width for the node marker
+Options2NavParts.CHEV_SQUARE = 7
+Options2NavParts.NODE_SQUARE = 11
 Options2NavParts.BOX         = 9
 Options2NavParts.BOLT        = 4
 
@@ -123,16 +125,39 @@ function Options2NavParts.MakeBolt(row)
     return bolt
 end
 
-function Options2NavParts.MakeIcon(row, size, path)
-    local icon = Turbine.UI.Control()
-    icon:SetParent(row)
-    icon:SetSize(size, size)
-    icon:SetTop(math.floor((Options2NavParts.ROW_H - size) / 2))
-    icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    icon:SetBackground(path)
-    icon:SetStretchMode(1)
-    icon:SetMouseVisible(false)
-    return icon
+-- Coloured square, filled or drawn as a 1px outline. Used for the node marker
+-- and the folder's expand state, because a .tga glyph cannot be coloured.
+-- slot is the horizontal space the square is centred in, so rows keep their
+-- alignment whatever size the square is.
+function Options2NavParts.MakeSquare(row, size, slot, color)
+    local square = Turbine.UI.Control()
+    square:SetParent(row)
+    square:SetSize(size, size)
+    square:SetTop(math.floor((Options2NavParts.ROW_H - size) / 2))
+    square:SetMouseVisible(false)
+
+    local inner = Turbine.UI.Control()
+    inner:SetParent(square)
+    inner:SetPosition(1, 1)
+    inner:SetSize(size - 2, size - 2)
+    inner:SetMouseVisible(false)
+
+    square._slot   = slot
+    square._color  = color
+    square._inset  = math.floor((slot - size) / 2)
+
+    function square:SetFilled(filled)
+        self:SetBackColor(self._color)
+        inner:SetBackColor(filled and self._color or nil)
+    end
+
+    -- position by the slot's left edge, not the square's
+    function square:SetSlotLeft(x)
+        self:SetLeft(x + self._inset)
+    end
+
+    square:SetFilled(true)
+    return square
 end
 
 function Options2NavParts.MakeLabel(row, size, color, alignment)

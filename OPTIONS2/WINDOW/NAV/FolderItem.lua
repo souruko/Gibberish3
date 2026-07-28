@@ -6,9 +6,6 @@ local P = nil   -- resolved lazily; RowParts is imported before this file
 local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana12
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 
-local ARROW_DOWN  = "Gibberish3/RESOURCES/nav_arrow_down.tga"
-local ARROW_RIGHT = "Gibberish3/RESOURCES/nav_arrow_right.tga"
-local ICON_FOLDER = "Gibberish3/RESOURCES/nav_btn_folder.tga"
 
 -- a folder has no enabled flag of its own; it reads as enabled when any window
 -- below it is enabled, and toggling it loads or unloads the whole subtree
@@ -50,8 +47,13 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
 
     self.rail = P.MakeRail(self, Options.Defaults.window.color_folder)
 
-    self.chevron = P.MakeIcon(self, P.CHEVRON, expanded and ARROW_DOWN or ARROW_RIGHT)
-    self.icon    = P.MakeIcon(self, P.NODE_ICON, ICON_FOLDER)
+    -- filled square = expanded, hollow square = collapsed
+    self.chevron = P.MakeSquare(self, P.CHEV_SQUARE, P.CHEVRON,
+        Options.Defaults.window.color_folder)
+    self.chevron:SetFilled(expanded)
+
+    self.icon = P.MakeSquare(self, P.NODE_SQUARE, P.NODE_ICON,
+        Options.Defaults.window.color_folder)
 
     self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_folder,
         Turbine.UI.ContentAlignment.MiddleLeft)
@@ -82,7 +84,7 @@ function Options2NavFolder:_Sync(expanded)
     local fd = self.nodeData.data
     local fi = self.nodeData.folderIndex
 
-    self.chevron:SetBackground(expanded and ARROW_DOWN or ARROW_RIGHT)
+    self.chevron:SetFilled(expanded)
     self._name = (fd.name ~= nil and fd.name ~= "") and fd.name
         or UTILS.GetText("options2", "unnamed_folder")
     self.count:SetText(tostring(child_count(fi)))
@@ -98,8 +100,8 @@ function Options2NavFolder:_Layout()
     if w <= 0 then return end
 
     local left = P.ContentLeft(self.depth)
-    self.chevron:SetLeft(left)
-    self.icon:SetLeft(left + P.CHEVRON + P.GAP)
+    self.chevron:SetSlotLeft(left)
+    self.icon:SetSlotLeft(left + P.CHEVRON + P.GAP)
     local text_left = left + P.CHEVRON + P.GAP + P.NODE_ICON + P.GAP
 
     -- right to left: enable box, child count, trigger bolt
@@ -134,7 +136,7 @@ function Options2NavFolder:GetKey()       return self.key end
 function Options2NavFolder:IsExpandable() return true end
 
 function Options2NavFolder:SetExpanded(v)
-    self.chevron:SetBackground(v and ARROW_DOWN or ARROW_RIGHT)
+    self.chevron:SetFilled(v)
 end
 
 function Options2NavFolder:RefreshEnabled()
