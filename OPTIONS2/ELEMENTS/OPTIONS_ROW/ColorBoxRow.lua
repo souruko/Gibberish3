@@ -5,32 +5,19 @@ function Options2.Elements.ColorBoxRow:Constructor(back_color, label_control, la
     self.label_control     = label_control
     self.label_description = label_description
 
-    local sp             = Options.Defaults.window.spacing
-    local content_height = height - 2 * sp
+    local M = Options2.Elements.EditorRow
 
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(sp, sp)
-    self.label:SetSize(110, content_height)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.label:SetFont(Options.Defaults.window.font)
-    Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
+    self.label = M.MakeLabel(self, tooltip_description)
+    self.label:SetHeight(height)
 
     self.color = Turbine.UI.Control()
     self.color:SetParent(self)
-    self.color:SetPosition(130 + 2 * sp, sp)
-    self.color:SetSize(content_height, content_height)
+    self.color:SetSize(M.CTRL_H, M.CTRL_H)
     self.color:SetBackColor(Turbine.UI.Color.Black)
+    self.color:SetMouseVisible(false)
 
-    self.textbox = Turbine.UI.Lotro.TextBox()
-    self.textbox:SetParent(self)
-    self.textbox:SetPosition(130 + 3 * sp + content_height, sp)
-    self.textbox:SetHeight(content_height)
-    self.textbox:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.textbox:SetForeColor(Options.Defaults.window.textcolor)
-    self.textbox:SetSelectable(true)
-    self.textbox:SetFont(Options.Defaults.window.font)
-    self.textbox:SetMultiline(false)
+    self.field = M.MakeField(self, false)
+    self.textbox = self.field.box
     self.textbox.TextChanged = function()
         self:TextChanged()
     end
@@ -45,8 +32,15 @@ function Options2.Elements.ColorBoxRow:LanguageChanged()
 end
 
 function Options2.Elements.ColorBoxRow:SizeChanged()
-    local width, height = self:GetSize()
-    self.textbox:SetWidth(width - 130 - 2 * Options.Defaults.window.spacing - height)
+    if self.field == nil then return end
+    local M = Options2.Elements.EditorRow
+    local w, h = self:GetSize()
+    local top  = M.CentreTop(h, M.CTRL_H)
+    self.label:SetHeight(h)
+    self.color:SetPosition(M.CTRL_LEFT, top)
+    local field_left = M.CTRL_LEFT + M.CTRL_H + 6
+    self.field:Layout(field_left, top,
+        math.max(0, w - field_left - M.RIGHT_PAD), M.CTRL_H)
 end
 
 function Options2.Elements.ColorBoxRow:SetText(value)

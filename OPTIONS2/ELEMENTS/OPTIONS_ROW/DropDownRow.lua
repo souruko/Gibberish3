@@ -5,20 +5,15 @@ function Options2.Elements.DropDownRow:Constructor(back_color, label_control, la
     self.label_control     = label_control
     self.label_description = label_description
 
-    local sp = Options.Defaults.window.spacing
+    local M = Options2.Elements.EditorRow
 
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(sp, sp)
-    self.label:SetSize(110, height - sp)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.label:SetFont(Options.Defaults.window.font)
-    Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
+    self.label = M.MakeLabel(self, tooltip_description)
+    self.label:SetHeight(height)
 
-    self.dropdown = Options2.Elements.Dropdown(150, lines)
+    self.dropdown = Options2.Elements.Dropdown(M.DROP_W, lines)
     self.dropdown:SetParent(self)
-    self.dropdown:SetPosition(145, sp)
-    self.dropdown:SetHeight(height - 2 * sp)
+    self.dropdown:SetPosition(M.CTRL_LEFT, M.CentreTop(height, M.CTRL_H))
+    self.dropdown:SetHeight(M.CTRL_H)
 
     self:SetHeight(height)
     self:SetBackColor(back_color)
@@ -30,6 +25,11 @@ function Options2.Elements.DropDownRow:LanguageChanged()
 end
 
 function Options2.Elements.DropDownRow:SizeChanged()
+    if self.dropdown == nil then return end
+    local M = Options2.Elements.EditorRow
+    local h = self:GetHeight()
+    self.label:SetHeight(h)
+    self.dropdown:SetTop(M.CentreTop(h, M.CTRL_H))
 end
 
 function Options2.Elements.DropDownRow:AddItem(text_control, text_description, value)

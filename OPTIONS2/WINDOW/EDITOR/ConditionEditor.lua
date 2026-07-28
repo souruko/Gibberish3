@@ -1,10 +1,10 @@
-local ROW_H  = 30
-local DESC_H = 50
-local LEFT   = 5
-local TOP    = 8
+local ROW_H  = 28
+local DESC_H = 40
+local LEFT   = 10
+local TOP    = 10
 
-local BC_ODD  = Turbine.UI.Color(0.16, 0.13, 0.10)
-local BC_EVEN = Turbine.UI.Color(0.12, 0.10, 0.08)
+local BC_ODD  = Options.Defaults.window.row_odd
+local BC_EVEN = Options.Defaults.window.row_even
 
 Options2.Window.ConditionEditor = class(Turbine.UI.Control)
 function Options2.Window.ConditionEditor:Constructor(nodeData)
@@ -12,7 +12,7 @@ function Options2.Window.ConditionEditor:Constructor(nodeData)
 
     self.nodeData = nodeData
     local data    = nodeData.data
-    local bc      = Options.Defaults.window.basecolor
+    local bc      = Options.Defaults.window.row_odd
     local y       = TOP
     local count   = 0
     self.rows     = {}
@@ -23,7 +23,7 @@ function Options2.Window.ConditionEditor:Constructor(nodeData)
         widget:SetParent(self)
         widget:SetPosition(LEFT, y)
         self.rows[#self.rows + 1] = widget
-        y = y + (h or ROW_H) + 5
+        y = y + (h or ROW_H) + 2
     end
 
     self.desc = Options2.Elements.TextBoxRow(bc, "options", "description", "trg_description", DESC_H, true)
@@ -52,7 +52,7 @@ end
 function Options2.Window.ConditionEditor:SizeChanged()
     if self.rows == nil then return end
     local w = self:GetWidth()
-    for _, r in ipairs(self.rows) do r:SetWidth(w - LEFT - 5) end
+    for _, r in ipairs(self.rows) do r:SetWidth(w - LEFT - LEFT) end
 end
 
 function Options2.Window.ConditionEditor:Save()

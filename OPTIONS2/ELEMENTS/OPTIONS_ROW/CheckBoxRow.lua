@@ -1,24 +1,17 @@
 Options2.Elements.CheckBoxRow = class(Turbine.UI.Control)
 function Options2.Elements.CheckBoxRow:Constructor(back_color, label_control, label_description, tooltip_description, height)
     Turbine.UI.Control.Constructor(self)
+    local M = Options2.Elements.EditorRow
 
     self.label_control     = label_control
     self.label_description = label_description
 
-    local sp             = Options.Defaults.window.spacing
-    local g_content_top  = -2
-
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(sp, sp)
-    self.label:SetSize(110, height - sp)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.label:SetFont(Options.Defaults.window.font)
-    Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
+    self.label = M.MakeLabel(self, tooltip_description)
+    self.label:SetHeight(height)
 
     self.checkbox = Options2.Elements.CheckBox()
     self.checkbox:SetParent(self)
-    self.checkbox:SetPosition(140, sp + g_content_top)
+    self.checkbox:SetPosition(M.CTRL_LEFT, M.CentreTop(height, M.CHECK))
 
     self:SetHeight(height)
     self:SetBackColor(back_color)
@@ -30,6 +23,11 @@ function Options2.Elements.CheckBoxRow:LanguageChanged()
 end
 
 function Options2.Elements.CheckBoxRow:SizeChanged()
+    if self.checkbox == nil then return end
+    local M = Options2.Elements.EditorRow
+    local h = self:GetHeight()
+    self.label:SetHeight(h)
+    self.checkbox:SetTop(M.CentreTop(h, M.CHECK))
 end
 
 function Options2.Elements.CheckBoxRow:SetChecked(value)

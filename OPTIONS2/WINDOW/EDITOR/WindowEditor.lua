@@ -1,11 +1,11 @@
-local ROW_H   = 30
+local ROW_H   = 28
 local DESC_H  = 50
-local LEFT    = 5
-local TOP     = 8
+local LEFT    = 10
+local TOP     = 10
 local TAB_W   = 100
 
-local BC_ODD  = Turbine.UI.Color(0.16, 0.13, 0.10)
-local BC_EVEN = Turbine.UI.Color(0.12, 0.10, 0.08)
+local BC_ODD  = Options.Defaults.window.row_odd
+local BC_EVEN = Options.Defaults.window.row_even
 
 -- ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ local function make_general_tab(data, bc)
     local add, rows = make_rows(panel, data, bc)
 
     local name = Options2.Elements.TextBoxRow(bc, "options2", "name", "name", ROW_H, false)
-    add(name, ROW_H + 5)
+    add(name, ROW_H)
 
     local timerType = Options2.Elements.DropDownRow(bc, "options", "timerType", "win_timer_type", ROW_H)
     if data.type == Window.Types.TIMER_WINDOW then
@@ -45,18 +45,28 @@ local function make_general_tab(data, bc)
     elseif data.type == Window.Types.COUNTER_WINDOW then
         timerType:AddItem("type", Timer.Types.COUNTER_BAR, Timer.Types.COUNTER_BAR)
     end
-    add(timerType, ROW_H + 5)
+    -- the window owns the display type, so this one row rewrites every timer
+    -- in it; mark it and say how many it touches
+    local edge = Turbine.UI.Control()
+    edge:SetParent(timerType)
+    edge:SetPosition(0, 0)
+    edge:SetSize(3, ROW_H)
+    edge:SetBackColor(Options.Defaults.window.accent)
+    edge:SetMouseVisible(false)
+    timerType.label:SetForeColor(Options.Defaults.window.text)
+    Options2.Elements.Tooltip.AddTooltip(timerType.label, "tooltip", "win_timer_type", false)
+    add(timerType, ROW_H)
 
     local desc = Options2.Elements.TextBoxRow(bc, "options", "description", "win_description", DESC_H, true)
-    add(desc, DESC_H + 5)
+    add(desc, DESC_H)
     local saveGlobaly = Options2.Elements.CheckBoxRow(bc, "options", "saveGlobaly", "win_save_globaly", ROW_H)
-    add(saveGlobaly, ROW_H + 5)
+    add(saveGlobaly, ROW_H)
     local resetOnTargetChanged = Options2.Elements.CheckBoxRow(bc, "options", "resetOnTargetChanged", "win_reset_on_target_change", ROW_H)
-    add(resetOnTargetChanged, ROW_H + 5)
+    add(resetOnTargetChanged, ROW_H)
     local useTargetEntity = Options2.Elements.CheckBoxRow(bc, "options", "useTargetEntity", "win_use_target_entity", ROW_H)
-    add(useTargetEntity, ROW_H + 5)
+    add(useTargetEntity, ROW_H)
     local overlay = Options2.Elements.CheckBoxRow(bc, "options", "overlay", "win_overlay", ROW_H)
-    add(overlay, ROW_H + 5)
+    add(overlay, ROW_H)
 
     local function load()
         name:SetText(data.name or "")
@@ -95,7 +105,7 @@ local function make_general_tab(data, bc)
     end
 
     local function size_changed(w)
-        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - 5) end
+        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - LEFT) end
     end
 
     load()
@@ -111,11 +121,11 @@ local function make_size_tab(data, bc)
     local width  = Options2.Elements.NumberBoxRow(bc, "options", "width",  "win_width",  ROW_H)
     add(width, ROW_H)
     local height = Options2.Elements.NumberBoxRow(bc, "options", "height", "win_height", ROW_H)
-    add(height, ROW_H + 5)
+    add(height, ROW_H)
     local frame  = Options2.Elements.NumberBoxRow(bc, "options", "frame",  "win_frame",  ROW_H)
     add(frame, ROW_H)
     local spacing = Options2.Elements.NumberBoxRow(bc, "options", "spacing", "win_spacing", ROW_H)
-    add(spacing, ROW_H + 5)
+    add(spacing, ROW_H)
 
     local direction = Options2.Elements.DropDownRow(bc, "options", "direction", "win_direction", ROW_H)
     for name, value in pairs(Direction) do
@@ -136,7 +146,7 @@ local function make_size_tab(data, bc)
         orientation:AddItem("orientation", name, value)
     end
     orientation:SortAlpha()
-    add(orientation, ROW_H + 5)
+    add(orientation, ROW_H)
 
     local function load()
         width:SetText(data.width)
@@ -163,7 +173,7 @@ local function make_size_tab(data, bc)
     end
 
     local function size_changed(w)
-        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - 5) end
+        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - LEFT) end
     end
 
     load()
@@ -187,19 +197,19 @@ local function make_color_tab(data, bc)
     local color5 = Options2.Elements.ColorBoxRow(bc, "options", "color5", "win_color_text", ROW_H)
     add(color5, ROW_H)
     local color6 = Options2.Elements.ColorBoxRow(bc, "options", "color6", "win_color_outline", ROW_H)
-    add(color6, ROW_H + 5)
+    add(color6, ROW_H)
     local color7 = Options2.Elements.ColorBoxRow(bc, "options", "color7", "win_color_threshold", ROW_H)
     add(color7, ROW_H)
     local color8 = Options2.Elements.ColorBoxRow(bc, "options", "color8", "win_color_thresholdTimer", ROW_H)
     add(color8, ROW_H)
     local color9 = Options2.Elements.ColorBoxRow(bc, "options", "color9", "win_color_thresholdText", ROW_H)
-    add(color9, ROW_H + 5)
+    add(color9, ROW_H)
     local opacityActiv = Options2.Elements.SliderBoxRow(bc, "options", "opacityActiv", "win_opacity_activ", ROW_H)
     add(opacityActiv, ROW_H)
     local opacityPassiv = Options2.Elements.SliderBoxRow(bc, "options", "opacityPassiv", "win_opacity_passiv", ROW_H)
     add(opacityPassiv, ROW_H)
     local opacityThreshold = Options2.Elements.SliderBoxRow(bc, "options", "opacityThreshold", "win_opacity_theshold", ROW_H)
-    add(opacityThreshold, ROW_H + 5)
+    add(opacityThreshold, ROW_H)
 
     local function load()
         color1:SetText(data.color1)
@@ -236,7 +246,7 @@ local function make_color_tab(data, bc)
     end
 
     local function size_changed(w)
-        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - 5) end
+        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - LEFT) end
     end
 
     load()
@@ -265,7 +275,7 @@ local function make_text_tab(data, bc)
     add(font, ROW_H)
 
     local fontSize = Options2.Elements.DropDownRow(bc, "options", "fontSize", "win_font_size", ROW_H)
-    add(fontSize, ROW_H + 5)
+    add(fontSize, ROW_H)
 
     font:SetCallback(function(sender, index, value)
         font_populate(fontSize, value)
@@ -277,7 +287,7 @@ local function make_text_tab(data, bc)
         numberFormat:AddItem("numberFormat", name, value)
     end
     numberFormat:Sort()
-    add(numberFormat, ROW_H + 5)
+    add(numberFormat, ROW_H)
 
     local textAlignment = Options2.Elements.DropDownRow(bc, "options", "textAlignment", "win_text_align", ROW_H)
     for name, value in pairs(Alignment) do
@@ -291,10 +301,10 @@ local function make_text_tab(data, bc)
         timerAlignment:AddItem("alignment", name, value)
     end
     timerAlignment:Sort()
-    add(timerAlignment, ROW_H + 5)
+    add(timerAlignment, ROW_H)
 
     local showTimer = Options2.Elements.CheckBoxRow(bc, "options", "showTimer", "win_show_timer", ROW_H)
-    add(showTimer, ROW_H + 5)
+    add(showTimer, ROW_H)
 
     local thresholdFont = Options2.Elements.DropDownRow(bc, "options", "thresholdFont", "win_thesholdFont", ROW_H)
     for name, value in pairs(Font.Type) do
@@ -304,7 +314,7 @@ local function make_text_tab(data, bc)
     add(thresholdFont, ROW_H)
 
     local thresholdFontSize = Options2.Elements.DropDownRow(bc, "options", "thresholdFontSize", "win_thesholdFont_size", ROW_H)
-    add(thresholdFontSize, ROW_H + 5)
+    add(thresholdFontSize, ROW_H)
 
     thresholdFont:SetCallback(function(sender, index, value)
         font_populate(thresholdFontSize, value)
@@ -342,7 +352,7 @@ local function make_text_tab(data, bc)
     end
 
     local function size_changed(w)
-        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - 5) end
+        for _, r in ipairs(rows) do r:SetWidth(w - LEFT - LEFT) end
     end
 
     load()
@@ -358,7 +368,7 @@ function Options2.Window.WindowEditor:Constructor(winData, winIndex)
     self.data     = winData
     self.winIndex = winIndex
 
-    local bc = Options.Defaults.window.basecolor
+    local bc = Options.Defaults.window.row_odd
 
     -- Tab window (fills the full area)
     self.tabs = Options2.Elements.TabWindow(TAB_W)

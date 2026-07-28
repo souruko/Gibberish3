@@ -8,28 +8,17 @@ function Options2.Elements.SliderBoxRow:Constructor(back_color, label_control, l
 
     self:SetBackColor(back_color)
 
-    local sp = Options.Defaults.window.spacing
+    local M = Options2.Elements.EditorRow
 
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(sp, sp)
-    self.label:SetSize(110, height - sp)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.label:SetFont(Options.Defaults.window.font)
-    Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
+    self.label = M.MakeLabel(self, tooltip_description)
+    self.label:SetHeight(height)
 
-    self.textbox = Turbine.UI.Lotro.TextBox()
-    self.textbox:SetParent(self)
-    self.textbox:SetSize(55, height - 2 * sp)
-    self.textbox:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.textbox:SetForeColor(Options.Defaults.window.textcolor)
-    self.textbox:SetSelectable(true)
-    self.textbox:SetFont(Options.Defaults.window.font)
-    self.textbox:SetMultiline(false)
+    self.field   = M.MakeField(self, false)
+    self.textbox = self.field.box
 
     self.slider_frame = Turbine.UI.Control()
     self.slider_frame:SetParent(self)
-    self.slider_frame:SetBackColor(Turbine.UI.Color(0.25, 0.25, 0.25))
+    self.slider_frame:SetBackColor(Options.Defaults.window.bg_sunken)
     self.slider_frame:SetMouseVisible(false)
 
     self.slider = Turbine.UI.Lotro.ScrollBar()
@@ -66,21 +55,22 @@ function Options2.Elements.SliderBoxRow:LanguageChanged()
 end
 
 function Options2.Elements.SliderBoxRow:SizeChanged()
+    if self.field == nil then return end
+    local M = Options2.Elements.EditorRow
     local width, height = self:GetSize()
-    local sp = Options.Defaults.window.spacing
+    local top = M.CentreTop(height, M.CTRL_H)
 
-    local textbox_left = 130 + 2 * sp
-    self.textbox:SetPosition(textbox_left, sp)
+    self.label:SetHeight(height)
+    self.field:Layout(M.CTRL_LEFT, top, M.NUM_W, M.CTRL_H)
 
-    local frame_left  = textbox_left + 55 + sp
-    local frame_width = width - frame_left - sp
-    local frame_height = height - 2 * sp
-    self.slider_frame:SetPosition(frame_left, sp)
-    self.slider_frame:SetSize(frame_width, frame_height)
+    local frame_left  = M.CTRL_LEFT + M.NUM_W + 6
+    local frame_width = math.max(0, width - frame_left - M.RIGHT_PAD)
+    self.slider_frame:SetPosition(frame_left, top)
+    self.slider_frame:SetSize(frame_width, M.CTRL_H)
 
     local pad = 2
-    self.slider:SetPosition(pad, frame_height / 2 - 4)
-    self.slider:SetWidth(frame_width - 2 * pad)
+    self.slider:SetPosition(pad, math.floor(M.CTRL_H / 2) - 5)
+    self.slider:SetWidth(math.max(0, frame_width - 2 * pad))
 end
 
 function Options2.Elements.SliderBoxRow:SetText(value)

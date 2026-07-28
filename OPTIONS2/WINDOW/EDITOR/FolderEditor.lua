@@ -1,6 +1,6 @@
-local ROW_H  = 30
-local LEFT   = 5
-local TOP    = 8
+local ROW_H  = 28
+local LEFT   = 10
+local TOP    = 10
 
 Options2.Window.FolderEditor = class(Turbine.UI.Control)
 function Options2.Window.FolderEditor:Constructor(folderData, folderIndex)
@@ -11,7 +11,7 @@ function Options2.Window.FolderEditor:Constructor(folderData, folderIndex)
 
     -- name row
     self.name = Options2.Elements.TextBoxRow(
-        Options.Defaults.window.basecolor,
+        Options.Defaults.window.row_odd,
         "options2", "name", "name", ROW_H, false
     )
     self.name:SetParent(self)
@@ -21,7 +21,7 @@ end
 
 function Options2.Window.FolderEditor:SizeChanged()
     if self.name == nil then return end
-    self.name:SetWidth(self:GetWidth() - LEFT - 5)
+    self.name:SetWidth(self:GetWidth() - LEFT - LEFT)
 end
 
 function Options2.Window.FolderEditor:Load(folderData, folderIndex)

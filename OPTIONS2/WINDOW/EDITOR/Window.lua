@@ -1,30 +1,53 @@
-local TOOLBAR_H       = 36
-local SEP_H           = 2
-local BTN_SIZE        = 26
-local BTN_ICON        = 16
-local BTN_TOP         = math.floor((TOOLBAR_H - BTN_SIZE) / 2)
-local SPACING         = 6
+local HEADER_H = 34
+local SEP_H    = 1
+local PAD      = 10
+local GAP      = 8
+local MARK     = 11
+local BTN_H    = 22
 
-local function make_editor_btn(parent, icon_path, click_fn)
+-- Save / Revert: a bordered pill, Save picked out in the accent colour
+local function make_action_btn(parent, border, fg, click_fn)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
-    btn:SetSize(BTN_SIZE, BTN_SIZE)
-    btn:SetTop(BTN_TOP)
+    btn:SetHeight(BTN_H)
+    btn:SetBackColor(border)
     btn:SetMouseVisible(true)
 
-    local icon = Turbine.UI.Control()
-    icon:SetParent(btn)
-    icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), math.floor((BTN_SIZE - BTN_ICON) / 2))
-    icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    icon:SetBackground(icon_path)
-    icon:SetMouseVisible(false)
+    local fill = Turbine.UI.Control()
+    fill:SetParent(btn)
+    fill:SetPosition(1, 1)
+    fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    fill:SetMouseVisible(false)
 
-    btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.hovercolor) end
-    btn.MouseLeave = function() btn:SetBackColor(nil) end
+    local label = Turbine.UI.Label()
+    label:SetParent(fill)
+    label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    label:SetForeColor(fg)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    label:SetMouseVisible(false)
+
+    btn.MouseEnter = function() fill:SetBackColor(Options.Defaults.window.select) end
+    btn.MouseLeave = function() fill:SetBackColor(Options.Defaults.window.bg_sunken) end
     btn.MouseClick = click_fn
 
+    function btn:SetLabel(text)
+        label:SetText(text)
+        local w = 20 + string.len(text) * 6
+        self:SetWidth(w)
+        fill:SetSize(w - 2, BTN_H - 2)
+        label:SetSize(w - 2, BTN_H - 2)
+    end
+
     return btn
+end
+
+-- node marker colour per node type, matching the two list columns
+local function node_color(nt)
+    if nt == "folder" then return Options.Defaults.window.color_folder end
+    if nt == "window" then return Options.Defaults.window.color_window end
+    if nt == "timer"  then return Options.Defaults.window.color_timer end
+    if nt == "condition" then return Options.Defaults.window.color_cond end
+    return Options.Defaults.window.color_trigger
 end
 
 Options2.Window.Editor = {}
@@ -36,79 +59,84 @@ function Options2.Window.Editor.Constructor:Constructor()
     self.nodeData = nil
     self.content  = nil
 
-    -- ── toolbar ─────────────────────────────────────────────────────────────
+    -- ── header: what is being edited, plus Save / Revert ────────────────────
     self.toolbar = Turbine.UI.Control()
     self.toolbar:SetParent(self)
     self.toolbar:SetPosition(0, 0)
-    self.toolbar:SetBackColor(Options.Defaults.window.backcolor2)
+    self.toolbar:SetHeight(HEADER_H)
+    self.toolbar:SetBackColor(Options.Defaults.window.bg_sunken)
+    self.toolbar:SetMouseVisible(false)
 
-    self.btn_save = make_editor_btn(self.toolbar,
-        "Gibberish3/RESOURCES/nav_btn_save.tga",
+    self.head_mark = Turbine.UI.Control()
+    self.head_mark:SetParent(self.toolbar)
+    self.head_mark:SetSize(MARK, MARK)
+    self.head_mark:SetPosition(PAD, math.floor((HEADER_H - MARK) / 2))
+    self.head_mark:SetVisible(false)
+    self.head_mark:SetMouseVisible(false)
+
+    self.head_name = Turbine.UI.Label()
+    self.head_name:SetParent(self.toolbar)
+    self.head_name:SetHeight(HEADER_H)
+    self.head_name:SetFont(Turbine.UI.Lotro.Font.Verdana14)
+    self.head_name:SetForeColor(Options.Defaults.window.text)
+    self.head_name:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.head_name:SetMouseVisible(false)
+
+    self.head_kind = Turbine.UI.Label()
+    self.head_kind:SetParent(self.toolbar)
+    self.head_kind:SetHeight(HEADER_H)
+    self.head_kind:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.head_kind:SetForeColor(Options.Defaults.window.text_faint)
+    self.head_kind:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.head_kind:SetMouseVisible(false)
+
+    self.btn_save = make_action_btn(self.toolbar,
+        Options.Defaults.window.accent, Options.Defaults.window.accent,
         function()
             if self.content ~= nil and self.content.Save ~= nil then
                 self.content:Save()
-                if Options2.Window.Object ~= nil then
-                    Options2.Window.Object.nav:Rebuild()
-                end
+                Options2.RefreshAll()
                 self:_ShowSaved()
             end
         end)
-    self.btn_save:SetLeft(SPACING)
 
-    self.btn_reset = make_editor_btn(self.toolbar,
-        "Gibberish3/RESOURCES/nav_btn_reset.tga",
+    self.btn_reset = make_action_btn(self.toolbar,
+        Options.Defaults.window.line, Options.Defaults.window.text_muted,
         function()
             self:_HideSaved()
             if self.content ~= nil and self.content.Reset ~= nil then
                 self.content:Reset()
             end
         end)
-    self.btn_reset:SetLeft(SPACING * 2 + BTN_SIZE)
-
-    -- vertical divider between buttons and breadcrumb
-    self.vdiv = Turbine.UI.Control()
-    self.vdiv:SetParent(self.toolbar)
-    self.vdiv:SetBackColor(Options.Defaults.window.framecolor)
-    self.vdiv:SetSize(1, TOOLBAR_H - 16)
-    self.vdiv:SetTop(8)
-    self.vdiv:SetMouseVisible(false)
-
-    self.breadcrumb = Turbine.UI.Label()
-    self.breadcrumb:SetParent(self.toolbar)
-    self.breadcrumb:SetHeight(TOOLBAR_H)
-    self.breadcrumb:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.breadcrumb:SetFont(Turbine.UI.Lotro.Font.Verdana14)
-    self.breadcrumb:SetForeColor(Options.Defaults.window.textcolor)
-    self.breadcrumb:SetMarkupEnabled(true)
-    self.breadcrumb:SetMouseVisible(false)
 
     self.saved_label = Turbine.UI.Label()
     self.saved_label:SetParent(self.toolbar)
-    self.saved_label:SetHeight(TOOLBAR_H)
+    self.saved_label:SetHeight(HEADER_H)
     self.saved_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.saved_label:SetFont(Options.Defaults.window.font)
-    self.saved_label:SetForeColor(Options.Defaults.window.textdark)
-    self.saved_label:SetText("Saved")
+    self.saved_label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.saved_label:SetForeColor(Options.Defaults.window.on)
     self.saved_label:SetVisible(false)
     self.saved_label:SetMouseVisible(false)
 
-    -- separator line below toolbar
     self.toolbar_sep = Turbine.UI.Control()
     self.toolbar_sep:SetParent(self)
-    self.toolbar_sep:SetPosition(0, TOOLBAR_H)
-    self.toolbar_sep:SetBackColor(Options.Defaults.window.framecolor)
+    self.toolbar_sep:SetPosition(0, HEADER_H)
+    self.toolbar_sep:SetHeight(SEP_H)
+    self.toolbar_sep:SetBackColor(Options.Defaults.window.line)
     self.toolbar_sep:SetMouseVisible(false)
+
+    self:_RefreshTexts()
 
     -- ── content area ─────────────────────────────────────────────────────────
     self.content_area = Turbine.UI.Control()
     self.content_area:SetParent(self)
-    self.content_area:SetBackColor(Options.Defaults.window.backcolor1)
+    self.content_area:SetBackColor(Options.Defaults.window.bg)
 
     self.placeholder = Turbine.UI.Label()
     self.placeholder:SetParent(self.content_area)
     self.placeholder:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
-    self.placeholder:SetFont(Options.Defaults.window.font)
-    self.placeholder:SetForeColor(Options.Defaults.window.textdark)
+    self.placeholder:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.placeholder:SetForeColor(Options.Defaults.window.text_faint)
     self.placeholder:SetText(UTILS.GetText("options2", "no_selection"))
     self.placeholder:SetMouseVisible(false)
 end
@@ -116,20 +144,27 @@ end
 function Options2.Window.Editor.Constructor:SizeChanged()
     if self.toolbar == nil then return end
     local w, h = self:GetSize()
-    local content_top = TOOLBAR_H + SEP_H
+    local content_top = HEADER_H + SEP_H
     local content_h   = h - content_top
 
-    self.toolbar:SetSize(w, TOOLBAR_H)
-    self.toolbar_sep:SetSize(w, SEP_H)
+    self.toolbar:SetWidth(w)
+    self.toolbar_sep:SetWidth(w)
 
-    local vdiv_left  = SPACING * 3 + BTN_SIZE * 2
-    self.vdiv:SetLeft(vdiv_left)
-    local crumb_left  = vdiv_left + SPACING + 4
-    local crumb_right = w - SPACING
-    self.breadcrumb:SetPosition(crumb_left, 0)
-    self.breadcrumb:SetWidth(crumb_right - crumb_left)
-    self.saved_label:SetPosition(crumb_left, 0)
-    self.saved_label:SetWidth(crumb_right - crumb_left)
+    -- actions sit at the right, the name and kind take what is left
+    local x = w - PAD - self.btn_reset:GetWidth()
+    self.btn_reset:SetPosition(x, math.floor((HEADER_H - BTN_H) / 2))
+    x = x - GAP - self.btn_save:GetWidth()
+    self.btn_save:SetPosition(x, math.floor((HEADER_H - BTN_H) / 2))
+
+    local name_left = PAD + MARK + GAP
+    local avail     = math.max(0, x - GAP - name_left)
+    local name_w    = math.floor(avail * 0.62)
+    self.head_name:SetPosition(name_left, 0)
+    self.head_name:SetWidth(name_w)
+    self.head_kind:SetPosition(name_left + name_w + GAP, 0)
+    self.head_kind:SetWidth(math.max(0, avail - name_w - GAP))
+    self.saved_label:SetPosition(name_left, 0)
+    self.saved_label:SetWidth(avail)
 
     self.content_area:SetPosition(0, content_top)
     self.content_area:SetSize(w, content_h)
@@ -142,14 +177,56 @@ end
 
 -- ── save feedback ────────────────────────────────────────────────────────────
 
+function Options2.Window.Editor.Constructor:_RefreshTexts()
+    self.btn_save:SetLabel(UTILS.GetText("options2", "save"))
+    self.btn_reset:SetLabel(UTILS.GetText("options2", "revert"))
+    self.saved_label:SetText(UTILS.GetText("options2", "saved"))
+end
+
 function Options2.Window.Editor.Constructor:_ShowSaved()
-    self.breadcrumb:SetVisible(false)
+    self.head_name:SetVisible(false)
+    self.head_kind:SetVisible(false)
     self.saved_label:SetVisible(true)
 end
 
 function Options2.Window.Editor.Constructor:_HideSaved()
     self.saved_label:SetVisible(false)
-    self.breadcrumb:SetVisible(true)
+    self.head_name:SetVisible(true)
+    self.head_kind:SetVisible(true)
+end
+
+-- the header names what is being edited; the breadcrumb path lives in the
+-- panel title bar
+local KIND_KEY = {
+    folder           = "kind_folder",
+    window           = "kind_window",
+    timer            = "kind_timer",
+    condition        = "kind_condition",
+    trigger          = "kind_trigger",
+    conditiontrigger = "kind_trigger",
+    foldertrigger    = "kind_trigger",
+    windowtrigger    = "kind_trigger",
+}
+
+function Options2.Window.Editor.Constructor:_UpdateHeader(nd)
+    if nd == nil then
+        self.head_mark:SetVisible(false)
+        self.head_name:SetText("")
+        self.head_kind:SetText("")
+        return
+    end
+
+    local nt = nd.nodeType
+    self.head_mark:SetBackColor(node_color(nt))
+    self.head_mark:SetVisible(true)
+
+    local name = nd.data.name
+    if name == nil or name == "" then name = nd.data.description end
+    if name == nil or name == "" then
+        name = Options2.Elements.RowParts.TriggerLabel(nd.data, nd.triggerType)
+    end
+    self.head_name:SetText(name or "")
+    self.head_kind:SetText(UTILS.GetText("options2", KIND_KEY[nt] or "kind_trigger"))
 end
 
 -- ── node switching ────────────────────────────────────────────────────────────
@@ -170,11 +247,13 @@ function Options2.Window.Editor.Constructor:SetNode(nodeData)
 
     if nodeData == nil then
         self.placeholder:SetVisible(true)
-        self.breadcrumb:SetText("")
+        self:_UpdateHeader(nil)
+        self:_SetBreadcrumb("")
         return
     end
 
     self.placeholder:SetVisible(false)
+    self:_UpdateHeader(nodeData)
     self:_UpdateBreadcrumb(nodeData)
 
     local nt = nodeData.nodeType
@@ -300,12 +379,22 @@ function Options2.Window.Editor.Constructor:_UpdateBreadcrumb(nd)
         parts[1] = nd.nodeType or ""
     end
 
-    self.breadcrumb:SetText(table.concat(parts, "  <rgb=#666666>></rgb>  "))
+    self:_SetBreadcrumb(table.concat(parts, "  /  "))
+end
+
+-- the path is shown in the panel's title bar, not in this column
+function Options2.Window.Editor.Constructor:_SetBreadcrumb(text)
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.SetBreadcrumb ~= nil then
+        obj:SetBreadcrumb(text)
+    end
 end
 
 function Options2.Window.Editor.Constructor:LanguageChanged()
     if self.toolbar == nil then return end
+    self:_RefreshTexts()
     self.placeholder:SetText(UTILS.GetText("options2", "no_selection"))
+    if self.nodeData ~= nil then self:_UpdateHeader(self.nodeData) end
     if self.content ~= nil and self.content.LanguageChanged ~= nil then
         self.content:LanguageChanged()
     end

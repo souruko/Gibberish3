@@ -8,34 +8,43 @@ function Options2.Elements.TabWindow:Constructor(tab_width)
 
     self.tab_back = Turbine.UI.Control()
     self.tab_back:SetParent(self)
-    self.tab_back:SetBackColor(Options.Defaults.window.backcolor2)
+    self.tab_back:SetBackColor(Options.Defaults.window.bg_sunken)
     self.tab_back:SetPosition(0, 0)
     self.tab_back:SetMouseVisible(false)
 
     self.tab_sep = Turbine.UI.Control()
     self.tab_sep:SetParent(self)
-    self.tab_sep:SetBackColor(Options.Defaults.window.framecolor)
+    self.tab_sep:SetBackColor(Options.Defaults.window.line)
     self.tab_sep:SetMouseVisible(false)
 
     self.content_back = Turbine.UI.Control()
     self.content_back:SetParent(self)
-    self.content_back:SetBackColor(Options.Defaults.window.backcolor1)
+    self.content_back:SetBackColor(Options.Defaults.window.bg)
     self.content_back:SetMouseVisible(false)
 end
 
+local TAB_H = 26
+
 function Options2.Elements.TabWindow:SizeChanged()
     local width, height = self:GetSize()
-    local tab_h = Options.Defaults.window.tab_height + Options.Defaults.window.frame
     local sep_h = 1
 
-    self.tab_back:SetSize(width, tab_h)
-    self.tab_sep:SetPosition(0, tab_h)
+    self.tab_back:SetSize(width, TAB_H)
+    self.tab_sep:SetPosition(0, TAB_H)
     self.tab_sep:SetSize(width, sep_h)
-    self.content_back:SetPosition(0, tab_h + sep_h)
-    self.content_back:SetSize(width, height - tab_h - sep_h)
+    self.content_back:SetPosition(0, TAB_H + sep_h)
+    self.content_back:SetSize(width, math.max(0, height - TAB_H - sep_h))
 
-    for i, entry in ipairs(self.tabs) do
-        entry.content:SetSize(width, height - tab_h - sep_h)
+    -- tabs share the width equally, the last one taking any rounding slack
+    local n = #self.tabs
+    if n > 0 then
+        local each = math.floor(width / n)
+        for i, entry in ipairs(self.tabs) do
+            local w = (i == n) and (width - each * (n - 1)) or each
+            entry.tab:SetPosition(each * (i - 1), 0)
+            entry.tab:SetSize(w, TAB_H)
+            entry.content:SetSize(width, math.max(0, height - TAB_H - sep_h))
+        end
     end
 end
 
@@ -43,7 +52,6 @@ function Options2.Elements.TabWindow:AddTab(item, name_control, name_description
     local index = #self.tabs + 1
     local tab   = Options2Tab(index, name_control, name_description, self, self.tab_width)
     tab:SetParent(self.tab_back)
-    tab:SetPosition((index - 1) * self.tab_width, 0)
 
     item:SetParent(self.content_back)
     item:SetPosition(0, 0)
@@ -54,6 +62,7 @@ function Options2.Elements.TabWindow:AddTab(item, name_control, name_description
     if self.selected == 0 then
         self:ChangeSelection(1)
     end
+    self:SizeChanged()
 end
 
 function Options2.Elements.TabWindow:ChangeSelection(index)

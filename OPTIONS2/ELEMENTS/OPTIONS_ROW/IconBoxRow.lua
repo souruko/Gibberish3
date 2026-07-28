@@ -4,33 +4,21 @@ function Options2.Elements.IconBoxRow:Constructor(back_color, label_control, lab
 
     self.label_control     = label_control
     self.label_description = label_description
-    self.content_height    = height - 2 * Options.Defaults.window.spacing
+    local M = Options2.Elements.EditorRow
 
-    local sp = Options.Defaults.window.spacing
+    self.label = M.MakeLabel(self, tooltip_description)
+    self.label:SetHeight(height)
 
-    self.label = Turbine.UI.Label()
-    self.label:SetParent(self)
-    self.label:SetPosition(sp, sp)
-    self.label:SetSize(110, self.content_height)
-    self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.label:SetFont(Options.Defaults.window.font)
-    Options2.Elements.Tooltip.AddTooltip(self.label, "tooltip", tooltip_description, false)
-
+    -- a game icon: native size, no stretch, and no Overlay blend (which would
+    -- render it invisible against the dark panel)
     self.icon = Turbine.UI.Control()
     self.icon:SetParent(self)
-    self.icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.icon:SetPosition(130 + 2 * sp, sp)
-    self.icon:SetSize(self.content_height, self.content_height)
+    self.icon:SetSize(Options2.Elements.RowParts.ICON_NATIVE,
+                      Options2.Elements.RowParts.ICON_NATIVE)
+    self.icon:SetMouseVisible(false)
 
-    self.textbox = Turbine.UI.Lotro.TextBox()
-    self.textbox:SetParent(self)
-    self.textbox:SetPosition(130 + 3 * sp + self.content_height, sp)
-    self.textbox:SetHeight(self.content_height)
-    self.textbox:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.textbox:SetForeColor(Options.Defaults.window.textcolor)
-    self.textbox:SetSelectable(true)
-    self.textbox:SetFont(Options.Defaults.window.font)
-    self.textbox:SetMultiline(false)
+    self.field   = M.MakeField(self, false)
+    self.textbox = self.field.box
     self.textbox.TextChanged = function()
         self:SetIcon()
     end
@@ -47,8 +35,17 @@ function Options2.Elements.IconBoxRow:LanguageChanged()
 end
 
 function Options2.Elements.IconBoxRow:SizeChanged()
-    local width = self:GetWidth()
-    self.textbox:SetWidth(width - 130 - 4 * Options.Defaults.window.spacing - self.content_height)
+    if self.field == nil then return end
+    local M  = Options2.Elements.EditorRow
+    local IC = Options2.Elements.RowParts.ICON_NATIVE
+    local width, height = self:GetSize()
+
+    self.label:SetHeight(height)
+    self.icon:SetPosition(M.CTRL_LEFT, M.CentreTop(height, IC))
+
+    local field_left = M.CTRL_LEFT + IC + 6
+    self.field:Layout(field_left, M.CentreTop(height, M.CTRL_H),
+        math.max(0, width - field_left - M.RIGHT_PAD), M.CTRL_H)
 end
 
 function Options2.Elements.IconBoxRow:SetText(value)
@@ -75,6 +72,5 @@ function Options2.Elements.IconBoxRow:SetIcon()
         return
     end
     local resolved = UTILS.ResolveTimerIcon(icon_id, self.externalMode)
-    self.icon:SetSize(UTILS.GetImageSize(resolved))
-    self.icon:SetBackground(resolved)
+    Options2.Elements.RowParts.SetNativeIcon(self.icon, resolved)
 end

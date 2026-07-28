@@ -1,12 +1,12 @@
-local ROW_H  = 30
-local DESC_H = 50
+local ROW_H  = 28
+local DESC_H = 40
 local ICON_H = 40
-local LEFT   = 5
-local TOP    = 8
+local LEFT   = 10
+local TOP    = 10
 local TAB_W  = 100
 
-local BC_ODD  = Turbine.UI.Color(0.16, 0.13, 0.10)
-local BC_EVEN = Turbine.UI.Color(0.12, 0.10, 0.08)
+local BC_ODD  = Options.Defaults.window.row_odd
+local BC_EVEN = Options.Defaults.window.row_even
 
 -- ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -20,13 +20,13 @@ local function make_rows(parent)
         widget:SetParent(parent)
         widget:SetPosition(LEFT, y)
         rows[#rows + 1] = widget
-        y = y + (h or ROW_H) + 5
+        y = y + (h or ROW_H) + 2
     end
     return add, rows
 end
 
 local function size_rows(rows, w)
-    for _, r in ipairs(rows) do r:SetWidth(w - LEFT - 5) end
+    for _, r in ipairs(rows) do r:SetWidth(w - LEFT - LEFT) end
 end
 
 local function lang_rows(rows)
@@ -35,45 +35,73 @@ end
 
 -- ── paste button helpers ──────────────────────────────────────────────────────
 
-local PASTE_W = 26
+local PASTE_W = 58
 local PASTE_H = 20
 
+-- Labelled "<- paste" button. Clicking it aims the library at this field; if
+-- something usable is already copied it is taken straight away. Idle it is a
+-- sunken pill with a green border, armed it fills with the accent colour.
 local function paste_btn(panel, row, attr, types, set_fn)
-    local btn = Turbine.UI.Button()
+    local btn = Turbine.UI.Control()
     btn:SetParent(panel)
     btn:SetSize(PASTE_W, PASTE_H)
-    btn:SetText("<-")
-    btn:SetFont(Options.Defaults.window.font)
-    btn:SetForeColor(Options.Defaults.window.paste_border)
+    btn:SetBackColor(Options.Defaults.window.paste_border)
+    btn:SetMouseVisible(true)
 
-    local entry = { btn = btn, row = row, attr = attr, types = types, set = set_fn }
+    local fill = Turbine.UI.Control()
+    fill:SetParent(btn)
+    fill:SetPosition(1, 1)
+    fill:SetSize(PASTE_W - 2, PASTE_H - 2)
+    fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    fill:SetMouseVisible(false)
 
-    btn.Click = function()
-        -- aim the library at this field, so the next item clicked fills it
+    local label = Turbine.UI.Label()
+    label:SetParent(fill)
+    label:SetSize(PASTE_W - 2, PASTE_H - 2)
+    label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    label:SetForeColor(Options.Defaults.window.text_muted)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    label:SetMouseVisible(false)
+
+    local entry = { btn = btn, row = row, attr = attr, types = types, set = set_fn,
+                    fill = fill, label = label }
+
+    function entry:SetArmed(armed)
+        if armed then
+            btn:SetBackColor(Options.Defaults.window.accent)
+            fill:SetBackColor(Options.Defaults.window.accent)
+            label:SetForeColor(Options.Defaults.window.bg)
+        else
+            btn:SetBackColor(Options.Defaults.window.paste_border)
+            fill:SetBackColor(Options.Defaults.window.bg_sunken)
+            label:SetForeColor(Options.Defaults.window.text_muted)
+        end
+    end
+
+    function entry:LanguageChanged()
+        label:SetText("← " .. UTILS.GetText("options2", "paste"))
+    end
+    entry:LanguageChanged()
+
+    btn.MouseClick = function()
         Options2.ArmField({
             attr  = attr,
             types = types,
             label = UTILS.GetText(row.label_control, row.label_description),
             set   = set_fn,
         })
-        -- if something usable is already copied, take it straight away
         Options2.FillArmedField(Options2.clipboard.item, Options2.clipboard.itemType)
     end
 
     return entry
 end
 
--- Paste buttons stay visible so a field can be armed with an empty clipboard;
--- the armed one is marked in the accent colour.
+-- Paste buttons stay visible so a field can be armed with an empty clipboard.
 local function refresh_paste(plist)
     local armed = Options2.armedField
     for _, p in ipairs(plist) do
         p.btn:SetVisible(true)
-        if armed ~= nil and armed.set == p.set then
-            p.btn:SetForeColor(Options.Defaults.window.accent)
-        else
-            p.btn:SetForeColor(Options.Defaults.window.paste_border)
-        end
+        p:SetArmed(armed ~= nil and armed.set == p.set)
     end
 end
 
@@ -82,15 +110,15 @@ local function size_paste(rows, plist, w)
     for _, p in ipairs(plist) do marked[p.row] = p end
     for _, r in ipairs(rows) do
         if marked[r] then
-            r:SetWidth(w - LEFT - 5 - PASTE_W - 4)
+            r:SetWidth(w - LEFT - LEFT - PASTE_W - 6)
         else
-            r:SetWidth(w - LEFT - 5)
+            r:SetWidth(w - LEFT - LEFT)
         end
     end
     for _, p in ipairs(plist) do
         local ry = p.row:GetTop()
         local rh = p.row:GetHeight()
-        p.btn:SetPosition(w - LEFT - PASTE_W - 5, ry + math.floor((rh - PASTE_H) / 2))
+        p.btn:SetPosition(w - LEFT - PASTE_W, ry + math.floor((rh - PASTE_H) / 2))
     end
 end
 
@@ -343,7 +371,7 @@ function Options2.Window.TimerEditor:Constructor(nodeData)
 
     self.nodeData    = nodeData
     local data       = nodeData.data
-    local bc         = Options.Defaults.window.basecolor
+    local bc         = Options.Defaults.window.row_odd
     local is_counter = (data.type == Timer.Types.COUNTER_BAR)
 
     self.tabs = Options2.Elements.TabWindow(TAB_W)

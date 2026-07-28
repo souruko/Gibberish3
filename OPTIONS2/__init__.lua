@@ -12,6 +12,7 @@ import "Gibberish3.OPTIONS2.ELEMENTS.TABWINDOW"
 import "Gibberish3.OPTIONS2.ELEMENTS.RIGHT_CLICK_MENU"
 
 -- row widgets (depend on CheckBox, Tooltip, Dropdown)
+import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.Metrics"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.TextBoxRow"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.NumberBoxRow"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.SliderBoxRow"

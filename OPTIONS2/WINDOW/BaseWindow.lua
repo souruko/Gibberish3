@@ -176,6 +176,15 @@ function Options2.Window.Constructor:Constructor()
         "Gibberish3/RESOURCES/arrow_right.tga", "o2_library",
         function() self:_SetLibraryCollapsed(not self.libraryCollapsed) end)
 
+    -- centred path of whatever the editor is showing
+    self.breadcrumb = Turbine.UI.Label()
+    self.breadcrumb:SetParent(self.titlebar)
+    self.breadcrumb:SetHeight(TITLE_H)
+    self.breadcrumb:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.breadcrumb:SetForeColor(Options.Defaults.window.text_faint)
+    self.breadcrumb:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    self.breadcrumb:SetMouseVisible(false)
+
     self.title_div = Turbine.UI.Control()
     self.title_div:SetParent(self.titlebar)
     self.title_div:SetSize(SEP_W, DIV_H)
@@ -262,6 +271,11 @@ function Options2.Window.Constructor:Constructor()
     end
 end
 
+function Options2.Window.Constructor:SetBreadcrumb(text)
+    if self.breadcrumb == nil then return end
+    self.breadcrumb:SetText(text or "")
+end
+
 function Options2.Window.Constructor:CloseWindow()
     self:SetVisible(false)
     Data.options.window.open2 = false
@@ -344,6 +358,11 @@ function Options2.Window.Constructor:OnLayout(iw, ih)
     self.btn_structure:SetPosition(x, btn_top)
 
     self.title_label:SetWidth(math.max(0, x - GAP - PAD))
+
+    -- the path sits between the brand and the buttons
+    local crumb_left = PAD + 90
+    self.breadcrumb:SetPosition(crumb_left, 0)
+    self.breadcrumb:SetWidth(math.max(0, x - GAP - crumb_left))
 
     self:_ApplyLayout()
 end
