@@ -26,7 +26,13 @@ function Options2.Window.SettingsWindow:Constructor()
     end
 
     self:_CenterOnPanel()
+    self:Show()
+end
+
+-- Activate only raises a window that is already visible, so always show first.
+function Options2.Window.SettingsWindow:Show()
     self:SetVisible(true)
+    self:Activate()
 end
 
 function Options2.Window.SettingsWindow:OnLayout(w, h)
@@ -69,10 +75,10 @@ function Options2.ToggleSettingsWindow()
     end
 
     local win = Options2.Window.SettingsWindowObject
-    local show = not win:IsVisible()
-    if show then
+    if win:IsVisible() then
+        win:SetVisible(false)
+    else
         win:_CenterOnPanel()
-        win:Activate()
+        win:Show()
     end
-    win:SetVisible(show)
 end

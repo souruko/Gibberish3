@@ -81,12 +81,18 @@ end
 function Options2.ToggleWindow()
     if Options2.Window.Object == nil then
         Options2.Window.Object = Options2.Window.Constructor()
+        Options2.Window.Object:Activate()
         Data.options.window.open2 = true
-    else
-        local now_visible = not Options2.Window.Object:IsVisible()
-        Options2.Window.Object:SetVisible(now_visible)
-        Data.options.window.open2 = now_visible
+        return
     end
+
+    local obj = Options2.Window.Object
+    local now_visible = not obj:IsVisible()
+    obj:SetVisible(now_visible)
+    -- Activate only raises a window that is already visible, so activate after
+    -- showing; otherwise the settings window can end up covering this one.
+    if now_visible then obj:Activate() end
+    Data.options.window.open2 = now_visible
 end
 
 function Options2.ShowExport(data, importType, index)
