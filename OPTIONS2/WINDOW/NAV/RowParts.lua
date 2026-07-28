@@ -7,6 +7,7 @@ Options2NavParts.ROW_H       = 26
 Options2NavParts.PAD         = 8
 Options2NavParts.GAP         = 6
 Options2NavParts.RAIL_W      = 3
+Options2NavParts.RAIL_IDLE_W = 2
 Options2NavParts.CHEVRON     = 11
 Options2NavParts.NODE_ICON   = 13
 Options2NavParts.BOX         = 9
@@ -64,14 +65,16 @@ function Options2NavParts.LayoutGuides(row, depth)
     end
 end
 
--- 3px left rail in the node colour, shown only while the row is selected
+-- Left rail in the node colour. This carries the folder/window colour coding:
+-- a .tga background cannot be tinted (SetBackColor fills the control behind the
+-- glyph rather than colouring it), so the colour lives on primitives and text.
+-- Always visible, and widened while the row is selected.
 function Options2NavParts.MakeRail(row, color)
     local rail = Turbine.UI.Control()
     rail:SetParent(row)
     rail:SetPosition(0, 0)
-    rail:SetSize(Options2NavParts.RAIL_W, Options2NavParts.ROW_H)
+    rail:SetSize(Options2NavParts.RAIL_IDLE_W, Options2NavParts.ROW_H)
     rail:SetBackColor(color)
-    rail:SetVisible(false)
     rail:SetMouseVisible(false)
     return rail
 end
@@ -177,7 +180,7 @@ end
 
 function Options2NavParts.ApplySelected(row, selected)
     row.selected = selected
-    row.rail:SetVisible(selected)
+    row.rail:SetWidth(selected and Options2NavParts.RAIL_W or Options2NavParts.RAIL_IDLE_W)
     row:SetBackColor(selected and Options.Defaults.window.select or nil)
 end
 

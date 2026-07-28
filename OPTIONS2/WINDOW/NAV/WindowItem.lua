@@ -45,7 +45,7 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
     self.rail = P.MakeRail(self, Options.Defaults.window.color_window)
     self.icon = P.MakeIcon(self, P.NODE_ICON, ICON_WINDOW)
 
-    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.text,
+    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_window,
         Turbine.UI.ContentAlignment.MiddleLeft)
 
     self.tag = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
@@ -75,7 +75,7 @@ function Options2NavWindow:_Sync()
     self.bolt:SetVisible(Options2NavParts.HasTriggers(wd, self.navWin.trig_types))
     self.box:SetOn(wd.enabled == true)
     self.label:SetForeColor(wd.enabled == true
-        and Options.Defaults.window.text
+        and Options.Defaults.window.color_window
         or  Options.Defaults.window.text_muted)
 
     P.LayoutGuides(self, self.depth)
@@ -127,14 +127,12 @@ function Options2NavWindow:SetExpanded(v) end
 function Options2NavWindow:RefreshEnabled()
     self.box:SetOn(self.nodeData.data.enabled == true)
     self.label:SetForeColor(self.nodeData.data.enabled == true
-        and Options.Defaults.window.text
+        and Options.Defaults.window.color_window
         or  Options.Defaults.window.text_muted)
 end
 
 function Options2NavWindow:Refresh(expanded, depth)
     self.depth = depth or 0
-    self.selected = false
-    self.rail:SetVisible(false)
-    self:SetBackColor(nil)
+    Options2NavParts.ApplySelected(self, false)
     self:_Sync()
 end

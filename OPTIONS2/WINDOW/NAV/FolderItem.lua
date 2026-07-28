@@ -53,7 +53,7 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
     self.chevron = P.MakeIcon(self, P.CHEVRON, expanded and ARROW_DOWN or ARROW_RIGHT)
     self.icon    = P.MakeIcon(self, P.NODE_ICON, ICON_FOLDER)
 
-    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.text,
+    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_folder,
         Turbine.UI.ContentAlignment.MiddleLeft)
 
     self.count = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
@@ -143,8 +143,6 @@ end
 
 function Options2NavFolder:Refresh(expanded, depth)
     self.depth = depth or 0
-    self.selected = false
-    self.rail:SetVisible(false)
-    self:SetBackColor(nil)
+    Options2NavParts.ApplySelected(self, false)
     self:_Sync(expanded)
 end

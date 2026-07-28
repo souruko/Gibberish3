@@ -13,7 +13,10 @@ local LIST_TOP  = HEADER_H + SEARCH_H + SEP_H
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 local FONT_BODY  = Turbine.UI.Lotro.Font.Verdana12
 
-local function make_nav_btn(parent, icon_path, click_fn)
+-- accent_color, when given, draws a 2px bar under the glyph. A .tga background
+-- cannot be tinted (SetBackColor fills the control behind it rather than
+-- colouring it), so a button's colour coding is carried by this bar.
+local function make_nav_btn(parent, icon_path, click_fn, accent_color)
     local btn = Turbine.UI.Control()
     btn:SetParent(parent)
     btn:SetSize(BTN_SIZE, BTN_SIZE)
@@ -23,11 +26,20 @@ local function make_nav_btn(parent, icon_path, click_fn)
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), math.floor((BTN_SIZE - BTN_ICON) / 2))
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 1)
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
     icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
+
+    if accent_color ~= nil then
+        local accent = Turbine.UI.Control()
+        accent:SetParent(btn)
+        accent:SetSize(BTN_ICON, 2)
+        accent:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), BTN_SIZE - 3)
+        accent:SetBackColor(accent_color)
+        accent:SetMouseVisible(false)
+    end
 
     btn.MouseEnter = function() btn:SetBackColor(Options.Defaults.window.select) end
     btn.MouseLeave = function() btn:SetBackColor(nil) end
@@ -84,13 +96,15 @@ function Options2.Window.Nav.Constructor:Constructor()
             Folder.New(UTILS.GetText("options2", "new_folder"))
             Options.SaveData()
             self:RebuildFresh()
-        end)
+        end,
+        Options.Defaults.window.color_folder)
 
     self.add_window_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_window.tga",
         function()
             self:ShowAddWindowMenu()
-        end)
+        end,
+        Options.Defaults.window.color_window)
 
     self.import_btn = make_nav_btn(self.header,
         "Gibberish3/RESOURCES/nav_btn_import.tga",

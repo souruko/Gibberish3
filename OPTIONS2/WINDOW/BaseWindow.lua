@@ -60,7 +60,7 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), math.floor((BTN_SIZE - BTN_ICON) / 2))
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 2)
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
     -- backgrounds are drawn at native size and clipped unless stretched, and
@@ -68,13 +68,23 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     icon:SetStretchMode(1)
     icon:SetMouseVisible(false)
 
+    -- A .tga background cannot be tinted (SetBackColor fills the control behind
+    -- the glyph rather than colouring it), so the accent state is carried by a
+    -- 2px bar under the icon.
+    local accent = Turbine.UI.Control()
+    accent:SetParent(btn)
+    accent:SetSize(BTN_ICON, 2)
+    accent:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), BTN_SIZE - 3)
+    accent:SetBackColor(Options.Defaults.window.accent)
+    accent:SetVisible(false)
+    accent:SetMouseVisible(false)
+
     btn.icon    = icon
+    btn.accent  = accent
     btn.active  = false
     btn.hovered = false
     btn.rest    = rest_color
 
-    -- active/hover is carried by the fill only; the .tga glyphs are not tinted
-    -- anywhere else in this panel either.
     function btn:ApplyState()
         if self.hovered then
             self:SetBackColor(Options.Defaults.window.line)
@@ -83,6 +93,7 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
         else
             self:SetBackColor(self.rest)
         end
+        self.accent:SetVisible(self.active)
     end
 
     add_hover_tooltip(btn, description,
