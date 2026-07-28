@@ -9,11 +9,19 @@ function Options2.Elements.RightClickSubMenu:Constructor(width)
     self.has_rows    = false
 
     self:SetMouseVisible(false)
-    self:SetWidth(self.width)
+    self:SetWidth(self.width + 2)
     self:SetVisible(false)
 
+    self.border = Turbine.UI.Control()
+    self.border:SetParent(self)
+    self.border:SetPosition(0, 0)
+    self.border:SetWidth(self.width + 2)
+    self.border:SetBackColor(Options.Defaults.rc_menu.border_color)
+    self.border:SetMouseVisible(false)
+
     self.background = Turbine.UI.Control()
-    self.background:SetParent(self)
+    self.background:SetParent(self.border)
+    self.background:SetPosition(1, 1)
     self.background:SetWidth(self.width)
     self.background:SetBackColor(Options.Defaults.rc_menu.back_color)
 
@@ -73,9 +81,10 @@ end
 
 function Options2.Elements.RightClickSubMenu:ChangeHeight(value)
     self.height = self.height + value
-    self:SetHeight(self.height)
+    self:SetHeight(self.height + 2)
     self.list:SetHeight(self.height)
     self.background:SetHeight(self.height)
+    self.border:SetHeight(self.height + 2)
 end
 
 function Options2.Elements.RightClickSubMenu:HoverChanged(selected)

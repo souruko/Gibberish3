@@ -48,7 +48,7 @@ function Options2.Elements.RightClickMenu:Show(left, top, orientation)
         b_left = 1000 - self.width
     end
 
-    self.background:SetPosition(b_left, b_top)
+    self.border:SetPosition(b_left, b_top)
     self:LanguageChanged()
     self:SetVisible(true)
     self:Activate()
@@ -116,7 +116,7 @@ function Options2.Elements.RightClickMenu:HoverChanged(selected)
 end
 
 function Options2.Elements.RightClickMenu:GetPos()
-    return self.background:GetPosition()
+    return self.border:GetPosition()
 end
 
 function Options2.Elements.RightClickMenu:LanguageChanged()
