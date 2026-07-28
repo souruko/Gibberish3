@@ -525,6 +525,7 @@ L[ Language.German ].options2.copied                   = "KOPIERT"
 L[ Language.German ].options2.recording_effects        = "Effekte aufzeichnen"
 L[ Language.German ].options2.recording_chat           = "Chat aufzeichnen"
 L[ Language.German ].options2.stop                     = "stopp"
+L[ Language.German ].options2.record                   = "aufnehmen"
 L[ Language.German ].options2.paste                    = "einfügen"
 
 L[ Language.German ].tooltip.o2_structure                  = "Strukturspalte ein- oder ausblenden."

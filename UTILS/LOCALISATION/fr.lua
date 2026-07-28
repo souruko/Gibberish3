@@ -525,6 +525,7 @@ L[ Language.French ].options2.copied                   = "COPIÉ"
 L[ Language.French ].options2.recording_effects        = "Enregistrement des effets"
 L[ Language.French ].options2.recording_chat           = "Enregistrement du chat"
 L[ Language.French ].options2.stop                     = "arrêt"
+L[ Language.French ].options2.record                   = "enregistrer"
 L[ Language.French ].options2.paste                    = "coller"
 
 L[ Language.French ].tooltip.o2_structure                  = "Afficher ou masquer la colonne structure."

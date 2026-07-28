@@ -12,7 +12,7 @@ local SEP_H    = 1
 local PAD      = 8
 local GAP      = 6
 local ICON_SZ  = 12
-local TOG_W    = 28
+local BTN_H    = 18
 
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 local FONT_BODY  = Turbine.UI.Lotro.Font.Verdana12
@@ -26,6 +26,50 @@ local EFFECT_TYPES = {}
 for _, name in ipairs({ "EffectSelf", "EffectGroup", "EffectTarget", "EffectRemoveSelf" }) do
     local tt = Trigger.Types[name]
     if tt ~= nil then EFFECT_TYPES[tt] = true end
+end
+
+-- small bordered text button
+local function make_text_btn(parent, click_fn)
+    local btn = Turbine.UI.Control()
+    btn:SetParent(parent)
+    btn:SetHeight(BTN_H)
+    btn:SetBackColor(Options.Defaults.window.line)
+    btn:SetMouseVisible(true)
+
+    local fill = Turbine.UI.Control()
+    fill:SetParent(btn)
+    fill:SetPosition(1, 1)
+    fill:SetMouseVisible(false)
+
+    local label = Turbine.UI.Label()
+    label:SetParent(fill)
+    label:SetFont(FONT_SMALL)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    label:SetMouseVisible(false)
+
+    btn._fill  = fill
+    btn._label = label
+
+    function btn:SetTone(bg, fg)
+        self._bg_idle = bg
+        fill:SetBackColor(bg)
+        label:SetForeColor(fg)
+    end
+
+    function btn:SetLabel(text)
+        label:SetText(text)
+        local w = 16 + string.len(text) * 6
+        self:SetWidth(w)
+        fill:SetSize(w - 2, BTN_H - 2)
+        label:SetSize(w - 2, BTN_H - 2)
+    end
+
+    btn.MouseEnter = function() fill:SetBackColor(Options.Defaults.window.select) end
+    btn.MouseLeave = function() fill:SetBackColor(btn._bg_idle) end
+    btn.MouseClick = click_fn
+
+    btn:SetTone(Options.Defaults.window.bg_sunken, Options.Defaults.window.text_muted)
+    return btn
 end
 
 -- tab: label plus a 2px accent underline when active
@@ -116,18 +160,6 @@ function Options2.Library.Window:Constructor()
     self.head_fills:SetForeColor(Options.Defaults.window.accent)
     self.head_fills:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
     self.head_fills:SetMouseVisible(false)
-
-    -- Effects and Chat are collected by listening to the game; this starts and
-    -- stops that. Only meaningful on those two tabs.
-    self.rec_btn = Turbine.UI.Control()
-    self.rec_btn:SetParent(self.header)
-    self.rec_btn:SetSize(TOG_W, 16)
-    self.rec_btn:SetTop(math.floor((HEADER_H - 16) / 2))
-    self.rec_btn:SetBlendMode(Turbine.UI.BlendMode.Overlay)
-    self.rec_btn:SetStretchMode(1)
-    self.rec_btn:SetVisible(false)
-    self.rec_btn:SetMouseVisible(true)
-    self.rec_btn.MouseClick = function() self:_ToggleRecording() end
 
     -- 1px accent edge down the column while a field is armed
     self.armed_edge = Turbine.UI.Control()
@@ -238,15 +270,11 @@ function Options2.Library.Window:Constructor()
     self.status_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.status_label:SetMouseVisible(false)
 
-    self.status_stop = Turbine.UI.Label()
-    self.status_stop:SetParent(self.status)
-    self.status_stop:SetHeight(STATUS_H)
-    self.status_stop:SetFont(FONT_SMALL)
-    self.status_stop:SetForeColor(Options.Defaults.window.text_muted)
-    self.status_stop:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
-    self.status_stop:SetVisible(false)
-    self.status_stop:SetMouseVisible(true)
-    self.status_stop.MouseClick = function() self:_StopRecording() end
+    -- Effects and Chat are collected by listening to the game. This starts and
+    -- stops that, and sits next to the banner it produces.
+    self.status_btn = make_text_btn(self.status, function() self:_ToggleRecording() end)
+    self.status_btn:SetTop(math.floor((STATUS_H - BTN_H) / 2))
+    self.status_btn:SetVisible(false)
 
     -- ── copied footer ───────────────────────────────────────────────────────
     self.clip_bar = Options2.Library.ClipboardBar()
@@ -264,7 +292,6 @@ end
 function Options2.Library.Window:_RefreshTexts()
     self.head_label:SetText(UTILS.GetText("options2", "library"))
     self.filter_hint:SetText(UTILS.GetText("options2", "find_library"))
-    self.status_stop:SetText(UTILS.GetText("options2", "stop"))
     self:_RefreshTabs()
     self:_RefreshStatus()
 end
@@ -388,39 +415,39 @@ end
 function Options2.Library.Window:_RefreshStatus()
     local armed     = Options2.armedField
     local recording = Options.CollectEffects or Options.CollectChat
+    -- nil on Skills, which is not collected
+    local collectable = (self:_RecordingForOpenTab() ~= nil)
 
     if recording then
         self.status:SetBackColor(REC_BG)
         self.status_dot:SetVisible(true)
-        self.status_stop:SetVisible(true)
         self.status_label:SetForeColor(REC_TEXT)
         self.status_label:SetText(UTILS.GetText("options2",
             Options.CollectEffects and "recording_effects" or "recording_chat"))
+        self.status_btn:SetLabel(UTILS.GetText("options2", "stop"))
+        self.status_btn:SetTone(REC_BG, REC_TEXT)
+        self.status_btn:SetVisible(true)
     else
         self.status:SetBackColor(Options.Defaults.window.row_even)
         self.status_dot:SetVisible(false)
-        self.status_stop:SetVisible(false)
         self.status_label:SetForeColor(Options.Defaults.window.text_faint)
-        self.status_label:SetText(UTILS.GetText("options2", "no_field_armed"))
+        -- the header already names an armed field, so do not contradict it here
+        self.status_label:SetText(armed ~= nil and ""
+            or UTILS.GetText("options2", "no_field_armed"))
+        self.status_btn:SetLabel(UTILS.GetText("options2", "record"))
+        self.status_btn:SetTone(Options.Defaults.window.bg_sunken,
+                                Options.Defaults.window.text_muted)
+        self.status_btn:SetVisible(collectable)
     end
-
-    local rec_state = self:_RecordingForOpenTab()
 
     if armed ~= nil then
         self.head_fills:SetText(
             string.format(UTILS.GetText("options2", "fills_field"), armed.label or ""))
         self.head_fills:SetVisible(true)
         self.armed_edge:SetVisible(true)
-        self.rec_btn:SetVisible(false)
     else
         self.head_fills:SetVisible(false)
         self.armed_edge:SetVisible(false)
-        self.rec_btn:SetVisible(rec_state ~= nil)
-        if rec_state ~= nil then
-            self.rec_btn:SetBackground(rec_state
-                and "Gibberish3/RESOURCES/switch_on.tga"
-                or  "Gibberish3/RESOURCES/switch_off.tga")
-        end
     end
 end
 
@@ -509,7 +536,6 @@ function Options2.Library.Window:_ApplyLayout()
     self.head_label:SetWidth(math.max(0, w - 2 * PAD - fills_w))
     self.head_fills:SetPosition(w - PAD - fills_w, 0)
     self.head_fills:SetWidth(fills_w)
-    self.rec_btn:SetLeft(w - PAD - TOG_W)
 
     local y = HEADER_H
 
@@ -541,10 +567,10 @@ function Options2.Library.Window:_ApplyLayout()
     self.status:SetPosition(0, y)
     self.status:SetWidth(w)
     local status_left = self.status_dot:IsVisible() and (PAD + 7 + GAP) or PAD
+    local btn_w = self.status_btn:IsVisible() and (self.status_btn:GetWidth() + GAP) or 0
+    self.status_btn:SetLeft(math.max(0, w - PAD - self.status_btn:GetWidth()))
     self.status_label:SetPosition(status_left, 0)
-    self.status_label:SetWidth(math.max(0, w - status_left - PAD - 34))
-    self.status_stop:SetPosition(math.max(0, w - PAD - 34), 0)
-    self.status_stop:SetWidth(34)
+    self.status_label:SetWidth(math.max(0, w - status_left - PAD - btn_w))
     y = y + STATUS_H
 
     -- the footer only takes space when something is on the clipboard

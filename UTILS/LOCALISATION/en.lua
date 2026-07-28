@@ -526,6 +526,7 @@ L[ Language.English ].options2.copied                   = "COPIED"
 L[ Language.English ].options2.recording_effects        = "Recording effects"
 L[ Language.English ].options2.recording_chat           = "Recording chat"
 L[ Language.English ].options2.stop                     = "stop"
+L[ Language.English ].options2.record                   = "record"
 L[ Language.English ].options2.paste                    = "paste"
 
 L[ Language.English ].tooltip.o2_structure                  = "Show or hide the structure column."
