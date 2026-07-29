@@ -321,6 +321,7 @@ L[ Language.German ].import.import                          = "Importieren"
 L[ Language.German ].import.export                          = "Exportieren"
 L[ Language.German ].import.create_new                      = "Neu erstellen"
 L[ Language.German ].import.insert_into                     = "In Auswahl einfügen"
+L[ Language.German ].import.external_images               = "Verwendet externe Bilder. Wer dies importiert, braucht diese Dateien ebenfalls im Ordner Gibberish3/IMAGES/:"
 
 L[ Language.German ].traitline_changed                      = "Ihr habt diese Bonus.Eigenschaft für Klassenspezialisierung erlangt:"
 

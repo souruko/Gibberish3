@@ -4,6 +4,7 @@ local PAD    = 8
 local BTN_H  = 26
 local BTN_W  = 140
 local SCROLL = 10
+local WARN_H = 58
 
 -- ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -93,6 +94,30 @@ function Options2.Window.ImportDialog:Constructor()
     self.scrollbar:SetWidth(SCROLL)
     self.textbox:SetVerticalScrollBar(self.scrollbar)
 
+    -- External-image warning (export mode only, and only when there is one).
+    -- The export string carries the filename but not the file, so the person
+    -- importing needs the images copied across separately.
+    self.warn = Turbine.UI.Control()
+    self.warn:SetParent(self.client)
+    self.warn:SetBackColor(Options.Defaults.window.color_trigger)
+    self.warn:SetVisible(false)
+    self.warn:SetMouseVisible(false)
+
+    self.warn_fill = Turbine.UI.Control()
+    self.warn_fill:SetParent(self.warn)
+    self.warn_fill:SetPosition(1, 1)
+    self.warn_fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    self.warn_fill:SetMouseVisible(false)
+
+    self.warn_label = Turbine.UI.Label()
+    self.warn_label:SetParent(self.warn_fill)
+    self.warn_label:SetPosition(PAD, 4)
+    self.warn_label:SetFont(Options.Defaults.window.font)
+    self.warn_label:SetForeColor(Options.Defaults.window.text)
+    self.warn_label:SetTextAlignment(Turbine.UI.ContentAlignment.TopLeft)
+    self.warn_label:SetMultiline(true)
+    self.warn_label:SetMouseVisible(false)
+
     -- Buttons (import mode only)
     self.btn_create = make_btn(self.client, "Create New", function()
         local text = self.textbox:GetText()
@@ -120,13 +145,28 @@ function Options2.Window.ImportDialog:OnLayout(w, h)
     local txt_w = w - sp * 2 - SCROLL
     local txt_h = h - sp * 2 - BTN_H - sp
 
+    -- the warning takes its room from the text box rather than growing the
+    -- window, so the dialog stays the same size whether or not it is shown
+    if self.warn ~= nil and self.warn:IsVisible() then
+        txt_h = txt_h - WARN_H - sp
+    end
+    txt_h = math.max(0, txt_h)
+
     self.textbox:SetPosition(sp, sp)
     self.textbox:SetSize(txt_w, txt_h)
 
     self.scrollbar:SetPosition(sp + txt_w, sp)
     self.scrollbar:SetHeight(txt_h)
 
-    local btn_top = sp + txt_h + sp
+    if self.warn ~= nil and self.warn:IsVisible() then
+        local warn_w = w - sp * 2
+        self.warn:SetPosition(sp, sp + txt_h + sp)
+        self.warn:SetSize(warn_w, WARN_H)
+        self.warn_fill:SetSize(math.max(0, warn_w - 2), WARN_H - 2)
+        self.warn_label:SetSize(math.max(0, warn_w - 2 - PAD * 2), WARN_H - 2 - 8)
+    end
+
+    local btn_top = h - sp - BTN_H
     self.btn_insert:SetPosition(w - sp - BTN_W, btn_top)
     self.btn_create:SetPosition(w - sp - BTN_W * 2 - sp, btn_top)
 end
@@ -135,6 +175,7 @@ function Options2.Window.ImportDialog:LanguageChanged()
     if self.btn_create == nil then return end
     self.btn_create._lbl:SetText(UTILS.GetText("import", "create_new"))
     self.btn_insert._lbl:SetText(UTILS.GetText("import", "insert_into"))
+    self:_RefreshImageWarning()
 end
 
 function Options2.Window.ImportDialog:ShowExport(data, importType, index)
@@ -144,6 +185,7 @@ function Options2.Window.ImportDialog:ShowExport(data, importType, index)
     self.textbox:SetText(UTILS.DataToStringV2(data, importType, index))
     self.btn_create:SetVisible(false)
     self.btn_insert:SetVisible(false)
+    self:_ShowImageWarning(UTILS.CollectExternalImages(data, importType, index))
     self:_CenterOnOptions2()
     self:SetVisible(true)
     self:Activate()
@@ -164,10 +206,28 @@ function Options2.Window.ImportDialog:ShowImport(context_nd)
          or context_nd.nodeType == "timer" or context_nd.nodeType == "trigger"
          or context_nd.nodeType == "windowtrigger" or context_nd.nodeType == "foldertrigger")
     self.btn_insert:SetVisible(has_context)
+    self:_ShowImageWarning(nil)
     self:_CenterOnOptions2()
     self:SetVisible(true)
     self:Activate()
     self.textbox:Focus()
+end
+
+-- files is the list from UTILS.CollectExternalImages, or nil to hide the strip
+function Options2.Window.ImportDialog:_ShowImageWarning(files)
+    if self.warn == nil then return end
+
+    self._warn_files = (files ~= nil and #files > 0) and files or nil
+    self.warn:SetVisible(self._warn_files ~= nil)
+    self:_RefreshImageWarning()
+    self:OnLayout(self.client:GetSize())
+end
+
+function Options2.Window.ImportDialog:_RefreshImageWarning()
+    if self.warn == nil or self._warn_files == nil then return end
+    self.warn_label:SetText(
+        UTILS.GetText("import", "external_images")
+        .. "\n" .. table.concat(self._warn_files, ", "))
 end
 
 function Options2.Window.ImportDialog:_CenterOnOptions2()

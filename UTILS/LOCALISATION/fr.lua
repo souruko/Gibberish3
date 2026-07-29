@@ -321,6 +321,7 @@ L[ Language.French ].import.import                         = "Importation"
 L[ Language.French ].import.export                         = "Exportation"
 L[ Language.French ].import.create_new                     = "Créer un nouveau"
 L[ Language.French ].import.insert_into                    = "Insérer dans la sélection"
+L[ Language.French ].import.external_images               = "Utilise des images externes. La personne qui importe ceci a aussi besoin de ces fichiers dans son dossier Gibberish3/IMAGES/ :"
 
 L[ Language.French ].traitline_changed                     = "Vous avez acquis le Trait bonus de spécialisation de classe :"
 

@@ -254,3 +254,108 @@ function FolderToString( data, index )
 
 end
 ---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+-- External images used by an export payload.
+--
+-- A timer with useExternalImage draws its icon from Gibberish3/IMAGES/, which the export
+-- string cannot carry. Whoever imports it needs the files too, so the export window warns
+-- about them. The traversal below has to match DataToString's exactly, or the warning will
+-- describe a different payload than the one on screen.
+--
+-- Returns a list of filenames, sorted and deduplicated. Empty when there is nothing to warn
+-- about.
+---------------------------------------------------------------------------------------------------
+local function collect_from_timer( timer_data, found )
+
+    if timer_data == nil or timer_data.useExternalImage ~= true then
+        return
+    end
+
+    local icon = timer_data.icon
+
+    -- an icon id that was never switched to a filename has nothing to copy
+    if type( icon ) ~= "string" or icon == "" then
+        return
+    end
+
+    found[ icon ] = true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+local function collect_from_window( window_data, found )
+
+    if window_data == nil or window_data.timerList == nil then
+        return
+    end
+
+    for i, timer_data in ipairs( window_data.timerList ) do
+        collect_from_timer( timer_data, found )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+local function collect_from_folder( index, found )
+
+    -- windows directly in this folder
+    for i, window_data in ipairs( Data.window ) do
+        if window_data.folder == index then
+            collect_from_window( window_data, found )
+        end
+    end
+
+    -- folders recursive
+    for i, folder_data in ipairs( Data.folder ) do
+        if folder_data.folder == index then
+            collect_from_folder( i, found )
+        end
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+function CollectExternalImages( data, type, index )
+
+    local found = {}
+
+    if data ~= nil then
+
+        if type == ImportType.Window then
+            collect_from_window( data, found )
+
+        elseif type == ImportType.Folder then
+            collect_from_folder( index, found )
+
+        elseif type == ImportType.Timer then
+            collect_from_timer( data, found )
+
+        elseif type == ImportType.WindowList then
+            for i, window_data in ipairs( data ) do
+                collect_from_window( window_data, found )
+            end
+
+        elseif type == ImportType.TimerList then
+            for i, timer_data in ipairs( data ) do
+                collect_from_timer( timer_data, found )
+            end
+
+        end
+
+        -- triggers and conditions carry no icon of their own
+
+    end
+
+    local list = {}
+    for name, _ in pairs( found ) do
+        list[ #list + 1 ] = name
+    end
+    table.sort( list )
+
+    return list
+
+end
+---------------------------------------------------------------------------------------------------

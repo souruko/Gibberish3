@@ -322,6 +322,7 @@ L[ Language.English ].import.import                         = "Import"
 L[ Language.English ].import.export                         = "Export"
 L[ Language.English ].import.create_new                     = "Create new"
 L[ Language.English ].import.insert_into                    = "Insert into selection"
+L[ Language.English ].import.external_images              = "Uses external images. Whoever imports this also needs these files in their Gibberish3/IMAGES/ folder:"
 
 L[ Language.English ].traitline_changed                     = "You have acquired the Class Specialization Bonus Trait:"
 
