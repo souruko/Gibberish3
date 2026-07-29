@@ -16,6 +16,7 @@
 - The editor now names what you are editing at the top, with Save and Revert buttons, and shows the full path in the title bar.
 - Your selection in both columns is remembered across a reload.
 - Everything in the panel is now translatable; several buttons that were stuck in English, including Test Timer, now follow your chosen language.
+- Move mode now matches the new look. The move window has the same dark frame as the options panel, its title bar shows the window you are moving, and the nudge arrows are a proper D-pad. The outlines drawn over each window while moving now use the panel's colours, with the selected one picked out clearly.
 
 ### 3.4.1
 - fixed pressing Escape briefly freezing the game, especially noticeable when the settings window wasn't even open — it was saving all plugin data every time Escape was pressed
