@@ -280,7 +280,7 @@ function BarElement:Update()
     else
 
         self.timerLabel:SetText( "" )
-        self.bar:SetWidth( 0 )
+        self:SetBarWidth( 0 )
         self:UpdateThreshold( timeLeft )
 
     end
@@ -294,18 +294,43 @@ end
 function BarElement:UpdateBar( timeLeft )
 
     -- update bar size depending on direction and orientation
+    local width
+
     -- descending horizontal
     if self.data.direction == Direction.Descending then
 
-        self.bar:SetWidth( timeLeft / self.duration * self.barWidth )
+        width = timeLeft / self.duration * self.barWidth
 
     -- ascending horizontal
     elseif self.data.direction == Direction.Ascending then
 
         local timePast = self.duration - timeLeft
-        self.bar:SetWidth( timePast / self.duration * self.barWidth )
+        width = timePast / self.duration * self.barWidth
+
+    else
+
+        return
 
     end
+
+    -- The bar is drawn in whole pixels, so at 60 frames a second most frames
+    -- ask for a width it already has. Only write when the pixel changes.
+    width = math.floor( width )
+
+    if width ~= self._lastBarWidth then
+        self._lastBarWidth = width
+        self.bar:SetWidth( width )
+    end
+
+end
+
+---------------------------------------------------------------------------------------------------
+-- set the bar width, keeping the cache above honest
+---------------------------------------------------------------------------------------------------
+function BarElement:SetBarWidth( width )
+
+    self._lastBarWidth = width
+    self.bar:SetWidth( width )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -436,7 +461,7 @@ function BarElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.barBack:SetBackColor( self.backColor )
-        self.bar:SetWidth( 0 )
+        self:SetBarWidth( 0 )
 
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
@@ -551,7 +576,11 @@ function BarElement:Resize()
 
     self.barBack:SetSize( width, height)
     self.barBase:SetSize( width, height)
+
+    -- this zeroes the width behind UpdateBar's back, so clear its cache too or
+    -- the next frame can decide it has nothing to do and leave the bar empty
     self.bar:SetSize( 0, height)
+    self._lastBarWidth = 0
 
     self.labelBack:SetSize( labelWidth, labelHeight )
     self.textLabel:SetSize( labelWidth, labelHeight )
