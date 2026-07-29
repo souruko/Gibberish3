@@ -22,7 +22,7 @@ local COLLAPSED_W  = 30
 
 local STRIP_BTN    = 18
 local STRIP_ICON   = 16
-local STRIP_LINE   = 14   -- thickness of the turned label
+local FONT_STRIP   = Turbine.UI.Lotro.Font.Verdana10
 
 -- Tooltip.AddTooltip owns MouseEnter/MouseLeave, so wrap it to keep the hover fill.
 local function add_hover_tooltip(control, description, enter_fn, leave_fn)
@@ -94,7 +94,17 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     return btn
 end
 
--- collapsed 30px strip: expand arrow over a sideways column name
+-- "Library" -> "L\ni\nb\nr\na\ny", for the collapsed strips.
+-- Splits on utf-8 sequences so accented names stay intact.
+local function stack_text(text)
+    local out = {}
+    for char in string.gmatch(text, "[\1-\127\194-\244][\128-\191]*") do
+        out[#out + 1] = char
+    end
+    return table.concat(out, "\n")
+end
+
+-- collapsed 30px strip: expand arrow over a stacked column name
 local function make_strip(parent, icon_path, expand_fn)
     local strip = Turbine.UI.Control()
     strip:SetParent(parent)
@@ -123,53 +133,37 @@ local function make_strip(parent, icon_path, expand_fn)
 
     local LABEL_TOP = PAD + STRIP_BTN + GAP
 
-    -- One line of text turned on its side, per the design. Stacking the letters
-    -- one per line instead leaves a ragged column, because the glyphs are not
-    -- the same width.
+    -- One letter per line. The design turns the text on its side instead, but
+    -- SetRotation cannot do it here: rotation is about a control's own centre
+    -- and does not change its layout box, so a label long enough to hold
+    -- "Structure" would have to stick far outside a 29px strip to be centred in
+    -- it, and it is not drawn once it does.
     --
-    -- SetRotation is a Turbine.UI.Window method, not a Control one, so the
-    -- label has to live inside a Window to be turned. A Window draws nothing of
-    -- its own, so hosting one here costs nothing visually.
-    -- A parented Turbine.UI.Window needs an explicit z-order or it draws behind
-    -- its parent's fill, and so does a label inside one. Every other Window in
-    -- this plugin does the same (see UI_ELEMENTS/TIMER/COUNTER_BAR/Element.lua).
-    local label_host = Turbine.UI.Window()
-    label_host:SetParent(strip)
-    label_host:SetMouseVisible(false)
-    label_host:SetZOrder(5)
-    -- a Turbine.UI.Window starts hidden, unlike a Control
-    label_host:SetVisible(true)
+    -- LABEL_W is even and starts at 0 so the column of letters centres on the
+    -- same pixel as the icon above it; letting the label span the full 29px put
+    -- its centre half a pixel off the icon's.
+    local LABEL_W = STRIP_BTN
 
     local label = Turbine.UI.Label()
-    label:SetParent(label_host)
-    label:SetPosition(0, 0)
-    label:SetFont(Options.Defaults.window.font)
+    label:SetParent(strip)
+    label:SetLeft(centre_x - LABEL_W / 2)
+    label:SetTop(LABEL_TOP)
+    label:SetWidth(LABEL_W)
+    label:SetMultiline(true)
+    label:SetFont(FONT_STRIP)
     label:SetForeColor(Options.Defaults.window.text_muted)
-    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.TopCenter)
     label:SetMouseVisible(false)
-    label:SetZOrder(6)
-
-    -- z is degrees clockwise. The host's left edge becomes its top edge, so
-    -- MiddleLeft text starts under the icon and reads downward.
-    label_host:SetRotation({ x = 0, y = 0, z = 90 })
 
     strip.MouseEnter = function() strip:SetBackColor(Options.Defaults.window.select) end
     strip.MouseLeave = function() strip:SetBackColor(Options.Defaults.window.bg_sunken) end
     strip.MouseClick = expand_fn
 
-    strip.label      = label
-    strip.label_host = label_host
+    strip.label = label
 
-    -- Rotation does not change a control's layout box: the host is still laid
-    -- out lying down and simply drawn turned, about its own centre. So size it
-    -- along the strip's height and centre it on where it should end up.
     strip.SizeChanged = function()
         local _, h = strip:GetSize()
-        local span = math.max(0, h - LABEL_TOP - PAD)
-        label_host:SetSize(span, STRIP_LINE)
-        label_host:SetPosition(centre_x - math.floor(span / 2),
-                               LABEL_TOP + math.floor(span / 2) - math.floor(STRIP_LINE / 2))
-        label:SetSize(span, STRIP_LINE)
+        label:SetHeight(math.max(0, h - LABEL_TOP - PAD))
     end
 
     return strip
@@ -343,8 +337,8 @@ local VERSION_RGB = "#5C6076"
 function Options2.Window.Constructor:_RefreshTexts()
     self:SetTitleText(UTILS.GetText("options2", "brand")
         .. "  <rgb=" .. VERSION_RGB .. ">" .. (Options.Version or "") .. "</rgb>")
-    self.struct_strip.label:SetText(UTILS.GetText("options2", "structure"))
-    self.lib_strip.label:SetText(UTILS.GetText("options2", "library"))
+    self.struct_strip.label:SetText(stack_text(UTILS.GetText("options2", "structure")))
+    self.lib_strip.label:SetText(stack_text(UTILS.GetText("options2", "library")))
 end
 
 -- ── window plumbing ─────────────────────────────────────────────────────────
