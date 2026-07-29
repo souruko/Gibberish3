@@ -7,17 +7,22 @@
 - Folders and windows are now sorted with the enabled ones first, then alphabetically, at every level.
 - A folder's checkbox now loads or unloads every window inside it at once, and shows as ticked whenever any of them is loaded.
 - Windows now show their timer type at a glance, and folders show how many things they contain.
+- Folders, windows, timers, triggers and conditions each have their own icon and colour, so you can pick out what you are looking at in either list.
 - Both side columns can be collapsed to a narrow strip to give the editor more room, and stay that way after a reload.
 - The library is now three tabs (Skills, Effects and Chat) with a filter box, instead of the old stacked sections.
 - New: clicking a paste button next to a field now aims the library at that field. The library tells you which field it will fill and switches to a tab that can fill it; clicking any entry then drops the value straight in.
+- New: an "Apply all" button on a trigger fills every field the copied item can supply in one go, instead of pasting them one at a time.
 - Effects and Chat now have a clear record button that turns into a stop button while collecting.
 - What you have copied is shown in a bar at the bottom of the library, with an x to clear it.
 - The plugin settings (language, shortcut size, auto-reload, tooltips) moved out of the editor into their own small window, opened from the gear in the panel's title bar.
+- Added a reload button to the panel's title bar, so you can reload the plugin without closing the options first.
+- The plugin version is now shown next to the name in the panel's title bar.
 - The editor now names what you are editing at the top, with Save and Revert buttons, and shows the full path in the title bar.
 - Your selection in both columns is remembered across a reload, and the editor reopens on the exact item you were last editing rather than the folder or window containing it.
 - Everything in the panel is now translatable; several buttons that were stuck in English, including Test Timer, now follow your chosen language.
 - Exporting anything that uses an external image now warns you, and lists the image files the other person also needs to copy into their Gibberish3/IMAGES/ folder.
 - Fixed the import/export window keeping its old language until the next reload after you switched language.
+- Fixed a few places in the options panel where a character showed as a question mark instead of an arrow or a dash.
 - Move mode now matches the new look. The move window has the same dark frame as the options panel, its title bar shows the window you are moving, and the nudge arrows are a proper D-pad. The outlines drawn over each window while moving now use the panel's colours, with the selected one picked out clearly.
 
 ### 3.4.1
