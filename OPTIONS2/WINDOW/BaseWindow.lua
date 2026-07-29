@@ -266,10 +266,17 @@ function Options2.Window.Constructor:Constructor()
     self.nav:Rebuild()
 
     -- Options2.Window.Object isn't assigned until after this constructor returns,
-    -- so Rebuild's restore loop can't call SetNode. Do it explicitly here.
+    -- so neither column's restore loop can reach the editor through it. Do it
+    -- explicitly here, in the order the columns are nested.
     if self.nav.selectedItem ~= nil then
         self.editor_panel:SetNode(self.nav.selectedItem.nodeData)
         self.contents:SetContainer(self.nav.selectedItem.nodeData)
+
+        -- SetContainer may have restored a row inside the container. That row,
+        -- not the container, is what was last being edited.
+        if self.contents.selectedItem ~= nil then
+            self.editor_panel:SetNode(self.contents.selectedItem.nodeData)
+        end
     end
 end
 
