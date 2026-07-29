@@ -17,6 +17,7 @@
 - The plugin settings (language, shortcut size, auto-reload, tooltips) moved out of the editor into their own small window, opened from the gear in the panel's title bar.
 - Added a reload button to the panel's title bar, so you can reload the plugin without closing the options first.
 - The plugin version is now shown next to the name in the panel's title bar.
+- Checkboxes are now on/off switches that match the panel's colours, instead of a small square with an x in it.
 - The editor now names what you are editing at the top, with Save and Revert buttons, and shows the full path in the title bar.
 - Your selection in both columns is remembered across a reload, and the editor reopens on the exact item you were last editing rather than the folder or window containing it.
 - Everything in the panel is now translatable; several buttons that were stuck in English, including Test Timer, now follow your chosen language.
