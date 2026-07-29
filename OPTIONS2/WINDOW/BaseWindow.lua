@@ -137,6 +137,8 @@ local function make_strip(parent, icon_path, expand_fn)
     label_host:SetParent(strip)
     label_host:SetMouseVisible(false)
     label_host:SetZOrder(5)
+    -- a Turbine.UI.Window starts hidden, unlike a Control
+    label_host:SetVisible(true)
 
     local label = Turbine.UI.Label()
     label:SetParent(label_host)
