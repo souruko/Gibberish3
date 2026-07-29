@@ -14,7 +14,7 @@
 - What you have copied is shown in a bar at the bottom of the library, with an x to clear it.
 - The plugin settings (language, shortcut size, auto-reload, tooltips) moved out of the editor into their own small window, opened from the gear in the panel's title bar.
 - The editor now names what you are editing at the top, with Save and Revert buttons, and shows the full path in the title bar.
-- Your selection in both columns is remembered across a reload.
+- Your selection in both columns is remembered across a reload, and the editor reopens on the exact item you were last editing rather than the folder or window containing it.
 - Everything in the panel is now translatable; several buttons that were stuck in English, including Test Timer, now follow your chosen language.
 - Exporting anything that uses an external image now warns you, and lists the image files the other person also needs to copy into their Gibberish3/IMAGES/ folder.
 - Fixed the import/export window keeping its old language until the next reload after you switched language.
