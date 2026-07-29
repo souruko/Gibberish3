@@ -187,6 +187,7 @@ L[ Language.French ].move.left                             = "Gauche:"
 L[ Language.French ].move.top                              =  "Haut:"
 L[ Language.French ].move.update                           =  "Mise à jour"
 L[ Language.French ].move.close                            =  "Fermer"
+L[ Language.French ].move.no_selection                      =  "Aucune fenêtre sélectionnée"
 
 -- selection
 L[ Language.French ].selection = {}
@@ -550,6 +551,12 @@ L[ Language.French ].tooltip.o2_structure                  = "Afficher ou masque
 L[ Language.French ].tooltip.o2_library                    = "Afficher ou masquer la colonne bibliothèque."
 L[ Language.French ].tooltip.o2_settings                   = "Ouvrir les paramètres du plugin."
 L[ Language.French ].tooltip.o2_reload              = "Recharger le plugin."
+L[ Language.French ].tooltip.o2_move_up             = "Déplacer la fenêtre sélectionnée d'un pixel vers le haut. Maintenir pour répéter."
+L[ Language.French ].tooltip.o2_move_down           = "Déplacer la fenêtre sélectionnée d'un pixel vers le bas. Maintenir pour répéter."
+L[ Language.French ].tooltip.o2_move_left           = "Déplacer la fenêtre sélectionnée d'un pixel vers la gauche. Maintenir pour répéter."
+L[ Language.French ].tooltip.o2_move_right          = "Déplacer la fenêtre sélectionnée d'un pixel vers la droite. Maintenir pour répéter."
+L[ Language.French ].tooltip.o2_move_update         = "Appliquer les valeurs Gauche et Haut ci-dessus."
+L[ Language.French ].tooltip.o2_move_close          = "Quitter le mode déplacement."
 
 L[ Language.French ].tooltip.cond_enabled                  = "Lorsqu'elle est décochée, cette condition est ignorée et le minuteur s'affiche toujours."
 L[ Language.French ].tooltip.tim_enabled                   = "Lorsqu'il est décoché, ce minuteur est masqué et ne s'affiche jamais."

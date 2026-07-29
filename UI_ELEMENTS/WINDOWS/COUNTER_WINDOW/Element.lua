@@ -49,6 +49,7 @@ function CounterWindowElement:Constructor( index )
     self.dragLabel:SetTextAlignment( Options.Defaults.move.TextAlignment )
     self.dragLabel:SetFont( Options.Defaults.move.Font )
     self.dragLabel:SetFontStyle( Options.Defaults.move.FontStyle )
+    self.dragLabel:SetForeColor( Options.Defaults.move.textcolor )
     self.dragLabel:SetPosition( Options.Defaults.move.FrameSize, Options.Defaults.move.FrameSize )
     self.dragLabel:SetZOrder( 4 )
 

@@ -1,178 +1,182 @@
 --=================================================================================================
 --= Move window
---= ===============================================================================================
---= 
+--=
+--= The drag-to-move overlay's control panel. Built on Options2.Elements.PanelWindow so it
+--= wears the same frameless chrome as the options panel: 1px border, 30px title bar carrying
+--= the selected window's name, close button. No Turbine.UI.Lotro widget is used — the Lotro
+--= text box and button draw their own ornate chrome, which cannot be restyled.
 --=================================================================================================
 
+local PAD      = 10
+local ROW_H    = 22
+local LABEL_W  = 44
+local GAP      = 6
+local BTN_H    = 22
+local PAD_BTN  = 24         -- the four arrow buttons are square
+local PAD_ICON = 16         -- chevron glyphs, drawn at their native size
 
+local ARROW = {
+    up    = "Gibberish3/RESOURCES/chevron_up.tga",
+    down  = "Gibberish3/RESOURCES/chevron_down.tga",
+    left  = "Gibberish3/RESOURCES/chevron_left.tga",
+    right = "Gibberish3/RESOURCES/chevron_right.tga",
+}
+
+-- a bordered pill, matching the editor's Save / Revert buttons
+local function make_pill(parent, border, fg, click_fn, tooltip)
+    local btn = Turbine.UI.Control()
+    btn:SetParent(parent)
+    btn:SetHeight(BTN_H)
+    btn:SetBackColor(border)
+    btn:SetMouseVisible(true)
+
+    local fill = Turbine.UI.Control()
+    fill:SetParent(btn)
+    fill:SetPosition(1, 1)
+    fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    fill:SetMouseVisible(false)
+
+    local label = Turbine.UI.Label()
+    label:SetParent(fill)
+    label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    label:SetForeColor(fg)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
+    label:SetMouseVisible(false)
+
+    Options2.Elements.Tooltip.AddTooltip(btn, "tooltip", tooltip, false)
+    local tip_enter, tip_leave = btn.MouseEnter, btn.MouseLeave
+    btn.MouseEnter = function(sender, args)
+        tip_enter(sender, args)
+        fill:SetBackColor(Options.Defaults.window.select)
+    end
+    btn.MouseLeave = function(sender, args)
+        tip_leave(sender, args)
+        fill:SetBackColor(Options.Defaults.window.bg_sunken)
+    end
+    btn.MouseClick = click_fn
+
+    btn._label = label
+    function btn:SetLabel(text) label:SetText(text) end
+    function btn:Layout(left, top, w)
+        self:SetPosition(left, top)
+        self:SetWidth(w)
+        fill:SetSize(math.max(0, w - 2), BTN_H - 2)
+        label:SetSize(math.max(0, w - 2), BTN_H - 2)
+    end
+
+    return btn
+end
+
+-- one square of the D-pad. The glyph is a 16px .tga drawn at its native size
+-- and Overlay-blended; stretching it or blending it any other way makes it
+-- vanish (see CLAUDE.md, UI gotchas).
+local function make_arrow(parent, path, down_fn, up_fn, click_fn, tooltip)
+    local btn = Turbine.UI.Control()
+    btn:SetParent(parent)
+    btn:SetSize(PAD_BTN, PAD_BTN)
+    btn:SetBackColor(Options.Defaults.window.select)
+    btn:SetMouseVisible(true)
+
+    local icon = Turbine.UI.Control()
+    icon:SetParent(btn)
+    icon:SetSize(PAD_ICON, PAD_ICON)
+    icon:SetPosition(math.floor((PAD_BTN - PAD_ICON) / 2),
+                     math.floor((PAD_BTN - PAD_ICON) / 2))
+    icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
+    icon:SetBackground(path)
+    icon:SetMouseVisible(false)
+
+    Options2.Elements.Tooltip.AddTooltip(btn, "tooltip", tooltip, false)
+    local tip_enter, tip_leave = btn.MouseEnter, btn.MouseLeave
+    btn.MouseEnter = function(sender, args)
+        tip_enter(sender, args)
+        btn:SetBackColor(Options.Defaults.window.line)
+    end
+    btn.MouseLeave = function(sender, args)
+        tip_leave(sender, args)
+        btn:SetBackColor(Options.Defaults.window.select)
+    end
+    btn.MouseDown  = down_fn
+    btn.MouseUp    = up_fn
+    btn.MouseClick = click_fn
+
+    btn.icon = icon
+    return btn
+end
 
 Options.Move = {}
-Options.Move.Constructor = class(Turbine.UI.Window)
+Options.Move.Constructor = class(Options2.Elements.PanelWindow)
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:Constructor()
-	Turbine.UI.Window.Constructor( self )
+    Options2.Elements.PanelWindow.Constructor(self, {
+        resizable  = false,
+        min_width  = Options.Defaults.move.width,
+        min_height = Options.Defaults.move.height,
+    })
 
     self:SetSize( Options.Defaults.move.width,  Options.Defaults.move.height )
     self:SetPosition( 0, ( ( Options.ScreenHeight - Options.Defaults.move.height ) / 2 ) )
-    self:SetBackColor( Options.Defaults.move.backcolor )
     self:SetZOrder(1)
 
-    -- shows the name of the selected window
-    self.header = Turbine.UI.Label()
-    self.header:SetParent( self )
-    self.header:SetPosition( 1, 1 )
-    self.header:SetSize( Options.Defaults.move.width - 2,  30 )
-    self.header:SetBackColor( Options.Defaults.move.headercolor )
-    self.header:SetFont( Options.Defaults.move.headerfont )
-    self.header:SetFontStyle( Options.Defaults.move.headerstyle )
-    self.header:SetTextAlignment( Options.Defaults.move.TextAlignment )
+    local M = Options2.Elements.EditorRow
 
     -- left value of the selected window
     self.left_label = Turbine.UI.Label()
-    self.left_label:SetParent( self )
-    self.left_label:SetPosition( 0, 50 )
-    self.left_label:SetSize( 35,  25 )
-    self.left_label:SetFont( Options.Defaults.move.Font )
+    self.left_label:SetParent( self.client )
+    self.left_label:SetSize( LABEL_W, ROW_H )
+    self.left_label:SetFont( M.FONT_LABEL )
+    self.left_label:SetForeColor( Options.Defaults.window.text_muted )
     self.left_label:SetTextAlignment( Options.Defaults.move.labelalignment )
 
-    self.left_textbox = Turbine.UI.Lotro.TextBox()
-    self.left_textbox:SetParent( self )
-    self.left_textbox:SetPosition( 45, 52 )
-    self.left_textbox:SetSize( 95,  20 )
-    self.left_textbox:SetFont( Options.Defaults.move.Font )
-    self.left_textbox:SetTextAlignment( Options.Defaults.move.TextAlignment )
+    self.left_field   = M.MakeField( self.client, false )
+    self.left_textbox = self.left_field.box
 
     -- top value of the selected window
-    self.top_label = Turbine.UI.Label()   
-    self.top_label:SetParent( self )
-    self.top_label:SetPosition( 0, 75 )
-    self.top_label:SetSize( 35,  25 )
-    self.top_label:SetFont( Options.Defaults.move.Font )
+    self.top_label = Turbine.UI.Label()
+    self.top_label:SetParent( self.client )
+    self.top_label:SetSize( LABEL_W, ROW_H )
+    self.top_label:SetFont( M.FONT_LABEL )
+    self.top_label:SetForeColor( Options.Defaults.window.text_muted )
     self.top_label:SetTextAlignment( Options.Defaults.move.labelalignment )
 
-    self.top_textbox = Turbine.UI.Lotro.TextBox()
-    self.top_textbox:SetParent( self )
-    self.top_textbox:SetPosition( 45, 77 )
-    self.top_textbox:SetSize( 95,  20 )
-    self.top_textbox:SetFont( Options.Defaults.move.Font )
-    self.top_textbox:SetTextAlignment( Options.Defaults.move.TextAlignment )
+    self.top_field   = M.MakeField( self.client, false )
+    self.top_textbox = self.top_field.box
 
     -- update changes
-    self.update_button = Turbine.UI.Lotro.Button()
-    self.update_button:SetParent( self )
-    self.update_button:SetPosition( 42, 102 )
-    self.update_button:SetSize( 100,  22 )
-    self.update_button:SetFont( Options.Defaults.move.Font )
-    self.update_button:SetTextAlignment( Options.Defaults.move.TextAlignment )
-    self.update_button.Click = function ()
-        self:UpdateClicked()
-    end
+    self.update_button = make_pill( self.client,
+        Options.Defaults.window.accent, Options.Defaults.window.accent,
+        function() self:UpdateClicked() end, "o2_move_update" )
 
-    -- move selected window 1 pixel per buttonpress
-    self.up_back = Turbine.UI.Control()
-    self.up_back:SetParent( self )
-    self.up_back:SetPosition( 60, 150 )
-    self.up_back:SetSize( 30,  20 )
-    self.up_back:SetBackColor( Options.Defaults.move.headercolor )
+    -- move selected window 1 pixel per buttonpress, repeating while held
+    self.up_button = make_arrow( self.client, ARROW.up,
+        function() self:ArrowDown( 0, -1 ) end,
+        function() self:ArrowUp() end,
+        function() self:ArrowClicked( 0, -1 ) end, "o2_move_up" )
 
-    self.up_button = Turbine.UI.Button()
-    self.up_button:SetParent( self.up_back )
-    self.up_button:SetPosition( 3, -2 )
-    self.up_button:SetSize(20, 20 )
-    self.up_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.up_button:SetBackground( "Gibberish3/RESOURCES/arrow_up.tga" )
-    self.up_button.Click = function ()
-        self:ArrowClicked( 0, -1 )
-    end
-    self.up_button.MouseDown = function ()
-        self:ArrowDown( 0, -1 )
-    end
-    self.up_button.MouseUp = function ()
-        self:ArrowUp()
-    end
+    self.left_button = make_arrow( self.client, ARROW.left,
+        function() self:ArrowDown( -1, 0 ) end,
+        function() self:ArrowUp() end,
+        function() self:ArrowClicked( -1, 0 ) end, "o2_move_left" )
 
-    
-    self.left_back = Turbine.UI.Control()
-    self.left_back:SetParent( self )
-    self.left_back:SetPosition(  30, 175 )
-    self.left_back:SetSize( 30,  20 )
-    self.left_back:SetBackColor( Options.Defaults.move.headercolor )
+    self.right_button = make_arrow( self.client, ARROW.right,
+        function() self:ArrowDown( 1, 0 ) end,
+        function() self:ArrowUp() end,
+        function() self:ArrowClicked( 1, 0 ) end, "o2_move_right" )
 
-    self.left_button = Turbine.UI.Button()
-    self.left_button:SetParent( self.left_back )
-    self.left_button:SetPosition( 2, -2 )
-    self.left_button:SetSize(20, 20 )
-    self.left_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.left_button:SetBackground( "Gibberish3/RESOURCES/arrow_left.tga" )
-    self.left_button.Click = function ()
-        self:ArrowClicked( -1, 0 )
-    end
-    self.left_button.MouseDown = function ()
-        self:ArrowDown( -1, 0 )
-    end
-    self.left_button.MouseUp = function ()
-        self:ArrowUp()
-    end
-
-    self.right_back = Turbine.UI.Control()
-    self.right_back:SetParent( self )
-    self.right_back:SetPosition( 90, 175 )
-    self.right_back:SetSize( 30,  20 )
-    self.right_back:SetBackColor( Options.Defaults.move.headercolor )
-
-    self.right_button = Turbine.UI.Button()
-    self.right_button:SetParent( self.right_back )
-    self.right_button:SetPosition( 5, -2 )
-    self.right_button:SetSize(20, 20 )
-    self.right_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.right_button:SetBackground( "Gibberish3/RESOURCES/arrow_right.tga" )
-    self.right_button.Click = function ()
-        self:ArrowClicked( 1, 0 )
-    end
-    self.right_button.MouseDown = function ()
-        self:ArrowDown( 1, 0 )
-    end
-    self.right_button.MouseUp = function ()
-        self:ArrowUp()
-    end
-    
-    self.down_back = Turbine.UI.Control()
-    self.down_back:SetParent( self )
-    self.down_back:SetPosition( 60, 200 )
-    self.down_back:SetSize( 30,  20 )
-    self.down_back:SetBackColor( Options.Defaults.move.headercolor )
-
-    self.down_button = Turbine.UI.Button()
-    self.down_button:SetParent( self.down_back )
-    self.down_button:SetPosition( 3, -2 )
-    self.down_button:SetSize( 20,  20 )
-    self.down_button:SetBlendMode( Turbine.UI.BlendMode.Overlay )
-    self.down_button:SetBackground( "Gibberish3/RESOURCES/arrow_down.tga" )
-    self.down_button.Click = function ()
-        self:ArrowClicked( 0, 1 )
-    end
-    self.down_button.MouseDown = function ()
-        self:ArrowDown( 0, 1 )
-    end
-    self.down_button.MouseUp = function ()
-        self:ArrowUp()
-    end
-    
+    self.down_button = make_arrow( self.client, ARROW.down,
+        function() self:ArrowDown( 0, 1 ) end,
+        function() self:ArrowUp() end,
+        function() self:ArrowClicked( 0, 1 ) end, "o2_move_down" )
 
     -- end movemode
-    self.close_button = Turbine.UI.Lotro.Button()
-    self.close_button:SetParent( self )
-    self.close_button:SetPosition( 42, 242 )
-    self.close_button:SetSize( 100,  22 )
-    self.close_button:SetFont( Options.Defaults.move.Font )
-    self.close_button:SetTextAlignment( Options.Defaults.move.TextAlignment )
-    self.close_button.Click = function ()
-        Options.MoveChanged( false )
-    end
+    self.close_button = make_pill( self.client,
+        Options.Defaults.window.line, Options.Defaults.window.text_muted,
+        function() Options.MoveChanged( false ) end, "o2_move_close" )
 
+    -- screen-centre guides, drawn over the game world
     self.x_line = Turbine.UI.Window()
     self.x_line:SetSize( Options.ScreenWidth, 4 )
-    self.x_line:SetBackColor( Turbine.UI.Color.White )
+    self.x_line:SetBackColor( Options.Defaults.move.guide )
     self.x_line:SetPosition( 0, (Options.ScreenHeight/2) - 2)
     self.x_line:SetVisible(true)
     self.x_line:SetMouseVisible(false)
@@ -180,13 +184,13 @@ function Options.Move.Constructor:Constructor()
     self.x_fill = Turbine.UI.Control()
     self.x_fill:SetParent(self.x_line)
     self.x_fill:SetSize( Options.ScreenWidth, 2 )
-    self.x_fill:SetBackColor( Turbine.UI.Color.Black )
+    self.x_fill:SetBackColor( Options.Defaults.move.guide_core )
     self.x_fill:SetPosition( 0, 1)
     self.x_fill:SetMouseVisible(false)
 
     self.y_line = Turbine.UI.Window()
     self.y_line:SetSize( 4,Options.ScreenHeight )
-    self.y_line:SetBackColor( Turbine.UI.Color.White )
+    self.y_line:SetBackColor( Options.Defaults.move.guide )
     self.y_line:SetPosition( (Options.ScreenWidth/2) - 2, 0)
     self.y_line:SetVisible(true)
     self.y_line:SetMouseVisible(false)
@@ -194,13 +198,61 @@ function Options.Move.Constructor:Constructor()
     self.y_fill = Turbine.UI.Control()
     self.y_fill:SetParent(self.y_line)
     self.y_fill:SetSize( 2 , Options.ScreenHeight )
-    self.y_fill:SetBackColor( Turbine.UI.Color.Black )
+    self.y_fill:SetBackColor( Options.Defaults.move.guide_core )
     self.y_fill:SetPosition( 1, 0 )
     self.y_fill:SetMouseVisible(false)
 
+    self:SizeChanged()
     self:LanguageChanged()
     self:SelectionChanged()
     self:SetVisible( true )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- laid out by PanelWindow whenever the window resizes
+---------------------------------------------------------------------------------------------------
+function Options.Move.Constructor:OnLayout( w, h )
+
+    if self.left_label == nil then
+        return
+    end
+
+    local field_left  = PAD + LABEL_W + GAP
+    local field_width = math.max( 0, w - field_left - PAD )
+    local y           = PAD
+
+    self.left_label:SetPosition( PAD, y )
+    self.left_field:Layout( field_left, y, field_width, ROW_H )
+    y = y + ROW_H + GAP
+
+    self.top_label:SetPosition( PAD, y )
+    self.top_field:Layout( field_left, y, field_width, ROW_H )
+    y = y + ROW_H + PAD
+
+    self.update_button:Layout( PAD, y, math.max( 0, w - 2 * PAD ) )
+    y = y + BTN_H + PAD
+
+    -- D-pad, centred
+    local cx = math.floor( ( w - PAD_BTN ) / 2 )
+    self.up_button:SetPosition( cx, y )
+    self.left_button:SetPosition( cx - PAD_BTN - GAP, y + PAD_BTN + GAP )
+    self.right_button:SetPosition( cx + PAD_BTN + GAP, y + PAD_BTN + GAP )
+    self.down_button:SetPosition( cx, y + 2 * ( PAD_BTN + GAP ) )
+
+    -- close sits on the bottom edge
+    self.close_button:Layout( PAD, h - PAD - BTN_H, math.max( 0, w - 2 * PAD ) )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- the title bar's close button ends move mode rather than just hiding
+---------------------------------------------------------------------------------------------------
+function Options.Move.Constructor:CloseWindow()
+
+    Options.MoveChanged( false )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -213,12 +265,12 @@ function Options.Move.Constructor:SelectionChanged()
         local selected  = Data.window[ Data.selectedIndex ]
         local left, top = UTILS.ScreenRatioToPixel( selected.left, selected.top)
 
-        self.header:SetText( selected.name )
+        self:SetTitleText( selected.name )
         self.left_textbox:SetText( tostring(left) )
         self.top_textbox:SetText( tostring(top) )
 
     else
-        self.header:SetText( "" )
+        self:SetTitleText( UTILS.GetText( "move", "no_selection" ) )
         self.left_textbox:SetText( "" )
         self.top_textbox:SetText( "" )
     end
@@ -233,7 +285,7 @@ function Options.Move.Constructor:UpdateClicked()
     local left = tonumber( self.left_textbox:GetText() )
     local top  = tonumber( self.top_textbox:GetText() )
 
-    -- check 
+    -- check
     if left == nil or top == nil then
         return
     end
@@ -293,7 +345,7 @@ function Options.Move.Constructor:Update()
     if Data.selectedIndex ~= 0 and time > self.next  then
 
         self:ArrowClicked( self.left_value, self.top_value )
-        
+
         self.next = time + 0.01
 
     end
@@ -338,18 +390,20 @@ function Options.Move.Constructor:UpdateChanges( left, top )
 
 end
 ---------------------------------------------------------------------------------------------------
-    
+
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:LanguageChanged()
 
     self.left_label:SetText( UTILS.GetText( "move", "left"))
     self.top_label:SetText( UTILS.GetText( "move", "top"))
-    self.update_button:SetText( UTILS.GetText( "move", "update"))
-    self.close_button:SetText( UTILS.GetText( "move", "close"))
+    self.update_button:SetLabel( UTILS.GetText( "move", "update"))
+    self.close_button:SetLabel( UTILS.GetText( "move", "close"))
+
+    self:SelectionChanged()
 
 end
 ---------------------------------------------------------------------------------------------------
-    
+
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:Closing()
 

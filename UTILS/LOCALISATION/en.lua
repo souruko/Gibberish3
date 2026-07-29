@@ -187,6 +187,7 @@ L[ Language.English ].move.left                             = "Left:"
 L[ Language.English ].move.top                              =  "Top:"
 L[ Language.English ].move.update                           =  "Update"
 L[ Language.English ].move.close                            =  "Close"
+L[ Language.English ].move.no_selection                     =  "No window selected"
 
 -- selection
 L[ Language.English ].selection = {}
@@ -551,6 +552,12 @@ L[ Language.English ].tooltip.o2_structure                  = "Show or hide the 
 L[ Language.English ].tooltip.o2_library                    = "Show or hide the library column."
 L[ Language.English ].tooltip.o2_settings                   = "Open the plugin settings."
 L[ Language.English ].tooltip.o2_reload              = "Reload the plugin."
+L[ Language.English ].tooltip.o2_move_up             = "Move the selected window up by one pixel. Hold to repeat."
+L[ Language.English ].tooltip.o2_move_down           = "Move the selected window down by one pixel. Hold to repeat."
+L[ Language.English ].tooltip.o2_move_left           = "Move the selected window left by one pixel. Hold to repeat."
+L[ Language.English ].tooltip.o2_move_right          = "Move the selected window right by one pixel. Hold to repeat."
+L[ Language.English ].tooltip.o2_move_update         = "Apply the left and top values above."
+L[ Language.English ].tooltip.o2_move_close          = "Leave move mode."
 L[ Language.English ].tooltip.cond_enabled                  = "When unchecked, this condition is ignored and the timer always shows as if the condition were met."
 L[ Language.English ].tooltip.tim_enabled                   = "When unchecked, this timer is hidden and never displays, regardless of triggers."
 L[ Language.English ].tooltip.trg_is_debuff                 = "Filter by buff or debuff type. 'Any' matches both buffs and debuffs."

@@ -14,10 +14,8 @@ Options.Defaults.move.TextAlignment = Turbine.UI.ContentAlignment.MiddleCenter
 Options.Defaults.move.Font          = Turbine.UI.Lotro.Font.Verdana12
 Options.Defaults.move.FontStyle     = Turbine.UI.FontStyle.Outline
 Options.Defaults.move.FrameSize     = 2
-Options.Defaults.move.seleced       = Turbine.UI.Color.LimeGreen
-Options.Defaults.move.notSeleced    = Turbine.UI.Color.White
-Options.Defaults.move.sbackground   = Turbine.UI.Color( 0.3, 0.3, 0.3 )
-Options.Defaults.move.nbackground   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
+-- the placeholder colours are assigned further down, once the panel palette
+-- they are drawn from exists
 
 -- timer
 Options.Defaults.timer               = {}
@@ -33,13 +31,11 @@ Options.Defaults.shortcut.size_step  = 5
 Options.Defaults.shortcut.menu_width = 125
 
 -- move window
-Options.Defaults.move.width          = 150
-Options.Defaults.move.height         = 272
+Options.Defaults.move.width          = 172
+Options.Defaults.move.height         = 262
 Options.Defaults.move.headerfont     = Turbine.UI.Lotro.Font.Verdana14
 Options.Defaults.move.headerstyle    = Turbine.UI.FontStyle.Outline
 Options.Defaults.move.labelalignment = Turbine.UI.ContentAlignment.MiddleRight
-Options.Defaults.move.backcolor      = Turbine.UI.Color( 0.1, 0.1, 0.1 )
-Options.Defaults.move.headercolor    = Turbine.UI.Color( 0.3, 0.3, 0.3 )
 
 -- optiosn window
 Options.Defaults.window              = {}
@@ -100,6 +96,22 @@ Options.Defaults.window.accent       = Turbine.UI.Color(0.569, 0.518, 0.851)
 Options.Defaults.window.paste_border = Turbine.UI.Color(0.310, 0.647, 0.392)
 Options.Defaults.window.on           = Turbine.UI.Color(0.200, 0.749, 0.302)
 Options.Defaults.window.off_border   = Turbine.UI.Color(0.290, 0.306, 0.400)
+------------------------------------------------------------------------------
+
+-- move mode, drawn from the palette above ------------------------------------
+-- The placeholder that covers each HUD window while move mode is on. Selected
+-- takes the accent, the rest take the ordinary border colour, which is the same
+-- selected/idle language the options panel uses everywhere else.
+Options.Defaults.move.seleced       = Options.Defaults.window.accent
+Options.Defaults.move.notSeleced    = Options.Defaults.window.line
+Options.Defaults.move.sbackground   = Options.Defaults.window.select
+Options.Defaults.move.nbackground   = Options.Defaults.window.bg_sunken
+Options.Defaults.move.textcolor     = Options.Defaults.window.text
+
+-- The crosshair keeps a dark core against a bright edge: it is drawn over the
+-- game world, not over the panel, so it cannot rely on a known background.
+Options.Defaults.move.guide         = Options.Defaults.window.accent
+Options.Defaults.move.guide_core    = Options.Defaults.window.bg_sunken
 ------------------------------------------------------------------------------
 
 Options.Defaults.window.menu_width      = 140

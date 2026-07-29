@@ -49,6 +49,7 @@ function TimerWindowElement:Constructor( index )
     self.dragLabel:SetTextAlignment( Options.Defaults.move.TextAlignment )
     self.dragLabel:SetFont( Options.Defaults.move.Font )
     self.dragLabel:SetFontStyle( Options.Defaults.move.FontStyle )
+    self.dragLabel:SetForeColor( Options.Defaults.move.textcolor )
     self.dragLabel:SetPosition( self.data.frame, self.data.frame )
     self.dragLabel:SetZOrder( 4 )
 

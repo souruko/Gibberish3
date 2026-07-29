@@ -187,6 +187,7 @@ L[ Language.German ].move.left                              = "Links:"
 L[ Language.German ].move.top                               =  "Oben:"
 L[ Language.German ].move.update                            =  "Aktualisieren"
 L[ Language.German ].move.close                             =  "Schließen"
+L[ Language.German ].move.no_selection                      =  "Kein Fenster gewählt"
 
 -- selection
 L[ Language.German ].selection = {}
@@ -550,6 +551,12 @@ L[ Language.German ].tooltip.o2_structure                  = "Strukturspalte ein
 L[ Language.German ].tooltip.o2_library                    = "Bibliotheksspalte ein- oder ausblenden."
 L[ Language.German ].tooltip.o2_settings                   = "Plugin-Einstellungen öffnen."
 L[ Language.German ].tooltip.o2_reload              = "Plugin neu laden."
+L[ Language.German ].tooltip.o2_move_up             = "Das gewählte Fenster um ein Pixel nach oben verschieben. Halten zum Wiederholen."
+L[ Language.German ].tooltip.o2_move_down           = "Das gewählte Fenster um ein Pixel nach unten verschieben. Halten zum Wiederholen."
+L[ Language.German ].tooltip.o2_move_left           = "Das gewählte Fenster um ein Pixel nach links verschieben. Halten zum Wiederholen."
+L[ Language.German ].tooltip.o2_move_right          = "Das gewählte Fenster um ein Pixel nach rechts verschieben. Halten zum Wiederholen."
+L[ Language.German ].tooltip.o2_move_update         = "Die Werte für Links und Oben übernehmen."
+L[ Language.German ].tooltip.o2_move_close          = "Verschiebemodus verlassen."
 
 L[ Language.German ].tooltip.cond_enabled                  = "Wenn deaktiviert, wird diese Bedingung ignoriert und der Timer wird immer angezeigt."
 L[ Language.German ].tooltip.tim_enabled                   = "Wenn deaktiviert, wird dieser Timer ausgeblendet und nie angezeigt."
