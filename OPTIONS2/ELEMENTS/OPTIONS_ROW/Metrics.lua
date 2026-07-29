@@ -19,6 +19,8 @@ M.NUM_W       = 64
 M.DROP_W      = 140
 M.CHECK       = 15
 M.RIGHT_PAD   = 10
+M.FIELD_PAD_X = 4           -- gap between a field's border and its text
+M.FIELD_PAD_Y = 3           -- top and bottom gap, multiline fields only
 
 M.FONT_LABEL = Turbine.UI.Lotro.Font.Verdana12
 M.FONT_FIELD = Turbine.UI.Lotro.Font.Verdana12
@@ -41,16 +43,27 @@ end
 -- A sunken field with a 1px border, built from a plain TextBox rather than
 -- Turbine.UI.Lotro.TextBox: the Lotro one draws its own ornate chrome, which
 -- cannot be restyled.
--- Returns the frame (position/size this) and the textbox inside it.
+--
+-- Three layers, because Turbine.UI.TextBox has no padding of its own: the
+-- frame paints the 1px border, the interior paints the field colour, and the
+-- text box is inset inside the interior. Insetting the box straight into the
+-- frame instead would make the gap show the border colour.
+--
+-- Returns the frame (position/size this) with .box, the textbox inside it.
 function M.MakeField(row, multiline)
     local frame = Turbine.UI.Control()
     frame:SetParent(row)
     frame:SetBackColor(Options.Defaults.window.line)
     frame:SetMouseVisible(false)
 
+    local inner = Turbine.UI.Control()
+    inner:SetParent(frame)
+    inner:SetPosition(1, 1)
+    inner:SetBackColor(Options.Defaults.window.bg_sunken)
+    inner:SetMouseVisible(true)
+
     local box = Turbine.UI.TextBox()
-    box:SetParent(frame)
-    box:SetPosition(1, 1)
+    box:SetParent(inner)
     box:SetBackColor(Options.Defaults.window.bg_sunken)
     box:SetForeColor(Options.Defaults.window.text)
     box:SetFont(M.FONT_FIELD)
@@ -63,11 +76,26 @@ function M.MakeField(row, multiline)
         box:SetTextAlignment(Turbine.UI.ContentAlignment.TopLeft)
     end
 
-    frame.box = box
+    -- the padding is part of the field, so clicking it should still put the
+    -- caret in the text rather than doing nothing
+    inner.MouseClick = function() box:Focus() end
+
+    frame.box   = box
+    frame.inner = inner
     function frame:Layout(left, top, w, h)
         self:SetPosition(left, top)
         self:SetSize(w, h)
-        box:SetSize(math.max(0, w - 2), math.max(0, h - 2))
+
+        local iw = math.max(0, w - 2)
+        local ih = math.max(0, h - 2)
+        inner:SetSize(iw, ih)
+
+        -- a single-line box keeps the full height so the whole field stays
+        -- clickable; its text is centred by the alignment anyway
+        local pad_y = (multiline == true) and M.FIELD_PAD_Y or 0
+        box:SetPosition(M.FIELD_PAD_X, pad_y)
+        box:SetSize(math.max(0, iw - 2 * M.FIELD_PAD_X),
+                    math.max(0, ih - 2 * pad_y))
     end
 
     return frame
