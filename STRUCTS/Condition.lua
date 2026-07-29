@@ -88,13 +88,31 @@ end
 ---------------------------------------------------------------------------------------------------
 -- iterates conditionList and fires matchFn against each condition trigger; updates tod on match
 ---------------------------------------------------------------------------------------------------
-function Condition.CheckAll( timerData, triggerType, matchFn, duration )
+-- cheap test callers use to skip building a match closure for a timer that has
+-- no conditions, which is the common case
+function Condition.HasAny( timerData )
 
-    if timerData.conditionList == nil then
+    local list = timerData.conditionList
+
+    return list ~= nil and #list > 0
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- effect, when given, supplies the duration only if a condition actually needs
+-- it: reading it is a call into the game, and a match is the rare case.
+function Condition.CheckAll( timerData, triggerType, matchFn, duration, effect )
+
+    -- an empty list is the common case and used to cost a GetGameTime per timer
+    -- per event, so leave before paying for it
+    if not Condition.HasAny( timerData ) then
         return
     end
 
-    local gameTime = Turbine.Engine.GetGameTime()
+    -- both of these used to be read up front for every timer on every event.
+    -- Nothing below needs either until a condition trigger matches.
+    local gameTime = nil
 
     for _, condition in ipairs( timerData.conditionList ) do
 
@@ -106,16 +124,29 @@ function Condition.CheckAll( timerData, triggerType, matchFn, duration )
 
                 if result ~= nil then
 
+                    if gameTime == nil then
+                        gameTime = Turbine.Engine.GetGameTime()
+                    end
+
                     if condTriggerData.action == Action.Add then
 
                         if condition.permanent == true then
                             condition.tod = math.huge
                         elseif condition.useCustomDuration == true then
                             condition.tod = gameTime + condition.duration
-                        elseif duration ~= nil then
-                            condition.tod = gameTime + duration
                         else
-                            condition.tod = math.huge
+
+                            if duration == nil and effect ~= nil then
+                                duration = effect:GetDuration()
+                                effect   = nil          -- resolve at most once
+                            end
+
+                            if duration ~= nil then
+                                condition.tod = gameTime + duration
+                            else
+                                condition.tod = math.huge
+                            end
+
                         end
 
                     elseif condTriggerData.action == Action.Remove then

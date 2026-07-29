@@ -150,10 +150,12 @@ Trigger[Trigger.Types.Skill].SkillUsed = function (skill)
                 -- check if timer is enabled
                 if timerData.enabled == true then
 
-                    Condition.CheckAll( timerData, Trigger.Types.Skill, function(t)
-                        if t.enabled == true and t.token == name then return 1 end
-                        return nil
-                    end)
+                    if Condition.HasAny( timerData ) then
+                        Condition.CheckAll( timerData, Trigger.Types.Skill, function(t)
+                            if t.enabled == true and t.token == name then return 1 end
+                            return nil
+                        end)
+                    end
 
                     -- all effect self of the timer
                     for triggerIndex, triggerData in ipairs(timerData[Trigger.Types.Skill]) do 

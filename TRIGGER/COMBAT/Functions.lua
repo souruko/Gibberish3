@@ -104,9 +104,11 @@ Trigger[Trigger.Types.Combat].CheckTimer = function ( combatState, windowIndex, 
         return
     end
 
-    Condition.CheckAll( timerData, Trigger.Types.Combat, function(t)
-        return Trigger[ Trigger.Types.Combat ].CheckTrigger(combatState, t)
-    end)
+    if Condition.HasAny( timerData ) then
+        Condition.CheckAll( timerData, Trigger.Types.Combat, function(t)
+            return Trigger[ Trigger.Types.Combat ].CheckTrigger(combatState, t)
+        end)
+    end
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Combat ]) do

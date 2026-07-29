@@ -20,20 +20,24 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
     function effects.EffectAdded(sender, args)
 
         local effect = effects:Get(args.Index)
-        
+
         Trigger.AddToEffectCollection( effect, "Self" )
+
+        -- the name is the same for every trigger this event visits, and reading
+        -- it is a call into the game, so read it once here
+        local effectName = effect:GetName()
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do
 
-            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData )
+            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData, effectName )
             Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, LocalPlayer, windowIndex, windowData )
 
         end
 
         for folderIndex, folderData in ipairs(Data.folder) do
 
-            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData, effectName )
             Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
 
         end
@@ -64,19 +68,20 @@ Trigger[ Trigger.Types.EffectSelf ].CheckAllActivEffects = function ()
 
     for index = 1, effects:GetCount(), 1 do
         
-        local effect = effects:Get(index)
+        local effect     = effects:Get(index)
+        local effectName = effect:GetName()
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do
 
-            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData )
+            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData, effectName )
             Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, LocalPlayer, windowIndex, windowData )
 
         end
 
         for folderIndex, folderData in ipairs(Data.folder) do
 
-            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData, effectName )
             Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
 
         end
@@ -89,12 +94,12 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check folder
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckFolder = function(effect, folderIndex, folderData)
+Trigger[ Trigger.Types.EffectSelf ].CheckFolder = function(effect, folderIndex, folderData, effectName)
 
     -- check window triggers
     for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectSelf ]) do
-        
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData)
+
+        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData, effectName)
 
         if posAdjustment ~= nil then
             -- fix posAdjustment
@@ -111,12 +116,12 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check windows
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effect, windowIndex, windowData  )
+Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effect, windowIndex, windowData, effectName )
 
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectSelf ]) do
 
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData)
+        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData, effectName)
 
         if posAdjustment ~= nil then
             Windows.WindowAction( windowIndex, windowData, triggerData )
@@ -132,7 +137,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effect, windowInde
 
     -- check the timers of the window
     for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.EffectSelf ].CheckTimer(effect, windowIndex, timerIndex, timerData)
+        Trigger[ Trigger.Types.EffectSelf ].CheckTimer(effect, windowIndex, timerIndex, timerData, effectName)
 
     end
 
@@ -142,21 +147,23 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check timer
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckTimer = function ( effect, windowIndex, timerIndex, timerData )
+Trigger[ Trigger.Types.EffectSelf ].CheckTimer = function ( effect, windowIndex, timerIndex, timerData, effectName )
 
     -- only check for enabled timers
     if timerData.enabled == false then
         return
     end
 
-    Condition.CheckAll( timerData, Trigger.Types.EffectSelf, function(t)
-        return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, t)
-    end, effect:GetDuration())
+    if Condition.HasAny( timerData ) then
+        Condition.CheckAll( timerData, Trigger.Types.EffectSelf, function(t)
+            return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, t, effectName)
+        end, nil, effect)
+    end
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectSelf ]) do
 
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData)
+        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effect, triggerData, effectName)
 
         if posAdjustment ~= nil then
             -- fix posAdjustment
@@ -173,14 +180,18 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check trigger
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerData )
+Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerData, effectName )
 
     -- only check for enabled trigger
     if triggerData.enabled == false then
         return nil
     end
 
-    local effectName = effect:GetName()
+    -- callers that already read it pass it in; reading it here per trigger is
+    -- a call into the game for a value that cannot change during one event
+    if effectName == nil then
+        effectName = effect:GetName()
+    end
 
     -- for exact-match: check name first to skip all API calls on non-matching effects
     if triggerData.useRegex ~= true then
@@ -269,9 +280,11 @@ Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTimer = function ( effect, window
         return
     end
 
-    Condition.CheckAll( timerData, Trigger.Types.EffectRemoveSelf, function(t)
-        return Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effect, t)
-    end)
+    if Condition.HasAny( timerData ) then
+        Condition.CheckAll( timerData, Trigger.Types.EffectRemoveSelf, function(t)
+            return Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effect, t)
+        end)
+    end
 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectRemoveSelf ]) do
