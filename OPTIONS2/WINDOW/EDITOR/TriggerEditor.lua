@@ -628,7 +628,9 @@ function Options2.Window.TriggerEditor:ApplyClipboard()
         if clip.item[p.attr] ~= nil then
             for _, t in ipairs(p.types) do
                 if t == clip.itemType then
-                    p.apply(clip.item[p.attr])
+                    -- the entry's setter is called `set`, matching the armed-field
+                    -- contract in Options2.FillArmedField
+                    p.set(clip.item[p.attr])
                     break
                 end
             end
