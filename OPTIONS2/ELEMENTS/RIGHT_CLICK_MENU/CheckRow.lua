@@ -10,11 +10,12 @@ function Options2.Elements.CheckRow:Constructor(text_control, text_description, 
     self.checkbox = Options2.Elements.CheckBox()
     self.checkbox:SetParent(self)
     -- centre it in the gutter the row's text is indented past, using the
-    -- checkbox's own size rather than assuming one
-    local cb = self.checkbox:GetWidth()
+    -- control's own width and height rather than assuming it is square
+    local cb_w = self.checkbox:GetWidth()
+    local cb_h = self.checkbox:GetHeight()
     self.checkbox:SetPosition(
-        math.floor((Options.Defaults.rc_menu.text_left - cb) / 2),
-        math.floor((height - cb) / 2))
+        math.floor((Options.Defaults.rc_menu.text_left - cb_w) / 2),
+        math.floor((height - cb_h) / 2))
     self.checkbox:SetMouseVisible(false)
 
     self.text = Turbine.UI.Label()
