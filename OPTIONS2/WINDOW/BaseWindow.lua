@@ -126,31 +126,43 @@ local function make_strip(parent, icon_path, expand_fn)
     -- One line of text turned on its side, per the design. Stacking the letters
     -- one per line instead leaves a ragged column, because the glyphs are not
     -- the same width.
+    --
+    -- SetRotation is a Turbine.UI.Window method, not a Control one, so the
+    -- label has to live inside a Window to be turned. A Window draws nothing of
+    -- its own, so hosting one here costs nothing visually.
+    local label_host = Turbine.UI.Window()
+    label_host:SetParent(strip)
+    label_host:SetMouseVisible(false)
+
     local label = Turbine.UI.Label()
-    label:SetParent(strip)
+    label:SetParent(label_host)
+    label:SetPosition(0, 0)
     label:SetFont(Options.Defaults.window.font)
     label:SetForeColor(Options.Defaults.window.text_muted)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     label:SetMouseVisible(false)
-    -- z is degrees clockwise. The label's left edge becomes its top edge, so
+
+    -- z is degrees clockwise. The host's left edge becomes its top edge, so
     -- MiddleLeft text starts under the icon and reads downward.
-    label:SetRotation({ x = 0, y = 0, z = 90 })
+    label_host:SetRotation({ x = 0, y = 0, z = 90 })
 
     strip.MouseEnter = function() strip:SetBackColor(Options.Defaults.window.select) end
     strip.MouseLeave = function() strip:SetBackColor(Options.Defaults.window.bg_sunken) end
     strip.MouseClick = expand_fn
 
-    strip.label = label
+    strip.label      = label
+    strip.label_host = label_host
 
-    -- Rotation does not change a control's layout box: the label is still laid
+    -- Rotation does not change a control's layout box: the host is still laid
     -- out lying down and simply drawn turned, about its own centre. So size it
     -- along the strip's height and centre it on where it should end up.
     strip.SizeChanged = function()
         local _, h = strip:GetSize()
         local span = math.max(0, h - LABEL_TOP - PAD)
+        label_host:SetSize(span, STRIP_LINE)
+        label_host:SetPosition(centre_x - math.floor(span / 2),
+                               LABEL_TOP + math.floor(span / 2) - math.floor(STRIP_LINE / 2))
         label:SetSize(span, STRIP_LINE)
-        label:SetPosition(centre_x - math.floor(span / 2),
-                          LABEL_TOP + math.floor(span / 2) - math.floor(STRIP_LINE / 2))
     end
 
     return strip
