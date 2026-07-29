@@ -130,9 +130,13 @@ local function make_strip(parent, icon_path, expand_fn)
     -- SetRotation is a Turbine.UI.Window method, not a Control one, so the
     -- label has to live inside a Window to be turned. A Window draws nothing of
     -- its own, so hosting one here costs nothing visually.
+    -- A parented Turbine.UI.Window needs an explicit z-order or it draws behind
+    -- its parent's fill, and so does a label inside one. Every other Window in
+    -- this plugin does the same (see UI_ELEMENTS/TIMER/COUNTER_BAR/Element.lua).
     local label_host = Turbine.UI.Window()
     label_host:SetParent(strip)
     label_host:SetMouseVisible(false)
+    label_host:SetZOrder(5)
 
     local label = Turbine.UI.Label()
     label:SetParent(label_host)
@@ -141,6 +145,7 @@ local function make_strip(parent, icon_path, expand_fn)
     label:SetForeColor(Options.Defaults.window.text_muted)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     label:SetMouseVisible(false)
+    label:SetZOrder(6)
 
     -- z is degrees clockwise. The host's left edge becomes its top edge, so
     -- MiddleLeft text starts under the icon and reads downward.
