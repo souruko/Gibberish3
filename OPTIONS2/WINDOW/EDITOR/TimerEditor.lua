@@ -35,7 +35,7 @@ end
 
 -- ── paste button helpers ──────────────────────────────────────────────────────
 
-local PASTE_W = 58
+local PASTE_W = 64
 local PASTE_H = 20
 
 -- Labelled "<- paste" button. Clicking it aims the library at this field; if
@@ -79,7 +79,7 @@ local function paste_btn(panel, row, attr, types, set_fn)
     end
 
     function entry:LanguageChanged()
-        label:SetText("← " .. UTILS.GetText("options2", "paste"))
+        label:SetText("<- " .. UTILS.GetText("options2", "paste"))
     end
     entry:LanguageChanged()
 

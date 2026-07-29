@@ -36,7 +36,7 @@ end
 
 -- ── paste button helpers ──────────────────────────────────────────────────────
 
-local PASTE_W = 58
+local PASTE_W = 64
 local PASTE_H = 20
 
 -- Labelled "<- paste" button. Clicking it aims the library at this field; if
@@ -80,7 +80,7 @@ local function paste_btn(panel, row, attr, types, set_fn)
     end
 
     function entry:LanguageChanged()
-        label:SetText("← " .. UTILS.GetText("options2", "paste"))
+        label:SetText("<- " .. UTILS.GetText("options2", "paste"))
     end
     entry:LanguageChanged()
 
@@ -512,7 +512,7 @@ local TIMER_TYPES = {
     [Trigger.Types.TimerThreshold] = true,
 }
 
-local APPLY_W = 54
+local APPLY_W = 64
 local APPLY_H = 20
 
 Options2.Window.TriggerEditor = class(Turbine.UI.Control)
@@ -538,7 +538,7 @@ function Options2.Window.TriggerEditor:Constructor(nodeData)
     self.type_label:SetText(type_name)
     self.type_label:SetMouseVisible(false)
 
-    -- "← Apply" button: applies all matching clipboard fields at once
+    -- "<- Apply" button: applies all matching clipboard fields at once
     self.apply_btn = Turbine.UI.Button()
     self.apply_btn:SetParent(self)
     self.apply_btn:SetSize(APPLY_W, APPLY_H)
@@ -546,7 +546,7 @@ function Options2.Window.TriggerEditor:Constructor(nodeData)
     self.apply_btn:SetForeColor(Options.Defaults.window.paste_border)
     self.apply_btn:SetVisible(false)
     self.apply_btn.Click = function() self:ApplyClipboard() end
-    self.apply_btn:SetText("← " .. UTILS.GetText("options2", "apply"))
+    self.apply_btn:SetText("<- " .. UTILS.GetText("options2", "apply"))
 
     -- form panel below header
     local panel, load_fn, save_fn, lang_fn, size_fn, plist
@@ -662,7 +662,7 @@ function Options2.Window.TriggerEditor:ClipboardChanged()
 end
 
 function Options2.Window.TriggerEditor:_RefreshApplyLabel()
-    self.apply_btn:SetText("← " .. UTILS.GetText("options2", "apply"))
+    self.apply_btn:SetText("<- " .. UTILS.GetText("options2", "apply"))
 end
 
 function Options2.Window.TriggerEditor:ArmedFieldChanged()

@@ -30,7 +30,11 @@ function RowParts.ContentLeft(depth)
     return INDENT_LEAD + depth * INDENT_STEP + 5
 end
 
--- utf-8 aware; Label clips mid-glyph, so never rely on clipping
+-- utf-8 aware; Label clips mid-glyph, so never rely on clipping.
+-- The suffix is three dots rather than an ellipsis glyph: the game font stops
+-- at Latin-1, so U+2026 draws as a question mark.
+RowParts.ELLIPSIS = "..."
+
 function RowParts.Truncate(text, max_chars)
     if text == nil or text == "" then return "" end
     text = tostring(text)
@@ -41,7 +45,8 @@ function RowParts.Truncate(text, max_chars)
         chars[#chars + 1] = c
     end
     if #chars <= max_chars then return text end
-    return table.concat(chars, "", 1, math.max(1, max_chars - 1)) .. "…"
+    local keep = max_chars - string.len(RowParts.ELLIPSIS)
+    return table.concat(chars, "", 1, math.max(1, keep)) .. RowParts.ELLIPSIS
 end
 
 -- Verdana12 is proportional; this is the budget used to decide truncation.
