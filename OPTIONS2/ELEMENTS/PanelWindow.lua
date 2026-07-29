@@ -72,6 +72,7 @@ function Options2.Elements.PanelWindow:Constructor(config)
     self.title_label:SetFont(Options.Defaults.window.font)
     self.title_label:SetForeColor(Options.Defaults.window.text)
     self.title_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.title_label:SetMarkupEnabled(true)
     self.title_label:SetMouseVisible(false)
 
     self.btn_close = Turbine.UI.Control()

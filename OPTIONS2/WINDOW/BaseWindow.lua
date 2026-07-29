@@ -59,7 +59,8 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     local icon = Turbine.UI.Control()
     icon:SetParent(btn)
     icon:SetSize(BTN_ICON, BTN_ICON)
-    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), 1)
+    icon:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2),
+                     math.floor((BTN_SIZE - BTN_ICON) / 2))
     icon:SetBlendMode(Turbine.UI.BlendMode.Overlay)
     icon:SetBackground(icon_path)
     icon:SetMouseVisible(false)
@@ -70,7 +71,7 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     local accent = Turbine.UI.Control()
     accent:SetParent(btn)
     accent:SetSize(BTN_ICON, 2)
-    accent:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), BTN_SIZE - 3)
+    accent:SetPosition(math.floor((BTN_SIZE - BTN_ICON) / 2), BTN_SIZE - 2)
     accent:SetBackColor(Options.Defaults.window.accent)
     accent:SetVisible(false)
     accent:SetMouseVisible(false)
@@ -305,8 +306,12 @@ function Options2.Window.Constructor:_RefreshToggles()
     self.btn_library:ApplyState()
 end
 
+-- text_faint, for the markup the title label renders
+local VERSION_RGB = "#5C6076"
+
 function Options2.Window.Constructor:_RefreshTexts()
-    self:SetTitleText(UTILS.GetText("options2", "brand"))
+    self:SetTitleText(UTILS.GetText("options2", "brand")
+        .. "  <rgb=" .. VERSION_RGB .. ">" .. (Options.Version or "") .. "</rgb>")
     self.struct_strip.label:SetText(stack_text(UTILS.GetText("options2", "structure")))
     self.lib_strip.label:SetText(stack_text(UTILS.GetText("options2", "library")))
 end

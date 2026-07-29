@@ -7,6 +7,12 @@
 
 
 ---------------------------------------------------------------------------------------------------
+-- Plugin version, shown next to the name in the options panel title bar.
+-- Keep in step with Gibberish.plugin and Gibberish.plugincompendium.
+Options.Version = "3.5.0"
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 Language = {}
 
 -- used language
