@@ -146,6 +146,12 @@ function Options.LanguageChanged( value )
         Options2.Window.SettingsWindowObject:LanguageChanged()
     end
 
+    -- the import/export dialog is built once at startup and reused, so it needs
+    -- telling too; without this its buttons keep the language they were built in
+    if Options2.Window.ImportDialogObject ~= nil then
+        Options2.Window.ImportDialogObject:LanguageChanged()
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 
