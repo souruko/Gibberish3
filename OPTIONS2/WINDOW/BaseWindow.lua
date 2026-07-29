@@ -22,7 +22,6 @@ local COLLAPSED_W  = 30
 
 local STRIP_BTN    = 18
 local STRIP_ICON   = 16
-local FONT_STRIP   = Turbine.UI.Lotro.Font.Verdana10
 
 -- Tooltip.AddTooltip owns MouseEnter/MouseLeave, so wrap it to keep the hover fill.
 local function add_hover_tooltip(control, description, enter_fn, leave_fn)
@@ -94,18 +93,11 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     return btn
 end
 
--- "Library" -> "L\ni\nb\nr\na\ny", for the collapsed strips.
--- Splits on utf-8 sequences so accented names stay intact.
-local function stack_text(text)
-    local out = {}
-    for char in string.gmatch(text, "[\1-\127\194-\244][\128-\191]*") do
-        out[#out + 1] = char
-    end
-    return table.concat(out, "\n")
-end
-
--- collapsed 30px strip: expand arrow over a stacked column name
-local function make_strip(parent, icon_path, expand_fn)
+-- Collapsed 30px strip: an expand arrow, and nothing else. The column name
+-- used to be stacked one letter per line, which never sat straight; the design
+-- turns it on its side, which Turbine cannot do for a Label (see CLAUDE.md).
+-- The arrow plus its tooltip say which column this is without either problem.
+local function make_strip(parent, icon_path, description, expand_fn)
     local strip = Turbine.UI.Control()
     strip:SetParent(parent)
     strip:SetBackColor(Options.Defaults.window.bg_sunken)
@@ -114,8 +106,6 @@ local function make_strip(parent, icon_path, expand_fn)
 
     local inner_w  = COLLAPSED_W - SEP_W
     local btn_left = math.floor((inner_w - STRIP_BTN) / 2)
-    -- icon and label share one centre line, so they cannot drift apart
-    local centre_x = btn_left + math.floor(STRIP_BTN / 2)
 
     local btn = Turbine.UI.Control()
     btn:SetParent(strip)
@@ -131,40 +121,12 @@ local function make_strip(parent, icon_path, expand_fn)
     icon:SetBackground(icon_path)
     icon:SetMouseVisible(false)
 
-    local LABEL_TOP = PAD + STRIP_BTN + GAP
+    -- with no label, the tooltip is the only thing naming the column
+    add_hover_tooltip(strip, description,
+        function() strip:SetBackColor(Options.Defaults.window.select) end,
+        function() strip:SetBackColor(Options.Defaults.window.bg_sunken) end)
 
-    -- One letter per line. The design turns the text on its side instead, but
-    -- SetRotation cannot do it here: rotation is about a control's own centre
-    -- and does not change its layout box, so a label long enough to hold
-    -- "Structure" would have to stick far outside a 29px strip to be centred in
-    -- it, and it is not drawn once it does.
-    --
-    -- LABEL_W is even and starts at 0 so the column of letters centres on the
-    -- same pixel as the icon above it; letting the label span the full 29px put
-    -- its centre half a pixel off the icon's.
-    local LABEL_W = STRIP_BTN
-
-    local label = Turbine.UI.Label()
-    label:SetParent(strip)
-    label:SetLeft(centre_x - LABEL_W / 2)
-    label:SetTop(LABEL_TOP)
-    label:SetWidth(LABEL_W)
-    label:SetMultiline(true)
-    label:SetFont(FONT_STRIP)
-    label:SetForeColor(Options.Defaults.window.text_muted)
-    label:SetTextAlignment(Turbine.UI.ContentAlignment.TopCenter)
-    label:SetMouseVisible(false)
-
-    strip.MouseEnter = function() strip:SetBackColor(Options.Defaults.window.select) end
-    strip.MouseLeave = function() strip:SetBackColor(Options.Defaults.window.bg_sunken) end
     strip.MouseClick = expand_fn
-
-    strip.label = label
-
-    strip.SizeChanged = function()
-        local _, h = strip:GetSize()
-        label:SetHeight(math.max(0, h - LABEL_TOP - PAD))
-    end
 
     return strip
 end
@@ -223,7 +185,7 @@ function Options2.Window.Constructor:Constructor()
     self.nav:SetParent(self.client)
 
     self.struct_strip = make_strip(self.client,
-        "Gibberish3/RESOURCES/chevron_right.tga",
+        "Gibberish3/RESOURCES/chevron_right.tga", "o2_structure",
         function() self:_SetStructureCollapsed(false) end)
 
     self.sep1 = Turbine.UI.Control()
@@ -254,7 +216,7 @@ function Options2.Window.Constructor:Constructor()
     self.library:SetParent(self.client)
 
     self.lib_strip = make_strip(self.client,
-        "Gibberish3/RESOURCES/chevron_left.tga",
+        "Gibberish3/RESOURCES/chevron_left.tga", "o2_library",
         function() self:_SetLibraryCollapsed(false) end)
 
     self:_RefreshTexts()
@@ -337,8 +299,6 @@ local VERSION_RGB = "#5C6076"
 function Options2.Window.Constructor:_RefreshTexts()
     self:SetTitleText(UTILS.GetText("options2", "brand")
         .. "  <rgb=" .. VERSION_RGB .. ">" .. (Options.Version or "") .. "</rgb>")
-    self.struct_strip.label:SetText(stack_text(UTILS.GetText("options2", "structure")))
-    self.lib_strip.label:SetText(stack_text(UTILS.GetText("options2", "library")))
 end
 
 -- ── window plumbing ─────────────────────────────────────────────────────────
