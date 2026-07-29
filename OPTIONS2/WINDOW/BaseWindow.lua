@@ -22,16 +22,7 @@ local COLLAPSED_W  = 30
 
 local STRIP_BTN    = 18
 local STRIP_ICON   = 16
-
--- "Library" -> "L\ni\nb\nr\na\ny", for the collapsed strips.
--- Splits on utf-8 sequences so accented names stay intact.
-local function stack_text(text)
-    local out = {}
-    for char in string.gmatch(text, "[\1-\127\194-\244][\128-\191]*") do
-        out[#out + 1] = char
-    end
-    return table.concat(out, "\n")
-end
+local STRIP_LINE   = 14   -- thickness of the turned label
 
 -- Tooltip.AddTooltip owns MouseEnter/MouseLeave, so wrap it to keep the hover fill.
 local function add_hover_tooltip(control, description, enter_fn, leave_fn)
@@ -103,7 +94,7 @@ local function make_title_btn(parent, icon_path, description, click_fn, rest_col
     return btn
 end
 
--- collapsed 30px strip: expand arrow over a vertical column name
+-- collapsed 30px strip: expand arrow over a sideways column name
 local function make_strip(parent, icon_path, expand_fn)
     local strip = Turbine.UI.Control()
     strip:SetParent(parent)
@@ -111,10 +102,15 @@ local function make_strip(parent, icon_path, expand_fn)
     strip:SetVisible(false)
     strip:SetMouseVisible(true)
 
+    local inner_w  = COLLAPSED_W - SEP_W
+    local btn_left = math.floor((inner_w - STRIP_BTN) / 2)
+    -- icon and label share one centre line, so they cannot drift apart
+    local centre_x = btn_left + math.floor(STRIP_BTN / 2)
+
     local btn = Turbine.UI.Control()
     btn:SetParent(strip)
     btn:SetSize(STRIP_BTN, STRIP_BTN)
-    btn:SetPosition(math.floor((COLLAPSED_W - SEP_W - STRIP_BTN) / 2), PAD)
+    btn:SetPosition(btn_left, PAD)
     btn:SetMouseVisible(false)
 
     local icon = Turbine.UI.Control()
@@ -127,15 +123,18 @@ local function make_strip(parent, icon_path, expand_fn)
 
     local LABEL_TOP = PAD + STRIP_BTN + GAP
 
+    -- One line of text turned on its side, per the design. Stacking the letters
+    -- one per line instead leaves a ragged column, because the glyphs are not
+    -- the same width.
     local label = Turbine.UI.Label()
     label:SetParent(strip)
-    label:SetPosition(0, LABEL_TOP)
-    label:SetWidth(COLLAPSED_W - SEP_W)
-    label:SetMultiline(true)
     label:SetFont(Options.Defaults.window.font)
     label:SetForeColor(Options.Defaults.window.text_muted)
-    label:SetTextAlignment(Turbine.UI.ContentAlignment.TopCenter)
+    label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     label:SetMouseVisible(false)
+    -- z is degrees clockwise. The label's left edge becomes its top edge, so
+    -- MiddleLeft text starts under the icon and reads downward.
+    label:SetRotation({ x = 0, y = 0, z = 90 })
 
     strip.MouseEnter = function() strip:SetBackColor(Options.Defaults.window.select) end
     strip.MouseLeave = function() strip:SetBackColor(Options.Defaults.window.bg_sunken) end
@@ -143,9 +142,15 @@ local function make_strip(parent, icon_path, expand_fn)
 
     strip.label = label
 
+    -- Rotation does not change a control's layout box: the label is still laid
+    -- out lying down and simply drawn turned, about its own centre. So size it
+    -- along the strip's height and centre it on where it should end up.
     strip.SizeChanged = function()
         local _, h = strip:GetSize()
-        label:SetHeight(math.max(0, h - LABEL_TOP - PAD))
+        local span = math.max(0, h - LABEL_TOP - PAD)
+        label:SetSize(span, STRIP_LINE)
+        label:SetPosition(centre_x - math.floor(span / 2),
+                          LABEL_TOP + math.floor(span / 2) - math.floor(STRIP_LINE / 2))
     end
 
     return strip
@@ -319,8 +324,8 @@ local VERSION_RGB = "#5C6076"
 function Options2.Window.Constructor:_RefreshTexts()
     self:SetTitleText(UTILS.GetText("options2", "brand")
         .. "  <rgb=" .. VERSION_RGB .. ">" .. (Options.Version or "") .. "</rgb>")
-    self.struct_strip.label:SetText(stack_text(UTILS.GetText("options2", "structure")))
-    self.lib_strip.label:SetText(stack_text(UTILS.GetText("options2", "library")))
+    self.struct_strip.label:SetText(UTILS.GetText("options2", "structure"))
+    self.lib_strip.label:SetText(UTILS.GetText("options2", "library"))
 end
 
 -- ── window plumbing ─────────────────────────────────────────────────────────
