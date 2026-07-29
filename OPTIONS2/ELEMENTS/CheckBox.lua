@@ -1,5 +1,5 @@
--- On/off switch: a 1px-bordered track with a knob that sits left when off and
--- right when on. Off it is dark and muted, on it fills with the accent.
+-- On/off switch, 22x12: a 1px-bordered track with a knob that sits left when
+-- off and right when on. Off it is dark and muted, on it fills with the accent.
 --
 -- Drawn from plain controls rather than a .tga on purpose. A .tga cannot be
 -- tinted (SetBackColor fills the control behind the glyph rather than colouring
@@ -10,9 +10,9 @@
 -- The name stays CheckBox: it is the same boolean control with the same API
 -- (SetChecked / IsChecked / CheckedChanged), only drawn differently.
 
-local W     = 26
-local H     = 14
-local KNOB  = 10
+local W     = 22
+local H     = 12
+local KNOB  = 8
 local INSET = 2
 
 Options2.Elements.CheckBox = class(Turbine.UI.Control)
