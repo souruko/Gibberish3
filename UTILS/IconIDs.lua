@@ -160,11 +160,26 @@ IconID [ IconID.Type.NewDottedBorder ] [10] = Turbine.UI.Graphic( 1092554679 )
 IconID [ IconID.Type.NewDottedBorder ] [11] = Turbine.UI.Graphic( 1092554680 )
 IconID [ IconID.Type.NewDottedBorder ] [12] = Turbine.UI.Graphic( 1092554681 )
 ---------------------------------------------------------------------------------------------------
--- circel images
+-- Circel images.
+--
+-- The timer draws a sweep from two pieces: the whole quadrants completed so far
+-- and the leading partial quadrant turned onto the quadrant it is sweeping. So
+-- only 1..25 and the three larger whole-quadrant shapes exist; the rest of the
+-- old 0..100 set is gone, along with three quarters of the plugin's art.
 IconID[ IconID.Type.Circel ] = {}
 
-for i = 0, 100 do
+local function LoadCircel( i )
 
     IconID[ IconID.Type.Circel ][ i ] = Turbine.UI.Graphic( "Gibberish3/RESOURCES/CIRCEL/circel_" .. i .. ".tga" )
 
 end
+
+-- one quadrant, in the steps the leading piece sweeps through
+for i = 1, 25 do
+    LoadCircel( i )
+end
+
+-- two, three and four whole quadrants
+LoadCircel( 50 )
+LoadCircel( 75 )
+LoadCircel( 100 )
