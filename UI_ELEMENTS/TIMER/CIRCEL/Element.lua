@@ -70,9 +70,15 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
         wedge:SetMouseVisible( false )
         wedge:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
         wedge:SetZOrder( 4 + i )
-        wedge:SetRotation( { x = 0, y = 0, z = ( i - 1 ) * 90 } )
         wedge:SetVisible( false )
         wedge.piece = nil
+
+        -- Setting the rotation once here does not survive the later SetSize
+        -- and SetBackground, which left all four pieces drawn at 0 and stacked
+        -- on each other - a full sweep looked like a single quarter. Keep the
+        -- angle and re-apply it after anything that touches the control.
+        wedge.rotation = { x = 0, y = 0, z = ( i - 1 ) * 90 }
+        wedge:SetRotation( wedge.rotation )
 
         self.wedges[i] = wedge
 
@@ -354,6 +360,7 @@ function CircelElement:SetCircelProgress( id )
 
                 wedge:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ piece ] )
                 wedge:SetStretchMode( 2 )
+                wedge:SetRotation( wedge.rotation )
                 wedge:SetVisible( true )
 
             end
@@ -603,6 +610,7 @@ function CircelElement:Resize()
         wedge.nativeWidth  = width
         wedge.nativeHeight = height
         wedge:SetStretchMode( 2 )
+        wedge:SetRotation( wedge.rotation )
     end
 
     self.labelBack:SetSize( width, height )
