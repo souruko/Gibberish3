@@ -1,5 +1,11 @@
 # Changelog
 
+### 3.5.1
+- Effect and chat triggers are much faster, especially with a lot of timers set up.
+- Bar timers now redraw only when the bar actually moves, instead of on every frame.
+- Circle timers use far less memory, and their artwork has been redrawn so the sweep lines up exactly.
+- The plugin is around ten times smaller to download: unused artwork has been removed and the circle images regenerated at a sensible size, taking it from about 3.4 MB to 340 KB.
+
 ### 3.5.0
 - The options panel has been redesigned. It now opens at 1168x640, can be resized freely in both directions, and uses a flat dark theme throughout instead of the old parchment frame.
 - Navigation is split into two columns. The left column holds only your folders and windows; selecting one fills the second column with everything inside it — the window's own triggers, its timers, and each timer's triggers and conditions.
