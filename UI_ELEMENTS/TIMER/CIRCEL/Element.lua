@@ -52,11 +52,31 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
     self.circelBack:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
     self.circelBack:SetZOrder( 3 )
 
+    -- The sweep is drawn as up to four quadrant pieces rather than one image
+    -- per percent. circel_25 is exactly one quadrant, so circel_(25k+r) is k
+    -- of those rotated into place plus circel_r rotated by k*90 - which needs
+    -- only circel_0..circel_25 instead of all 101.
     self.circel = Turbine.UI.Window()
     self.circel:SetParent( self.circelBack )
     self.circel:SetMouseVisible( false )
-    self.circel:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
     self.circel:SetZOrder( 4 )
+
+    self.wedges = {}
+
+    for i = 1, 4 do
+
+        local wedge = Turbine.UI.Window()
+        wedge:SetParent( self.circel )
+        wedge:SetMouseVisible( false )
+        wedge:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
+        wedge:SetZOrder( 4 + i )
+        wedge:SetRotation( { x = 0, y = 0, z = ( i - 1 ) * 90 } )
+        wedge:SetVisible( false )
+        wedge.piece = nil
+
+        self.wedges[i] = wedge
+
+    end
 
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
@@ -120,7 +140,7 @@ function CircelElement:DataChanged()
 
     -- colors
     self.circelBack:SetBackColor( UTILS.ColorFix( parentData.color2 ) )
-    self.circel:SetBackColor( UTILS.ColorFix( parentData.color3 ) )
+    self:SetCircelColor( UTILS.ColorFix( parentData.color3 ) )
     
     -- font colors
     self.timerLabel:SetForeColor( UTILS.ColorFix( parentData.color4 ) )
@@ -238,6 +258,9 @@ function CircelElement:Finish()
 
     -- close all windows
     self.labelBack:Close()
+    for i = 1, 4 do
+        self.wedges[i]:Close()
+    end
     self.circel:Close()
     self.circelBack:Close()
     self:Close()
@@ -279,8 +302,63 @@ function CircelElement:Update()
     else
 
         self.timerLabel:SetText( "" )
-        self.circel:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ 0 ] )
-        self.circel:SetStretchMode( 2 )
+        self:SetCircelProgress( 0 )
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- the sweep colour lives on the pieces, since they carry the image
+---------------------------------------------------------------------------------------------------
+function CircelElement:SetCircelColor( color )
+
+    for i = 1, 4 do
+        self.wedges[i]:SetBackColor( color )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- show a 0..100 sweep as up to four rotated quadrant pieces
+---------------------------------------------------------------------------------------------------
+function CircelElement:SetCircelProgress( id )
+
+    local full = math.floor( id / 25 )
+    local rest = id - full * 25
+
+    for i = 1, 4 do
+
+        local wedge = self.wedges[i]
+        local piece = nil
+
+        -- quadrants fully swept, then the partial one at the leading edge
+        if i <= full then
+            piece = 25
+        elseif i == full + 1 and rest > 0 then
+            piece = rest
+        end
+
+        -- each piece changes rarely, so only touch the ones that moved
+        if piece ~= wedge.piece then
+
+            wedge.piece = piece
+
+            if piece == nil then
+
+                wedge:SetVisible( false )
+
+            else
+
+                wedge:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ piece ] )
+                wedge:SetStretchMode( 2 )
+                wedge:SetVisible( true )
+
+            end
+
+        end
 
     end
 
@@ -301,8 +379,7 @@ function CircelElement:UpdateCircel( timeLeft )
 
     if circelID ~= self._lastCircelID then
         self._lastCircelID = circelID
-        self.circel:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ circelID ] )
-        self.circel:SetStretchMode( 2 )
+        self:SetCircelProgress( circelID )
     end
 
 end
@@ -342,7 +419,7 @@ function CircelElement:UpdateThreshold( timeLeft )
 
         if self._inThreshold ~= false then
             self._inThreshold = false
-            self.circel:SetBackColor( self.backColor )
+            self:SetCircelColor( self.backColor )
             self.timerLabel:SetForeColor( self.timerColor )
             self.textLabel:SetForeColor( self.textColor )
             self.timerLabel:SetFont( self.font )
@@ -371,7 +448,7 @@ function CircelElement:UpdateThreshold( timeLeft )
             self.circelBack:SetOpacity( self.parent.data.opacityThreshold )
             -- static background: set once on entry when not flashing
             if not ( self.data.useAnimation == true and self.data.animationType == AnimationType.Flashing ) then
-                self.circel:SetBackColor( Turbine.UI.Color.Red )
+                self:SetCircelColor( Turbine.UI.Color.Red )
             end
         end
 
@@ -388,7 +465,7 @@ function CircelElement:UpdateThreshold( timeLeft )
                 value = ( flashValue - math.floor( flashValue ) )
             end
 
-            self.circel:SetBackColor( Turbine.UI.Color( 1, value, value ) )
+            self:SetCircelColor( Turbine.UI.Color( 1, value, value ) )
 
         end
 
@@ -436,7 +513,7 @@ function CircelElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.circelBack:SetOpacity( self.parent.data.opacityPassiv )
-        self.circel:SetBackColor( self.backColor )
+        self:SetCircelColor( self.backColor )
         self:UpdateCircel( 0 )
 
         self.textLabel:SetVisible( false )
@@ -519,9 +596,14 @@ function CircelElement:Resize()
     self.circelBack:SetStretchMode( 2 )
 
     self.circel:SetSize( width, height )
-    self.circel.nativeWidth = width
-    self.circel.nativeHeight = height
-    self.circel:SetStretchMode( 2 )
+
+    for i = 1, 4 do
+        local wedge = self.wedges[i]
+        wedge:SetSize( width, height )
+        wedge.nativeWidth  = width
+        wedge.nativeHeight = height
+        wedge:SetStretchMode( 2 )
+    end
 
     self.labelBack:SetSize( width, height )
     self.textLabel:SetSize( width, height )
