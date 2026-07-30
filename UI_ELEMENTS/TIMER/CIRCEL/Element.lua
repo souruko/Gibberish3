@@ -52,37 +52,41 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
     self.circelBack:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
     self.circelBack:SetZOrder( 3 )
 
-    -- The sweep is drawn as up to four quadrant pieces rather than one image
-    -- per percent. circel_25 is exactly one quadrant, so circel_(25k+r) is k
-    -- of those rotated into place plus circel_r rotated by k*90 - which needs
-    -- only circel_0..circel_25 instead of all 101.
+    -- The sweep is drawn from two pieces rather than one image per percent:
+    -- the whole quadrants completed so far, and the partial one at the leading
+    -- edge turned onto the quadrant it is sweeping. circel_25 is exactly one
+    -- quadrant, so this needs circel_0..25 plus 50, 75 and 100 - 29 images
+    -- instead of 101.
+    --
+    -- The two pieces never want the same image, which matters: a
+    -- Turbine.UI.Graphic only draws in one control at a time, so handing the
+    -- same one to two controls leaves all but the last of them blank.
     self.circel = Turbine.UI.Window()
     self.circel:SetParent( self.circelBack )
     self.circel:SetMouseVisible( false )
     self.circel:SetZOrder( 4 )
 
-    self.wedges = {}
+    -- whole quadrants: circel_0/25/50/75/100, never rotated
+    self.circelFull = Turbine.UI.Window()
+    self.circelFull:SetParent( self.circel )
+    self.circelFull:SetMouseVisible( false )
+    self.circelFull:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.circelFull:SetZOrder( 5 )
+    self.circelFull:SetVisible( false )
+    self.circelFull.piece = nil
 
-    for i = 1, 4 do
+    -- the leading partial quadrant: circel_1..24, turned by whole * 90
+    self.circelLead = Turbine.UI.Window()
+    self.circelLead:SetParent( self.circel )
+    self.circelLead:SetMouseVisible( false )
+    self.circelLead:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
+    self.circelLead:SetZOrder( 6 )
+    self.circelLead:SetVisible( false )
+    self.circelLead.piece = nil
 
-        local wedge = Turbine.UI.Window()
-        wedge:SetParent( self.circel )
-        wedge:SetMouseVisible( false )
-        wedge:SetBackColorBlendMode(Turbine.UI.BlendMode.Overlay)
-        wedge:SetZOrder( 4 + i )
-        wedge:SetVisible( false )
-        wedge.piece = nil
-
-        -- Setting the rotation once here does not survive the later SetSize
-        -- and SetBackground, which left all four pieces drawn at 0 and stacked
-        -- on each other - a full sweep looked like a single quarter. Keep the
-        -- angle and re-apply it after anything that touches the control.
-        wedge.rotation = { x = 0, y = 0, z = ( i - 1 ) * 90 }
-        wedge:SetRotation( wedge.rotation )
-
-        self.wedges[i] = wedge
-
-    end
+    -- Rotation does not survive a later SetSize or SetBackground, so the angle
+    -- is kept and re-applied after anything that writes to the control.
+    self.circelLead.rotation = { x = 0, y = 0, z = 0 }
 
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
@@ -264,9 +268,8 @@ function CircelElement:Finish()
 
     -- close all windows
     self.labelBack:Close()
-    for i = 1, 4 do
-        self.wedges[i]:Close()
-    end
+    self.circelFull:Close()
+    self.circelLead:Close()
     self.circel:Close()
     self.circelBack:Close()
     self:Close()
@@ -320,52 +323,65 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:SetCircelColor( color )
 
-    for i = 1, 4 do
-        self.wedges[i]:SetBackColor( color )
-    end
+    self.circelFull:SetBackColor( color )
+    self.circelLead:SetBackColor( color )
 
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- show a 0..100 sweep as up to four rotated quadrant pieces
+-- show a 0..100 sweep as whole quadrants plus a turned leading piece
 ---------------------------------------------------------------------------------------------------
 function CircelElement:SetCircelProgress( id )
 
-    local full = math.floor( id / 25 )
-    local rest = id - full * 25
+    local whole = math.floor( id / 25 )
+    local rest  = id - whole * 25
+    local base  = whole * 25
 
-    for i = 1, 4 do
+    -- completed quadrants
+    if base ~= self.circelFull.piece then
 
-        local wedge = self.wedges[i]
-        local piece = nil
+        self.circelFull.piece = base
 
-        -- quadrants fully swept, then the partial one at the leading edge
-        if i <= full then
-            piece = 25
-        elseif i == full + 1 and rest > 0 then
-            piece = rest
-        end
+        if base == 0 then
 
-        -- each piece changes rarely, so only touch the ones that moved
-        if piece ~= wedge.piece then
+            self.circelFull:SetVisible( false )
 
-            wedge.piece = piece
+        else
 
-            if piece == nil then
-
-                wedge:SetVisible( false )
-
-            else
-
-                wedge:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ piece ] )
-                wedge:SetStretchMode( 2 )
-                wedge:SetRotation( wedge.rotation )
-                wedge:SetVisible( true )
-
-            end
+            self.circelFull:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ base ] )
+            self.circelFull:SetStretchMode( 2 )
+            self.circelFull:SetVisible( true )
 
         end
+
+    end
+
+    -- leading partial quadrant
+    if rest ~= self.circelLead.piece then
+
+        self.circelLead.piece = rest
+
+        if rest == 0 then
+
+            self.circelLead:SetVisible( false )
+
+        else
+
+            self.circelLead:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Circel ][ rest ] )
+            self.circelLead:SetStretchMode( 2 )
+            self.circelLead:SetVisible( true )
+
+        end
+
+    end
+
+    -- the angle moves as the sweep crosses into the next quadrant, and has to
+    -- be re-applied after the background change above regardless
+    if rest > 0 then
+
+        self.circelLead.rotation.z = whole * 90
+        self.circelLead:SetRotation( self.circelLead.rotation )
 
     end
 
@@ -604,14 +620,16 @@ function CircelElement:Resize()
 
     self.circel:SetSize( width, height )
 
-    for i = 1, 4 do
-        local wedge = self.wedges[i]
-        wedge:SetSize( width, height )
-        wedge.nativeWidth  = width
-        wedge.nativeHeight = height
-        wedge:SetStretchMode( 2 )
-        wedge:SetRotation( wedge.rotation )
-    end
+    self.circelFull:SetSize( width, height )
+    self.circelFull.nativeWidth  = width
+    self.circelFull.nativeHeight = height
+    self.circelFull:SetStretchMode( 2 )
+
+    self.circelLead:SetSize( width, height )
+    self.circelLead.nativeWidth  = width
+    self.circelLead.nativeHeight = height
+    self.circelLead:SetStretchMode( 2 )
+    self.circelLead:SetRotation( self.circelLead.rotation )
 
     self.labelBack:SetSize( width, height )
     self.textLabel:SetSize( width, height )
