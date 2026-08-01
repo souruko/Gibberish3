@@ -1,5 +1,17 @@
 # Changelog
 
+### 3.6.0
+- New: timers can be put in any order you like. Drag a timer in the contents list and drop it where you want it, and its triggers and conditions move with it. The list no longer sorts itself alphabetically, and permanent timers follow your order in game as well.
+- New: triggers can be moved between timers. Drag a trigger onto another timer, onto a condition, or onto the window or folder at the top of the list. Triggers keep their usual order inside whatever holds them, so you pick which timer a trigger belongs to, not where it sits in the list. If its action means nothing in the new place, it switches to one that works.
+- Fixed permanent timers being ordered wrongly in game when mixed with ordinary ones.
+
+### 3.5.2
+- New windows now start in the same dark colours as the options panel — an indigo border, a near-black background and a soft purple bar — instead of the old black and bright blue.
+- New windows are now nearly solid while a timer is running, fade further back when nothing is on them, and go fully opaque once a timer reaches its threshold. Previously all three looked identical.
+- The default text in a new window is smaller so it sits properly inside the bar, and the threshold text is now a step larger than the normal text, so a timer running out is easier to catch.
+- New counter windows now fill their bar the same way round as timer windows: the count fills with colour over a dark track, rather than the reverse.
+- Windows you have already set up keep their own colours and are not changed.
+
 ### 3.5.1
 - Effect and chat triggers are much faster, especially with a lot of timers set up.
 - Bar timers now redraw only when the bar actually moves, instead of on every frame.

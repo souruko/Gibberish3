@@ -215,9 +215,9 @@ function RowParts.WireRow(row, navWin)
     end
 end
 
--- Contents column rows: select on click, context menu on right click. They are
--- not drag sources — the contents column shows one container at a time, so
--- there is nowhere to drag to.
+-- Contents column rows: select on click, context menu on right click, drag to
+-- move. Every row is wired as a drag source; the controller decides which ones
+-- actually start a drag and where they may land — see CONTENT/Window.lua.
 function RowParts.WireContentRow(row, contentWin)
     row:SetMouseVisible(true)
     row.MouseEnter = function()
@@ -228,7 +228,24 @@ function RowParts.WireContentRow(row, contentWin)
     row.MouseLeave = function()
         if not row.selected then row:SetBackColor(nil) end
     end
+    row.MouseDown = function(sender, args)
+        if args.Button == Turbine.UI.MouseButton.Left then
+            contentWin:_DragBegin(row, args)
+        end
+    end
+    row.MouseMove = function(sender, args) contentWin:_DragMove(row, args) end
+    row.MouseUp = function(sender, args)
+        if args.Button == Turbine.UI.MouseButton.Left then
+            contentWin:_DragFinish(row, args)
+        end
+    end
     row.MouseClick = function(sender, args)
+        -- the mouse-up that ended a drag also arrives here; it must not
+        -- re-select the row under the cursor
+        if contentWin._drag_just_ended then
+            contentWin._drag_just_ended = false
+            return
+        end
         if args.Button == Turbine.UI.MouseButton.Right then
             contentWin:RowRightClicked(row)
         else

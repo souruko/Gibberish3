@@ -82,20 +82,63 @@ Options.Defaults.window.color_timer   = Turbine.UI.Color(0.10, 0.62, 0.46)
 Options.Defaults.window.color_trigger = Turbine.UI.Color(0.82, 0.40, 0.08)
 Options.Defaults.window.color_cond    = Turbine.UI.Color(0.55, 0.18, 0.75)
 
--- options panel palette (rework) --------------------------------------------
-Options.Defaults.window.bg           = Turbine.UI.Color(0.086, 0.094, 0.149) -- panel ground
-Options.Defaults.window.bg_sunken    = Turbine.UI.Color(0.071, 0.078, 0.122) -- columns, fields
-Options.Defaults.window.row_odd      = Turbine.UI.Color(0.114, 0.125, 0.196)
-Options.Defaults.window.row_even     = Turbine.UI.Color(0.102, 0.114, 0.173)
-Options.Defaults.window.select       = Turbine.UI.Color(0.137, 0.153, 0.255)
-Options.Defaults.window.line         = Turbine.UI.Color(0.180, 0.196, 0.314)
-Options.Defaults.window.text         = Turbine.UI.Color(0.914, 0.914, 0.929)
-Options.Defaults.window.text_muted   = Turbine.UI.Color(0.545, 0.561, 0.659)
-Options.Defaults.window.text_faint   = Turbine.UI.Color(0.361, 0.376, 0.463)
-Options.Defaults.window.accent       = Turbine.UI.Color(0.569, 0.518, 0.851)
-Options.Defaults.window.paste_border = Turbine.UI.Color(0.310, 0.647, 0.392)
-Options.Defaults.window.on           = Turbine.UI.Color(0.200, 0.749, 0.302)
-Options.Defaults.window.off_border   = Turbine.UI.Color(0.290, 0.306, 0.400)
+-- Nocturne palette ------------------------------------------------------------
+-- The one place the plugin's colours are written down. They are kept as plain
+-- { R, G, B } tables rather than Turbine.UI.Color because the HUD defaults in
+-- UI_ELEMENTS/WINDOWS/*/Defaults.lua are copied straight into saved window data,
+-- and a Turbine.UI.Color cannot be serialised. The options panel's own colours
+-- are built from these same numbers just below.
+Options.Defaults.nocturne = {
+    bg           = { R = 0.086, G = 0.094, B = 0.149 },  -- panel ground
+    bg_sunken    = { R = 0.071, G = 0.078, B = 0.122 },  -- columns, fields
+    row_odd      = { R = 0.114, G = 0.125, B = 0.196 },
+    row_even     = { R = 0.102, G = 0.114, B = 0.173 },
+    select       = { R = 0.137, G = 0.153, B = 0.255 },
+    line         = { R = 0.180, G = 0.196, B = 0.314 },
+    text         = { R = 0.914, G = 0.914, B = 0.929 },
+    text_muted   = { R = 0.545, G = 0.561, B = 0.659 },
+    text_faint   = { R = 0.361, G = 0.376, B = 0.463 },
+    accent       = { R = 0.569, G = 0.518, B = 0.851 },
+    paste_border = { R = 0.310, G = 0.647, B = 0.392 },
+    on           = { R = 0.200, G = 0.749, B = 0.302 },
+    off_border   = { R = 0.290, G = 0.306, B = 0.400 },
+    -- the alert counterpart of "on", used by the HUD for threshold state; the
+    -- panel has nothing that needs it
+    warn         = { R = 0.749, G = 0.200, B = 0.282 },
+}
+
+---------------------------------------------------------------------------------------------------
+-- a fresh { R, G, B } copy of a palette entry, so callers can hand it to window
+-- data without every window ending up sharing the one palette table
+---------------------------------------------------------------------------------------------------
+function Options.Defaults.Nocturne( name )
+
+    local color = Options.Defaults.nocturne[ name ]
+
+    return { R = color.R, G = color.G, B = color.B }
+
+end
+---------------------------------------------------------------------------------------------------
+
+-- options panel palette, drawn from the Nocturne colours above ------------------
+local function panel_color( name )
+    local color = Options.Defaults.nocturne[ name ]
+    return Turbine.UI.Color( color.R, color.G, color.B )
+end
+
+Options.Defaults.window.bg           = panel_color("bg")
+Options.Defaults.window.bg_sunken    = panel_color("bg_sunken")
+Options.Defaults.window.row_odd      = panel_color("row_odd")
+Options.Defaults.window.row_even     = panel_color("row_even")
+Options.Defaults.window.select       = panel_color("select")
+Options.Defaults.window.line         = panel_color("line")
+Options.Defaults.window.text         = panel_color("text")
+Options.Defaults.window.text_muted   = panel_color("text_muted")
+Options.Defaults.window.text_faint   = panel_color("text_faint")
+Options.Defaults.window.accent       = panel_color("accent")
+Options.Defaults.window.paste_border = panel_color("paste_border")
+Options.Defaults.window.on           = panel_color("on")
+Options.Defaults.window.off_border   = panel_color("off_border")
 ------------------------------------------------------------------------------
 
 -- move mode, drawn from the palette above ------------------------------------
