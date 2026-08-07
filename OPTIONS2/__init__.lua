@@ -20,6 +20,7 @@ import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.ColorBoxRow"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.CheckBoxRow"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.DropDownRow"
 import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.IconBoxRow"
+import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.TargetListRow"
 
 -- window shell first (defines Options2.Window = {})
 import "Gibberish3.OPTIONS2.WINDOW.BaseWindow"

@@ -2,6 +2,7 @@ local ROW_H   = 28
 local DESC_H  = 50
 local TOKEN_H = 60
 local ICON_H  = 40
+local LIST_H  = 112     -- target list: room for four names plus the add field
 local LEFT    = 10
 local TOP     = 10
 local HDR_H   = 26
@@ -185,6 +186,10 @@ local function make_effect_form(data, bc, nodeData, trigType)
     local panel = Turbine.UI.Control()
     local add, rows = make_rows(panel, 0)
     local has_exclude = (trigType == Trigger.Types.EffectGroup)
+    -- only the group/target effects see a name other than the player's own, so
+    -- only those two can usefully be filtered by a target list
+    local has_targets = (trigType == Trigger.Types.EffectGroup
+                      or trigType == Trigger.Types.EffectTarget)
     local has_value   = needs_value(nodeData)
     local plist = {}
 
@@ -219,6 +224,12 @@ local function make_effect_form(data, bc, nodeData, trigType)
     category:SortAlpha()
     add(category)
 
+    local listOfTargets
+    if has_targets then
+        listOfTargets = Options2.Elements.TargetListRow(bc, "options", "listOfTargets", "trg_list_of_targets", LIST_H)
+        add(listOfTargets, LIST_H)
+    end
+
     local excludeSelf
     if has_exclude then
         excludeSelf = Options2.Elements.CheckBoxRow(bc, "options", "excludeSelf", "trg_exclude_self", ROW_H)
@@ -245,6 +256,7 @@ local function make_effect_form(data, bc, nodeData, trigType)
         isDebuff:SetSelection(data.isDebuff or Source.Any)
         isDispellable:SetSelection(data.isDispellable or Source.Any)
         category:SetSelection(data.category or Source.Any)
+        if listOfTargets ~= nil then listOfTargets:SetValue(data.listOfTargets or {}) end
         if excludeSelf ~= nil then excludeSelf:SetChecked(data.excludeSelf == true) end
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
@@ -258,6 +270,7 @@ local function make_effect_form(data, bc, nodeData, trigType)
         data.isDebuff      = isDebuff:GetSelectedValue()
         data.isDispellable = isDispellable:GetSelectedValue()
         data.category      = category:GetSelectedValue()
+        if listOfTargets ~= nil then data.listOfTargets = listOfTargets:GetValue() end
         if excludeSelf ~= nil then data.excludeSelf = excludeSelf:IsChecked() end
         data.action        = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
@@ -296,8 +309,8 @@ local function make_chat_form(data, bc, nodeData)
     plist[#plist+1] = paste_btn(panel, source, "source", {3},
         function(v) source:SetSelection(v) end)
 
-    local listOfTargets = Options2.Elements.TextBoxRow(bc, "options", "listOfTargets", "trg_list_of_targets", DESC_H, true)
-    add(listOfTargets, DESC_H)
+    local listOfTargets = Options2.Elements.TargetListRow(bc, "options", "listOfTargets", "trg_list_of_targets", LIST_H)
+    add(listOfTargets, LIST_H)
 
     local action = build_action_dd(bc, nodeData)
     add(action)
@@ -316,7 +329,7 @@ local function make_chat_form(data, bc, nodeData)
         token:SetText(data.token or "")
         useRegex:SetChecked(data.useRegex == true)
         source:SetSelection(data.source or Source.Any)
-        listOfTargets:SetText(UTILS.ListOfTargetsToString(data.listOfTargets or {}))
+        listOfTargets:SetValue(data.listOfTargets or {})
         action:SetSelection(data.action)
         if valueRow ~= nil then valueRow:SetText(tostring(data.value or 0)) end
         tagRow:SetText(data.tag or "")
@@ -327,7 +340,7 @@ local function make_chat_form(data, bc, nodeData)
         data._cachedPattern  = nil
         data.useRegex        = useRegex:IsChecked()
         data.source          = source:GetSelectedValue()
-        data.listOfTargets   = UTILS.StringOfTargetsToList(listOfTargets:GetText())
+        data.listOfTargets   = listOfTargets:GetValue()
         data.action          = action:GetSelectedValue()
         if valueRow ~= nil then data.value = valueRow:GetText() or 0 end
         data.tag = tagRow:GetText()

@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.6.1
+- The list of targets is back on chat and effect triggers. It disappeared when the options panel was redesigned, so a trigger meant to watch only certain people could no longer be set up.
+- Target names are now managed as a proper list. Each name sits on its own line with an x to remove it, and there is a box underneath to add one, instead of a single text box full of names separated by semicolons.
+- A "+ Target" button adds whoever you currently have targeted to the list, so you no longer have to type out a name and hope you spelled it right.
+
 ### 3.6.0
 - New: timers can be put in any order you like. Drag a timer in the contents list and drop it where you want it, and its triggers and conditions move with it. The list no longer sorts itself alphabetically, and permanent timers follow your order in game as well.
 - New: triggers can be moved between timers. Drag a trigger onto another timer, onto a condition, or onto the window or folder at the top of the list. Triggers keep their usual order inside whatever holds them, so you pick which timer a trigger belongs to, not where it sits in the list. If its action means nothing in the new place, it switches to one that works.

@@ -548,6 +548,12 @@ L[ Language.French ].options2.recording_chat           = "Enregistrement du chat
 L[ Language.French ].options2.stop                     = "arrêt"
 L[ Language.French ].options2.record                   = "enregistrer"
 L[ Language.French ].options2.paste                    = "coller"
+L[ Language.French ].options2.add                      = "Ajouter"
+L[ Language.French ].options2.target                   = "Cible"
+L[ Language.French ].options2.no_targets               = "aucun nom - toutes les cibles conviennent"
+L[ Language.French ].tooltip.o2_target_add          = "Ajouter le nom du champ à la liste. Séparer plusieurs noms avec ';'."
+L[ Language.French ].tooltip.o2_target_remove       = "Retirer ce nom de la liste."
+L[ Language.French ].tooltip.o2_target_current      = "Ajouter le nom de votre cible actuelle."
 
 L[ Language.French ].tooltip.o2_structure                  = "Afficher ou masquer la colonne structure."
 L[ Language.French ].tooltip.o2_library                    = "Afficher ou masquer la colonne bibliothèque."
