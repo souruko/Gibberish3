@@ -126,13 +126,21 @@ function TimerToString( data )
 
         if type(value) == "table" then
 
+        elseif key == "icon" then
+            -- written below, always
+
         else
 
             text = text  .. key .. ":{" .. tostring(value) .. "}:"
-        
+
         end
 
     end
+
+    -- A blanked icon means "adopt the icon of the triggering effect" and is stored as nil,
+    -- which pairs() cannot see. Written explicitly so the blank survives the round trip
+    -- instead of being restored as the type default.
+    text = text .. "icon:{" .. tostring( data.icon or "" ) .. "}:"
 
     -- timer triggers
     for name, index in pairs(Trigger.Types) do

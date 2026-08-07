@@ -560,8 +560,13 @@ function StringToTimer( text, parent )
         data.counterSTART              = tonumber(timer_attributes["counterSTART"])
     end
     
-    if timer_attributes["icon"] ~= nil then
-        data.icon              = tonumber(timer_attributes["icon"]) or timer_attributes["icon"]
+    -- A blank icon means "adopt the icon of the triggering effect". Older payloads dropped
+    -- the field entirely in that case, so a missing icon is a blank one, not a default one.
+    local icon = timer_attributes["icon"]
+    if icon == nil or icon == "" then
+        data.icon              = nil
+    else
+        data.icon              = tonumber(icon) or icon
     end
 
     if timer_attributes["useExternalImage"] ~= nil then

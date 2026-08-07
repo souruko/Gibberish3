@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.6.2
+- Fixed a timer's icon coming back wrong after an import. A timer whose icon was left blank so it takes the icon of the effect that triggers it was restored with the standard icon instead.
+
 ### 3.6.1
 - The list of targets is back on chat and effect triggers. It disappeared when the options panel was redesigned, so a trigger meant to watch only certain people could no longer be set up.
 - Target names are now managed as a proper list. Each name sits on its own line with an x to remove it, and there is a box underneath to add one, instead of a single text box full of names separated by semicolons.
