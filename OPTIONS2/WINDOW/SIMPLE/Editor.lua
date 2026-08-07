@@ -11,12 +11,15 @@
 -- header.
 
 local ROW_H    = 28
+local ICON_H   = 40   -- the icon row, sized around the 32px game icon
 local PAD      = 10
 local GAP      = 8
 local SEG_H    = Options2.Simple.SEG_H
 local HINT_GAP = 8
 local PASTE_W  = 52
 local PASTE_H  = 22
+local ICON_W   = 130  -- an icon id is a fixed-length number, so the field is
+                      -- narrow and the rest of the row explains what empty does
 
 local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
 
@@ -76,14 +79,15 @@ function Options2.Window.SimpleEditor:Constructor(owner)
 
     -- one row shell: the 104px right-aligned label plus whatever control sits
     -- to its right. Fills are assigned at layout time, over visible rows only.
-    local function add_row(key)
+    local function add_row(key, height)
         local row = Turbine.UI.Control()
         row:SetParent(self)
-        row:SetHeight(ROW_H)
+        row:SetHeight(height or ROW_H)
         row:SetMouseVisible(false)
         row.label = M.MakeLabel(row, nil)
-        row.label:SetHeight(ROW_H)
+        row.label:SetHeight(height or ROW_H)
         row.key = key
+        row.h   = height or ROW_H
         self.rows[#self.rows + 1] = row
         return row
     end
@@ -125,6 +129,27 @@ function Options2.Window.SimpleEditor:Constructor(owner)
     self.row_text = add_row("text")
     self.seg_text = Options2.Simple.MakeSegments(self.row_text, 4)
 
+    -- Icon: the same setting as Style > Icon in the advanced editor. Left empty
+    -- the timer falls back to the icon of whatever effect or skill triggered
+    -- it, which is what most timers want.
+    self.row_icon    = add_row("icon", ICON_H)
+    self.icon_view   = Turbine.UI.Control()
+    self.icon_view:SetParent(self.row_icon)
+    self.icon_view:SetSize(Options2.Elements.RowParts.ICON_NATIVE,
+                           Options2.Elements.RowParts.ICON_NATIVE)
+    self.icon_view:SetMouseVisible(false)
+
+    self.field_icon = M.MakeField(self.row_icon, false)
+    self.field_icon.box.TextChanged = function() self:_RefreshIconPreview() end
+    self.btn_icon  = self:_MakePasteButton(self.row_icon,
+        function() self:_ToggleIconPaste() end)
+    self.hint_icon = add_hint(self.row_icon)
+    self.hint_icon:SetHeight(ICON_H)
+
+    -- an external image is a path rather than an id; simple mode has no switch
+    -- for it, but it must not be thrown away when such a timer is saved here
+    self._iconExternal = false
+
     self:_FillKinds()
     self:_RefreshTexts()
 end
@@ -134,7 +159,7 @@ end
 -- The paste button: a sunken pill with a green border, as in the advanced
 -- editor. While the popover is open it fills with the selection colour and the
 -- field's own border turns accent, so the pair reads as one open control.
-function Options2.Window.SimpleEditor:_MakePasteButton(row)
+function Options2.Window.SimpleEditor:_MakePasteButton(row, click_fn)
     local btn = Turbine.UI.Control()
     btn:SetParent(row)
     btn:SetSize(PASTE_W, PASTE_H)
@@ -169,20 +194,34 @@ function Options2.Window.SimpleEditor:_MakePasteButton(row)
     end
     btn:LanguageChanged()
 
-    btn.MouseClick = function() self:_TogglePaste() end
+    btn.MouseClick = click_fn or function() self:_TogglePaste() end
 
     return btn
+end
+
+-- Two fields share the one popover, so a click has to know whose it is. The
+-- popover closes on Deactivated, which the click on the other button triggers
+-- first: without the owner test that close would swallow the click, and the
+-- other field's picker would need a second one to open.
+function Options2.Window.SimpleEditor:_PasteBlocked(owner)
+    local popover = Options2.Simple.Popover()
+    if popover == nil then return true end
+
+    if popover:IsVisible() then
+        popover:Close()
+        if self._pasteOwner == owner then return true end
+    elseif popover:JustClosed() and self._pasteOwner == owner then
+        return true
+    end
+
+    self._pasteOwner = owner
+    return false
 end
 
 function Options2.Window.SimpleEditor:_TogglePaste()
     local popover = Options2.Simple.Popover()
     if popover == nil then return end
-
-    if popover:IsVisible() then
-        popover:Close()
-        return
-    end
-    if popover:JustClosed() then return end
+    if self:_PasteBlocked("token") then return end
 
     local kind = self.dd_tracks:GetSelectedValue()
     if kind == nil then return end
@@ -199,6 +238,58 @@ function Options2.Window.SimpleEditor:_SetPasteOpen(open)
     self.btn_paste:SetOpen(open)
     self.field_token:SetBackColor(open and Options.Defaults.window.accent
                                        or  Options.Defaults.window.line)
+end
+
+-- The icon picker: the same popover on the same collection, but what it writes
+-- is the picked entry's icon rather than its token. The kind decides the
+-- collection, so a skill timer lists skill icons and an effect timer effect
+-- icons; the entry for the effect already being tracked is highlighted.
+function Options2.Window.SimpleEditor:_ToggleIconPaste()
+    local popover = Options2.Simple.Popover()
+    if popover == nil then return end
+    if self:_PasteBlocked("icon") then return end
+
+    local kind = self.dd_tracks:GetSelectedValue()
+    if kind == nil then return end
+
+    -- Chat lines carry no icon of their own, so that kind picks from the
+    -- effects instead -- the same two collections the advanced icon field
+    -- offers, narrowed to the one this timer is most likely to want.
+    if kind == Trigger.Types.Chat then kind = Trigger.Types.EffectSelf end
+
+    self:_SetIconPasteOpen(true)
+    popover:Open(self.field_icon, kind,
+        UTILS.GetText("options2", "field_icon"),
+        self.field_token.box:GetText(),
+        function(data)
+            self.field_icon.box:SetText(data.icon ~= nil and tostring(data.icon) or "")
+            -- a picked entry is always a game icon id, never a file of ours
+            self._iconExternal = false
+            self:_RefreshIconPreview()
+        end,
+        function() self:_SetIconPasteOpen(false) end)
+end
+
+function Options2.Window.SimpleEditor:_SetIconPasteOpen(open)
+    self.btn_icon:SetOpen(open)
+    self.field_icon:SetBackColor(open and Options.Defaults.window.accent
+                                      or  Options.Defaults.window.line)
+end
+
+-- Empty means "whatever triggered this timer", which cannot be previewed here,
+-- so the swatch is simply left blank.
+function Options2.Window.SimpleEditor:_RefreshIconPreview()
+    local text = self.field_icon.box:GetText()
+    local id   = self._iconExternal and text or tonumber(text)
+
+    if id == nil or id == "" then
+        self.icon_view:SetBackground()
+        self.icon_view:SetSize(Options2.Elements.RowParts.ICON_NATIVE,
+                               Options2.Elements.RowParts.ICON_NATIVE)
+        return
+    end
+    Options2.Elements.RowParts.SetNativeIcon(self.icon_view,
+        UTILS.ResolveTimerIcon(id, self._iconExternal))
 end
 
 -- closing the panel, or moving off this timer, must not leave it floating
@@ -219,8 +310,10 @@ function Options2.Window.SimpleEditor:_RefreshTexts()
     self.row_name.label:SetText(UTILS.GetText("options2", "field_name"))
     self.row_runs.label:SetText(UTILS.GetText("options2", "field_runs"))
     self.row_text.label:SetText(UTILS.GetText("options2", "field_timer_text"))
+    self.row_icon.label:SetText(UTILS.GetText("options2", "field_icon"))
 
     self.hint_runs:SetText(UTILS.GetText("options2", "field_runs_hint"))
+    self.hint_icon:SetText(UTILS.GetText("options2", "field_icon_hint"))
 
     self.seg_text:SetLabels({
         UTILS.GetText("options2", "text_none"),
@@ -271,6 +364,10 @@ function Options2.Window.SimpleEditor:Load()
     self.field_runs.box:SetText(tostring(td.timerValue or 10))
     self.seg_text:SetSelected(self:_TextIndex(td))
 
+    self._iconExternal = (td.useExternalImage == true)
+    self.field_icon.box:SetText(td.icon ~= nil and tostring(td.icon) or "")
+    self:_RefreshIconPreview()
+
     self:_ApplyLayout()
 end
 
@@ -303,9 +400,18 @@ function Options2.Window.SimpleEditor:Save()
 
     td.description = self.field_name.box:GetText()
 
+    -- Icon: nil for an empty field, so the timer takes the icon of whatever
+    -- triggered it. tonumber does that on its own for a game icon id.
+    local icon_text = self.field_icon.box:GetText()
+    if self._iconExternal then
+        td.icon = (icon_text ~= "") and icon_text or nil
+    else
+        td.icon = tonumber(icon_text)
+    end
+
     -- Tracks: keep the trigger when the kind is unchanged, otherwise replace
-    -- every trigger with one of the new kind. A simple timer has exactly one,
-    -- so there is nothing else to preserve.
+    -- every trigger with one of the new kind. A simple timer holds only what
+    -- this editor wrote, so there is nothing else to preserve.
     local kind = self.dd_tracks:GetSelectedValue()
     local info = Options2.Simple.Inspect(td)
     local trg  = info.trigger
@@ -343,12 +449,40 @@ function Options2.Window.SimpleEditor:Save()
             ensure_capture(trg)
             td.stacking   = Stacking.Single
         end
+
+        -- The other half of the pair: without it the bar would keep running
+        -- after the effect is cured or falls off early. Written last, because
+        -- the timer-text options above may still have rewritten the token.
+        self:_SyncRemoveTrigger(td, trg)
     end
 
 
     Options.SaveData()
     Options.DataChanged(wi)
     Windows.EnabledChanged(wi)
+end
+
+-- Keep the EffectRemoveSelf half of a self-effect timer on the same effect as
+-- the EffectSelf half that starts it. Anything the timer already has is reused
+-- rather than replaced, so a trigger the player renamed in advanced mode keeps
+-- its description.
+function Options2.Window.SimpleEditor:_SyncRemoveTrigger(td, trg)
+    local rt  = Trigger.Types.EffectRemoveSelf
+    local rem = (td[rt] or {})[1]
+
+    if rem == nil then
+        rem   = Trigger.New(rt)
+        td[rt] = { rem }
+    else
+        -- a second one would make the timer advanced-only on the next redraw
+        for i = #td[rt], 2, -1 do table.remove(td[rt], i) end
+    end
+
+    rem.enabled        = true
+    rem.action         = Action.Remove
+    rem.token          = trg.token
+    rem.useRegex       = trg.useRegex
+    rem._cachedPattern = nil
 end
 
 -- Changing the kind clears the token: it named something in the old
@@ -382,6 +516,8 @@ function Options2.Window.SimpleEditor:_VisibleRows()
     if kind == Trigger.Types.EffectSelf then
         list[#list + 1] = self.row_text
     end
+    -- every kind can carry its own icon
+    list[#list + 1] = self.row_icon
     return list
 end
 
@@ -407,7 +543,7 @@ function Options2.Window.SimpleEditor:_ApplyLayout()
             row:SetPosition(0, y)
             row:SetWidth(w)
             row:SetBackColor(M.Fill(index))
-            y = y + ROW_H
+            y = y + (row.h or ROW_H)
         end
     end
 
@@ -432,6 +568,21 @@ function Options2.Window.SimpleEditor:_ApplyLayout()
 
     self.seg_text:Layout(ctrl_left, M.CentreTop(ROW_H, SEG_H))
 
+    -- Icon: the preview at its native size, then a short field, its paste
+    -- button, and the note about leaving it empty in whatever is left
+    local IC        = Options2.Elements.RowParts.ICON_NATIVE
+    local icon_left = ctrl_left + IC + GAP
+    local icon_w    = math.min(ICON_W, math.max(0, w - icon_left - PASTE_W - GAP - PAD))
+    local hint_left = icon_left + icon_w + GAP + PASTE_W + HINT_GAP
+    local hint_w    = math.max(0, w - hint_left - PAD)
+
+    self.icon_view:SetPosition(ctrl_left, M.CentreTop(ICON_H, IC))
+    self.field_icon:Layout(icon_left, M.CentreTop(ICON_H, M.CTRL_H), icon_w, M.CTRL_H)
+    self.btn_icon:SetPosition(icon_left + icon_w + GAP, M.CentreTop(ICON_H, PASTE_H))
+    self.hint_icon:SetPosition(hint_left, 0)
+    self.hint_icon:SetWidth(hint_w)
+    -- half a sentence reads as broken, so a narrow column drops it entirely
+    self.hint_icon:SetVisible(hint_w >= 100)
 
     self._content_h = y
 end

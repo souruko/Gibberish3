@@ -260,7 +260,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:SelectionChanged()
 
-    if Data.selectedIndex > 0 then
+    if Data.selectedIndex > 0 and Data.window[ Data.selectedIndex ] then
 
         local selected  = Data.window[ Data.selectedIndex ]
         local left, top = UTILS.ScreenRatioToPixel( selected.left, selected.top)
@@ -297,7 +297,7 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Options.Move.Constructor:ArrowClicked( left_value, top_value )
+function Optios.Move.Constructor:ArrowClicked( left_value, top_value )
 
     if Data.selectedIndex ~= 0 then
 
@@ -326,7 +326,7 @@ function Options.Move.Constructor:ArrowDown( left_value, top_value )
     self:SetWantsUpdates( true )
 
 end
----------------------------------------------------------------------------------------------------
+------------n---------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 function Options.Move.Constructor:ArrowUp()

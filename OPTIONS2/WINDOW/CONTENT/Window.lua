@@ -7,6 +7,9 @@
 -- selection.
 
 local HEADER_H = 34
+-- the header stacks the name over the hint that says what clicking it does
+local NAME_H   = 20
+local HINT_H   = HEADER_H - NAME_H
 local SEP_H    = 1
 local LIST_TOP = HEADER_H + SEP_H
 local SCROLL_W = 10
@@ -113,7 +116,7 @@ function Options2.Window.Content.Constructor:Constructor()
 
     self.head_name = Turbine.UI.Label()
     self.head_name:SetParent(self.header)
-    self.head_name:SetHeight(HEADER_H)
+    self.head_name:SetHeight(NAME_H)
     self.head_name:SetFont(FONT_NAME)
     self.head_name:SetForeColor(Options.Defaults.window.text)
     self.head_name:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
@@ -121,11 +124,20 @@ function Options2.Window.Content.Constructor:Constructor()
 
     self.head_meta = Turbine.UI.Label()
     self.head_meta:SetParent(self.header)
-    self.head_meta:SetHeight(HEADER_H)
+    self.head_meta:SetHeight(NAME_H)
     self.head_meta:SetFont(FONT_SMALL)
     self.head_meta:SetForeColor(Options.Defaults.window.text_faint)
     self.head_meta:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.head_meta:SetMouseVisible(false)
+
+    -- the header is not an obvious button, so it says so in as many words
+    self.head_hint = Turbine.UI.Label()
+    self.head_hint:SetParent(self.header)
+    self.head_hint:SetHeight(HINT_H)
+    self.head_hint:SetFont(FONT_SMALL)
+    self.head_hint:SetForeColor(Options.Defaults.window.text_faint)
+    self.head_hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.head_hint:SetMouseVisible(false)
 
     self.btn_timer = make_add_btn(self.header, function()
         local c = self.container
@@ -201,6 +213,8 @@ function Options2.Window.Content.Constructor:SizeChanged()
     self.head_name:SetWidth(name_w)
     self.head_meta:SetPosition(name_left + name_w + GAP, 0)
     self.head_meta:SetWidth(math.max(0, avail - name_w - GAP))
+    self.head_hint:SetPosition(name_left, NAME_H)
+    self.head_hint:SetWidth(avail)
 
     local list_top = HEADER_H + SEP_H
     local view_h   = math.max(0, h - list_top)
@@ -498,6 +512,7 @@ function Options2.Window.Content.Constructor:_RefreshHeader()
         self.head_mark:SetVisible(false)
         self.head_name:SetText("")
         self.head_meta:SetText("")
+        self.head_hint:SetText("")
         self.btn_timer:SetVisible(false)
         self.btn_trigger:SetVisible(false)
         self:SizeChanged()
@@ -514,6 +529,8 @@ function Options2.Window.Content.Constructor:_RefreshHeader()
             is_window and "unnamed_window" or "unnamed_folder")
     end
     self.head_name:SetText(name)
+    self.head_hint:SetText(UTILS.GetText("options2",
+        is_window and "header_hint_window" or "header_hint_folder"))
 
     if is_window then
         local wd = Data.window[c.windowIndex]

@@ -28,27 +28,35 @@ end
 -- every structural reason it cannot. Returns a table:
 --
 --   simple         true when the simple editor can show the whole timer
---   trigger        the timer's single trigger, when it has exactly one
+--   trigger        the trigger the editor shows, when the timer has just one
+--                  (or the starting half of the self-effect pair)
 --   triggerType    that trigger's Trigger.Types value
+--   removeTrigger  the pair's EffectRemoveSelf half, when there is one
 --   triggerCount   triggers across every type
 --   conditionCount entries in conditionList
 --   reasons        ordered list of { key, count }, empty when simple
 --
--- reason keys: "triggers" (not exactly one), "kind" (a type simple mode does
--- not edit), "action" (something other than a plain start), "conditions".
+-- reason keys: "triggers" (not a shape simple mode writes), "kind" (a type
+-- simple mode does not edit), "action" (something other than a plain start),
+-- "conditions".
 function Options2.Simple.Inspect(timerData)
     local info = {
         simple         = false,
         trigger        = nil,
         triggerType    = nil,
+        removeTrigger  = nil,
         triggerCount   = 0,
         conditionCount = #(timerData.conditionList or {}),
         reasons        = {},
     }
 
+    -- first trigger of each type, so the self-effect pair can be told apart
+    -- from two unrelated triggers
+    local first = {}
     for _, tt in ipairs(Options2.TriggerTypes()) do
         for _, td in ipairs(timerData[tt] or {}) do
             info.triggerCount = info.triggerCount + 1
+            if first[tt] == nil then first[tt] = td end
             if info.trigger == nil then
                 info.trigger     = td
                 info.triggerType = tt
@@ -56,17 +64,36 @@ function Options2.Simple.Inspect(timerData)
         end
     end
 
+    -- The self-effect pair: simple mode writes one EffectSelf trigger that
+    -- starts the timer and one EffectRemoveSelf trigger on the same effect that
+    -- takes it down again when the effect drops. The editor shows the starting
+    -- half; the other one follows it on save. Different tokens mean the two
+    -- track different effects, which is an advanced construct.
+    local self_add    = first[Trigger.Types.EffectSelf]
+    local self_remove = first[Trigger.Types.EffectRemoveSelf]
+    local is_pair     = info.triggerCount == 2
+                        and self_add ~= nil and self_remove ~= nil
+                        and (self_add.token or "") == (self_remove.token or "")
+
+    if is_pair then
+        info.trigger       = self_add
+        info.triggerType   = Trigger.Types.EffectSelf
+        info.removeTrigger = self_remove
+    end
+
     local function reason(key, count)
         info.reasons[#info.reasons + 1] = { key = key, count = count }
     end
 
-    if info.triggerCount ~= 1 then
+    if info.triggerCount ~= 1 and not is_pair then
         reason("triggers", info.triggerCount)
     elseif not Options2.Simple.IS_KIND[info.triggerType] then
         reason("kind", 1)
-    elseif info.trigger.action ~= Action.Add then
-        -- the simple editor only ever writes a trigger that starts the timer;
-        -- Remove, Enable, Disable and Subtract cannot be shown or round-tripped
+    elseif info.trigger.action ~= Action.Add
+        or (is_pair and self_remove.action ~= Action.Remove) then
+        -- the simple editor only ever writes a trigger that starts the timer
+        -- and, for a self effect, one that removes it again; Enable, Disable
+        -- and Subtract cannot be shown or round-tripped
         reason("action", 1)
     end
 

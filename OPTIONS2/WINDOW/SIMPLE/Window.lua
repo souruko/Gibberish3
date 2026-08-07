@@ -10,6 +10,10 @@
 -- this is the shell they drop into.
 
 local HEADER_H  = 34
+-- the timers header stacks the window name over the hint that says what
+-- clicking it does; the editor header keeps its single centred line
+local NAME_H    = 20
+local HINT_H    = HEADER_H - NAME_H
 local SECTION_H = 20
 local FOOTER_H  = 24
 local SEP_H     = 1
@@ -181,11 +185,20 @@ function Options2.Window.Simple.Constructor:Constructor()
 
     self.timers_name = Turbine.UI.Label()
     self.timers_name:SetParent(self.timers_head)
-    self.timers_name:SetHeight(HEADER_H)
+    self.timers_name:SetHeight(NAME_H)
     self.timers_name:SetFont(FONT_TITLE)
     self.timers_name:SetForeColor(Options.Defaults.window.text)
     self.timers_name:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.timers_name:SetMouseVisible(false)
+
+    -- the header is not an obvious button, so it says so in as many words
+    self.timers_head_hint = Turbine.UI.Label()
+    self.timers_head_hint:SetParent(self.timers_head)
+    self.timers_head_hint:SetHeight(HINT_H)
+    self.timers_head_hint:SetFont(FONT_SMALL)
+    self.timers_head_hint:SetForeColor(Options.Defaults.window.text_faint)
+    self.timers_head_hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
+    self.timers_head_hint:SetMouseVisible(false)
 
     self.btn_timer = make_add_btn(self.timers_head, function()
         self:AddTimer()
@@ -387,6 +400,7 @@ function Options2.Window.Simple.Constructor:_RefreshHeader()
     if nd == nil then
         self.timers_mark:SetVisible(false)
         self.timers_name:SetText("")
+        self.timers_head_hint:SetText("")
         self.btn_timer:SetVisible(false)
         self.windowSelected = false
         self:_UpdateHeaderState()
@@ -399,6 +413,7 @@ function Options2.Window.Simple.Constructor:_RefreshHeader()
     end
     self.timers_mark:SetVisible(true)
     self.timers_name:SetText(name)
+    self.timers_head_hint:SetText(UTILS.GetText("options2", "header_hint_window"))
     self.btn_timer:SetVisible(true)
     self:_UpdateHeaderState()
 end
@@ -622,7 +637,8 @@ end
 -- ── adding ──────────────────────────────────────────────────────────────────
 
 -- A new timer starts as an "Effect on me" so it is simple-representable from
--- birth: one trigger, of a kind the simple editor knows, and nothing else.
+-- birth: the pair the simple editor writes for that kind -- the effect starts
+-- the timer, losing it takes the timer down again -- and nothing else.
 function Options2.Window.Simple.Constructor:AddTimer()
     local wi = self:GetWindowIndex()
     if wi == nil then return end
@@ -630,7 +646,10 @@ function Options2.Window.Simple.Constructor:AddTimer()
     if wd == nil then return end
 
     local tmd = Timer.New(wd.timerType)
-    table.insert(tmd[Trigger.Types.EffectSelf], Trigger.New(Trigger.Types.EffectSelf))
+    table.insert(tmd[Trigger.Types.EffectSelf],
+                 Trigger.New(Trigger.Types.EffectSelf))
+    table.insert(tmd[Trigger.Types.EffectRemoveSelf],
+                 Trigger.New(Trigger.Types.EffectRemoveSelf))
     Window.AddTimer(wi, tmd)
 
     Options.SaveData()
@@ -875,17 +894,20 @@ function Options2.Window.Simple.Constructor:_ApplyLayout()
     self.timers_section:SetWidth(timers_w)
     self.timers_section_label:SetWidth(math.max(0, timers_w - 2 * PAD))
 
-    -- "+ Timer" sits at the right of the header, the name takes what is left
+    -- "+ Timer" sits at the right of the header on the name's line, so the hint
+    -- below it can run the full width of the column
     local name_right = timers_w - PAD
     if self.btn_timer:IsVisible() then
         self.btn_timer:SetPosition(timers_w - PAD - self.btn_timer:GetWidth(),
-                                   math.floor((HEADER_H - BTN_H) / 2))
+                                   math.floor((NAME_H - BTN_H) / 2))
         name_right = name_right - self.btn_timer:GetWidth() - GAP
     end
 
     local name_left = PAD + MARK + GAP
     self.timers_name:SetPosition(name_left, 0)
     self.timers_name:SetWidth(math.max(0, name_right - name_left))
+    self.timers_head_hint:SetPosition(name_left, NAME_H)
+    self.timers_head_hint:SetWidth(math.max(0, timers_w - PAD - name_left))
 
     local list_top = HEADER_H + SEP_H + SECTION_H
     self.timers_section_sep:SetPosition(0, list_top)
