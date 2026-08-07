@@ -22,6 +22,7 @@ function Options2.RefreshAll()
     if obj == nil then return end
     if obj.nav ~= nil then obj.nav:RebuildFresh() end
     if obj.contents ~= nil then obj.contents:RebuildFresh() end
+    if obj.simple ~= nil then obj.simple:Rebuild() end
 end
 
 -- drop the current selection in both columns and empty the editor
@@ -39,6 +40,7 @@ function Options2.EffectCollectionChanged()
         obj.library:_FillEffects()
         obj.library:_ApplyLayout()
     end
+    Options2.Simple.CollectionChanged()
 end
 
 function Options2.ChatCollectionChanged()
@@ -47,6 +49,7 @@ function Options2.ChatCollectionChanged()
         obj.library:_FillChat()
         obj.library:_ApplyLayout()
     end
+    Options2.Simple.CollectionChanged()
 end
 
 function Options2.NotifyClipboardChanged()
@@ -127,6 +130,16 @@ function Options2.ClearClipboard()
     Options2.NotifyClipboardChanged()
 end
 
+-- ── panel mode ─────────────────────────────────────────────────────────────────
+--
+-- Advanced is the four-column expert panel; simple edits one timer at a time
+-- through a handful of fields. The mode is persisted per character alongside
+-- the rest of the panel state, and switching keeps the selection.
+Options2.Mode = {
+    ADVANCED = 1,
+    SIMPLE   = 2,
+}
+
 -- Persisted panel state. Lives under the historic "gibberish_options2_nav" key and is
 -- extended, never replaced, so a save written by an older version still restores.
 local _panel_state = {
@@ -134,6 +147,8 @@ local _panel_state = {
     contentKey         = nil,   -- contents column
     structureCollapsed = false,
     libraryCollapsed   = false,
+    mode               = Options2.Mode.ADVANCED,
+    simpleTimerKey     = nil,   -- simple mode's timers column
 }
 
 local function _WritePanelState()
@@ -142,6 +157,8 @@ local function _WritePanelState()
         contentKey         = _panel_state.contentKey,
         structureCollapsed = _panel_state.structureCollapsed,
         libraryCollapsed   = _panel_state.libraryCollapsed,
+        mode               = _panel_state.mode,
+        simpleTimerKey     = _panel_state.simpleTimerKey,
     }, nil)
 end
 
@@ -160,6 +177,13 @@ function Options2.StartUp()
         end
         if type(state.libraryCollapsed) == "boolean" then
             _panel_state.libraryCollapsed = state.libraryCollapsed
+        end
+        -- a save from before simple mode existed has no mode; it stays advanced
+        if state.mode == Options2.Mode.SIMPLE or state.mode == Options2.Mode.ADVANCED then
+            _panel_state.mode = state.mode
+        end
+        if type(state.simpleTimerKey) == "string" then
+            _panel_state.simpleTimerKey = state.simpleTimerKey
         end
     end
 
@@ -212,6 +236,20 @@ end
 
 function Options2.LoadContentState()
     return _panel_state.contentKey
+end
+
+function Options2.GetMode()
+    return _panel_state.mode or Options2.Mode.ADVANCED
+end
+
+function Options2.SetMode(mode)
+    if mode ~= Options2.Mode.SIMPLE and mode ~= Options2.Mode.ADVANCED then return end
+    if _panel_state.mode == mode then return end
+    _panel_state.mode = mode
+    _WritePanelState()
+
+    local obj = Options2.Window.Object
+    if obj ~= nil and obj.ApplyMode ~= nil then obj:ApplyMode() end
 end
 
 -- read a persisted panel flag (structureCollapsed / libraryCollapsed)

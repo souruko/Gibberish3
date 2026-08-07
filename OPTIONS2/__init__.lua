@@ -34,6 +34,8 @@ import "Gibberish3.OPTIONS2.WINDOW.NAV"
 import "Gibberish3.OPTIONS2.WINDOW.CONTENT"
 -- editor panel (depends on NAV for node types, depends on elements for row widgets)
 import "Gibberish3.OPTIONS2.WINDOW.EDITOR"
+-- simple mode: the timers and editor columns beside the shared structure column
+import "Gibberish3.OPTIONS2.WINDOW.SIMPLE"
 -- standalone settings window (hosts the settings panel defined under EDITOR)
 import "Gibberish3.OPTIONS2.WINDOW.SettingsWindow"
 -- library panel (skills / effects / chat + clipboard bar)

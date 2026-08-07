@@ -59,6 +59,8 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.selectedItem = nil
     self.items        = {}
     self.filter       = ""
+    -- simple mode shows the same tree with a shorter header
+    self._compact     = false
     self._initial_restore = (self.selectedKey ~= nil)
     self._itemCache   = {}
     self._last_list_w = -1
@@ -217,6 +219,16 @@ function Options2.Window.Nav.Constructor:_RefreshFooter()
         UTILS.GetText("options2", "footer_counts"), #Data.folder, #Data.window))
 end
 
+-- Simple mode reuses this whole column, but import and collapse-all belong to
+-- the advanced panel, so its header keeps only the two add buttons.
+function Options2.Window.Nav.Constructor:SetCompact(compact)
+    if self._compact == compact then return end
+    self._compact = compact
+    self.import_btn:SetVisible(not compact)
+    self.collapse_btn:SetVisible(not compact)
+    self:SizeChanged()
+end
+
 -- repaint every visible row's enable box (a folder box reflects its subtree)
 function Options2.Window.Nav.Constructor:RefreshEnabledStates()
     for _, item in ipairs(self.items) do
@@ -254,16 +266,17 @@ function Options2.Window.Nav.Constructor:SizeChanged()
 
     self.header:SetWidth(w)
 
-    -- header buttons, right to left
-    local x = w - PAD - BTN_SIZE
-    self.collapse_btn:SetLeft(x)
-    x = x - BTN_GAP - BTN_SIZE
-    self.import_btn:SetLeft(x)
-    x = x - BTN_GAP - BTN_SIZE
-    self.add_window_btn:SetLeft(x)
-    x = x - BTN_GAP - BTN_SIZE
-    self.add_folder_btn:SetLeft(x)
-    self.header_label:SetWidth(math.max(0, x - PAD - PAD))
+    -- header buttons, right to left; a hidden one takes no room
+    local x = w - PAD
+    for _, btn in ipairs({ self.collapse_btn, self.import_btn,
+                           self.add_window_btn, self.add_folder_btn }) do
+        if btn:IsVisible() then
+            x = x - BTN_SIZE
+            btn:SetLeft(x)
+            x = x - BTN_GAP
+        end
+    end
+    self.header_label:SetWidth(math.max(0, x - PAD))
 
     -- search row
     self.search_row:SetWidth(w)
@@ -476,6 +489,9 @@ function Options2.Window.Nav.Constructor:_RestoreSelection()
             if obj ~= nil and obj.contents ~= nil then
                 obj.contents:SetContainer(item.nodeData)
             end
+            if obj ~= nil and obj.simple ~= nil then
+                obj.simple:SetContainer(item.nodeData)
+            end
             return
         end
     end
@@ -599,6 +615,10 @@ function Options2.Window.Nav.Constructor:_SelectItem(item)
     if obj ~= nil and obj.contents ~= nil then
         obj.contents:ClearSelection()
         obj.contents:SetContainer(item.nodeData)
+    end
+    -- simple mode shows the same container in its own timers column
+    if obj ~= nil and obj.simple ~= nil then
+        obj.simple:SetContainer(item.nodeData)
     end
 end
 

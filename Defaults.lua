@@ -41,6 +41,9 @@ Options.Defaults.move.labelalignment = Turbine.UI.ContentAlignment.MiddleRight
 Options.Defaults.window              = {}
 Options.Defaults.window.min_width    = 1168
 Options.Defaults.window.min_height   = 640
+-- simple mode drops the contents and library columns, so it needs less room
+Options.Defaults.window.min_width_simple  = 1020
+Options.Defaults.window.min_height_simple = 560
 Options.Defaults.window.ws_width     = 250
 Options.Defaults.window.c_width      = 200
 Options.Defaults.window.g_height     = 50

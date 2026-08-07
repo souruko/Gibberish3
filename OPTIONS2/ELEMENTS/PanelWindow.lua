@@ -157,6 +157,19 @@ function Options2.Elements.PanelWindow:TitleBarRight()
     return self._title_right or 0
 end
 
+-- Change the floor the gripper may drag down to. Grows the window when it is
+-- already smaller than the new minimum; never shrinks a window the user has
+-- deliberately made larger.
+function Options2.Elements.PanelWindow:SetMinSize(min_w, min_h)
+    self._min_w = min_w
+    self._min_h = min_h
+
+    local w, h = self:GetSize()
+    if w < min_w or h < min_h then
+        self:SetSize(math.max(w, min_w), math.max(h, min_h))
+    end
+end
+
 -- default close: hide. Subclasses override to also persist their open flag.
 function Options2.Elements.PanelWindow:CloseWindow()
     self:SetVisible(false)

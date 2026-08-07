@@ -318,27 +318,8 @@ end
 -- ── collection filling ─────────────────────────────────────────────────────────
 
 function Options2.Library.Window:_FillSkills()
-    local list = {}
-    for _, v in ipairs(Data.persistent_collection.skill) do
-        list[#list + 1] = v
-    end
-    local skills = LocalPlayer:GetTrainedSkills()
-    for i = 1, skills:GetCount() do
-        local sk   = skills:GetItem(i)
-        local info = sk:GetSkillInfo()
-        local d    = {
-            token      = info:GetName(),
-            icon       = info:GetIconImageID(),
-            timer      = sk:GetCooldown(),
-            source     = nil,
-            persistent = false,
-        }
-        if d.timer ~= nil and d.timer > 999999 then d.timer = nil end
-        if Options.CheckForIndexInCollection(d, 1) == nil then
-            list[#list + 1] = d
-        end
-    end
-    self.skill_seg:SetList(list, self.filterText)
+    -- shared with simple mode's paste popover, so the two lists cannot drift
+    self.skill_seg:SetList(Options2.Simple.SkillList(), self.filterText)
     self:_RefreshTabs()
 end
 
