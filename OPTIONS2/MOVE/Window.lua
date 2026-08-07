@@ -297,7 +297,7 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
-function Optios.Move.Constructor:ArrowClicked( left_value, top_value )
+function Options.Move.Constructor:ArrowClicked( left_value, top_value )
 
     if Data.selectedIndex ~= 0 then
 

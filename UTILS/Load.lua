@@ -172,6 +172,20 @@ function Options.OverwriteCharData( global_data, char_data )
 
     end
 
+    -- save guard against invalid selectedIndex
+    if global_data.window[ global_data.selectedIndex ] == nil then
+        global_data.selectedIndex                  = 0
+        global_data.selectedTimerIndex             = 0
+        global_data.selectedTriggerIndex           = 0
+        global_data.selectedTriggerType            = 0
+        global_data.selectedTriggerIndex2          = 0
+        global_data.selectedTriggerType2           = 0
+        global_data.selectedConditionsIndex        = 0
+        global_data.selectedConditionTriggerIndex  = 0
+        global_data.selectedConditionTriggerType   = 0
+
+    end
+
     -- the options
     global_data.moveMode                   = char_data.moveMode             
     global_data.autoReload                 = char_data.autoReload           
