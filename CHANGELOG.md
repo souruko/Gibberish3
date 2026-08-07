@@ -1,5 +1,14 @@
 # Changelog
 
+### 3.7.0
+- New: the options panel now has a Simple mode. A switch in the title bar swaps between it and the full Advanced panel, and it remembers which one you were using.
+- Simple mode keeps your usual list of folders and windows, adds a list of the timers in whichever window you pick, and edits one timer at a time with a handful of fields instead of the full set of tabs.
+- Setting up a timer is now a matter of choosing what it tracks — a skill cooldown, an effect on you, on your group or on your target, or a chat message — then giving it a name and the skill, effect or message to watch for.
+- The paste button opens the matching list right under the field: your skills, or the effects and chat you have collected, with a filter and a record button to collect more. You no longer have to aim the library at a field first.
+- Timers built in Advanced mode that Simple mode cannot show are still listed, marked ADV, with a short note on what makes them more than Simple can handle and a button to open them in Advanced.
+- Clicking a window's name above the timer list opens its settings: the name, whether its timers show as bars, icons, circles or plain text, the size, whether the remaining time is shown and in what format, the text size and the main colours.
+- Advanced mode is unchanged.
+
 ### 3.6.2
 - Fixed a timer's icon coming back wrong after an import. A timer whose icon was left blank so it takes the icon of the effect that triggers it was restored with the standard icon instead.
 
