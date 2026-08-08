@@ -419,9 +419,6 @@ function Options2.Window.Constructor:ApplyMode()
     self.btn_library:SetVisible(advanced)
     self.breadcrumb:SetVisible(advanced)
 
-    -- the shared structure column loses import and collapse-all in simple mode
-    if self.nav ~= nil then self.nav:SetCompact(not advanced) end
-
     -- the popover floats over everything, so it must not survive the switch
     if self.simple ~= nil then self.simple.fields:ClosePaste() end
 

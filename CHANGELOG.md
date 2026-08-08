@@ -1,5 +1,12 @@
 # Changelog
 
+### 3.7.1
+- Simple mode can now set a timer's icon. Left empty, the timer still takes the icon of the skill or effect that starts it; the paste button opens your skills or collected effects to pick one instead.
+- A timer that tracks an effect on you now ends the moment the effect drops, instead of running out its full duration.
+- The structure list in Simple mode now has the same import and collapse-all buttons as the Advanced panel.
+- The heading above the timer list now says in as many words that clicking it opens the window's or folder's settings.
+- Fixed an error when the plugin loaded with a window selected that had since been deleted.
+
 ### 3.7.0
 - New: the options panel now has a Simple mode. A switch in the title bar swaps between it and the full Advanced panel, and it remembers which one you were using.
 - Simple mode keeps your usual list of folders and windows, adds a list of the timers in whichever window you pick, and edits one timer at a time with a handful of fields instead of the full set of tabs.

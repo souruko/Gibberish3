@@ -33,6 +33,7 @@ L[ Language.French ].class[ Turbine.Gameplay.Class.Troll ]         = "Troll"
 L[ Language.French ].class[ Turbine.Gameplay.Class.WarLeader ]     = "War-Leader"
 L[ Language.French ].class[ Turbine.Gameplay.Class.Warden ]        = "Warden"
 L[ Language.French ].class[ Turbine.Gameplay.Class.Weaver ]        = "Weaver"
+-- L[ Language.French ].class[ Turbine.Gameplay.Class.Sorceress ]     = "Sorceress"
 ---------------------------------------------------------------------------------------------------
 
 LpData.class = L[ Language.French ].class[ LocalPlayer:GetClass() ]

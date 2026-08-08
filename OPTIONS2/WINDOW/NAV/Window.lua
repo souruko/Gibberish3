@@ -59,8 +59,6 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.selectedItem = nil
     self.items        = {}
     self.filter       = ""
-    -- simple mode shows the same tree with a shorter header
-    self._compact     = false
     self._initial_restore = (self.selectedKey ~= nil)
     self._itemCache   = {}
     self._last_list_w = -1
@@ -217,16 +215,6 @@ function Options2.Window.Nav.Constructor:_RefreshFooter()
     if self.footer == nil then return end
     self.footer:SetText(string.format(
         UTILS.GetText("options2", "footer_counts"), #Data.folder, #Data.window))
-end
-
--- Simple mode reuses this whole column, but import and collapse-all belong to
--- the advanced panel, so its header keeps only the two add buttons.
-function Options2.Window.Nav.Constructor:SetCompact(compact)
-    if self._compact == compact then return end
-    self._compact = compact
-    self.import_btn:SetVisible(not compact)
-    self.collapse_btn:SetVisible(not compact)
-    self:SizeChanged()
 end
 
 -- repaint every visible row's enable box (a folder box reflects its subtree)
