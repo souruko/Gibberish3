@@ -15,14 +15,45 @@ function Options2.TriggerTypes()
     return _trigger_types
 end
 
+-- Both list columns push their restored selection into the editor. Every path that
+-- does so goes through here so a full refresh can hold them off and set the editor
+-- once at the end, instead of letting the columns set it twice.
+Options2._holdEditor = false
+
+function Options2.SetEditorNode(nodeData)
+    if Options2._holdEditor then return end
+    local obj = Options2.Window.Object
+    if obj == nil or obj.editor_panel == nil then return end
+    obj.editor_panel:SetNode(nodeData)
+end
+
 -- Rebuild both list columns. Adding or deleting anything shifts array indices,
 -- which invalidates the index-based row caches in both columns.
 function Options2.RefreshAll()
     local obj = Options2.Window.Object
     if obj == nil then return end
+
+    -- Left alone the rebuild sets the editor twice - the container from the
+    -- structure column, then the row inside it from the contents column. The
+    -- second call sees a different node type than the first, so the editor treats
+    -- it as a switch and drops the open tab: saving from Style or Animation
+    -- landed back on General. Hold the editor, rebuild, then set it once.
+    Options2._holdEditor = true
     if obj.nav ~= nil then obj.nav:RebuildFresh() end
     if obj.contents ~= nil then obj.contents:RebuildFresh() end
+    Options2._holdEditor = false
+
     if obj.simple ~= nil then obj.simple:Rebuild() end
+
+    -- a row inside the container outranks the container itself, the same
+    -- precedence the panel uses when it first opens
+    local nd = nil
+    if obj.contents ~= nil and obj.contents.selectedItem ~= nil then
+        nd = obj.contents.selectedItem.nodeData
+    elseif obj.nav ~= nil and obj.nav.selectedItem ~= nil then
+        nd = obj.nav.selectedItem.nodeData
+    end
+    Options2.SetEditorNode(nd)
 end
 
 -- drop the current selection in both columns and empty the editor
@@ -30,6 +61,16 @@ function Options2.ClearSelection()
     local obj = Options2.Window.Object
     if obj == nil then return end
     if obj.nav ~= nil then obj.nav.selectedKey = nil end
+    if obj.contents ~= nil then obj.contents:ClearSelection() end
+    Options2.selectedNode = nil
+end
+
+-- Drop the row selection in the contents column only. Deleting a trigger, timer or
+-- condition invalidates that column's index-based keys, but the structure column
+-- still points at a container that exists, so the user keeps their place.
+function Options2.ClearContentSelection()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
     if obj.contents ~= nil then obj.contents:ClearSelection() end
     Options2.selectedNode = nil
 end

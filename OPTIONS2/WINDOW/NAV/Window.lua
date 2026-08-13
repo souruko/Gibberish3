@@ -471,9 +471,7 @@ function Options2.Window.Nav.Constructor:_RestoreSelection()
             item:SetSelected(true)
             self.selectedItem = item
             local obj = Options2.Window.Object
-            if obj ~= nil and obj.editor_panel ~= nil then
-                obj.editor_panel:SetNode(item.nodeData)
-            end
+            Options2.SetEditorNode(item.nodeData)
             if obj ~= nil and obj.contents ~= nil then
                 obj.contents:SetContainer(item.nodeData)
             end
@@ -595,9 +593,7 @@ function Options2.Window.Nav.Constructor:_SelectItem(item)
     Options2.selectedNode = item.nodeData
 
     local obj = Options2.Window.Object
-    if obj ~= nil and obj.editor_panel ~= nil then
-        obj.editor_panel:SetNode(item.nodeData)
-    end
+    Options2.SetEditorNode(item.nodeData)
     -- picking a container refills the contents column and drops whatever row
     -- was selected inside the previous one
     if obj ~= nil and obj.contents ~= nil then

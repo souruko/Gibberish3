@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.7.2
+- Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.
+- The window or folder you are working in stays selected when you add a trigger, so you no longer lose your place in the list. Deleting a trigger, timer or condition now keeps it selected as well.
+- Saving a timer from the Style or Animation tab no longer jumps back to General.
+
 ### 3.7.1
 - Simple mode can now set a timer's icon. Left empty, the timer still takes the icon of the skill or effect that starts it; the paste button opens your skills or collected effects to pick one instead.
 - A timer that tracks an effect on you now ends the moment the effect drops, instead of running out its full duration.

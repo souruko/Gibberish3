@@ -99,33 +99,53 @@ end
 ---------------------------------------------------------------------------------------------------
 function Folder.Delete(index)
 
-    -- kill all child folders/windows
+    local folder = Data.folder[ index ]
+    if folder == nil then return end
+
+    -- Deleting a child swap-deletes the last slot into the freed one, and that can
+    -- move *this* folder. Look our own slot up again before every pass so the
+    -- comparisons below - and the final swap - use where we are now, not where we
+    -- started; deleting the last folder of a nested pair used to delete a bystander
+    -- instead and leave a hole in Data.folder.
+    local function own_index()
+        for i, fd in pairs(Data.folder) do
+            if fd == folder then return i end
+        end
+        return nil
+    end
+
+    -- kill all child windows
     local delete = true
-    local startIndex = 1
-    while delete do 
+    while delete do
         delete = false
-        for i=startIndex,#Data.window do
-            if Data.window[i].folder == index then
+        index = own_index()
+        if index == nil then return end
+        for i=1,#Data.window do
+            if Data.window[i] ~= nil and Data.window[i].folder == index then
                 delete = true
-                startIndex = i
                 Options.DeleteWindow( i )
                 break
             end
         end
     end
-    local delete = true
-    local startIndex = 1
-    while delete do 
+
+    -- kill all child folders
+    delete = true
+    while delete do
         delete = false
-        for i=startIndex,#Data.folder do
-            if Data.folder[i].folder == index then
+        index = own_index()
+        if index == nil then return end
+        for i=1,#Data.folder do
+            if Data.folder[i] ~= nil and Data.folder[i].folder == index then
                 delete = true
-                startIndex = i
                 Options.DeleteFolder( i )
                 break
             end
         end
     end
+
+    index = own_index()
+    if index == nil then return end
 
     local folder_count = #Data.folder
     Data.folder[ index ]        = Data.folder[ folder_count ]
@@ -142,6 +162,53 @@ function Folder.Delete(index)
             item.folder = index
         end
     end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- close up holes in Data.folder
+---------------------------------------------------------------------------------------------------
+-- Everything walks Data.folder with ipairs, which stops at the first empty slot, so a
+-- single hole hides every folder after it. Saves written before Folder.Delete was fixed
+-- can carry one. Slots are packed down, every folder reference is remapped, and anything
+-- that pointed at a folder which is gone moves back to the root.
+---------------------------------------------------------------------------------------------------
+function Folder.RepairIndices()
+
+    if Data == nil or Data.folder == nil then return false end
+
+    -- highest occupied slot; # cannot be trusted once there is a hole
+    local max_index = 0
+    for i in pairs(Data.folder) do
+        if type(i) == "number" and i > max_index then max_index = i end
+    end
+
+    local packed = {}
+    local remap  = {}
+    for i=1,max_index do
+        if Data.folder[i] ~= nil then
+            packed[#packed+1] = Data.folder[i]
+            remap[i] = #packed
+        end
+    end
+
+    if #packed == max_index then return false end
+
+    Data.folder = packed
+
+    for i, folder_data in ipairs(Data.folder) do
+        if folder_data.folder ~= nil then
+            folder_data.folder = remap[ folder_data.folder ]
+        end
+    end
+    for i, window_data in pairs(Data.window or {}) do
+        if window_data.folder ~= nil then
+            window_data.folder = remap[ window_data.folder ]
+        end
+    end
+
+    return true
 
 end
 ---------------------------------------------------------------------------------------------------

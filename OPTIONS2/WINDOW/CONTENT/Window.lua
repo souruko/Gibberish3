@@ -301,10 +301,7 @@ function Options2.Window.Content.Constructor:SelectContainer()
     self:ClearSelection()
     Options2.selectedNode = self.container
 
-    local obj = Options2.Window.Object
-    if obj ~= nil and obj.editor_panel ~= nil then
-        obj.editor_panel:SetNode(self.container)
-    end
+    Options2.SetEditorNode(self.container)
 end
 
 function Options2.Window.Content.Constructor:_RightClickContainer()
@@ -568,10 +565,7 @@ function Options2.Window.Content.Constructor:_RestoreSelection()
             item:SetSelected(true)
             self.selectedItem = item
             Options2.selectedNode = item.nodeData
-            local obj = Options2.Window.Object
-            if obj ~= nil and obj.editor_panel ~= nil then
-                obj.editor_panel:SetNode(item.nodeData)
-            end
+            Options2.SetEditorNode(item.nodeData)
             self:_UpdateHeaderState()
             return
         end
@@ -588,10 +582,7 @@ function Options2.Window.Content.Constructor:_Select(item)
     Options2.SaveContentState(self.selectedKey)
     Options2.selectedNode = item.nodeData
 
-    local obj = Options2.Window.Object
-    if obj ~= nil and obj.editor_panel ~= nil then
-        obj.editor_panel:SetNode(item.nodeData)
-    end
+    Options2.SetEditorNode(item.nodeData)
     self:_UpdateHeaderState()
 end
 

@@ -49,6 +49,7 @@ import "Gibberish3.UTILS.Save"
 import "Gibberish3.UTILS.Load"
 
 Data = Options.LoadData()
+Folder.RepairIndices()
 Options.FillPersistantCollection()
 ---------------------------------------------------------------------------------------------------
 
