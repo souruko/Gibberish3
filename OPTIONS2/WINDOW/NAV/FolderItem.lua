@@ -3,10 +3,6 @@
 
 local P = nil   -- resolved lazily; RowParts is imported before this file
 
-local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana12
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
-
-
 -- a folder has no enabled flag of its own; it reads as enabled when any window
 -- below it is enabled, and toggling it loads or unloads the whole subtree
 local function folder_enabled(folderIdx)
@@ -51,10 +47,10 @@ function Options2NavFolder:Constructor(navWin, folderIdx, folderData, key, expan
         expanded and P.ICON.expanded or P.ICON.collapsed, P.ROW_H, P.CHEVRON)
     self.icon = P.MakeIcon(self, P.ICON.folder, P.ROW_H, P.NODE_ICON)
 
-    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_folder,
+    self.label = P.MakeLabel(self, Options2.Fonts.BODY, Options.Defaults.window.color_folder,
         Turbine.UI.ContentAlignment.MiddleLeft)
 
-    self.count = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
+    self.count = P.MakeLabel(self, Options2.Fonts.SMALL, Options.Defaults.window.text_faint,
         Turbine.UI.ContentAlignment.MiddleRight)
 
     self.bolt = P.MakeIcon(self, P.ICON.trigger, P.ROW_H)

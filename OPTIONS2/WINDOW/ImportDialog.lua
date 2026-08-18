@@ -6,6 +6,16 @@ local BTN_W  = 140
 local SCROLL = 10
 local WARN_H = 58
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    DLG_W  = F.Px(520)
+    DLG_H  = F.Px(360)
+    BTN_H  = F.Px(26)
+    BTN_W  = F.Px(140)
+    WARN_H = F.Px(58)
+end)
+
 -- ── helpers ───────────────────────────────────────────────────────────────────
 
 local function make_btn(parent, label, click_fn)

@@ -16,7 +16,7 @@ function Options2DropdownItem:Constructor(parent, width, text_control, text_desc
     self.label:SetLeft(8)
     self.label:SetMultiline(true)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetMouseVisible(false)
 
     self:LanguageChanged()

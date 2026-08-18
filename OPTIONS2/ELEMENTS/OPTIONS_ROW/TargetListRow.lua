@@ -14,6 +14,14 @@ local PAD_V    = 4
 local ENTRY_PAD = 6
 local MIN_FIELD_W = 70
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    ENTRY_H     = F.Px(20)
+    BTN_H       = F.Px(20)
+    MIN_FIELD_W = F.Px(70)
+end)
+
 local M = Options2.Elements.EditorRow
 
 -- ── helpers ───────────────────────────────────────────────────────────────────
@@ -39,7 +47,7 @@ local function make_button(parent, border, fg, tooltip_description, click_fn)
 
     local label = Turbine.UI.Label()
     label:SetParent(fill)
-    label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    label:SetFont(Options2.Fonts.SMALL)
     label:SetForeColor(fg)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)
@@ -166,7 +174,7 @@ function Options2.Elements.TargetListRow:Constructor(back_color, label_control, 
     self.empty = Turbine.UI.Label()
     self.empty:SetParent(self.inner)
     self.empty:SetPosition(0, 0)
-    self.empty:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.empty:SetFont(Options2.Fonts.SMALL)
     self.empty:SetForeColor(Options.Defaults.window.text_faint)
     self.empty:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.empty:SetMouseVisible(false)

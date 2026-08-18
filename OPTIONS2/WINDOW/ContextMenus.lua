@@ -62,7 +62,7 @@ end
 
 -- standalone version, raised by the contents column's "+ Trigger" button
 function Options2.ShowAddTriggerMenu(parent_data)
-    local menu = Options2.Elements.RightClickMenu(172)
+    local menu = Options2.Elements.RightClickMenu(Options2.Fonts.Px(172))
     _current_menu = menu
     AddTriggerRows(menu, parent_data)
     menu:Show()
@@ -83,7 +83,7 @@ end
 
 -- folderIndex nil adds at the root
 function Options2.ShowAddWindowMenu(folderIndex)
-    local menu = Options2.Elements.RightClickMenu(172)
+    local menu = Options2.Elements.RightClickMenu(Options2.Fonts.Px(172))
     _current_menu = menu
 
     local lang = L[Language.Local] or L[Language.English]
@@ -99,7 +99,7 @@ function Options2.ShowAddWindowMenu(folderIndex)
 end
 
 function Options2.ShowContextMenu(nd)
-    local menu = Options2.Elements.RightClickMenu(172)
+    local menu = Options2.Elements.RightClickMenu(Options2.Fonts.Px(172))
     _current_menu = menu
 
     local h          = Options.Defaults.rc_menu.item_height

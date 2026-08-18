@@ -4,10 +4,13 @@
 
 local P = nil   -- resolved lazily; RowParts is imported before this file
 
-local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana12
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
-
 local TAG_W       = 52
+
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    TAG_W = F.Px(52)
+end)
 
 -- "Bar" / "Counter" etc. from the tables in UI_ELEMENTS/__init__.lua, uppercased
 -- for the tag. string.upper is byte-wise, which is fine for these ASCII names.
@@ -44,10 +47,10 @@ function Options2NavWindow:Constructor(navWin, winIdx, winData, key, expanded, d
     self.rail = P.MakeRail(self, Options.Defaults.window.color_window)
     self.icon = P.MakeIcon(self, P.ICON.window, P.ROW_H, P.NODE_ICON)
 
-    self.label = P.MakeLabel(self, FONT_NAME, Options.Defaults.window.color_window,
+    self.label = P.MakeLabel(self, Options2.Fonts.BODY, Options.Defaults.window.color_window,
         Turbine.UI.ContentAlignment.MiddleLeft)
 
-    self.tag = P.MakeLabel(self, FONT_SMALL, Options.Defaults.window.text_faint,
+    self.tag = P.MakeLabel(self, Options2.Fonts.SMALL, Options.Defaults.window.text_faint,
         Turbine.UI.ContentAlignment.MiddleRight)
 
     self.bolt = P.MakeIcon(self, P.ICON.trigger, P.ROW_H)

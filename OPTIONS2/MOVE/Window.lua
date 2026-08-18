@@ -15,6 +15,14 @@ local BTN_H    = 22
 local PAD_BTN  = 24         -- the four arrow buttons are square
 local PAD_ICON = 16         -- chevron glyphs, drawn at their native size
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    ROW_H   = F.Px(22)
+    LABEL_W = F.Px(44)
+    BTN_H   = F.Px(22)
+end)
+
 local ARROW = {
     up    = "Gibberish3/RESOURCES/chevron_up.tga",
     down  = "Gibberish3/RESOURCES/chevron_down.tga",
@@ -38,7 +46,7 @@ local function make_pill(parent, border, fg, click_fn, tooltip)
 
     local label = Turbine.UI.Label()
     label:SetParent(fill)
-    label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    label:SetFont(Options2.Fonts.BODY)
     label:SetForeColor(fg)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)

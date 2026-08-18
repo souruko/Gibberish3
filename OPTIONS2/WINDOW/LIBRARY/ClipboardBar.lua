@@ -9,6 +9,13 @@ local GAP     = 8
 local TAG_W   = 46
 local BTN_SZ  = 18
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    BAR_H = math.max(ICON_SZ + 4, F.Px(36))
+    TAG_W = F.Px(46)
+end)
+
 Options2.Library.ClipboardBar = class(Turbine.UI.Control)
 function Options2.Library.ClipboardBar:Constructor()
     Turbine.UI.Control.Constructor(self)
@@ -28,7 +35,7 @@ function Options2.Library.ClipboardBar:Constructor()
     self.tag:SetParent(self)
     self.tag:SetPosition(PAD, 0)
     self.tag:SetSize(TAG_W, BAR_H)
-    self.tag:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.tag:SetFont(Options2.Fonts.SMALL)
     self.tag:SetForeColor(Options.Defaults.window.text_faint)
     self.tag:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.tag:SetMouseVisible(false)
@@ -42,7 +49,7 @@ function Options2.Library.ClipboardBar:Constructor()
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
     self.label:SetHeight(BAR_H)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetForeColor(Options.Defaults.window.text)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetMouseVisible(false)
@@ -51,7 +58,7 @@ function Options2.Library.ClipboardBar:Constructor()
     self.clear_btn:SetParent(self)
     self.clear_btn:SetSize(BTN_SZ, BTN_SZ)
     self.clear_btn:SetText("x")
-    self.clear_btn:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.clear_btn:SetFont(Options2.Fonts.BODY)
     self.clear_btn:SetForeColor(Options.Defaults.window.text_muted)
     self.clear_btn.Click = function() Options2.ClearClipboard() end
 

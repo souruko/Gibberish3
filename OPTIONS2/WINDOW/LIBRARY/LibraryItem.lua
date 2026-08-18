@@ -13,6 +13,15 @@ local PIN_W   = 16
 local USE_W   = 34
 local USE_H   = 20
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    -- the row still has to clear the 32px icon it is built around
+    ITEM_H = math.max(ICON_SZ + 4, F.Px(36))
+    USE_W  = F.Px(34)
+    USE_H  = F.Px(20)
+end)
+
 Options2.Library.LibraryItem = class(Turbine.UI.Control)
 function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     Turbine.UI.Control.Constructor(self)
@@ -34,7 +43,7 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
 
     self.token_label = Turbine.UI.Label()
     self.token_label:SetParent(self)
-    self.token_label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.token_label:SetFont(Options2.Fonts.BODY)
     self.token_label:SetTextAlignment(Turbine.UI.ContentAlignment.TopLeft)
     self.token_label:SetForeColor(Options.Defaults.window.text)
     self.token_label:SetText(data.token or "")
@@ -42,7 +51,7 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
 
     self.sub_label = Turbine.UI.Label()
     self.sub_label:SetParent(self)
-    self.sub_label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.sub_label:SetFont(Options2.Fonts.SMALL)
     self.sub_label:SetTextAlignment(Turbine.UI.ContentAlignment.BottomLeft)
     self.sub_label:SetForeColor(Options.Defaults.window.text_faint)
     self.sub_label:SetMouseVisible(false)
@@ -75,7 +84,7 @@ function Options2.Library.LibraryItem:Constructor(data, typeIdx, library)
     self.use_label = Turbine.UI.Label()
     self.use_label:SetParent(self.use_btn)
     self.use_label:SetSize(USE_W, USE_H)
-    self.use_label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.use_label:SetFont(Options2.Fonts.SMALL)
     self.use_label:SetForeColor(Options.Defaults.window.bg)
     self.use_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.use_label:SetMouseVisible(false)

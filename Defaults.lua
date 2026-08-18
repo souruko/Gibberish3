@@ -50,6 +50,10 @@ Options.Defaults.window.g_height     = 50
 Options.Defaults.window.spacing      = 5
 Options.Defaults.window.frame        = 2
 Options.Defaults.window.font         = Turbine.UI.Lotro.Font.Verdana12
+-- Options2.Fonts.Scale.NORMAL; the panel's font size, and with it every metric
+-- that has to hold text. Options2/Fonts.lua overwrites the values above and
+-- below that it drives, so this is only the fallback for a save without one.
+Options.Defaults.window.font_scale   = 1
 Options.Defaults.window.basecolor    = Turbine.UI.Color( 0.16, 0.13, 0.10 )
 Options.Defaults.window.backcolor1   = Turbine.UI.Color( 0.09, 0.08, 0.07 )
 Options.Defaults.window.backcolor2   = Turbine.UI.Color( 0.09, 0.08, 0.07 )
@@ -69,7 +73,6 @@ Options.Defaults.window.g_content_top  = - 2
 
 Options.Defaults.window.t_item_height   = 34
 Options.Defaults.window.w_item_height   = 32
-Options.Defaults.window.w_font          = Turbine.UI.Lotro.Font.Verdana16
 Options.Defaults.window.w_window_base   = Turbine.UI.Color( 0.1, 0.1, 0.1 )
 Options.Defaults.window.w_window_hover  = Turbine.UI.Color(0.3,0.3,0.3)
 Options.Defaults.window.w_window_select = Turbine.UI.Color(0.18,0.18,0.18)

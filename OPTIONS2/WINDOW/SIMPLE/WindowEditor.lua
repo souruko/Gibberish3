@@ -12,12 +12,17 @@
 -- This is the simple subset. The advanced window editor still has the frame,
 -- spacing, opacities, alignments, threshold colours and the rest.
 
-local ROW_H    = 28
+local ROW_H    = Options2.Elements.EditorRow.ROW_H
 local PAD      = 10
 local GAP      = 8
 local HINT_GAP = 8
 
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    -- ROW_H is the shared editor row height, so every editor stays in step
+    ROW_H = Options2.Elements.EditorRow.ROW_H
+end)
 
 -- window.timerType values the Look row offers, in display order
 local LOOK_TYPES = { Timer.Types.BAR, Timer.Types.ICON, Timer.Types.CIRCEL, Timer.Types.TEXT }
@@ -51,7 +56,7 @@ function Options2.Window.SimpleWindowEditor:Constructor(owner)
         local hint = Turbine.UI.Label()
         hint:SetParent(row)
         hint:SetHeight(ROW_H)
-        hint:SetFont(FONT_SMALL)
+        hint:SetFont(Options2.Fonts.SMALL)
         hint:SetForeColor(Options.Defaults.window.text_faint)
         hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
         hint:SetMouseVisible(false)

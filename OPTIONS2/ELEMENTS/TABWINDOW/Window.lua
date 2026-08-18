@@ -25,6 +25,12 @@ end
 
 local TAB_H = 26
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    TAB_H = F.Px(26)
+end)
+
 function Options2.Elements.TabWindow:SizeChanged()
     local width, height = self:GetSize()
     local sep_h = 1

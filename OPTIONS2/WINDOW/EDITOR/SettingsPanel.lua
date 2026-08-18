@@ -1,12 +1,30 @@
-local ROW_H      = 30
 local ROW_GAP    = 4
 local LEFT       = 5
 local TOP        = 8
+
+-- this panel's rows are taller than the editor's, so it keeps its own metrics
+local ROW_H      = 30
 local STEP_BTN_W = 24
 local STEP_BTN_H = 22
 local VAL_W      = 46
 local LABEL_W    = 110
 local CTRL_LEFT  = 145
+
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    ROW_H      = F.Px(30)
+    STEP_BTN_W = F.Px(24)
+    STEP_BTN_H = F.Px(22)
+    VAL_W      = F.Px(46)
+    LABEL_W    = F.Px(110)
+    CTRL_LEFT  = F.Px(145)
+end)
+
+-- height this panel needs for its rows, so the window can size itself to them
+function Options2.Window.SettingsPanelHeight(rows)
+    return TOP + rows * (ROW_H + ROW_GAP) + TOP
+end
 
 Options2.Window.SettingsPanel = class(Turbine.UI.Control)
 function Options2.Window.SettingsPanel:Constructor()
@@ -97,13 +115,31 @@ function Options2.Window.SettingsPanel:Constructor()
 
     self:_RefreshShortcutSize()
 
+    -- ── font size ────────────────────────────────────────────────────────────
+    -- Scales the options panel and the move window, nothing in the game world.
+    -- Picking a size rebuilds both, so the panel comes back at the new size with
+    -- the same selection.
+    self.font_size = Options2.Elements.DropDownRow(
+        Options.Defaults.window.row_odd,
+        "general", "font_size", "dd_font_size", ROW_H, nil
+    )
+    self.font_size:SetParent(self)
+    self.font_size:SetPosition(LEFT, TOP + 2 * (ROW_H + ROW_GAP))
+    self.font_size:AddItem("general", "font_normal", Options2.Fonts.Scale.NORMAL)
+    self.font_size:AddItem("general", "font_large",  Options2.Fonts.Scale.LARGE)
+    self.font_size:AddItem("general", "font_xlarge", Options2.Fonts.Scale.XLARGE)
+    self.font_size:SetSelection(Options2.Fonts.Current())
+    self.font_size:SetCallback(function(sender, index, value)
+        Options2.ApplyFontScale(value)
+    end)
+
     -- ── auto reload ──────────────────────────────────────────────────────────
     self.auto_reload = Options2.Elements.CheckBoxRow(
         Options.Defaults.window.row_odd,
         "shortcut", "auto_reload", "cb_auto_reload", ROW_H
     )
     self.auto_reload:SetParent(self)
-    self.auto_reload:SetPosition(LEFT, TOP + 2 * (ROW_H + ROW_GAP))
+    self.auto_reload:SetPosition(LEFT, TOP + 3 * (ROW_H + ROW_GAP))
     self.auto_reload:SetChecked(Data.autoReload)
     self.auto_reload:SetCallback(function(value)
         Options.AutoReloadChanged()
@@ -115,7 +151,7 @@ function Options2.Window.SettingsPanel:Constructor()
         "general", "show_tooltips", "cb_show_tooltips", ROW_H
     )
     self.show_tooltips:SetParent(self)
-    self.show_tooltips:SetPosition(LEFT, TOP + 3 * (ROW_H + ROW_GAP))
+    self.show_tooltips:SetPosition(LEFT, TOP + 4 * (ROW_H + ROW_GAP))
     self.show_tooltips:SetChecked(Data.showTooltips)
     self.show_tooltips:SetCallback(function(value)
         Data.showTooltips = value
@@ -148,6 +184,7 @@ function Options2.Window.SettingsPanel:SizeChanged()
     local w = self:GetWidth() - LEFT - 5
     self.language:SetWidth(w)
     self.shortcut_row:SetWidth(w)
+    self.font_size:SetWidth(w)
     self.auto_reload:SetWidth(w)
     self.show_tooltips:SetWidth(w)
 end
@@ -158,6 +195,9 @@ function Options2.Window.SettingsPanel:LanguageChanged()
     self.language.dropdown:LanguageChanged()
     self.language:SetSelection(Data.options.language)
     self.shortcut_label:SetText(UTILS.GetText("general", "shortcut_size"))
+    self.font_size:LanguageChanged()
+    self.font_size.dropdown:LanguageChanged()
+    self.font_size:SetSelection(Options2.Fonts.Current())
     self.auto_reload:LanguageChanged()
     self.show_tooltips:LanguageChanged()
 end

@@ -196,6 +196,13 @@ local SEG_PAD = 8
 
 Options2.Simple.SEG_H = SEG_H
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    SEG_H = F.Px(22)
+    Options2.Simple.SEG_H = SEG_H
+end)
+
 function Options2.Simple.MakeSegments(parent, count, pick_fn)
     local strip = { segments = {}, selected = 1 }
 
@@ -212,7 +219,7 @@ function Options2.Simple.MakeSegments(parent, count, pick_fn)
 
         local label = Turbine.UI.Label()
         label:SetParent(fill)
-        label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+        label:SetFont(Options2.Fonts.SMALL)
         label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
         label:SetMouseVisible(false)
 
@@ -324,7 +331,7 @@ function Options2.Simple.MakeAdvTag(parent, row_h)
     local label = Turbine.UI.Label()
     label:SetParent(tag)
     label:SetSize(W, H)
-    label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    label:SetFont(Options2.Fonts.SMALL)
     label:SetForeColor(Options.Defaults.window.text_muted)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetText(UTILS.GetText("options2", "simple_adv_tag"))

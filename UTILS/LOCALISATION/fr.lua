@@ -276,6 +276,10 @@ L[ Language.French ].general = {}
 L[ Language.French ].general.show_tooltip                  = "Afficher l'infobulle"
 L[ Language.French ].general.language                      = "Langue"
 L[ Language.French ].general.shortcut_size                 = "Taille du raccourci"
+L[ Language.French ].general.font_size                     = "Taille de police"
+L[ Language.French ].general.font_normal                   = "Normale"
+L[ Language.French ].general.font_large                    = "Grande"
+L[ Language.French ].general.font_xlarge                   = "Très grande"
 L[ Language.French ].general.show_tooltips                 = "Afficher les infobulles"
 L[ Language.French ].general.english                       = "Anglais"
 L[ Language.French ].general.german                        = "Allemand"
@@ -372,6 +376,7 @@ L[ Language.French ].tooltip.cb_auto_reload                = "Recharge automatiq
 
 L[ Language.French ].tooltip.dd_language                   = "Définit la langue d'affichage du panneau d'options. N'affecte pas la langue du client de jeu."
 L[ Language.French ].tooltip.dd_shortcut_size               = "Taille en pixels du bouton de raccourci déplaçable utilisé pour ouvrir ce panneau d'options."
+L[ Language.French ].tooltip.dd_font_size                   = "Taille du texte du panneau d'options et de la fenêtre de déplacement. Ne change pas les minuteurs affichés dans le jeu : chaque fenêtre a sa propre police."
 
 L[ Language.French ].tooltip.trg_description               = "Label interne affiché dans la liste des déclencheurs. N'a aucun effet sur le comportement."
 L[ Language.French ].tooltip.trg_token                     = "Le texte ou le motif auquel ce déclencheur est comparé.\nPour les déclencheurs de chat : comparé au texte du message.\nPour les déclencheurs d'effets : comparé au nom de l'effet."

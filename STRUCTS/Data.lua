@@ -65,6 +65,7 @@ function DataFunction.New()
     data.options.window.top2        = 0.23
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
+    data.options.window.fontScale   = Options.Defaults.window.font_scale
     
     data.options.window.collection_segment = 1
 

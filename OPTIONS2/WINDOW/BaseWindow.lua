@@ -12,9 +12,20 @@
 local SEP_W        = 1
 local PAD          = 8
 local GAP          = 8
-local BTN_SIZE     = 22
 local BTN_ICON     = 16
 local DIV_H        = 16
+local COLLAPSED_W  = 30
+
+local STRIP_BTN    = 18
+local STRIP_ICON   = 16
+
+local SW_PAD       = 10   -- padding either side of a segment's label
+local SW_ACCENT_H  = 2
+
+-- Everything below holds text, so it follows the panel's font size. The column
+-- widths are the minimum each column needs for its own labels; the fixed art
+-- above (separators, padding, strip glyphs) does not scale.
+local BTN_SIZE     = 22
 local TITLE_H      = 30
 
 -- column slots include their own 1px rule
@@ -22,19 +33,26 @@ local COL_STRUCT_W = 272
 local COL_CONT_W   = 348
 local COL_LIB_W    = 230
 local COL_EDIT_MIN = 200
-local COLLAPSED_W  = 30
 
 -- simple mode uses a narrower structure column; its other two live in SIMPLE/
 local SIMPLE_STRUCT_W = 240
 
-local STRIP_BTN    = 18
-local STRIP_ICON   = 16
-
 -- mode switch
 local SW_H         = 22
-local SW_PAD       = 10   -- padding either side of a segment's label
-local SW_CHAR      = 6    -- Verdana10 is proportional; this is the width budget
-local SW_ACCENT_H  = 2
+local SW_CHAR      = 6    -- Verdana is proportional; this is the width budget
+
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    BTN_SIZE        = F.Px(22)
+    TITLE_H         = F.Px(30)
+    COL_STRUCT_W    = F.Px(272)
+    COL_CONT_W      = F.Px(348)
+    COL_LIB_W       = F.Px(230)
+    COL_EDIT_MIN    = F.Px(200)
+    SIMPLE_STRUCT_W = F.Px(240)
+    SW_H            = F.Px(22)
+    SW_CHAR         = F.Px(6)
+end)
 
 -- Tooltip.AddTooltip owns MouseEnter/MouseLeave, so wrap it to keep the hover fill.
 local function add_hover_tooltip(control, description, enter_fn, leave_fn)
@@ -168,7 +186,7 @@ local function make_mode_switch(parent, pick_fn)
         local label = Turbine.UI.Label()
         label:SetParent(seg)
         label:SetHeight(SW_H - 2)
-        label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+        label:SetFont(Options2.Fonts.SMALL)
         label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
         label:SetMouseVisible(false)
 
@@ -269,7 +287,7 @@ function Options2.Window.Constructor:Constructor()
     self.breadcrumb = Turbine.UI.Label()
     self.breadcrumb:SetParent(self.titlebar)
     self.breadcrumb:SetHeight(TITLE_H)
-    self.breadcrumb:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.breadcrumb:SetFont(Options2.Fonts.SMALL)
     self.breadcrumb:SetForeColor(Options.Defaults.window.text_faint)
     self.breadcrumb:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.breadcrumb:SetMouseVisible(false)

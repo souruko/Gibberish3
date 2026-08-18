@@ -10,7 +10,6 @@ Options2.Elements.RowParts = {}
 local RowParts = Options2.Elements.RowParts
 
 
-RowParts.ROW_H       = 26
 RowParts.PAD         = 8
 RowParts.GAP         = 6
 RowParts.RAIL_W      = 3
@@ -29,6 +28,17 @@ local GUIDE_OFF   = 8   -- guide sits at the end of each level's spacer
 function RowParts.ContentLeft(depth)
     return INDENT_LEAD + depth * INDENT_STEP + 5
 end
+
+-- Row heights hold text, so they follow the panel's font size; the icon slots,
+-- rails and indents above are fixed art and do not. Read RowParts.ROW_H at
+-- construct time, never capture it at load time.
+local function refresh()
+    RowParts.ROW_H   = Options2.Fonts.Px(26)
+    RowParts.CHILD_H = Options2.Fonts.Px(26)
+end
+
+refresh()
+Options2.Fonts.Register(refresh)
 
 -- utf-8 aware; Label clips mid-glyph, so never rely on clipping.
 -- The suffix is three dots rather than an ellipsis glyph: the game font stops
@@ -49,9 +59,11 @@ function RowParts.Truncate(text, max_chars)
     return table.concat(chars, "", 1, math.max(1, keep)) .. RowParts.ELLIPSIS
 end
 
--- Verdana12 is proportional; this is the budget used to decide truncation.
+-- Verdana is proportional; 6.5px is the average glyph width at size 12, scaled
+-- by the panel's font size. This is the budget used to decide truncation, so it
+-- has to follow the font or every row overflows.
 function RowParts.CharBudget(pixels)
-    return math.floor(pixels / 6.5)
+    return math.floor(pixels / (6.5 * Options2.Fonts.ratio))
 end
 
 -- one 1px vertical guide per ancestor level, pooled on the row
@@ -380,7 +392,6 @@ end
 -- one continuous line down the whole timer block, including behind a condition
 -- and its own triggers. A condition trigger adds a second, purple rail inside
 -- that.
-RowParts.CHILD_H          = 26
 RowParts.CHILD_RAIL_X     = 18   -- timer rail, every child row
 RowParts.CHILD_TEXT_X     = 27   -- rail + 8px margin
 RowParts.COND_RAIL_X      = 31   -- timer rail + 12px margin

@@ -276,6 +276,10 @@ L[ Language.German ].general = {}
 L[ Language.German ].general.show_tooltip                   = "Tooltip Anzeigen"
 L[ Language.German ].general.language                       = "Sprache"
 L[ Language.German ].general.shortcut_size                  = "Größe der Verknüpfung"
+L[ Language.German ].general.font_size                      = "Schriftgröße"
+L[ Language.German ].general.font_normal                    = "Normal"
+L[ Language.German ].general.font_large                     = "Groß"
+L[ Language.German ].general.font_xlarge                    = "Sehr groß"
 L[ Language.German ].general.show_tooltips                  = "Tooltips anzeigen"
 L[ Language.German ].general.english                        = "Englisch"
 L[ Language.German ].general.german                         = "Deutsch"
@@ -372,6 +376,7 @@ L[ Language.German ].tooltip.cb_auto_reload                 = "Lädt das Plugin 
 
 L[ Language.German ].tooltip.dd_language                    = "Legt die Anzeigesprache des Optionsfensters fest. Hat keinen Einfluss auf die Sprache des Spielclients."
 L[ Language.German ].tooltip.dd_shortcut_size                = "Größe in Pixeln der verschiebbaren Verknüpfungsschaltfläche, mit der dieses Optionsfenster geöffnet wird."
+L[ Language.German ].tooltip.dd_font_size                    = "Textgröße des Optionsfensters und des Verschiebefensters. Ändert nicht die Timer in der Spielwelt - diese haben pro Fenster ihre eigene Schrift."
 
 L[ Language.German ].tooltip.trg_description                = "Internes Label, das in der Auslöserliste angezeigt wird. Hat keinen Einfluss auf das Verhalten."
 L[ Language.German ].tooltip.trg_token                      = "Der Text oder das Muster, gegen das dieser Auslöser abgeglichen wird.\nFür Chat-Auslöser: gegen den Nachrichtentext geprüft.\nFür Effekt-Auslöser: gegen den Effektnamen geprüft."

@@ -1,8 +1,17 @@
 -- Small standalone window hosting Options2.Window.SettingsPanel.
 -- Opened from the gear in the options panel title bar.
 
+local ROWS   = 5    -- language, shortcut size, font size, auto reload, tooltips
+local CHROME = 36   -- title bar, border and a little slack below the last row
+
 local WIN_W = 380
-local WIN_H = 190
+local WIN_H = Options2.Window.SettingsPanelHeight(ROWS) + CHROME
+
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    WIN_W = Options2.Fonts.Px(380)
+    WIN_H = Options2.Window.SettingsPanelHeight(ROWS) + Options2.Fonts.Px(CHROME)
+end)
 
 Options2.Window.SettingsWindow = class(Options2.Elements.PanelWindow)
 function Options2.Window.SettingsWindow:Constructor()

@@ -7,24 +7,35 @@
 Options2.Elements.EditorRow = {}
 local M = Options2.Elements.EditorRow
 
-M.ROW_H       = 28          -- 40 when the control is a multiline box
-M.ROW_H_MULTI = 40
-M.LABEL_W     = 104
 M.LABEL_GAP   = 10
-M.CTRL_LEFT   = M.LABEL_W + M.LABEL_GAP
-M.CTRL_H      = 22
 M.PAD         = 10          -- editor content padding
 M.ROW_GAP     = 2
-M.NUM_W       = 64
-M.DROP_W      = 140
 M.CHECK       = 12          -- the switch's height; see Elements.CheckBox
-M.CHECK_W     = 22
 M.RIGHT_PAD   = 10
 M.FIELD_PAD_X = 4           -- gap between a field's border and its text
 M.FIELD_PAD_Y = 3           -- top and bottom gap, multiline fields only
 
-M.FONT_LABEL = Turbine.UI.Lotro.Font.Verdana12
-M.FONT_FIELD = Turbine.UI.Lotro.Font.Verdana12
+-- Everything that has to hold text scales with the panel's font size; the
+-- padding above does not. Read these at construct time - changing the font size
+-- rebuilds every window, so a value captured at load time would be stale.
+local function refresh()
+    local F = Options2.Fonts
+
+    M.ROW_H       = F.Px( 28 )      -- 40 when the control is a multiline box
+    M.ROW_H_MULTI = F.Px( 40 )
+    M.LABEL_W     = F.Px( 104 )
+    M.CTRL_LEFT   = M.LABEL_W + M.LABEL_GAP
+    M.CTRL_H      = F.Px( 22 )
+    M.NUM_W       = F.Px( 64 )
+    M.DROP_W      = F.Px( 140 )
+    M.CHECK_W     = F.Px( 22 )
+
+    M.FONT_LABEL  = F.BODY
+    M.FONT_FIELD  = F.BODY
+end
+
+refresh()
+Options2.Fonts.Register( refresh )
 
 -- 104px right-aligned label in text_muted
 function M.MakeLabel(row, tooltip_description)

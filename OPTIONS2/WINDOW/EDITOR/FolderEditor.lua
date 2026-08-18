@@ -1,6 +1,13 @@
-local ROW_H  = 28
+local ROW_H  = Options2.Elements.EditorRow.ROW_H
 local LEFT   = 10
 local TOP    = 10
+
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    -- ROW_H is the shared editor row height, so every editor stays in step
+    ROW_H = Options2.Elements.EditorRow.ROW_H
+end)
 
 Options2.Window.FolderEditor = class(Turbine.UI.Control)
 function Options2.Window.FolderEditor:Constructor(folderData, folderIndex)

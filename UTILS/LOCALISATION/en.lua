@@ -277,6 +277,10 @@ L[ Language.English ].general = {}
 L[ Language.English ].general.show_tooltip                  = "Show Tooltip"
 L[ Language.English ].general.language                      = "Language"
 L[ Language.English ].general.shortcut_size                 = "Shortcut Size"
+L[ Language.English ].general.font_size                     = "Font Size"
+L[ Language.English ].general.font_normal                   = "Normal"
+L[ Language.English ].general.font_large                    = "Large"
+L[ Language.English ].general.font_xlarge                   = "Extra Large"
 L[ Language.English ].general.show_tooltips                 = "Show Tooltips"
 L[ Language.English ].general.english                       = "English"
 L[ Language.English ].general.german                        = "German"
@@ -373,6 +377,7 @@ L[ Language.English ].tooltip.cb_auto_reload                = "Automatically rel
 
 L[ Language.English ].tooltip.dd_language                   = "Sets the display language of the options panel. Does not affect the game client language."
 L[ Language.English ].tooltip.dd_shortcut_size               = "Size in pixels of the draggable shortcut button used to open this options panel."
+L[ Language.English ].tooltip.dd_font_size                   = "Text size of the options panel and the move window. Does not change the timers you see in the game world - those have their own font on each window."
 
 L[ Language.English ].tooltip.trg_description               = "Internal label shown in the trigger list. Has no effect on behaviour."
 L[ Language.English ].tooltip.trg_token                     = "The text or pattern this trigger matches against.\nFor Chat triggers: matched against the message text.\nFor Effect triggers: matched against the effect name."

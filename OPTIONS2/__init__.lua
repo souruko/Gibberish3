@@ -1,3 +1,7 @@
+-- the panel's font size and every metric derived from it; first, because the
+-- modules below register their metrics with it as they load
+import "Gibberish3.OPTIONS2.Fonts"
+
 -- standalone controls
 import "Gibberish3.OPTIONS2.ELEMENTS.CheckBox"
 import "Gibberish3.OPTIONS2.ELEMENTS.Tooltip"
@@ -47,6 +51,10 @@ import "Gibberish3.OPTIONS2.Functions"
 import "Gibberish3.OPTIONS2.SHORTCUT.Functions"
 import "Gibberish3.OPTIONS2.MOVE.Window"
 import "Gibberish3.OPTIONS2.SHORTCUT.Window"
+
+-- Every module has registered its metrics by now, and the saved data is loaded,
+-- so resolve the font size before the first window is built.
+Options2.Fonts.Apply( Options2.Fonts.Current() )
 
 -- singleton tooltip used by all row widgets
 Options2.Elements.TooltipObject = Options2.Elements.Tooltip()

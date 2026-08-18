@@ -10,7 +10,7 @@
 -- edited in SIMPLE/WindowEditor.lua, reached by clicking the timers column's
 -- header.
 
-local ROW_H    = 28
+local ROW_H    = Options2.Elements.EditorRow.ROW_H
 local ICON_H   = 40   -- the icon row, sized around the 32px game icon
 local PAD      = 10
 local GAP      = 8
@@ -21,7 +21,18 @@ local PASTE_H  = 22
 local ICON_W   = 130  -- an icon id is a fixed-length number, so the field is
                       -- narrow and the rest of the row explains what empty does
 
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    -- the shared editor row height, so every editor stays in step
+    ROW_H   = Options2.Elements.EditorRow.ROW_H
+    -- Kinds.lua rescales the shared segment height; re-read it rather than
+    -- holding the value this file loaded with
+    SEG_H   = Options2.Simple.SEG_H
+    PASTE_W = F.Px(52)
+    PASTE_H = F.Px(22)
+    ICON_W  = F.Px(130)
+end)
 
 -- ── kind tables ─────────────────────────────────────────────────────────────
 
@@ -96,7 +107,7 @@ function Options2.Window.SimpleEditor:Constructor(owner)
         local hint = Turbine.UI.Label()
         hint:SetParent(row)
         hint:SetHeight(ROW_H)
-        hint:SetFont(FONT_SMALL)
+        hint:SetFont(Options2.Fonts.SMALL)
         hint:SetForeColor(Options.Defaults.window.text_faint)
         hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
         hint:SetMouseVisible(false)
@@ -176,7 +187,7 @@ function Options2.Window.SimpleEditor:_MakePasteButton(row, click_fn)
     local label = Turbine.UI.Label()
     label:SetParent(fill)
     label:SetSize(PASTE_W - 2, PASTE_H - 2)
-    label:SetFont(FONT_SMALL)
+    label:SetFont(Options2.Fonts.SMALL)
     label:SetForeColor(Options.Defaults.window.paste_border)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)

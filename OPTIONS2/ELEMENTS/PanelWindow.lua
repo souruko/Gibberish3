@@ -10,12 +10,19 @@
 -- buttons up to (it sits left of the close button).
 
 local BORDER   = 1
-local TITLE_H  = 30
 local PAD      = 8
 local GAP      = 8
-local BTN_SIZE = 22
 local BTN_ICON = 16
 local GRIP     = 14
+
+-- the title bar has to hold the title text, so it follows the panel's font size
+local TITLE_H  = 30
+local BTN_SIZE = 22
+
+Options2.Fonts.Register(function()
+    TITLE_H  = Options2.Fonts.Px(30)
+    BTN_SIZE = Options2.Fonts.Px(22)
+end)
 
 Options2.Elements.PanelWindow = class(Turbine.UI.Window)
 

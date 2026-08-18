@@ -4,6 +4,12 @@
 local TAB_H    = 26
 local ACCENT_H = 2
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    TAB_H = F.Px(26)
+end)
+
 Options2Tab = class(Turbine.UI.Control)
 function Options2Tab:Constructor(index, name_control, name_description, parent, width)
     Turbine.UI.Control.Constructor(self)
@@ -19,7 +25,7 @@ function Options2Tab:Constructor(index, name_control, name_description, parent, 
     self.label:SetPosition(0, 0)
     self.label:SetHeight(TAB_H)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetForeColor(Options.Defaults.window.text_muted)
     self.label:SetMouseVisible(false)
 

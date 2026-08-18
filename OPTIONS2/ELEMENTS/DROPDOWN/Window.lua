@@ -1,6 +1,12 @@
 local SCROLL_W    = 10
 local MAX_POPUP_H = 240
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    MAX_POPUP_H = F.Px(240)
+end)
+
 Options2.Elements.Dropdown = class(Turbine.UI.Control)
 function Options2.Elements.Dropdown:Constructor(width, lines)
     Turbine.UI.Control.Constructor(self)
@@ -23,7 +29,7 @@ function Options2.Elements.Dropdown:Constructor(width, lines)
     self.label:SetLeft(8)
     self.label:SetMultiline(false)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetForeColor(Options.Defaults.window.text)
     self.label:SetMouseVisible(false)
 

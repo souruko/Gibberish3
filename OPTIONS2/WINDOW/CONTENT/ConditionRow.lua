@@ -32,10 +32,10 @@ function Options2ContentCondition:Constructor(contentWin, winIdx, timerIdx, cond
     self.mark = P.MakeIcon(self, P.ICON.condition, P.CHILD_H)
     self.mark:SetLeft(P.CHILD_TEXT_X)
 
-    self.label = P.MakeChildLabel(self, Turbine.UI.Lotro.Font.Verdana10,
+    self.label = P.MakeChildLabel(self, Options2.Fonts.SMALL,
         Options.Defaults.window.text, Turbine.UI.ContentAlignment.MiddleLeft)
 
-    self.meta = P.MakeChildLabel(self, Turbine.UI.Lotro.Font.Verdana10,
+    self.meta = P.MakeChildLabel(self, Options2.Fonts.SMALL,
         Options.Defaults.window.text_faint, Turbine.UI.ContentAlignment.MiddleRight)
 
     self.box = P.MakeEnableBox(self, function()

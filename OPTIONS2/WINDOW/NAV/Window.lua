@@ -10,8 +10,16 @@ local BTN_ICON  = 16
 local PAD       = 8
 local LIST_TOP  = HEADER_H + SEARCH_H + SEP_H
 
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
-local FONT_BODY  = Turbine.UI.Lotro.Font.Verdana12
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    HEADER_H = F.Px(26)
+    SEARCH_H = F.Px(24)
+    FOOTER_H = F.Px(20)
+    ITEM_H   = F.Px(26)
+    BTN_SIZE = F.Px(20)
+    LIST_TOP = HEADER_H + SEARCH_H + SEP_H
+end)
 
 -- accent_color, when given, draws a 2px bar under the glyph. A .tga background
 -- cannot be tinted (SetBackColor fills the control behind it rather than
@@ -81,7 +89,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.header_label:SetParent(self.header)
     self.header_label:SetPosition(PAD, 0)
     self.header_label:SetHeight(HEADER_H)
-    self.header_label:SetFont(FONT_SMALL)
+    self.header_label:SetFont(Options2.Fonts.SMALL)
     self.header_label:SetForeColor(Options.Defaults.window.text_muted)
     self.header_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.header_label:SetMouseVisible(false)
@@ -133,7 +141,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.search_box:SetParent(self.search_row)
     self.search_box:SetHeight(SEARCH_H - 4)
     self.search_box:SetTop(2)
-    self.search_box:SetFont(FONT_BODY)
+    self.search_box:SetFont(Options2.Fonts.BODY)
     self.search_box:SetForeColor(Options.Defaults.window.text)
     self.search_box:SetBackColor(nil)
     self.search_box:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
@@ -150,7 +158,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.search_hint = Turbine.UI.Label()
     self.search_hint:SetParent(self.search_row)
     self.search_hint:SetHeight(SEARCH_H)
-    self.search_hint:SetFont(FONT_BODY)
+    self.search_hint:SetFont(Options2.Fonts.BODY)
     self.search_hint:SetForeColor(Options.Defaults.window.text_faint)
     self.search_hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.search_hint:SetMouseVisible(false)
@@ -159,7 +167,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.search_clear:SetSize(20, 20)
     self.search_clear:SetParent(self.search_box)
     self.search_clear:SetText("x")
-    self.search_clear:SetFont(FONT_BODY)
+    self.search_clear:SetFont(Options2.Fonts.BODY)
     self.search_clear:SetVisible(false)
     self.search_clear.Click = function()
         self.search_box:SetText("")
@@ -196,7 +204,7 @@ function Options2.Window.Nav.Constructor:Constructor()
     self.footer = Turbine.UI.Label()
     self.footer:SetParent(self)
     self.footer:SetHeight(FOOTER_H)
-    self.footer:SetFont(FONT_SMALL)
+    self.footer:SetFont(Options2.Fonts.SMALL)
     self.footer:SetForeColor(Options.Defaults.window.text_faint)
     self.footer:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.footer:SetMouseVisible(false)

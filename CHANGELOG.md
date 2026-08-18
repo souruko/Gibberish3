@@ -1,5 +1,11 @@
 # Changelog
 
+### 3.8.0
+- New: a Font Size setting, in the settings window behind the gear in the options panel's title bar. Normal, Large and Extra Large make all the text in the options panel and the move window bigger, for anyone who found the smaller labels hard to read.
+- Everything grows with the text, so nothing is cut off: rows, fields, buttons and the panel's own minimum size. On a smaller screen the panel will not open wider than the screen itself.
+- Picking a size takes effect straight away. The panel reopens at the new size with the same folder, window or timer still selected, and remembers your choice.
+- This only changes the options panel and the move window. The timers you see while playing keep their own font and size, set per window as before.
+
 ### 3.7.2
 - Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.
 - The window or folder you are working in stays selected when you add a trigger, so you no longer lose your place in the list. Deleting a trigger, timer or condition now keeps it selected as well.

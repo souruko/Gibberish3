@@ -9,6 +9,15 @@ local BTN_W  = 110
 local BTN_H  = 28
 local GAP    = 10
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    CARD_W = F.Px(280)
+    CARD_H = F.Px(90)
+    BTN_W  = F.Px(110)
+    BTN_H  = F.Px(28)
+end)
+
 local function _make()
     -- overlay: Window so SetOpacity works; fills the content area of the options window
     local overlay = Turbine.UI.Window()

@@ -1,9 +1,18 @@
-local ROW_H  = 28
+local ROW_H  = Options2.Elements.EditorRow.ROW_H
 local DESC_H = 40
 local ICON_H = 40
 local LEFT   = 10
 local TOP    = 10
 local TAB_W  = 100
+
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    -- ROW_H is the shared editor row height, so every editor stays in step
+    ROW_H  = Options2.Elements.EditorRow.ROW_H
+    DESC_H = F.Px(40)
+    TAB_W  = F.Px(100)
+end)
 
 local BC_ODD  = Options.Defaults.window.row_odd
 local BC_EVEN = Options.Defaults.window.row_even
@@ -38,6 +47,13 @@ end
 local PASTE_W = 64
 local PASTE_H = 20
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    PASTE_W = F.Px(64)
+    PASTE_H = F.Px(20)
+end)
+
 -- Labelled "<- paste" button. Clicking it aims the library at this field; if
 -- something usable is already copied it is taken straight away. Idle it is a
 -- sunken pill with a green border, armed it fills with the accent colour.
@@ -58,7 +74,7 @@ local function paste_btn(panel, row, attr, types, set_fn)
     local label = Turbine.UI.Label()
     label:SetParent(fill)
     label:SetSize(PASTE_W - 2, PASTE_H - 2)
-    label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    label:SetFont(Options2.Fonts.SMALL)
     label:SetForeColor(Options.Defaults.window.text_muted)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)
@@ -170,7 +186,7 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
     local test_label = Turbine.UI.Label()
     test_label:SetParent(test_fill)
     test_label:SetSize(118, 20)
-    test_label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    test_label:SetFont(Options2.Fonts.BODY)
     test_label:SetForeColor(Options.Defaults.window.text_muted)
     test_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     test_label:SetMouseVisible(false)

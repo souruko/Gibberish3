@@ -11,6 +11,13 @@ local MARK   = 16
 local BOX    = 9
 local META_W = 46
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    H      = F.Px(28)
+    META_W = F.Px(46)
+end)
+
 Options2SimpleTimer = class(Turbine.UI.Control)
 function Options2SimpleTimer:Constructor(simpleWin, winIdx, timerIdx, timerData, key)
     Turbine.UI.Control.Constructor(self)
@@ -41,14 +48,14 @@ function Options2SimpleTimer:Constructor(simpleWin, winIdx, timerIdx, timerData,
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
     self.label:SetHeight(H)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetMouseVisible(false)
 
     self.meta = Turbine.UI.Label()
     self.meta:SetParent(self)
     self.meta:SetHeight(H)
-    self.meta:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.meta:SetFont(Options2.Fonts.SMALL)
     self.meta:SetForeColor(Options.Defaults.window.text_faint)
     self.meta:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
     self.meta:SetMouseVisible(false)

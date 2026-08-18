@@ -20,8 +20,15 @@ local BTN_H    = 20
 local BTN_GAP  = 4
 local BTN_PAD  = 8
 
-local FONT_NAME  = Turbine.UI.Lotro.Font.Verdana14
-local FONT_SMALL = Turbine.UI.Lotro.Font.Verdana10
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    HEADER_H = F.Px(34)
+    NAME_H   = F.Px(20)
+    HINT_H   = HEADER_H - NAME_H
+    LIST_TOP = HEADER_H + SEP_H
+    BTN_H    = F.Px(20)
+end)
 
 -- 1px-bordered text button for the header's add actions
 local function make_add_btn(parent, click_fn, tooltip)
@@ -39,7 +46,7 @@ local function make_add_btn(parent, click_fn, tooltip)
 
     local label = Turbine.UI.Label()
     label:SetParent(fill)
-    label:SetFont(FONT_SMALL)
+    label:SetFont(Options2.Fonts.SMALL)
     label:SetForeColor(Options.Defaults.window.text_muted)
     label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     label:SetMouseVisible(false)
@@ -117,7 +124,7 @@ function Options2.Window.Content.Constructor:Constructor()
     self.head_name = Turbine.UI.Label()
     self.head_name:SetParent(self.header)
     self.head_name:SetHeight(NAME_H)
-    self.head_name:SetFont(FONT_NAME)
+    self.head_name:SetFont(Options2.Fonts.TITLE)
     self.head_name:SetForeColor(Options.Defaults.window.text)
     self.head_name:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.head_name:SetMouseVisible(false)
@@ -125,7 +132,7 @@ function Options2.Window.Content.Constructor:Constructor()
     self.head_meta = Turbine.UI.Label()
     self.head_meta:SetParent(self.header)
     self.head_meta:SetHeight(NAME_H)
-    self.head_meta:SetFont(FONT_SMALL)
+    self.head_meta:SetFont(Options2.Fonts.SMALL)
     self.head_meta:SetForeColor(Options.Defaults.window.text_faint)
     self.head_meta:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.head_meta:SetMouseVisible(false)
@@ -134,7 +141,7 @@ function Options2.Window.Content.Constructor:Constructor()
     self.head_hint = Turbine.UI.Label()
     self.head_hint:SetParent(self.header)
     self.head_hint:SetHeight(HINT_H)
-    self.head_hint:SetFont(FONT_SMALL)
+    self.head_hint:SetFont(Options2.Fonts.SMALL)
     self.head_hint:SetForeColor(Options.Defaults.window.text_faint)
     self.head_hint:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.head_hint:SetMouseVisible(false)
@@ -171,7 +178,7 @@ function Options2.Window.Content.Constructor:Constructor()
 
     self.placeholder = Turbine.UI.Label()
     self.placeholder:SetParent(self)
-    self.placeholder:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.placeholder:SetFont(Options2.Fonts.BODY)
     self.placeholder:SetForeColor(Options.Defaults.window.text_faint)
     self.placeholder:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleCenter)
     self.placeholder:SetMouseVisible(false)
@@ -609,6 +616,12 @@ end
 local DRAG_THRESH = 5
 local GHOST_H     = 26
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    GHOST_H = F.Px(26)
+end)
+
 local DRAG_OK      = Turbine.UI.Color(0.569, 0.518, 0.851, 0.55)  -- accent
 local DRAG_NO      = Turbine.UI.Color(0.749, 0.200, 0.282, 0.50)  -- warn
 local DRAG_TARGET  = Turbine.UI.Color(0.569, 0.518, 0.851, 0.35)
@@ -650,7 +663,7 @@ function Options2.Window.Content.Constructor:_InitDrag()
     self._drag_ghost_lbl:SetParent(self._drag_ghost)
     self._drag_ghost_lbl:SetPosition(8, 0)
     self._drag_ghost_lbl:SetHeight(GHOST_H)
-    self._drag_ghost_lbl:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self._drag_ghost_lbl:SetFont(Options2.Fonts.BODY)
     self._drag_ghost_lbl:SetForeColor(Options.Defaults.window.text)
     self._drag_ghost_lbl:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self._drag_ghost_lbl:SetZOrder(501)

@@ -293,6 +293,88 @@ function Options2.SetMode(mode)
     if obj ~= nil and obj.ApplyMode ~= nil then obj:ApplyMode() end
 end
 
+-- ── font size ──────────────────────────────────────────────────────────────────
+--
+-- Nothing in OPTIONS2 can re-font itself in place: every label takes its font and
+-- every row its height when it is built. So a change is applied by building the
+-- windows again. That is cheap and loses nothing - the panel restores its mode,
+-- both column selections and the collapse flags from the persisted panel state,
+-- and every window's position is saved data too.
+
+local function _RebuildUI()
+    local obj = Options2.Window.Object
+    if obj ~= nil then
+        local was_open = obj:IsVisible()
+        -- the paste popover is an unparented window, so it would be left behind
+        if obj.simple ~= nil then obj.simple.fields:ClosePaste() end
+        obj:Close()
+        Options2.Window.Object = nil
+        if was_open then
+            Options2.Window.Object = Options2.Window.Constructor()
+            Options2.Window.Object:Activate()
+            Data.options.window.open2 = true
+        end
+    end
+
+    -- built hidden at startup and shown on demand, so it never needs restoring
+    if Options2.Window.ImportDialogObject ~= nil then
+        Options2.Window.ImportDialogObject:Close()
+        Options2.Window.ImportDialogObject = Options2.Window.ImportDialog()
+    end
+
+    -- the toolbar button builds its right-click menu once, in its constructor
+    if Options.Shortcut.Object ~= nil then
+        Options.Shortcut.Object:Close()
+        Options.Shortcut.Object = Options.Shortcut.Constructor()
+    end
+
+    if Options.Move.Object ~= nil then
+        Options.Move.Object:Close()
+        Options.Move.Object = nil
+        if Data.moveMode == true then
+            Options.Move.Object = Options.Move.Constructor()
+        end
+    end
+
+    -- last, because the change was made in this one
+    local settings = Options2.Window.SettingsWindowObject
+    if settings ~= nil then
+        local was_visible = settings:IsVisible()
+        settings:Close()
+        Options2.Window.SettingsWindowObject = nil
+        if was_visible then
+            Options2.Window.SettingsWindowObject = Options2.Window.SettingsWindow()
+        end
+    end
+end
+
+local _rebuild_tick = nil
+
+function Options2.ApplyFontScale(scale)
+    if not Options2.Fonts.IsValid(scale) then return end
+    if scale == Options2.Fonts.Current() then return end
+
+    Data.options.window.fontScale = scale
+    Options.SaveData()
+
+    Options2.Fonts.Apply(scale)
+
+    -- This runs from the settings dropdown's own click handler and the windows
+    -- about to be destroyed are that dropdown's ancestors, so rebuild on the
+    -- next tick rather than from inside the event. Same trick as the reloader
+    -- in UTILS/Load.lua.
+    if _rebuild_tick ~= nil then return end
+
+    _rebuild_tick = Turbine.UI.Window()
+    _rebuild_tick.Update = function(sender)
+        sender:SetWantsUpdates(false)
+        _rebuild_tick = nil
+        _RebuildUI()
+        sender:Close()
+    end
+    _rebuild_tick:SetWantsUpdates(true)
+end
+
 -- read a persisted panel flag (structureCollapsed / libraryCollapsed)
 function Options2.GetPanelState(name)
     return _panel_state[name]

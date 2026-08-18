@@ -4,6 +4,12 @@
 local H   = 20
 local PAD = 10
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    H = F.Px(20)
+end)
+
 Options2ContentSection = class(Turbine.UI.Control)
 function Options2ContentSection:Constructor(key, text)
     Turbine.UI.Control.Constructor(self)
@@ -20,7 +26,7 @@ function Options2ContentSection:Constructor(key, text)
     self.label:SetParent(self)
     self.label:SetPosition(PAD, 0)
     self.label:SetHeight(H)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.label:SetFont(Options2.Fonts.SMALL)
     self.label:SetForeColor(Options.Defaults.window.text_faint)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetMouseVisible(false)

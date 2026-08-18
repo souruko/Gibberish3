@@ -8,6 +8,13 @@ local BOLT    = 4
 local BOX     = 9
 local TOKEN_W = 130
 
+-- the metrics that hold text follow the panel's font size; see OPTIONS2/Fonts.lua
+Options2.Fonts.Register(function()
+    local F = Options2.Fonts
+    H       = F.Px(28)
+    TOKEN_W = F.Px(130)
+end)
+
 -- nodeType is "foldertrigger" or "windowtrigger"; the owner index goes into
 -- folderIndex or windowIndex to match what the editor expects
 Options2ContentOwnTrigger = class(Turbine.UI.Control)
@@ -42,7 +49,7 @@ function Options2ContentOwnTrigger:Constructor(contentWin, nodeType, ownerIdx, t
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
     self.label:SetHeight(H)
-    self.label:SetFont(Turbine.UI.Lotro.Font.Verdana12)
+    self.label:SetFont(Options2.Fonts.BODY)
     self.label:SetForeColor(Options.Defaults.window.text)
     self.label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.label:SetMouseVisible(false)
@@ -50,7 +57,7 @@ function Options2ContentOwnTrigger:Constructor(contentWin, nodeType, ownerIdx, t
     self.token = Turbine.UI.Label()
     self.token:SetParent(self)
     self.token:SetHeight(H)
-    self.token:SetFont(Turbine.UI.Lotro.Font.Verdana10)
+    self.token:SetFont(Options2.Fonts.SMALL)
     self.token:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleRight)
     self.token:SetMouseVisible(false)
 
