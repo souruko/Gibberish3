@@ -33,7 +33,7 @@ L[ Language.German].class[ Turbine.Gameplay.Class.Troll ]         = "Troll"
 L[ Language.German].class[ Turbine.Gameplay.Class.WarLeader ]     = "Kriegsanführer"
 L[ Language.German].class[ Turbine.Gameplay.Class.Warden ]        = "Hüter"
 L[ Language.German].class[ Turbine.Gameplay.Class.Weaver ]        = "Spinne"
--- L[ Language.German].class[ Turbine.Gameplay.Class.Sorceress ]     = "Zauberin"
+L[ Language.German].class[ Turbine.Gameplay.Class.Sorceress ]     = "Zauberin"
 ---------------------------------------------------------------------------------------------------
 
 LpData.class = L[ Language.German ].class[ LocalPlayer:GetClass() ]

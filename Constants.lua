@@ -285,3 +285,6 @@ Font[Font.Type.FixedSys][15]            = Turbine.UI.Lotro.Font.FixedSys15
 Font[Font.Type.LucidaConsole]           = {}
 Font[Font.Type.LucidaConsole][12]       = Turbine.UI.Lotro.Font.LucidaConsole12
 ---------------------------------------------------------------------------------------------------
+-- Turbine Enum additions ...
+
+Turbine.Gameplay.Class.Sorceress = 217
