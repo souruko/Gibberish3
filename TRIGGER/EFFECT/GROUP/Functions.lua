@@ -11,8 +11,14 @@
 ---------------------------------------------------------------------------------------------------
 -- members of the party that currently have a callback registered, by name
 Trigger[ Trigger.Types.EffectGroup ].tracked = {}
+Trigger[ Trigger.Types.EffectGroup ].party   = nil
 
 Trigger[Trigger.Types.EffectGroup].Init = function ()
+
+    -- only the first GetParty works, so it is read once here and kept. A party
+    -- change reloads the plugin, by way of the auto reload on the party messages
+    -- in chat, and that runs this again with a fresh one.
+    Trigger[ Trigger.Types.EffectGroup ].party = LocalPlayer:GetParty()
 
     Trigger[ Trigger.Types.EffectGroup ].Sync()
 
@@ -22,9 +28,9 @@ end
 ---------------------------------------------------------------------------------------------------
 -- bring the registered callbacks in line with the current party
 ---------------------------------------------------------------------------------------------------
--- called at start up and whenever group tracking is switched on or off. The game
--- gives no usable event for the party itself changing, so a member who joins
--- after this has run is picked up the next time it runs.
+-- called at start up and whenever group tracking is switched on or off, so that
+-- switching it on registers the callbacks instead of leaving them until the next
+-- reload. Works off the party read at start up: it never asks the game again.
 Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
     local tracked = Trigger[ Trigger.Types.EffectGroup ].tracked
@@ -33,7 +39,7 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
     -- track group
     if  Data.trackGroupEffects == true then
 
-        local party = LocalPlayer:GetParty()
+        local party = Trigger[ Trigger.Types.EffectGroup ].party
 
         -- party exists
         if party ~= nil then
