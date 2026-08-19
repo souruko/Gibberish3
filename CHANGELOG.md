@@ -12,6 +12,10 @@
 - Fixed effects on a previous target still setting off target effect triggers. Clearing your target, or targeting yourself, left the one before it being watched as though it were still selected.
 - Target effects are now watched from the moment you log in. Until now the effects already on whatever you had targeted were shown, but nothing new landing on it counted until you targeted something else.
 - The Target Effects switch in the shortcut menu now takes effect straight away, the same as the Group Effects one.
+- Timers that run forever no longer redraw themselves on every frame. A permanent timer on screen was writing to the game's display sixty times a second to keep showing the same thing.
+- Self effect and effect removed triggers are lighter in the same way as the group and target ones. Effect removed triggers using a pattern rebuilt that pattern for every trigger, every time any effect dropped off you.
+- Starting a timer does less work: the text and duration placeholders are only worked out for timers that actually use them.
+- Logging in with a lot of skill triggers is quicker. Every skill you have trained was checked against every trigger; now the list of watched skills is worked out once.
 
 ### 3.7.2
 - Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.

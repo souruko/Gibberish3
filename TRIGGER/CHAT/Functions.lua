@@ -342,9 +342,12 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Chat ].CheckForReload = function (message)
 
+    -- these are whole sentences with full stops in them, so a pattern match pays
+    -- for the matcher on every line of chat. They are literal text, so ask for a
+    -- plain search.
     for key, text in pairs(L[ Language.Local ].ReloadMessages) do
         
-        if string.find( message, text ) then
+        if string.find( message, text, 1, true ) then
             Options.Reload()
             return
         end
