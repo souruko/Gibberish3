@@ -252,7 +252,7 @@ Trigger[ Trigger.Types.EffectTarget ].CheckTimer = function ( effectView, target
         if posAdjustment ~= nil then
             -- fix posAdjustment
             posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effectView.effect, target, posAdjustment, windowIndex, timerIndex, triggerData )
+            Trigger.ProcessEffectTrigger( effectView.effect, target, posAdjustment, windowIndex, timerIndex, triggerData, nil, targetName )
 
         end
 

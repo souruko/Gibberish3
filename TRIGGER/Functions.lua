@@ -167,7 +167,15 @@ end
 function Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerData)
 
     local placeholder = {}
-    local captures = { string.find(message, Trigger.ReplacePlaceholder(token), posAdjustment) }
+
+    -- regex triggers have already had the token turned into a pattern
+    local pattern = triggerData and triggerData._cachedPattern
+
+    if pattern == nil then
+        pattern = Trigger.ReplacePlaceholder(token)
+    end
+
+    local captures = { string.find(message, pattern, posAdjustment) }
 
     -- Remove the first 2 values from captures array since string.find returns startindex and endindex before captures
     table.remove(captures, 1)

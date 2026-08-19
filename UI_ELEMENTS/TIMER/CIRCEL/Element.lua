@@ -310,8 +310,13 @@ function CircelElement:Update()
     -- permanent timers without running time
     else
 
-        self.timerLabel:SetText( "" )
-        self:SetCircelProgress( 0 )
+        -- none of this changes while the timer stays permanent, so it is written
+        -- once on the way in rather than on every frame
+        if self._lastTimeKey ~= "permanent" then
+            self._lastTimeKey = "permanent"
+            self.timerLabel:SetText( "" )
+            self:SetCircelProgress( 0 )
+        end
 
     end
 
