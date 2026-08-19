@@ -23,6 +23,84 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- effect view
+---------------------------------------------------------------------------------------------------
+-- Every effect:Get*() is a call into the game and none of the values can change
+-- while a single event is being processed. A view is built once per event and
+-- reads each value at most once, no matter how many triggers ask for it.
+function Trigger.NewEffectView( effect )
+
+    return { effect = effect }
+
+end
+
+function Trigger.EffectName( view )
+
+    local value = view.name
+
+    if value == nil then
+        value     = view.effect:GetName()
+        view.name = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIcon( view )
+
+    local value = view.icon
+
+    if value == nil then
+        value     = view.effect:GetIcon()
+        view.icon = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIsDebuff( view )
+
+    local value = view.isDebuff
+
+    if value == nil then
+        value         = view.effect:IsDebuff()
+        view.isDebuff = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIsCurable( view )
+
+    local value = view.isCurable
+
+    if value == nil then
+        value          = view.effect:IsCurable()
+        view.isCurable = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectCategory( view )
+
+    local value = view.category
+
+    if value == nil then
+        value         = view.effect:GetCategory()
+        view.category = value
+    end
+
+    return value
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- replace placeholders in token
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)

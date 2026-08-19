@@ -23,22 +23,24 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
 
         Trigger.AddToEffectCollection( effect, "Self" )
 
-        -- the name is the same for every trigger this event visits, and reading
-        -- it is a call into the game, so read it once here
-        local effectName = effect:GetName()
+        -- the effect is the same for every trigger this event visits, and every
+        -- read of it is a call into the game, so read it once here and hand the
+        -- same values to all of them
+        local effectView = Trigger.NewEffectView( effect )
+        local effectName = Trigger.EffectName( effectView )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do
 
             Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData, effectName )
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, LocalPlayer, windowIndex, windowData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, LocalPlayer, windowIndex, windowData, LpData.name )
 
         end
 
         for folderIndex, folderData in ipairs(Data.folder) do
 
             Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData, effectName )
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, LocalPlayer, folderIndex, folderData, LpData.name )
 
         end
 
@@ -69,20 +71,21 @@ Trigger[ Trigger.Types.EffectSelf ].CheckAllActivEffects = function ()
     for index = 1, effects:GetCount(), 1 do
         
         local effect     = effects:Get(index)
-        local effectName = effect:GetName()
+        local effectView = Trigger.NewEffectView( effect )
+        local effectName = Trigger.EffectName( effectView )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do
 
             Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effect, windowIndex, windowData, effectName )
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effect, LocalPlayer, windowIndex, windowData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, LocalPlayer, windowIndex, windowData, LpData.name )
 
         end
 
         for folderIndex, folderData in ipairs(Data.folder) do
 
             Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effect, folderIndex, folderData, effectName )
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effect, LocalPlayer, folderIndex, folderData )
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, LocalPlayer, folderIndex, folderData, LpData.name )
 
         end
 
