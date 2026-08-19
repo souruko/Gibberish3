@@ -115,6 +115,10 @@ function Options.TrackGroupChanged()
 
     Data.trackGroupEffects = not( Data.trackGroupEffects )
 
+    -- register or drop the party callbacks straight away, instead of leaving
+    -- them as they were until the next reload
+    Trigger[ Trigger.Types.EffectGroup ].Sync()
+
     -- shortcut
     Options.Shortcut.Object:TrackGroupChanged()
 

@@ -7,22 +7,86 @@
 
 
 ---------------------------------------------------------------------------------------------------
--- skill event processing start up
+-- effect group event processing start up
 ---------------------------------------------------------------------------------------------------
+-- members of the party that currently have a callback registered, by name
+Trigger[ Trigger.Types.EffectGroup ].tracked      = {}
+Trigger[ Trigger.Types.EffectGroup ].hookedParty  = nil
+Trigger[ Trigger.Types.EffectGroup ].partyWatched = false
+
 Trigger[Trigger.Types.EffectGroup].Init = function ()
 
+    -- the party is watched even while tracking is switched off, so that
+    -- switching it on takes effect without a reload
+    Trigger[ Trigger.Types.EffectGroup ].WatchParty()
+
+    Trigger[ Trigger.Types.EffectGroup ].Sync()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- watch for the party itself being formed, joined, left or disbanded
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectGroup ].WatchParty = function ()
+
+    if Trigger[ Trigger.Types.EffectGroup ].partyWatched == true then
+        return
+    end
+
+    Trigger[ Trigger.Types.EffectGroup ].partyWatched = true
+
+    AddCallback( LocalPlayer, "PartyChanged", function ()
+
+        Trigger[ Trigger.Types.EffectGroup ].Sync()
+
+    end )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- bring the registered callbacks in line with the current party
+---------------------------------------------------------------------------------------------------
+-- called at start up and whenever the party changes. Registering used to happen
+-- once at start up only: members who joined later were never tracked, and
+-- members who left kept a callback that went on firing for them.
+Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
+
+    local tracked = Trigger[ Trigger.Types.EffectGroup ].tracked
+    local present = {}
+
     -- track group
-    if  Data.trackGroupEffects == true then                     
+    if  Data.trackGroupEffects == true then
 
         local party = LocalPlayer:GetParty()
 
         -- party exists
-        if party ~= nil then                                    
-         
+        if party ~= nil then
+
+            -- members come and go without the party itself being replaced
+            if Trigger[ Trigger.Types.EffectGroup ].hookedParty ~= party then
+
+                Trigger[ Trigger.Types.EffectGroup ].hookedParty = party
+
+                AddCallback( party, "MemberAdded", function ()
+
+                    Trigger[ Trigger.Types.EffectGroup ].Sync()
+
+                end )
+
+                AddCallback( party, "MemberRemoved", function ()
+
+                    Trigger[ Trigger.Types.EffectGroup ].Sync()
+
+                end )
+
+            end
+
             local localPlayerName = LpData.name
 
             -- iterate member
-            for i = 1, party:GetMemberCount(), 1 do             
+            for i = 1, party:GetMemberCount(), 1 do
 
                 local player     = party:GetMember(i)
                 local playerName = player:GetName()
@@ -30,29 +94,16 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
                 -- if member ~= lp
                 if playerName ~= localPlayerName then
 
-                    local effects = player:GetEffects()
+                    present[ playerName ] = true
 
-                    -- add
-                    function effects.EffectAdded(sender, args)
+                    -- only members that are not tracked yet are registered and
+                    -- swept, so one member joining does not check the active
+                    -- effects of everyone already in the party a second time
+                    if tracked[ playerName ] == nil then
 
-                        local effect = effects:Get(args.Index)
+                        tracked[ playerName ] = Trigger[ Trigger.Types.EffectGroup ].Register( player, playerName )
 
-                        Trigger.AddToEffectCollection( effect, "Group" )
-
-                        -- read the effect once for the whole event instead of
-                        -- once per trigger it is checked against
-                        local effectView = Trigger.NewEffectView( effect )
-
-                        -- all groups
-                        for windowIndex, windowData in ipairs(Data.window) do
-                            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
-
-                        end
-
-                        for folderIndex, folderData in ipairs(Data.folder) do
-                            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
-
-                        end
+                        Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName )
 
                     end
 
@@ -60,8 +111,18 @@ Trigger[Trigger.Types.EffectGroup].Init = function ()
 
             end
 
-            -- check all active effects once after all callbacks are registered
-            Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects()
+        end
+
+    end
+
+    -- everyone who left, and everyone at all once tracking is switched off
+    for playerName, record in pairs( tracked ) do
+
+        if present[ playerName ] ~= true then
+
+            record.active = false
+            RemoveCallback( record.effects, "EffectAdded", record.callback )
+            tracked[ playerName ] = nil
 
         end
 
@@ -71,48 +132,69 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check all activ effects
+-- register the effect callback of one party member
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckAllActivEffects = function ()
+Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
 
-    local party = LocalPlayer:GetParty()
+    local effects = player:GetEffects()
+    local record  = { effects = effects, active = true }
 
-    -- if party exists
-    if party ~= nil then                                        
-     
-        local localPlayerName = LpData.name
+    -- add
+    record.callback = AddCallback( effects, "EffectAdded", function ( sender, args )
 
-        -- iterate member
-        for i = 1, party:GetMemberCount(), 1 do                 
+        -- a callback can outlive the member it was registered for, and tracking
+        -- can be switched off without the plugin being reloaded
+        if record.active ~= true or Data.trackGroupEffects ~= true then
+            return
+        end
 
-            local player     = party:GetMember(i)
-            local playerName = player:GetName()
+        local effect = effects:Get(args.Index)
 
-            -- member ~= lp
-            if playerName ~= localPlayerName then         
+        Trigger.AddToEffectCollection( effect, "Group" )
 
-                local effects = player:GetEffects()
+        -- read the effect once for the whole event instead of once per trigger
+        local effectView = Trigger.NewEffectView( effect )
 
-                -- iterate effects
-                for j = 1, effects:GetCount(), 1 do             
+        -- all groups
+        for windowIndex, windowData in ipairs(Data.window) do
+            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
 
-                    local effectView = Trigger.NewEffectView( effects:Get(j) )
+        end
 
-                    -- all groups
-                    for windowIndex, windowData in ipairs(Data.window) do
+        for folderIndex, folderData in ipairs(Data.folder) do
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
 
-                        Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
+        end
 
-                    end
+    end )
 
-                    for folderIndex, folderData in ipairs(Data.folder) do
+    return record
 
-                        Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
+end
+---------------------------------------------------------------------------------------------------
 
-                    end
-                end
+---------------------------------------------------------------------------------------------------
+-- check the active effects of one party member
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName )
 
-            end
+    local effects = player:GetEffects()
+
+    -- iterate effects
+    for j = 1, effects:GetCount(), 1 do
+
+        local effectView = Trigger.NewEffectView( effects:Get(j) )
+
+        -- all groups
+        for windowIndex, windowData in ipairs(Data.window) do
+
+            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
+
+        end
+
+        for folderIndex, folderData in ipairs(Data.folder) do
+
+            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
 
         end
 
