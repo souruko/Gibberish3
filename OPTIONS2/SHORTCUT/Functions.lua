@@ -102,6 +102,10 @@ function Options.TrackTargetChanged()
 
     Data.trackTargetEffects = not( Data.trackTargetEffects )
 
+    -- register or drop the target callback straight away, instead of leaving it
+    -- as it was until the next reload
+    Trigger[ Trigger.Types.EffectTarget ].Sync( false )
+
     -- shortcut
     Options.Shortcut.Object:TrackTargetChanged()
 

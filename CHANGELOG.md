@@ -7,6 +7,11 @@
 - This only changes the options panel and the move window. The timers you see while playing keep their own font and size, set per window as before.
 - The Group Effects switch in the shortcut menu now takes effect straight away. Turning it on used to do nothing until the plugin was reloaded, and turning it off left it running.
 - Group effect triggers are considerably lighter on the game. The effect being checked is now read once per effect instead of once per trigger, which is most noticeable when you log in or zone with a lot of group triggers set up.
+- Target effect triggers got the same treatment, and are lighter on the game in the same way.
+- Fixed a target effect trigger with Cureable set to anything other than Any throwing an error. The trigger never worked, and the error stopped every trigger after it from being checked for that effect.
+- Fixed effects on a previous target still setting off target effect triggers. Clearing your target, or targeting yourself, left the one before it being watched as though it were still selected.
+- Target effects are now watched from the moment you log in. Until now the effects already on whatever you had targeted were shown, but nothing new landing on it counted until you targeted something else.
+- The Target Effects switch in the shortcut menu now takes effect straight away, the same as the Group Effects one.
 
 ### 3.7.2
 - Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.
