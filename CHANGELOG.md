@@ -5,8 +5,8 @@
 - Everything grows with the text, so nothing is cut off: rows, fields, buttons and the panel's own minimum size. On a smaller screen the panel will not open wider than the screen itself.
 - Picking a size takes effect straight away. The panel reopens at the new size with the same folder, window or timer still selected, and remembers your choice.
 - This only changes the options panel and the move window. The timers you see while playing keep their own font and size, set per window as before.
-- Fixed group effect triggers not keeping up with your group. Someone joining after you logged in was never watched, and someone leaving went on being watched as if they were still there.
 - The Group Effects switch in the shortcut menu now takes effect straight away. Turning it on used to do nothing until the plugin was reloaded, and turning it off left it running.
+- Turning Group Effects off and on again now re-reads your group. Someone who joined after you logged in starts being watched, and someone who has left stops being watched, without reloading the plugin.
 - Group effect triggers are considerably lighter on the game. The effect being checked is now read once per effect instead of once per trigger, which is most noticeable when you log in or zone with a lot of group triggers set up.
 
 ### 3.7.2

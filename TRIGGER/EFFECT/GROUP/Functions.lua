@@ -10,15 +10,9 @@
 -- effect group event processing start up
 ---------------------------------------------------------------------------------------------------
 -- members of the party that currently have a callback registered, by name
-Trigger[ Trigger.Types.EffectGroup ].tracked      = {}
-Trigger[ Trigger.Types.EffectGroup ].hookedParty  = nil
-Trigger[ Trigger.Types.EffectGroup ].partyWatched = false
+Trigger[ Trigger.Types.EffectGroup ].tracked = {}
 
 Trigger[Trigger.Types.EffectGroup].Init = function ()
-
-    -- the party is watched even while tracking is switched off, so that
-    -- switching it on takes effect without a reload
-    Trigger[ Trigger.Types.EffectGroup ].WatchParty()
 
     Trigger[ Trigger.Types.EffectGroup ].Sync()
 
@@ -26,31 +20,11 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- watch for the party itself being formed, joined, left or disbanded
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].WatchParty = function ()
-
-    if Trigger[ Trigger.Types.EffectGroup ].partyWatched == true then
-        return
-    end
-
-    Trigger[ Trigger.Types.EffectGroup ].partyWatched = true
-
-    AddCallback( LocalPlayer, "PartyChanged", function ()
-
-        Trigger[ Trigger.Types.EffectGroup ].Sync()
-
-    end )
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
 -- bring the registered callbacks in line with the current party
 ---------------------------------------------------------------------------------------------------
--- called at start up and whenever the party changes. Registering used to happen
--- once at start up only: members who joined later were never tracked, and
--- members who left kept a callback that went on firing for them.
+-- called at start up and whenever group tracking is switched on or off. The game
+-- gives no usable event for the party itself changing, so a member who joins
+-- after this has run is picked up the next time it runs.
 Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
     local tracked = Trigger[ Trigger.Types.EffectGroup ].tracked
@@ -63,25 +37,6 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
         -- party exists
         if party ~= nil then
-
-            -- members come and go without the party itself being replaced
-            if Trigger[ Trigger.Types.EffectGroup ].hookedParty ~= party then
-
-                Trigger[ Trigger.Types.EffectGroup ].hookedParty = party
-
-                AddCallback( party, "MemberAdded", function ()
-
-                    Trigger[ Trigger.Types.EffectGroup ].Sync()
-
-                end )
-
-                AddCallback( party, "MemberRemoved", function ()
-
-                    Trigger[ Trigger.Types.EffectGroup ].Sync()
-
-                end )
-
-            end
 
             local localPlayerName = LpData.name
 
