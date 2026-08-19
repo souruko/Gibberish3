@@ -82,7 +82,7 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
         if present[ playerName ] ~= true then
 
             record.active = false
-            RemoveCallback( record.effects, "EffectAdded", record.callback )
+            Trigger.RemoveCallback( record.effects, "EffectAdded", record.callback )
             tracked[ playerName ] = nil
 
         end
@@ -101,7 +101,7 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
     local record  = { effects = effects, active = true }
 
     -- add
-    record.callback = AddCallback( effects, "EffectAdded", function ( sender, args )
+    record.callback = Trigger.AddCallback( effects, "EffectAdded", function ( sender, args )
 
         -- a callback can outlive the member it was registered for, and tracking
         -- can be switched off without the plugin being reloaded

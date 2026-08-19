@@ -42,7 +42,7 @@ Trigger[ Trigger.Types.EffectTarget ].Sync = function ( targetChanged )
     if tracked ~= nil then
 
         tracked.active = false
-        RemoveCallback( tracked.effects, "EffectAdded", tracked.callback )
+        Trigger.RemoveCallback( tracked.effects, "EffectAdded", tracked.callback )
         Trigger[ Trigger.Types.EffectTarget ].tracked = nil
 
     end
@@ -97,7 +97,7 @@ Trigger[ Trigger.Types.EffectTarget ].Register = function ( target, targetName )
     local effects = target:GetEffects()
     local record  = { effects = effects, active = true }
 
-    record.callback = AddCallback( effects, "EffectAdded", function ( sender, args )
+    record.callback = Trigger.AddCallback( effects, "EffectAdded", function ( sender, args )
 
         -- a callback can outlive the target it was registered for, and tracking
         -- can be switched off without the plugin being reloaded
@@ -337,38 +337,5 @@ Trigger[ Trigger.Types.EffectTarget ].CheckTrigger = function ( effectView, targ
 
     return match
 
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- callbacks
----------------------------------------------------------------------------------------------------
-function AddCallback(object, event, callback)
-    if (object[event] == nil) then
-        object[event] = callback;
-    else
-        if (type(object[event]) == "table") then
-            table.insert(object[event], callback);
-        else
-            object[event] = {object[event], callback};
-        end
-    end
-    return callback;
-end
-
-function RemoveCallback(object, event, callback)
-    if (object[event] == callback) then
-        object[event] = nil;
-    else
-        if (type(object[event]) == "table") then
-            local size = table.getn(object[event]);
-            for i = 1, size do
-                if (object[event][i] == callback) then
-                    table.remove(object[event], i);
-                    break;
-                end
-            end
-        end
-    end
 end
 ---------------------------------------------------------------------------------------------------
