@@ -520,42 +520,36 @@ function TimerWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                -- both permanent > sort by index > child2 first
-                if child1.data.permanent == true and
-                child2.data.permanent == true and
-                child1.data.sortIndex > child2.data.sortIndex then
+                -- both permanent > sort by index descending > tie broken by list position
+                if child1.data.permanent == true and child2.data.permanent == true then
 
-                    return true
+                    if child1.data.sortIndex ~= child2.data.sortIndex then
+                        return child1.data.sortIndex > child2.data.sortIndex
+                    else
+                        return child1.index < child2.index
+                    end
 
-                -- both permanent > sort by index > child1 first
-                elseif child1.data.permanent == true and
-                child2.data.permanent == true and
-                child1.data.sortIndex < child2.data.sortIndex then
-
-                    return false
-
-                -- child1 permanent = first
+                -- child1 permanent = last
                 elseif child1.data.permanent == true then
 
                     return false
-                    
-                -- child2 permanent = first
+
+                -- child2 permanent = last
                 elseif child2.data.permanent == true then
 
                     return true
 
-                -- both not permanent sort ty endTime > child2 first
-                elseif child1.endTime > child2.endTime then
+                -- both not permanent sort by endTime descending > tie broken by list position
+                elseif child1.endTime ~= child2.endTime then
 
-                    return true
+                    return child1.endTime > child2.endTime
 
-                -- both not permanent sort ty endTime > child1 first
                 else
 
-                    return false
+                    return child1.index < child2.index
 
                 end
-                
+
             end
         )
 
@@ -564,42 +558,36 @@ function TimerWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                -- both permanent > sort by index > child2 first
-                if child1.data.permanent == true and
-                child2.data.permanent == true and
-                child1.data.sortIndex > child2.data.sortIndex then
+                -- both permanent > sort by index ascending > tie broken by list position
+                if child1.data.permanent == true and child2.data.permanent == true then
 
-                    return false
-
-                -- both permanent > sort by index > child1 first
-                elseif child1.data.permanent == true and
-                child2.data.permanent == true and
-                child1.data.sortIndex < child2.data.sortIndex then
-
-                    return true
+                    if child1.data.sortIndex ~= child2.data.sortIndex then
+                        return child1.data.sortIndex < child2.data.sortIndex
+                    else
+                        return child1.index < child2.index
+                    end
 
                 -- child1 permanent = first
                 elseif child1.data.permanent == true then
 
                     return true
-                    
+
                 -- child2 permanent = first
                 elseif child2.data.permanent == true then
 
                     return false
 
-                -- both not permanent sort ty endTime > child2 first
-                elseif child1.endTime > child2.endTime then
+                -- both not permanent sort by endTime ascending > tie broken by list position
+                elseif child1.endTime ~= child2.endTime then
 
-                    return false
+                    return child1.endTime < child2.endTime
 
-                -- both not permanent sort ty endTime > child1 first
                 else
 
-                    return true
+                    return child1.index < child2.index
 
                 end
-                
+
             end
         )
 

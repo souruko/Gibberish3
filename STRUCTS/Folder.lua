@@ -195,6 +195,12 @@ function Folder.RepairIndices()
 
     if #packed == max_index then return false end
 
+    -- Data.folder also carries the non-array field lastID; keep it, or the next
+    -- new folder cannot get an id.
+    for key, value in pairs(Data.folder) do
+        if type(key) ~= "number" then packed[key] = value end
+    end
+
     Data.folder = packed
 
     for i, folder_data in ipairs(Data.folder) do
@@ -202,7 +208,8 @@ function Folder.RepairIndices()
             folder_data.folder = remap[ folder_data.folder ]
         end
     end
-    for i, window_data in pairs(Data.window or {}) do
+    -- ipairs, not pairs: Data.window carries the number field lastID too
+    for i, window_data in ipairs(Data.window or {}) do
         if window_data.folder ~= nil then
             window_data.folder = remap[ window_data.folder ]
         end

@@ -598,16 +598,12 @@ function CounterWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                if child1.counterCURRENT > child2.counterCURRENT then
-
-                    return false
-
+                if child1.data.sortIndex ~= child2.data.sortIndex then
+                    return child1.data.sortIndex > child2.data.sortIndex
                 else
-
-                    return true
-
+                    return child1.index < child2.index
                 end
-                
+
             end
         )
 
@@ -617,16 +613,12 @@ function CounterWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                if child1.counterCURRENT < child2.counterCURRENT then
-
-                    return false
-
+                if child1.data.sortIndex ~= child2.data.sortIndex then
+                    return child1.data.sortIndex < child2.data.sortIndex
                 else
-
-                    return true
-
+                    return child1.index < child2.index
                 end
-                
+
             end
         )
 
