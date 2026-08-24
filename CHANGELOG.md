@@ -1,5 +1,15 @@
 # Changelog
 
+### 3.8.1
+- Resetting a timer no longer counts as that timer ending, so a reset can no longer set off another timer that is waiting for the first one to end.
+- Counters now stay in the order you arranged them, the same as timers. A counter window used to reorder itself by how high each count was, ignoring the order set in the list.
+- Timers running out at the same moment no longer swap places with each other while they tick down.
+- Duplicating a timer now gives the copy its own place in the running order instead of sharing the original's, so the two no longer trade places on screen.
+- The shortcut button can no longer be dragged off the edge of the screen. A button that ended up off-screen — from a saved position on a larger screen, or from making the icon bigger — is now brought back into view.
+- The options panel can no longer be moved out of reach. The title bar is the only way to drag it, so part of the bar now always stays on screen and the panel can never go above the top edge. A position saved on a larger screen is brought back into view as well.
+- Windows missing from the list are now recovered the same way folders already were. A gap in the saved list used to hide every window after it.
+- Fixed the folder recovery leaving the plugin unable to create new folders afterwards. After a recovery the options panel now opens with nothing selected, rather than on whatever moved into the old spot.
+
 ### 3.8.0
 - New: a Font Size setting, in the settings window behind the gear in the options panel's title bar. Normal, Large and Extra Large make all the text in the options panel and the move window bigger, for anyone who found the smaller labels hard to read.
 - Everything grows with the text, so nothing is cut off: rows, fields, buttons and the panel's own minimum size. On a smaller screen the panel will not open wider than the screen itself.

@@ -431,10 +431,16 @@ end
 ---------------------------------------------------------------------------------------------------
 -- timer is done
 ---------------------------------------------------------------------------------------------------
-function BarElement:Ended()
+function BarElement:Ended( silent )
 
     -- timer ended trigger event
-    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
+    -- a silent end ( reset ) stops the timer without firing the event, so a reset
+    -- cannot start another timer that listens for this timers end
+    if silent ~= true then
+
+        Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
+
+    end
 
     if self.data.permanent == true then
         
@@ -507,10 +513,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Reset(force)
 
-    -- if reset attribute is set call the timer end
+    -- if reset attribute is set call the timer end without the timer end event
     if force == true or self.data.reset == true then
-        
-        self:Ended()
+
+        self:Ended( true )
 
     end
 
