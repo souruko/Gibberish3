@@ -369,9 +369,11 @@ function Options2.Window.Constructor:Constructor()
                      Options.Defaults.window.min_height)
     end
 
+    -- MoveTo, not SetPosition: a position saved on a bigger screen than the one
+    -- we are on now would otherwise put the title bar out of reach
     local l2 = Data.options.window.left2 or Data.options.window.left
     local t2 = Data.options.window.top2  or Data.options.window.top
-    self:SetPosition(UTILS.ScreenRatioToPixel(l2, t2))
+    self:MoveTo(UTILS.ScreenRatioToPixel(l2, t2))
 
     self:SetWantsKeyEvents(true)
     self.KeyDown = function(sender, args)

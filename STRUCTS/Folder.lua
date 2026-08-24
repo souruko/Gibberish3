@@ -167,53 +167,81 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- close up holes in Data.folder
+-- pack one hole-free array out of a table that also carries plain fields
 ---------------------------------------------------------------------------------------------------
--- Everything walks Data.folder with ipairs, which stops at the first empty slot, so a
--- single hole hides every folder after it. Saves written before Folder.Delete was fixed
--- can carry one. Slots are packed down, every folder reference is remapped, and anything
--- that pointed at a folder which is gone moves back to the root.
+-- Data.folder and Data.window are arrays, but each one also holds a lastID field. Copying
+-- only the numbered slots would drop it and the next new folder/window could not get an id,
+-- so the named fields are carried across too.
+-- Returns the packed table, an old index -> new index map, and whether anything moved.
 ---------------------------------------------------------------------------------------------------
-function Folder.RepairIndices()
-
-    if Data == nil or Data.folder == nil then return false end
+local function PackArray( source )
 
     -- highest occupied slot; # cannot be trusted once there is a hole
     local max_index = 0
-    for i in pairs(Data.folder) do
+    for i in pairs(source) do
         if type(i) == "number" and i > max_index then max_index = i end
     end
 
     local packed = {}
     local remap  = {}
     for i=1,max_index do
-        if Data.folder[i] ~= nil then
-            packed[#packed+1] = Data.folder[i]
+        if source[i] ~= nil then
+            packed[#packed+1] = source[i]
             remap[i] = #packed
         end
     end
 
-    if #packed == max_index then return false end
-
-    -- Data.folder also carries the non-array field lastID; keep it, or the next
-    -- new folder cannot get an id.
-    for key, value in pairs(Data.folder) do
+    for key, value in pairs(source) do
         if type(key) ~= "number" then packed[key] = value end
     end
 
-    Data.folder = packed
+    return packed, remap, (#packed ~= max_index)
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- close up holes in Data.folder and Data.window
+---------------------------------------------------------------------------------------------------
+-- Everything walks both lists with ipairs, which stops at the first empty slot, so a single
+-- hole hides every folder or window after it. Saves written before Folder.Delete was fixed
+-- can carry one. Slots are packed down, every folder reference is remapped, and anything
+-- that pointed at a folder which is gone moves back to the root.
+---------------------------------------------------------------------------------------------------
+function Folder.RepairIndices()
+
+    if Data == nil or Data.folder == nil or Data.window == nil then return false end
+
+    local folders, folder_remap, folders_moved = PackArray( Data.folder )
+    local windows, _,            windows_moved = PackArray( Data.window )
+
+    if folders_moved == false and windows_moved == false then return false end
+
+    Data.folder = folders
+    Data.window = windows
 
     for i, folder_data in ipairs(Data.folder) do
         if folder_data.folder ~= nil then
-            folder_data.folder = remap[ folder_data.folder ]
+            folder_data.folder = folder_remap[ folder_data.folder ]
         end
     end
-    -- ipairs, not pairs: Data.window carries the number field lastID too
-    for i, window_data in ipairs(Data.window or {}) do
+    for i, window_data in ipairs(Data.window) do
         if window_data.folder ~= nil then
-            window_data.folder = remap[ window_data.folder ]
+            window_data.folder = folder_remap[ window_data.folder ]
         end
     end
+
+    -- the saved selection is a Data.window index (or a negated Data.folder one) and the
+    -- repack has just moved both, so it no longer points where it did
+    Data.selectedIndex                  = 0
+    Data.selectedTimerIndex             = 0
+    Data.selectedTriggerIndex           = 0
+    Data.selectedTriggerType            = 0
+    Data.selectedTriggerIndex2          = 0
+    Data.selectedTriggerType2           = 0
+    Data.selectedConditionsIndex        = 0
+    Data.selectedConditionTriggerIndex  = 0
+    Data.selectedConditionTriggerType   = 0
 
     return true
 
