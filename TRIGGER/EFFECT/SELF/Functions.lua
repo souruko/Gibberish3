@@ -226,10 +226,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckTrigger = function ( effect, triggerDat
     -- check token (regex path only; exact match already confirmed above)
     if triggerData.useRegex == true then
 
-        if triggerData._cachedPattern == nil then
-            triggerData._cachedPattern = Trigger.ReplacePlaceholder(triggerData.token)
-        end
-        return string.find( effectName, triggerData._cachedPattern )
+        return string.find( effectName, Trigger.GetPattern(triggerData) )
 
     end
 
@@ -316,7 +313,7 @@ Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger = function ( effect, trig
     -- check token
     if triggerData.useRegex == true then
 
-        return string.find( effect:GetName(), Trigger.ReplacePlaceholder(triggerData.token) )
+        return string.find( effect:GetName(), Trigger.GetPattern(triggerData) )
 
     else
 
@@ -393,27 +390,14 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
 
     elseif timerData.textOption == TimerTextOptions.CustomText then
 
-        text = timerData.textValue
-
-        for index, value in pairs(placeholder) do
-
-            text = string.gsub ( text, index, value)
-
-        end
+        text = Trigger.ApplyPlaceholder( timerData.textValue, placeholder )
 
     end
 
     -- duration
     if timerData.useCustomTimer == true then
 
-        duration = timerData.timerValue
-
-        for index, value in pairs(placeholder) do
-
-            duration = string.gsub( tostring(duration), index, value)
-
-        end
-
+        duration = Trigger.ApplyPlaceholder( timerData.timerValue, placeholder )
         duration = tonumber( duration ) or duration
 
     else

@@ -493,8 +493,10 @@ function TimerWindowElement:FillPermanentChildren()
 
             local icon = timerData.icon
             local text = ""
+            -- a permanent timer has no trigger of its own, but the common
+            -- placeholders do not need one
             if timerData.textOption == TimerTextOptions.CustomText then
-                text = timerData.textValue
+                text = Trigger.ApplyPlaceholder( timerData.textValue, Trigger.CommonPlaceholder() )
             end
 
             self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, j, 0, 0, icon, text, nil, nil, false )

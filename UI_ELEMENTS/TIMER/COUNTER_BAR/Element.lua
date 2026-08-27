@@ -89,7 +89,7 @@ function CounterBarElement:Constructor( parent, data, index )
     self:DataChanged()
 
     -- start up
-    self:UpdateContent( 0, data.icon, data.textValue, nil, nil, true )
+    self:UpdateContent( 0, data.icon, Trigger.ApplyPlaceholder( data.textValue, Trigger.CommonPlaceholder() ), nil, nil, true )
 
     -- timer started trigger event
     if Trigger.TimerEvent ~= nil then

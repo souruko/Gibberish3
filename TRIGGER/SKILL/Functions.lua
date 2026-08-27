@@ -240,7 +240,7 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
     local key       = nil
 
     local token = triggerData.token
-    local placeholder = { ["&tag"] = tostring(triggerData.tag or "") }
+    local placeholder = Trigger.CommonPlaceholder( triggerData )
 
     -- key
     -- every trigger = new timer
@@ -263,16 +263,14 @@ Trigger[ Trigger.Types.Skill ].ProcessTrigger = function ( skill, windowIndex, t
 
     elseif timerData.textOption == TimerTextOptions.CustomText then
 
-        text = timerData.textValue
-        for k, v in pairs(placeholder) do text = string.gsub(text, k, v) end
+        text = Trigger.ApplyPlaceholder( timerData.textValue, placeholder )
 
     end
 
     -- duration
     if timerData.useCustomTimer == true then
 
-        duration = timerData.timerValue
-        for k, v in pairs(placeholder) do duration = string.gsub(tostring(duration), k, v) end
+        duration = Trigger.ApplyPlaceholder( timerData.timerValue, placeholder )
         duration = tonumber(duration) or duration
 
     else

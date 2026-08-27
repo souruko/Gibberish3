@@ -355,7 +355,7 @@ local function make_chat_form(data, bc, nodeData)
     local function save()
         data.description     = desc:GetText()
         data.token           = token:GetText()
-        data._cachedPattern  = nil
+        Trigger.ClearPattern( data )
         data.useRegex        = useRegex:IsChecked()
         data.source          = source:GetSelectedValue()
         data.listOfTargets   = listOfTargets:GetValue()
