@@ -370,30 +370,37 @@ function Options.LoadRunningTimer()
 
                 local timerData = windowData.timerList[ data.index ]
 
-                -- check if timer should get started again
-                if data.startTime == nil or
-                gameTime < (data.startTime + data.duration) or
-                    timerData.loop == true then
-
-                    -- fix loop start time
-                    if timerData.loop == true then
-                        local time_past = gameTime - data.startTime
-                        local time_left = math.fmod(time_past, data.duration)
-                        data.startTime = gameTime - time_left
-                    end
+                if timerData == nil then
+                    Turbine.Shell.WriteLine( "Gibberish: Timer index " .. data.index .. " not found in window " .. i )
                     
-                    -- action call
-                    Windows[ i ]:TimerAction(
-                        fake_trigger_data,
-                        timerData,
-                        data.index,
-                        data.startTime,
-                        data.duration,
-                        data.icon,
-                        data.text,
-                        nil,
-                        data.key
-                    )
+                else
+
+                    -- check if timer should get started again
+                    if data.startTime == nil or
+                    gameTime < (data.startTime + data.duration) or
+                        timerData.loop == true then
+
+                        -- fix loop start time
+                        if timerData.loop == true then
+                            local time_past = gameTime - data.startTime
+                            local time_left = math.fmod(time_past, data.duration)
+                            data.startTime = gameTime - time_left
+                        end
+                        
+                        -- action call
+                        Windows[ i ]:TimerAction(
+                            fake_trigger_data,
+                            timerData,
+                            data.index,
+                            data.startTime,
+                            data.duration,
+                            data.icon,
+                            data.text,
+                            nil,
+                            data.key
+                        )
+
+                    end
 
                 end
 
