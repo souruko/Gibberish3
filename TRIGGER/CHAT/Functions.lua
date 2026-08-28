@@ -206,7 +206,10 @@ Trigger[ Trigger.Types.Chat ].CheckTrigger = function( message, chatType, trigge
     end
 
     -- find match with message and token (cache the processed pattern since the token is immutable at runtime)
-    return string.find( message, Trigger.GetPattern( triggerData ) )
+    if triggerData._cachedPattern == nil then
+        triggerData._cachedPattern = Trigger.ReplacePlaceholder( triggerData.token )
+    end
+    return string.find( message, triggerData._cachedPattern )
 
   
 end
@@ -265,7 +268,11 @@ Trigger[ Trigger.Types.Chat ].ProcessTrigger = function( message, chatType, posA
 
 
    elseif timerData.textOption == TimerTextOptions.CustomText then
-       text = Trigger.ApplyPlaceholder( timerData.textValue, placeholder )
+       text = timerData.textValue
+
+       for index, value in pairs(placeholder) do
+           text = string.gsub ( text, index, value)
+       end
 
    end
 

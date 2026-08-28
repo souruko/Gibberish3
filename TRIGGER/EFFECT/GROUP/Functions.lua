@@ -255,7 +255,10 @@ Trigger[ Trigger.Types.EffectGroup ].CheckTrigger = function ( effect, player, t
     -- check token (regex path only; exact match already confirmed above)
     if triggerData.useRegex == true then
 
-        return string.find( effectName, Trigger.GetPattern(triggerData) )
+        if triggerData._cachedPattern == nil then
+            triggerData._cachedPattern = Trigger.ReplacePlaceholder(triggerData.token)
+        end
+        return string.find( effectName, triggerData._cachedPattern )
 
     end
 

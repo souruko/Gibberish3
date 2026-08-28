@@ -101,10 +101,11 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
     -- declaration
     local windowData = Data.window[windowIndex]
     local timerData = windowData.timerList[timerIndex]
-    local placeholder = Trigger.CommonPlaceholder( triggerData )
+    local placeholder = { ["&tag"] = tostring(triggerData.tag or "") }
 
     local startTime = Turbine.Engine.GetGameTime()
-    local text      = Trigger.ApplyPlaceholder( timerData.textValue, placeholder )
+    local text      = timerData.textValue
+    for k, v in pairs(placeholder) do text = string.gsub(text, k, v) end
     local duration  = 10
     local icon      = timerData.icon
     local entity    = nil
@@ -122,7 +123,8 @@ Trigger.ProcessTimerTrigger = function ( windowIndex, timerIndex, triggerData )
     -- duration
     if timerData.useCustomTimer == true then
 
-        duration = Trigger.ApplyPlaceholder( timerData.timerValue, placeholder )
+        duration = timerData.timerValue
+        for k, v in pairs(placeholder) do duration = string.gsub(tostring(duration), k, v) end
         duration = tonumber(duration) or duration
 
     end

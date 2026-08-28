@@ -5,8 +5,6 @@
 - Everything grows with the text, so nothing is cut off: rows, fields, buttons and the panel's own minimum size. On a smaller screen the panel will not open wider than the screen itself.
 - Picking a size takes effect straight away. The panel reopens at the new size with the same folder, window or timer still selected, and remembers your choice.
 - This only changes the options panel and the move window. The timers you see while playing keep their own font and size, set per window as before.
-- Fixed the &name placeholder showing the wrong character. Once a trigger had run, the name was baked into the trigger and saved with it, and since that data is shared by the whole account, every other character kept matching on the name of whichever one saved last. Existing settings are repaired the next time the plugin loads.
-- &name, &class and &target now also work in the text and the duration of timers started by a skill, by combat start or end, or by another timer, and in the text of permanent and counter timers. Previously only &tag was replaced there and the rest showed as typed.
 
 ### 3.7.2
 - Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.

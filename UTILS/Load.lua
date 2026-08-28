@@ -48,7 +48,7 @@ function Options.LoadData()
 
     -- no char data > use global_data
     if char_data == nil then
-        return Options.StripRuntimeData( global_data )
+        return global_data
 
     end
 
@@ -58,37 +58,7 @@ function Options.LoadData()
 
     end
 
-    return Options.StripRuntimeData( Options.OverwriteCharData( global_data, char_data ) )
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- remove runtime only fields from loaded data
----------------------------------------------------------------------------------------------------
--- Up to 3.8.0 the pattern built from a trigger token was cached on the trigger
--- itself, which put it in the save file with &name already resolved. That data
--- is shared by every character of the account, so the cache is cleaned out of
--- older saves here - it is now kept outside of Data and never written.
-function Options.StripRuntimeData( data )
-
-    if type( data ) ~= "table" then
-        return data
-
-    end
-
-    data._cachedPattern = nil
-
-    for key, value in pairs( data ) do
-
-        if type( value ) == "table" then
-            Options.StripRuntimeData( value )
-
-        end
-
-    end
-
-    return data
+    return Options.OverwriteCharData( global_data, char_data )
 
 end
 ---------------------------------------------------------------------------------------------------

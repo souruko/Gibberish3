@@ -66,7 +66,7 @@ local function ensure_capture(trigData)
         trigData.token = (token ~= "" and (token .. " &1") or "&1")
     end
     trigData.useRegex     = true
-    Trigger.ClearPattern(trigData)
+    trigData._cachedPattern = nil
 end
 
 -- the literal part of a token, with the capture group taken back out
@@ -435,7 +435,7 @@ function Options2.Window.SimpleEditor:Save()
 
     trg.action          = Action.Add
     trg.token           = self.field_token.box:GetText()
-    Trigger.ClearPattern(trg)
+    trg._cachedPattern  = nil
 
     -- Chat has no duration of its own, so the timer supplies one
     if kind == Trigger.Types.Chat then
@@ -493,7 +493,7 @@ function Options2.Window.SimpleEditor:_SyncRemoveTrigger(td, trg)
     rem.action         = Action.Remove
     rem.token          = trg.token
     rem.useRegex       = trg.useRegex
-    Trigger.ClearPattern(rem)
+    rem._cachedPattern = nil
 end
 
 -- Changing the kind clears the token: it named something in the old

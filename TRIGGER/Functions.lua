@@ -48,83 +48,11 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- cache of processed tokens
----------------------------------------------------------------------------------------------------
--- A token is immutable at runtime, so the pattern built from it is kept instead
--- of being rebuilt on every trigger check.
---
--- The cache lives here, keyed by the trigger table, and NOT on the trigger
--- itself: triggers are part of Data and Data is written to the save file, so a
--- pattern stored on the trigger was saved with &name already resolved. Since
--- the account scope is the base for every character, the next character loaded
--- that pattern, found it already there and never rebuilt it - &name kept
--- matching whichever character saved last.
-local patternCache = setmetatable( {}, { __mode = "k" } )
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- returns the pattern of a trigger token
----------------------------------------------------------------------------------------------------
-function Trigger.GetPattern( triggerData )
-
-    local pattern = patternCache[ triggerData ]
-
-    if pattern == nil then
-
-        pattern = Trigger.ReplacePlaceholder( triggerData.token )
-        patternCache[ triggerData ] = pattern
-
-    end
-
-    return pattern
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- drop the cached pattern of a trigger, call after its token changed
----------------------------------------------------------------------------------------------------
-function Trigger.ClearPattern( triggerData )
-
-    patternCache[ triggerData ] = nil
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- returns the placeholders every trigger type supports
----------------------------------------------------------------------------------------------------
-function Trigger.CommonPlaceholder( triggerData, target )
-
-    -- no target given: the one selected right now
-    if target == nil then
-
-        local entity = LocalPlayer:GetTarget()
-
-        if entity ~= nil and entity.GetName ~= nil then
-            target = entity:GetName()
-        end
-
-    end
-
-    local placeholder = {}
-
-    placeholder["&name"]   = LpData.name
-    placeholder["&class"]  = LpData.class
-    placeholder["&target"] = target or ""
-    placeholder["&tag"]    = tostring((triggerData and triggerData.tag) or "")
-
-    return placeholder
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
 -- returns list of placeholders
 ---------------------------------------------------------------------------------------------------
 function Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerData)
 
-    local placeholder = Trigger.CommonPlaceholder(triggerData, target)
+    local placeholder = {}
     local captures = { string.find(message, Trigger.ReplacePlaceholder(token), posAdjustment) }
 
     -- Remove the first 2 values from captures array since string.find returns startindex and endindex before captures
@@ -137,31 +65,13 @@ function Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerDa
         placeholder["&" .. index] = value
     end
 
+    -- Add index, value pairs for common placeholders
+    placeholder["&name"] = LpData.name
+    placeholder["&class"] = LpData.class
+    placeholder["&target"] = target
+    placeholder["&tag"] = tostring((triggerData and triggerData.tag) or "")
+
     return placeholder
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- replace every placeholder in a text
----------------------------------------------------------------------------------------------------
-function Trigger.ApplyPlaceholder(text, placeholder)
-
-    text = tostring(text or "")
-
-    for index, value in pairs(placeholder) do
-
-        -- % introduces a capture reference in a gsub replacement, so a value
-        -- carrying one ("50% of ...") has to be escaped before it is used.
-        -- Kept in its own variable: gsub also returns a count, and passed on
-        -- directly that count would land in the limit argument of the outer call
-        local replacement = string.gsub(tostring(value), "%%", "%%%%")
-
-        text = string.gsub(text, index, replacement)
-
-    end
-
-    return text
 
 end
 ---------------------------------------------------------------------------------------------------
