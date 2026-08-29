@@ -24,6 +24,67 @@ Close_reload_plugin:SetWantsUpdates( true )
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- drop the cached trigger patterns
+---------------------------------------------------------------------------------------------------
+-- Trigger.ReplacePlaceholder resolves &name and &class against the character that is logged in and
+-- the result is cached on the trigger itself. That cache must never outlive a session: it is part
+-- of Data, so it gets written to the account wide plugin data and the next character loads a
+-- pattern built from the previous character's name and class. It is only rebuilt when nil, so the
+-- trigger would never match again. Cleared on load and before every save.
+---------------------------------------------------------------------------------------------------
+function Options.ClearPatternCache( data )
+
+    if data == nil then
+        return
+    end
+
+    -- trigger types are 1 - 10; Trigger.Types is not loaded yet when the data is loaded
+    local function clear_trigger_lists( container )
+
+        for triggerType = 1, 10 do
+
+            local list = container[ triggerType ]
+
+            if list ~= nil then
+
+                for index, trigger in ipairs( list ) do
+                    trigger._cachedPattern = nil
+                end
+
+            end
+
+        end
+
+    end
+
+    -- folder triggers
+    for index, folder_data in ipairs( data.folder or {} ) do
+        clear_trigger_lists( folder_data )
+    end
+
+    for index, window_data in ipairs( data.window or {} ) do
+
+        -- window triggers
+        clear_trigger_lists( window_data )
+
+        for i, timer_data in ipairs( window_data.timerList or {} ) do
+
+            -- timer triggers
+            clear_trigger_lists( timer_data )
+
+            -- condition triggers
+            for j, condition_data in ipairs( timer_data.conditionList or {} ) do
+                clear_trigger_lists( condition_data )
+            end
+
+        end
+
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- load data
 ---------------------------------------------------------------------------------------------------
 function Options.LoadData()
@@ -48,6 +109,7 @@ function Options.LoadData()
 
     -- no char data > use global_data
     if char_data == nil then
+        Options.ClearPatternCache( global_data )
         return global_data
 
     end
@@ -58,7 +120,11 @@ function Options.LoadData()
 
     end
 
-    return Options.OverwriteCharData( global_data, char_data )
+    local data = Options.OverwriteCharData( global_data, char_data )
+
+    Options.ClearPatternCache( data )
+
+    return data
 
 end
 ---------------------------------------------------------------------------------------------------

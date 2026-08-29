@@ -11,6 +11,9 @@
 ---------------------------------------------------------------------------------------------------
 function Options.SaveData()
 
+    -- the resolved &name / &class patterns are per character, they must not reach the account data
+    Options.ClearPatternCache( Data )
+
     if Language.Local == Language.English then
         Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_char_" .. Language[ Language.English ], Data, nil)
         Turbine.PluginData.Save(Turbine.DataScope.Account, "gibberish_global_" .. Language[ Language.English ], Data, nil)

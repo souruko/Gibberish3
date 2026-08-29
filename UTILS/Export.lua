@@ -175,7 +175,8 @@ function TriggerToString( data )
 
             end
 
-        else
+        -- runtime cache holding this character's resolved &name / &class, never share it
+        elseif key ~= "_cachedPattern" then
 
             text = text  .. key .. ":{" .. tostring(value) .. "}:"
 
@@ -208,7 +209,7 @@ function ConditionToString( data )
                     if key == "listOfTargets" then
                         t = t .. key .. ":{" .. tostring( ListOfTargetsToString( value ) ) .. "}:"
                     end
-                else
+                elseif key ~= "_cachedPattern" then
                     t = t .. key .. ":{" .. tostring(value) .. "}:"
                 end
             end
