@@ -10,7 +10,7 @@
 -- save data
 ---------------------------------------------------------------------------------------------------
 function Options.SaveData()
-
+-- 
     -- the resolved &name / &class patterns are per character, they must not reach the account data
     Options.ClearPatternCache( Data )
 
