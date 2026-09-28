@@ -30,6 +30,8 @@ function TimerWindowElement:Constructor( index )
     self.data       = Data.window[ self.index ]
     -- timer table
     self.children   = {}
+    -- finished timers kept for reuse ( creating new lotro windows for every timer adds up )
+    self.pool       = {}
 
     self.base_left, self.base_top = UTILS.ScreenRatioToPixel( self.data.left, self.data.top )
     self.left_shift = 0
@@ -282,6 +284,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerWindowElement:Finish()
 
+    -- no more recycling, all timers have to be closed
+    self.finishing = true
+
     -- timer finish call
     for i = #self.children, 1, -1 do
 
@@ -289,8 +294,34 @@ function TimerWindowElement:Finish()
 
     end
 
+    -- close the recycled timers
+    for i = #self.pool, 1, -1 do
+
+        self.pool[i]:Dispose()
+        self.pool[i] = nil
+
+    end
+
+    -- no layout for a closed window
+    Windows.PendingLayouts[ self ] = nil
+
     self.dragWindow:Close()
     self:Close()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- sort and resize, called by the central updater after timers were added / removed
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:ApplyLayout()
+
+    if self.finishing == true then
+        return
+    end
+
+    self:SortChildren()
+    self:Resize()
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -314,7 +345,83 @@ function TimerWindowElement:ChildFinished( child )
     -- remove child from timerListBox
     self.timerListBox:RemoveItem( child )
 
-    self:Resize()
+    -- resize once in the next frame
+    Windows.RequestLayout( self )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- keep a finished timer for reuse, returns false if the timer has to be closed
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:RecycleChild( child )
+
+    -- window is closing / permanent timers are never finished while running
+    if self.finishing == true or
+       child.data.permanent == true or
+       Options.Defaults.timer.maxPoolSize <= 0 then
+        return false
+    end
+
+    -- pool is full, close the oldest timer
+    if #self.pool >= Options.Defaults.timer.maxPoolSize then
+
+        self.pool[1]:Dispose()
+        table.remove( self.pool, 1 )
+
+    end
+
+    self.pool[ #self.pool + 1 ] = child
+
+    return true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns a finished timer for the same timer data or nil
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:TakeFromPool( timerIndex, timerData )
+
+    for i = #self.pool, 1, -1 do
+
+        local child = self.pool[i]
+
+        -- same timer data and still the same timer type
+        if child.index == timerIndex and
+           child.data == timerData and
+           child.timerType == timerData.type then
+
+            table.remove( self.pool, i )
+            return child
+
+        end
+
+    end
+
+    return nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- apply the current opacity of a control again ( lotro ignores setting the same value )
+---------------------------------------------------------------------------------------------------
+local function ForceOpacity( control )
+
+    if control == nil then
+        return
+    end
+
+    local opacity = control:GetOpacity()
+
+    if opacity == 0 then
+        control:SetOpacity( 1 )
+    else
+        control:SetOpacity( 0 )
+    end
+
+    control:SetOpacity( opacity )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -329,10 +436,35 @@ function TimerWindowElement:ActionAdd( timerData, timerIndex, startTime, duratio
     -- create new timer
     if child == nil then
 
-        local index = #self.children + 1
-        self.children[ index ] = Timer[ timerData.type ].Constructor( self, timerData, timerIndex, startTime, duration, icon, text, entity, key, true )
-        self.timerListBox:AddItem( self.children[ index ] )
-        self:Resize()
+        -- reuse a finished timer if possible
+        child = self:TakeFromPool( timerIndex, timerData )
+
+        if child ~= nil then
+
+            child:Start( startTime, duration, icon, text, entity, key, true )
+
+            DebugStats.timersReused = DebugStats.timersReused + 1
+            child.reuseCount = ( child.reuseCount or 0 ) + 1
+
+        else
+
+            child = Timer[ timerData.type ].Constructor( self, timerData, timerIndex, startTime, duration, icon, text, entity, key, true )
+            child.timerType = timerData.type
+
+            DebugStats.timersCreated = DebugStats.timersCreated + 1
+
+        end
+
+        self.children[ #self.children + 1 ] = child
+        self.timerListBox:AddItem( child )
+
+        -- a re-added timer is drawn with full opacity, although GetOpacity() still returns the old value
+        -- and setting the same value again is ignored by lotro, so the opacity is forced to change once
+        if child.reuseCount ~= nil then
+            ForceOpacity( child )
+            ForceOpacity( child.iconControl )
+            ForceOpacity( child.circelBack )
+        end
 
     -- update running timer
     else
@@ -341,7 +473,8 @@ function TimerWindowElement:ActionAdd( timerData, timerIndex, startTime, duratio
 
     end
 
-    self:SortChildren()
+    -- sort / resize once in the next frame instead of after every added timer
+    Windows.RequestLayout( self )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -359,7 +492,6 @@ function TimerWindowElement:ActionRemove( timerIndex, key )
             if self.children[i].key == nil or self.children[i].key == key then
 
                 self.children[i]:Ended()
-                self:Resize()
 
             end
 

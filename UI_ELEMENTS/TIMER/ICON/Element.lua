@@ -89,6 +89,30 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
     self.timerLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
     self.timerLabel:SetZOrder( 8 )
     
+    -- start up
+    self:Start( startTime, duration, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] start the timer ( also used for recycled timers )
+---------------------------------------------------------------------------------------------------
+function IconElement:Start( startTime, duration, icon, text, entity, key, activ )
+
+    -- key
+    self.key = key
+    self.icon = icon
+
+    -- for threshold timer event
+    self.firstThreshold = true
+    self._inThreshold = nil
+    self._lastTimeKey = nil
+    self._lastShadowID = nil
+    -- animation
+    self.nextAnimation  = 0
+    self.animationStep  = 1
+
     -- load settings
     self:DataChanged()
 
@@ -109,6 +133,9 @@ end
 -- [required] load timer settings
 ---------------------------------------------------------------------------------------------------
 function IconElement:DataChanged()
+
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
 
     -- declarations
     local parentData = self.parent.data
@@ -160,7 +187,7 @@ end
 function IconElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- protrect timer from updates
-    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+    if self.data.protect == true and (Windows.IsTimerActive( self ) == true) then
         return
     end
     
@@ -230,10 +257,28 @@ end
 function IconElement:Finish()
 
     -- stop updates and set visibility to false
-    self:SetWantsUpdates( false )
+    Windows.SetTimerActive( self, false )
     self:SetVisibility( false )
 
     self.parent:ChildFinished( self )
+
+    -- release the entity reference
+    self.entityControl:SetEntity( nil )
+
+    -- keep the timer for reuse instead of closing it
+    if self.parent.RecycleChild ~= nil and self.parent:RecycleChild( self ) == true then
+        return
+    end
+
+    self:Dispose()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] close all windows
+---------------------------------------------------------------------------------------------------
+function IconElement:Dispose()
 
     -- close all windows
     self.labelBack:Close()
@@ -245,10 +290,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- update element ( called every frame )
 ---------------------------------------------------------------------------------------------------
-function IconElement:Update()
+function IconElement:Update( gameTime )
     
-    -- calculate the timeLeft until timer ends
-    local timeLeft = self.endTime - Turbine.Engine.GetGameTime()
+    -- calculate the timeLeft until timer ends ( gameTime comes from the central updater )
+    local timeLeft = self.endTime - gameTime
 
     -- timer ended
     if timeLeft <= 0 then
@@ -503,6 +548,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function IconElement:Activ( value )
 
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
+
     -- change opacity and text/timer visiblilty depending on activ
     if value == true then
 
@@ -541,7 +589,7 @@ function IconElement:Activ( value )
     end
 
     -- start or stop updates
-    self:SetWantsUpdates( value )
+    Windows.SetTimerActive( self, value )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -646,6 +694,8 @@ function IconElement:Resize()
     self.timerLabel:SetSize( labelWidth, labelHeight )
     self.iconControl:SetSize( width, height )
     self.shadow:SetSize( width, height )
+    -- size changed, the shadow image has to be set again
+    self._lastShadowID = nil
     self.shadow.nativeWidth = width
     self.shadow.nativeHeight = height
     self.animation:SetSize( width, height )
@@ -669,7 +719,7 @@ end
 function IconElement:GetRunningInformation()
 
     -- permanent inactiv timer
-    if self:GetWantsUpdates() == false then
+    if Windows.IsTimerActive( self ) == false then
         return nil
     end
 

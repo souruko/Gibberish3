@@ -88,6 +88,26 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     self.timerLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
     self.timerLabel:SetZOrder( 8 )
     
+    -- start up
+    self:Start( startTime, duration, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] start the timer ( also used for recycled timers )
+---------------------------------------------------------------------------------------------------
+function BarElement:Start( startTime, duration, icon, text, entity, key, activ )
+
+    -- key
+    self.key = key
+    self.icon = icon
+
+    -- for threshold timer event
+    self.firstThreshold = true
+    self._inThreshold = nil
+    self._lastTimeKey = nil
+
     -- load settings
     self:DataChanged()
 
@@ -108,6 +128,9 @@ end
 -- [required] load timer settings
 ---------------------------------------------------------------------------------------------------
 function BarElement:DataChanged()
+
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
 
     -- declarations
     local parentData = self.parent.data
@@ -166,7 +189,7 @@ end
 function BarElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- protrect timer from updates
-    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+    if self.data.protect == true and (Windows.IsTimerActive( self ) == true) then
         return
     end
 
@@ -233,10 +256,28 @@ end
 function BarElement:Finish()
 
     -- stop updates and set visibility to false
-    self:SetWantsUpdates( false )
+    Windows.SetTimerActive( self, false )
     self:SetVisibility( false )
 
     self.parent:ChildFinished( self )
+
+    -- release the entity reference
+    self.entityControl:SetEntity( nil )
+
+    -- keep the timer for reuse instead of closing it
+    if self.parent.RecycleChild ~= nil and self.parent:RecycleChild( self ) == true then
+        return
+    end
+
+    self:Dispose()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] close all windows
+---------------------------------------------------------------------------------------------------
+function BarElement:Dispose()
 
     -- close all windows
     self.labelBack:Close()
@@ -249,10 +290,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- update element ( called every frame )
 ---------------------------------------------------------------------------------------------------
-function BarElement:Update()
+function BarElement:Update( gameTime )
     
-    -- calculate the timeLeft until timer ends
-    local timeLeft = self.endTime - Turbine.Engine.GetGameTime()
+    -- calculate the timeLeft until timer ends ( gameTime comes from the central updater )
+    local timeLeft = self.endTime - gameTime
 
     -- timer ended
     if timeLeft <= 0 then
@@ -463,6 +504,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Activ( value )
 
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
+
     -- change opacity and text/timer visiblilty depending on activ
     if value == true then
 
@@ -494,7 +538,7 @@ function BarElement:Activ( value )
     end
 
     -- start or stop updates
-    self:SetWantsUpdates( value )
+    Windows.SetTimerActive( self, value )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -619,7 +663,7 @@ end
 function BarElement:GetRunningInformation()
 
     -- permanent inactiv timer
-    if self:GetWantsUpdates() == false then
+    if Windows.IsTimerActive( self ) == false then
         return nil
     end
 
