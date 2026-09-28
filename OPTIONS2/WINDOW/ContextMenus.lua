@@ -291,8 +291,10 @@ function Options2.ShowContextMenu(nd)
             and tmd.description or UTILS.GetText("options2", "unnamed_timer")
         menu:AddRow(Options2.Elements.Row("nav_menu", "duplicate", function()
             local copy = Timer.Copy(tmd)
-            local tlist = Data.window[wi].timerList
-            table.insert(tlist, tmi + 1, copy)
+            local wd = Data.window[wi]
+            copy.sortIndex = wd.nextTimerSortIndex
+            wd.nextTimerSortIndex = wd.nextTimerSortIndex + 1
+            table.insert(wd.timerList, tmi + 1, copy)
             Options.SaveData()
             Options.DataChanged(wi)
             Options2.RefreshAll()

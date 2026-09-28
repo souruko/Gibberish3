@@ -49,6 +49,9 @@ function Options.Shortcut.Constructor:Constructor()
 			x = x + ( args.X - self.dragStartX )
             y = y + ( args.Y - self.dragStartY )
 
+            -- clamp to screen bounds
+            x, y = UTILS.ClampToScreen( x, y, self:GetSize() )
+
             -- set new position
             self:SetPosition( x, y )
 
@@ -212,6 +215,11 @@ end
 function Options.Shortcut.Constructor:SetIconSize( size )
 
     self:SetSize( size, size )
+
+    -- the saved position may come from a bigger screen, and a bigger icon can
+    -- push the button over an edge; both are only visible once the size is set
+    local left, top = self:GetPosition()
+    self:SetPosition( UTILS.ClampToScreen( left, top, size, size ) )
 
 end
 ---------------------------------------------------------------------------------------------------

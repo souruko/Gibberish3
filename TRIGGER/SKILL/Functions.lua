@@ -13,11 +13,16 @@ Trigger[Trigger.Types.Skill].Init = function ()
 
     local listOfSkills = LocalPlayer:GetTrainedSkills()
 
+    -- every trained skill used to be answered by walking every window, timer,
+    -- condition and folder. The set of tokens is the same for all of them, so it
+    -- is collected once and each skill is then a single lookup.
+    local usedSkills = Trigger[ Trigger.Types.Skill ].CollectUsedSkills()
+
     for i = 1, listOfSkills:GetCount(), 1 do
 
         local skill = listOfSkills:GetItem(i)
 
-        if Trigger[ Trigger.Types.Skill ].IsSkillUsed( skill:GetSkillInfo():GetName() ) then
+        if usedSkills[ skill:GetSkillInfo():GetName() ] == true then
 
             function skill.ResetTimeChanged( sender, args )
 
@@ -34,6 +39,74 @@ Trigger[Trigger.Types.Skill].Init = function ()
         end
         
     end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- return the set of skill names any trigger watches
+---------------------------------------------------------------------------------------------------
+-- same walk as IsSkillUsed below, gathering the tokens instead of answering for
+-- one name at a time
+Trigger[Trigger.Types.Skill].CollectUsedSkills = function ()
+
+    local used = {}
+
+    local function collect( list )
+
+        if list == nil then
+            return
+        end
+
+        for _, triggerData in ipairs(list) do
+
+            if triggerData.enabled == true and triggerData.token ~= nil then
+                used[ triggerData.token ] = true
+            end
+
+        end
+
+    end
+
+    -- all groups
+    for windowIndex, windowData in ipairs(Data.window) do
+
+        -- check if group is enabled
+        if windowData.enabled == true then
+
+            -- all timer of the group
+            for timerIndex, timerData in ipairs(windowData.timerList) do
+
+                -- check if timer is enabled
+                if timerData.enabled == true then
+
+                    collect( timerData[Trigger.Types.Skill] )
+
+                    -- condition triggers
+                    for _, condition in ipairs(timerData.conditionList or {}) do
+                        if condition.enabled == true then
+                            collect( condition[Trigger.Types.Skill] )
+                        end
+                    end
+
+                end
+
+            end
+
+        end
+
+        -- check window triggers
+        collect( windowData[ Trigger.Types.Skill ] )
+
+    end
+
+    for folderIndex, folderData in ipairs(Data.folder) do
+
+        collect( folderData[Trigger.Types.Skill] )
+
+    end
+
+    return used
 
 end
 ---------------------------------------------------------------------------------------------------

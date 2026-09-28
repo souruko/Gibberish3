@@ -63,7 +63,7 @@ function Options2.Elements.PanelWindow:Constructor(config)
     self.titlebar.MouseMove = function(sender, args)
         if not self._dragging then return end
         local left, top = self:GetPosition()
-        self:SetPosition(left + (args.X - self._drag_x), top + (args.Y - self._drag_y))
+        self:MoveTo(left + (args.X - self._drag_x), top + (args.Y - self._drag_y))
     end
 
     self.titlebar.MouseUp = function(sender, args)
@@ -157,6 +157,13 @@ end
 
 function Options2.Elements.PanelWindow:SetTitleText(text)
     self.title_label:SetText(text)
+end
+
+-- Move the window, keeping its title bar reachable. The bar is the only drag
+-- handle there is, so a window that leaves the screen through the top edge can
+-- never be brought back - every position change goes through here.
+function Options2.Elements.PanelWindow:MoveTo(left, top)
+    self:SetPosition(UTILS.ClampHandleToScreen(left, top, self:GetWidth(), TITLE_H))
 end
 
 -- x that a subclass's own title-bar buttons must stay left of

@@ -23,6 +23,120 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- callbacks
+---------------------------------------------------------------------------------------------------
+-- these live on the Trigger table rather than being plain globals: a plain
+-- global reaches only the file it is written in, so it cannot be called from
+-- another one
+function Trigger.AddCallback(object, event, callback)
+    if (object[event] == nil) then
+        object[event] = callback;
+    else
+        if (type(object[event]) == "table") then
+            table.insert(object[event], callback);
+        else
+            object[event] = {object[event], callback};
+        end
+    end
+    return callback;
+end
+
+function Trigger.RemoveCallback(object, event, callback)
+    if (object[event] == callback) then
+        object[event] = nil;
+    else
+        if (type(object[event]) == "table") then
+            local size = table.getn(object[event]);
+            for i = 1, size do
+                if (object[event][i] == callback) then
+                    table.remove(object[event], i);
+                    break;
+                end
+            end
+        end
+    end
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- effect view
+---------------------------------------------------------------------------------------------------
+-- Every effect:Get*() is a call into the game and none of the values can change
+-- while a single event is being processed. A view is built once per event and
+-- reads each value at most once, no matter how many triggers ask for it.
+function Trigger.NewEffectView( effect )
+
+    return { effect = effect }
+
+end
+
+function Trigger.EffectName( view )
+
+    local value = view.name
+
+    if value == nil then
+        value     = view.effect:GetName()
+        view.name = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIcon( view )
+
+    local value = view.icon
+
+    if value == nil then
+        value     = view.effect:GetIcon()
+        view.icon = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIsDebuff( view )
+
+    local value = view.isDebuff
+
+    if value == nil then
+        value         = view.effect:IsDebuff()
+        view.isDebuff = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectIsCurable( view )
+
+    local value = view.isCurable
+
+    if value == nil then
+        value          = view.effect:IsCurable()
+        view.isCurable = value
+    end
+
+    return value
+
+end
+
+function Trigger.EffectCategory( view )
+
+    local value = view.category
+
+    if value == nil then
+        value         = view.effect:GetCategory()
+        view.category = value
+    end
+
+    return value
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- replace placeholders in token
 ---------------------------------------------------------------------------------------------------
 function Trigger.ReplacePlaceholder(token)
@@ -53,7 +167,15 @@ end
 function Trigger.GetPlaceholder(token, message, posAdjustment, target, triggerData)
 
     local placeholder = {}
-    local captures = { string.find(message, Trigger.ReplacePlaceholder(token), posAdjustment) }
+
+    -- regex triggers have already had the token turned into a pattern
+    local pattern = triggerData and triggerData._cachedPattern
+
+    if pattern == nil then
+        pattern = Trigger.ReplacePlaceholder(token)
+    end
+
+    local captures = { string.find(message, pattern, posAdjustment) }
 
     -- Remove the first 2 values from captures array since string.find returns startindex and endindex before captures
     table.remove(captures, 1)

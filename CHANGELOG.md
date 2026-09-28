@@ -1,10 +1,31 @@
 # Changelog
 
+### 3.8.1
+- Resetting a timer no longer counts as that timer ending, so a reset can no longer set off another timer that is waiting for the first one to end.
+- Counters now stay in the order you arranged them, the same as timers. A counter window used to reorder itself by how high each count was, ignoring the order set in the list.
+- Timers running out at the same moment no longer swap places with each other while they tick down.
+- Duplicating a timer now gives the copy its own place in the running order instead of sharing the original's, so the two no longer trade places on screen.
+- The shortcut button can no longer be dragged off the edge of the screen. A button that ended up off-screen — from a saved position on a larger screen, or from making the icon bigger — is now brought back into view.
+- The options panel can no longer be moved out of reach. The title bar is the only way to drag it, so part of the bar now always stays on screen and the panel can never go above the top edge. A position saved on a larger screen is brought back into view as well.
+- Windows missing from the list are now recovered the same way folders already were. A gap in the saved list used to hide every window after it.
+- Fixed the folder recovery leaving the plugin unable to create new folders afterwards. After a recovery the options panel now opens with nothing selected, rather than on whatever moved into the old spot.
+
 ### 3.8.0
 - New: a Font Size setting, in the settings window behind the gear in the options panel's title bar. Normal, Large and Extra Large make all the text in the options panel and the move window bigger, for anyone who found the smaller labels hard to read.
 - Everything grows with the text, so nothing is cut off: rows, fields, buttons and the panel's own minimum size. On a smaller screen the panel will not open wider than the screen itself.
 - Picking a size takes effect straight away. The panel reopens at the new size with the same folder, window or timer still selected, and remembers your choice.
 - This only changes the options panel and the move window. The timers you see while playing keep their own font and size, set per window as before.
+- The Group Effects switch in the shortcut menu now takes effect straight away. Turning it on used to do nothing until the plugin was reloaded, and turning it off left it running.
+- Group effect triggers are considerably lighter on the game. The effect being checked is now read once per effect instead of once per trigger, which is most noticeable when you log in or zone with a lot of group triggers set up.
+- Target effect triggers got the same treatment, and are lighter on the game in the same way.
+- Fixed a target effect trigger with Cureable set to anything other than Any throwing an error. The trigger never worked, and the error stopped every trigger after it from being checked for that effect.
+- Fixed effects on a previous target still setting off target effect triggers. Clearing your target, or targeting yourself, left the one before it being watched as though it were still selected.
+- Target effects are now watched from the moment you log in. Until now the effects already on whatever you had targeted were shown, but nothing new landing on it counted until you targeted something else.
+- The Target Effects switch in the shortcut menu now takes effect straight away, the same as the Group Effects one.
+- Timers that run forever no longer redraw themselves on every frame. A permanent timer on screen was writing to the game's display sixty times a second to keep showing the same thing.
+- Self effect and effect removed triggers are lighter in the same way as the group and target ones. Effect removed triggers using a pattern rebuilt that pattern for every trigger, every time any effect dropped off you.
+- Starting a timer does less work: the text and duration placeholders are only worked out for timers that actually use them.
+- Logging in with a lot of skill triggers is quicker. Every skill you have trained was checked against every trigger; now the list of watched skills is worked out once.
 
 ### 3.7.2
 - Fixed an error when deleting a folder that sits inside another folder. In some cases the delete also removed an unrelated folder and hid every folder below it from the list; hidden folders are recovered the next time the plugin loads.

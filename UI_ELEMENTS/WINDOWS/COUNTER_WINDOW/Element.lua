@@ -90,11 +90,7 @@ function CounterWindowElement:Constructor( index )
             y = y + ( args.Y - self.dragStartY )
 
             -- clamp to screen bounds
-            local width, height = self:GetSize()
-            if x < 0 then x = 0 end
-            if y < 0 then y = 0 end
-            if x > Options.ScreenWidth  - width  then x = Options.ScreenWidth  - width  end
-            if y > Options.ScreenHeight - height then y = Options.ScreenHeight - height end
+            x, y = UTILS.ClampToScreen( x, y, self:GetSize() )
 
             -- set new position
             self:SetPosition( x, y )
@@ -598,16 +594,12 @@ function CounterWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                if child1.counterCURRENT > child2.counterCURRENT then
-
-                    return false
-
+                if child1.data.sortIndex ~= child2.data.sortIndex then
+                    return child1.data.sortIndex > child2.data.sortIndex
                 else
-
-                    return true
-
+                    return child1.index < child2.index
                 end
-                
+
             end
         )
 
@@ -617,16 +609,12 @@ function CounterWindowElement:SortChildren()
         self.timerListBox:Sort(
             function (child1, child2)
 
-                if child1.counterCURRENT < child2.counterCURRENT then
-
-                    return false
-
+                if child1.data.sortIndex ~= child2.data.sortIndex then
+                    return child1.data.sortIndex < child2.data.sortIndex
                 else
-
-                    return true
-
+                    return child1.index < child2.index
                 end
-                
+
             end
         )
 

@@ -123,7 +123,7 @@ function Options.Move.Constructor:Constructor()
     })
 
     self:SetSize( Options.Defaults.move.width,  Options.Defaults.move.height )
-    self:SetPosition( 0, ( ( Options.ScreenHeight - Options.Defaults.move.height ) / 2 ) )
+    self:MoveTo( 0, math.floor( ( Options.ScreenHeight - Options.Defaults.move.height ) / 2 ) )
     self:SetZOrder(1)
 
     local M = Options2.Elements.EditorRow
@@ -375,18 +375,7 @@ function Options.Move.Constructor:UpdateChanges( left, top )
             width, height = Windows[ Data.selectedIndex ]:GetSize()
         end
 
-        if left < 0 then
-            left = 0
-        end
-        if top < 0 then
-            top = 0
-        end
-        if left > Options.ScreenWidth - width then
-           left =  Options.ScreenWidth - width
-        end
-        if top > Options.ScreenHeight - height then
-            top = Options.ScreenHeight - height
-        end
+        left, top = UTILS.ClampToScreen( left, top, width, height )
 
         -- update data
         selected.left,  selected.top = UTILS.PixelToScreenRatio( left, top )

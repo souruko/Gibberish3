@@ -310,8 +310,13 @@ function CircelElement:Update()
     -- permanent timers without running time
     else
 
-        self.timerLabel:SetText( "" )
-        self:SetCircelProgress( 0 )
+        -- none of this changes while the timer stays permanent, so it is written
+        -- once on the way in rather than on every frame
+        if self._lastTimeKey ~= "permanent" then
+            self._lastTimeKey = "permanent"
+            self.timerLabel:SetText( "" )
+            self:SetCircelProgress( 0 )
+        end
 
     end
 
@@ -500,10 +505,16 @@ end
 ---------------------------------------------------------------------------------------------------
 -- timer is done
 ---------------------------------------------------------------------------------------------------
-function CircelElement:Ended()
+function CircelElement:Ended( silent )
 
     -- timer ended trigger event
-    Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
+    -- a silent end ( reset ) stops the timer without firing the event, so a reset
+    -- cannot start another timer that listens for this timers end
+    if silent ~= true then
+
+        Trigger.TimerEvent( self.data.id, Trigger.Types.TimerEnd )
+
+    end
 
     if self.data.permanent == true then
         
@@ -576,10 +587,10 @@ end
 ---------------------------------------------------------------------------------------------------
 function CircelElement:Reset(force)
 
-    -- if reset attribute is set call the timer end
+    -- if reset attribute is set call the timer end without the timer end event
     if force == true or self.data.reset == true then
-        
-        self:Ended()
+
+        self:Ended( true )
 
     end
 

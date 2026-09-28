@@ -34,6 +34,66 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- keep a window inside the screen ( for loading and dragging )
+-- the far edge is applied first so a window bigger than the screen keeps its
+-- top left corner on screen instead of hanging off the top
+---------------------------------------------------------------------------------------------------
+function ClampToScreen( left, top, width, height )
+
+    if left > Options.ScreenWidth - width then
+        left = Options.ScreenWidth - width
+    end
+
+    if top > Options.ScreenHeight - height then
+        top = Options.ScreenHeight - height
+    end
+
+    if left < 0 then
+        left = 0
+    end
+
+    if top < 0 then
+        top = 0
+    end
+
+    return left, top
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- keep the drag handle of a panel reachable ( for windows that can only be
+-- moved by their title bar ). the window itself may hang off the left or right
+-- edge - forcing a panel wider than the screen fully inside would pin it in
+-- place - but HANDLE_VISIBLE pixels of the bar stay on screen and it can never
+-- go above the top edge, where there would be no way to grab it again
+---------------------------------------------------------------------------------------------------
+local HANDLE_VISIBLE = 80
+
+function ClampHandleToScreen( left, top, width, handle_height )
+
+    if left > Options.ScreenWidth - HANDLE_VISIBLE then
+        left = Options.ScreenWidth - HANDLE_VISIBLE
+    end
+
+    if left < HANDLE_VISIBLE - width then
+        left = HANDLE_VISIBLE - width
+    end
+
+    if top > Options.ScreenHeight - handle_height then
+        top = Options.ScreenHeight - handle_height
+    end
+
+    if top < 0 then
+        top = 0
+    end
+
+    return left, top
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- fix get tourbine color from data
 ---------------------------------------------------------------------------------------------------
 function ColorFix( color )

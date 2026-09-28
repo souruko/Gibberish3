@@ -102,6 +102,10 @@ function Options.TrackTargetChanged()
 
     Data.trackTargetEffects = not( Data.trackTargetEffects )
 
+    -- register or drop the target callback straight away, instead of leaving it
+    -- as it was until the next reload
+    Trigger[ Trigger.Types.EffectTarget ].Sync( false )
+
     -- shortcut
     Options.Shortcut.Object:TrackTargetChanged()
 
@@ -114,6 +118,10 @@ end
 function Options.TrackGroupChanged()
 
     Data.trackGroupEffects = not( Data.trackGroupEffects )
+
+    -- register or drop the party callbacks straight away, instead of leaving
+    -- them as they were until the next reload
+    Trigger[ Trigger.Types.EffectGroup ].Sync()
 
     -- shortcut
     Options.Shortcut.Object:TrackGroupChanged()
