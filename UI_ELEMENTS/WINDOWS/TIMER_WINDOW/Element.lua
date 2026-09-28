@@ -363,6 +363,12 @@ function TimerWindowElement:RecycleChild( child )
         return false
     end
 
+    -- circel timers are always built new: a reused one draws its rotated sweep at the wrong
+    -- size and position, while a new one is always correct
+    if child.timerType == Timer.Types.CIRCEL then
+        return false
+    end
+
     -- pool is full, close the oldest timer
     if #self.pool >= Options.Defaults.timer.maxPoolSize then
 
@@ -463,7 +469,6 @@ function TimerWindowElement:ActionAdd( timerData, timerIndex, startTime, duratio
         if child.reuseCount ~= nil then
             ForceOpacity( child )
             ForceOpacity( child.iconControl )
-            ForceOpacity( child.circelBack )
         end
 
     -- update running timer
