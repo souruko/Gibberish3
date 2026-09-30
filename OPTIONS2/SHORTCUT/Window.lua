@@ -12,13 +12,19 @@ Options.Shortcut.Constructor = class(Turbine.UI.Window)
 function Options.Shortcut.Constructor:Constructor()
 	Turbine.UI.Window.Constructor( self )
 
-    -- set self (control must start at the image's native size before the
-    -- background/stretch mode are applied, then be resized to the saved size)
     local size = Data.options.shortcut.size or Options.Defaults.shortcut.size
-    self:SetSize( Options.Defaults.shortcut.size, Options.Defaults.shortcut.size )
     self:SetPosition( UTILS.ScreenRatioToPixel( Data.options.shortcut.left, Data.options.shortcut.top ) )
-    self:SetBackground("Gibberish3/RESOURCES/gibberish_new_icon.tga")
-    self:SetStretchMode(1)
+
+    -- The picture sits on a control inside the button rather than on the button
+    -- itself, because only a child control can be given the edge attachments a
+    -- stretched picture now needs ( see UTILS.AttachImageEdges ). The button
+    -- stays the thing the mouse talks to and SetIconSize sizes both.
+    self.iconImage = Turbine.UI.Control()
+    self.iconImage:SetParent( self )
+    self.iconImage:SetPosition( 0, 0 )
+    self.iconImage:SetMouseVisible( false )
+    UTILS.AttachImageEdges( self.iconImage )
+    UTILS.SetStretchedImage( self.iconImage, "Gibberish3/RESOURCES/gibberish_new_icon.tga" )
 
     -- mouse interaction
     self.dragging = false
@@ -215,6 +221,7 @@ end
 function Options.Shortcut.Constructor:SetIconSize( size )
 
     self:SetSize( size, size )
+    self.iconImage:SetSize( size, size )
 
     -- the saved position may come from a bigger screen, and a bigger icon can
     -- push the button over an edge; both are only visible once the size is set

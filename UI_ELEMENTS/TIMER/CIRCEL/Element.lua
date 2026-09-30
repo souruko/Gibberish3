@@ -92,6 +92,7 @@ function CircelElement:Constructor( parent, data, index, startTime, duration, ic
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
     self.iconControl:SetZOrder( 5 )
+    UTILS.AttachImageEdges( self.iconControl )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
@@ -237,9 +238,7 @@ function CircelElement:UpdateContent( startTime, duration, icon, text, entity, k
     if self.data.showIcon == true then
 
         local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
-        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
-        self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( resolvedIcon )
+        UTILS.SetStretchedImage( self.iconControl, resolvedIcon )
         self.iconControl:SetSize( 32, 32 )
         self.iconControl:SetVisible(true)
 

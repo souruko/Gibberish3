@@ -177,6 +177,63 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- put an image on a control so it can be drawn at a size other than its own
+--
+-- The order of these three calls is the whole point of this function and must
+-- not be tidied away. Since update 49.6 the stretch mode takes the picture's
+-- size from whatever is on the control at the moment the mode is set, so
+-- setting the mode first - on a control with no picture yet - latches nothing,
+-- and every SetSize afterwards leaves the picture at its own size. That is why
+-- a timer larger than its icon drew the icon small in the corner.
+--
+-- So: the picture first, then mode 2 to snap the control to the picture's own
+-- size, then mode 1 to switch to stretching the picture to the control. The
+-- caller gives the control its real size afterwards and the picture follows.
+--
+-- This is how PrimePlugins draws every one of its icons.
+---------------------------------------------------------------------------------------------------
+function SetStretchedImage( control, image )
+
+	control:SetBackground( image )
+	control:SetStretchMode( 2 )
+	control:SetStretchMode( 1 )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- allow a control to stretch the picture it is given
+--
+-- Update 49.6 draws a picture at its own size on a control that has no edge
+-- attachments, however large the control is. This is what the release notes
+-- mean by "must be used for controls with stretch modes in order for the
+-- control to correctly scale with UI scaling", and it is the difference
+-- between an icon that fills its timer and one that sits in the corner of it.
+--
+-- Same / Same / Opposite / Opposite pins the control to its own top left and
+-- leaves its size alone: the right and bottom edges keep their distance from
+-- the parent's *left* and *top*, so a parent being resized does not drag this
+-- control with it. The layout code goes on setting the size itself, exactly as
+-- it did, and only the stretching changes.
+--
+-- Called once, where the control is built. Does nothing on a client older than
+-- 49.6, which stretched pictures without being asked.
+---------------------------------------------------------------------------------------------------
+function AttachImageEdges( control )
+
+	if Turbine.UI.EdgeAttachmentType == nil then
+		return
+	end
+
+	control:AttachEdges( Turbine.UI.EdgeAttachmentType.Same,
+	                     Turbine.UI.EdgeAttachmentType.Same,
+	                     Turbine.UI.EdgeAttachmentType.Opposite,
+	                     Turbine.UI.EdgeAttachmentType.Opposite )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- resolve a timer icon value, applying the external-image path prefix if enabled
 ---------------------------------------------------------------------------------------------------
 function ResolveTimerIcon( icon, useExternalImage )

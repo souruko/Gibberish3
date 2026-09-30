@@ -54,17 +54,20 @@ function IconElement:Constructor( parent, data, index, startTime, duration, icon
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
+    UTILS.AttachImageEdges( self.iconControl )
 
     self.shadow = Turbine.UI.Control()
     self.shadow:SetParent( self )
     self.shadow:SetBackColorBlendMode( Turbine.UI.BlendMode.Overlay )
     self.shadow:SetBackColor( Turbine.UI.Color.Black )
     self.shadow:SetMouseVisible( false )
+    UTILS.AttachImageEdges( self.shadow )
 
     self.animation = Turbine.UI.Control()
     self.animation:SetParent( self )
     self.animation:SetBackColorBlendMode( Turbine.UI.BlendMode.Overlay )
     self.animation:SetMouseVisible( false )
+    UTILS.AttachImageEdges( self.animation )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
@@ -230,9 +233,7 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
     if self.data.showIcon == true then
 
         local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
-        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
-        self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( resolvedIcon )
+        UTILS.SetStretchedImage( self.iconControl, resolvedIcon )
         self.iconControl:SetSize( self.parent.data.width, self.parent.data.height )
         self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
         self.iconControl:SetVisible(true)
@@ -376,9 +377,7 @@ function IconElement:UpdateShadow( timeLeft )
 
     if shadowID ~= self._lastShadowID then
         self._lastShadowID = shadowID
-        self.shadow:SetSize( 32, 32 )
-        self.shadow:SetBackground( UTILS.IconID[ UTILS.IconID.Type.Shadow ][ shadowID ] )
-        self.shadow:SetStretchMode( 1 )
+        UTILS.SetStretchedImage( self.shadow, UTILS.IconID[ UTILS.IconID.Type.Shadow ][ shadowID ] )
         self.shadow:SetSize( self.width, self.height )
     end
 
@@ -519,9 +518,7 @@ function IconElement:ThresholdAnimation()
     if self.nextAnimation <= gameTime then
 
         -- animation
-        self.animation:SetSize(32, 32)
-        self.animation:SetBackground( UTILS.IconID[ self.data.animationType ][ self.animationStep ] )
-        self.animation:SetStretchMode( 1 )
+        UTILS.SetStretchedImage( self.animation, UTILS.IconID[ self.data.animationType ][ self.animationStep ] )
         self.animation:SetSize( self.width, self.height )
 
         -- next stop

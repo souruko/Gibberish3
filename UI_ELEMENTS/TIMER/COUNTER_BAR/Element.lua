@@ -66,6 +66,7 @@ function CounterBarElement:Constructor( parent, data, index )
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
     self.iconControl:SetZOrder( 5 )
+    UTILS.AttachImageEdges( self.iconControl )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
@@ -160,9 +161,7 @@ function CounterBarElement:UpdateContent( value, icon, text, entity, key, activ 
     if self.data.showIcon == true then
 
         local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
-        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
-        self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( resolvedIcon )
+        UTILS.SetStretchedImage( self.iconControl, resolvedIcon )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
         self.iconControl:SetVisible(true)
 

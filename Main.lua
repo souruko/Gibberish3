@@ -25,9 +25,17 @@ import "Gibberish3.Defaults"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- lotro hands the plugin object to this file and nowhere else, and every other
+-- directory is its own environment, so it is kept where the rest can reach it.
+-- Options.Plugin:GetUsesGlobalScaling() answers whether the player has ticked
+-- "Use Global Scaling" in the plugin manager
+Options.Plugin = plugin
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- class / type lua
 -- combat chat parse
--- load / save        
+-- load / save
 -- global variables / constants
 -- utils functions
 import "Gibberish3.UTILS"

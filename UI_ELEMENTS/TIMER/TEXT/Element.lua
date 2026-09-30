@@ -45,6 +45,7 @@ function TextElement:Constructor( parent, data, index, startTime, duration, icon
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
+    UTILS.AttachImageEdges( self.iconControl )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
@@ -191,9 +192,7 @@ function TextElement:UpdateContent( startTime, duration, icon, text, entity, key
     if self.data.showIcon == true then
 
         local resolvedIcon = UTILS.ResolveTimerIcon( icon, self.data.useExternalImage )
-        self.iconControl:SetSize( UTILS.GetImageSize( resolvedIcon ) )
-        self.iconControl:SetStretchMode( 1 )
-        self.iconControl:SetBackground( resolvedIcon )
+        UTILS.SetStretchedImage( self.iconControl, resolvedIcon )
         self.iconControl:SetSize( self.parent.data.height, self.parent.data.height )
         self.iconControl:SetVisible(true)
 

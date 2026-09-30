@@ -91,6 +91,23 @@ function DebugCommand:Execute( command, arguments )
     Turbine.Shell.WriteLine( "--- Gibberish3 debug ---" )
     Turbine.Shell.WriteLine( string.format( "Lua memory: %.0f KB (after GC: %.0f KB)", memoryBefore, memoryAfter ) )
 
+    -- "Use Global Scaling" in the plugin manager. Since update 49.6 that
+    -- checkbox is what puts a plugin into ui scaling mode, and images are only
+    -- stretched to the size they are given while it is on
+    local usesScaling = "unknown"
+
+    -- kept by Main.lua, the only file lotro hands the plugin object to
+    pcall( function()
+        usesScaling = tostring( Options.Plugin:GetUsesGlobalScaling() )
+    end )
+
+    -- older clients have no such method, so say so rather than nothing
+    if usesScaling == "unknown" and Options.Plugin ~= nil then
+        usesScaling = "not supported by this client"
+    end
+
+    Turbine.Shell.WriteLine( "Use Global Scaling: " .. usesScaling )
+
     -- target tracking
     local targetTrigger = Trigger[ Trigger.Types.EffectTarget ]
     local tracking = "off"
@@ -147,7 +164,7 @@ function DebugCommand:Execute( command, arguments )
 end
 
 function DebugCommand:GetHelp()
-    return "Prints Gibberish3 memory usage and timer counts."
+    return "Prints Gibberish3 memory usage and timer counts. 'timers' for the state of every running timer."
 end
 
 function DebugCommand:GetShortHelp()
