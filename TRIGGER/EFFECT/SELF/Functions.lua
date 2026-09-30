@@ -21,12 +21,12 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
 
         local effect = effects:Get(args.Index)
 
-        Trigger.AddToEffectCollection( effect, "Self" )
-
         -- the effect is the same for every trigger this event visits, and every
         -- read of it is a call into the game, so read it once here and hand the
         -- same values to all of them
         local effectView = Trigger.NewEffectView( effect )
+
+        Trigger.AddToEffectCollection( effect, "Self", effectView )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do

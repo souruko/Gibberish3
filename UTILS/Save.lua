@@ -14,6 +14,13 @@ function Options.SaveData()
     -- the resolved &name / &class patterns are per character, they must not reach the account data
     Options.ClearPatternCache( Data )
 
+    -- every change to the triggers ends here, so the group trigger index is
+    -- dropped and rebuilt from the saved data on the next group effect
+    if Trigger ~= nil and Trigger.Types ~= nil and Trigger[ Trigger.Types.EffectGroup ] ~= nil
+        and Trigger[ Trigger.Types.EffectGroup ].InvalidateIndex ~= nil then
+        Trigger[ Trigger.Types.EffectGroup ].InvalidateIndex()
+    end
+
     if Language.Local == Language.English then
         Turbine.PluginData.Save(Turbine.DataScope.Character, "gibberish_char_" .. Language[ Language.English ], Data, nil)
         Turbine.PluginData.Save(Turbine.DataScope.Account, "gibberish_global_" .. Language[ Language.English ], Data, nil)

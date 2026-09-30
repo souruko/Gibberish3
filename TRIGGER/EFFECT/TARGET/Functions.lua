@@ -149,10 +149,10 @@ Trigger[ Trigger.Types.EffectTarget ].Register = function ( target, targetName )
             return
         end
 
-        Trigger.AddToEffectCollection( effect, "Target" )
-
         -- read the effect once for the whole event instead of once per trigger
         local effectView = Trigger.NewEffectView( effect )
+
+        Trigger.AddToEffectCollection( effect, "Target", effectView )
 
         -- all groups
         for windowIndex, windowData in ipairs(Data.window) do
