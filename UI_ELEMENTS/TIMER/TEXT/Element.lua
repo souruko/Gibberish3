@@ -45,28 +45,51 @@ function TextElement:Constructor( parent, data, index, startTime, duration, icon
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
-    self.iconControl:SetZOrder( 5 )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
     self.labelBack:SetMouseVisible( false )
-    self.labelBack:SetZOrder( 6 )
-    
+
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.labelBack )
     self.textLabel:SetMouseVisible( false )
     self.textLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
     self.textLabel:SetMarkupEnabled(true)
-    self.textLabel:SetZOrder( 7 )
-    
+
     self.timerLabel = Turbine.UI.Label()
     self.timerLabel:SetParent( self.labelBack )
     self.timerLabel:SetMouseVisible( false )
     self.timerLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
-    self.timerLabel:SetZOrder( 8 )
-    
+
+    self:ApplyZOrder()
+
     -- start up
     self:Start( startTime, duration, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] set the draw order of all controls
+-- the labels sit in labelBack, a window inside this window, and a recycled timer loses that
+-- stacking when it is added to the listbox again, which draws the text behind the icon
+---------------------------------------------------------------------------------------------------
+function TextElement:ApplyZOrder()
+
+    UTILS.ForceZOrder( self.iconControl, 5 )
+    UTILS.ForceZOrder( self.labelBack,   6 )
+    UTILS.ForceZOrder( self.textLabel,   7 )
+    UTILS.ForceZOrder( self.timerLabel,  8 )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] rebuild the timer after it was added to the listbox again
+---------------------------------------------------------------------------------------------------
+function TextElement:Restore()
+
+    UTILS.RestoreInnerWindows( self, { self.labelBack } )
 
 end
 ---------------------------------------------------------------------------------------------------

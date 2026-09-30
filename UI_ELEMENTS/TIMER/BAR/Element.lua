@@ -43,53 +43,76 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
     self.entityControl:SetParent( self )
-    self.entityControl:SetZOrder( 1 )
 
     self.frame = Turbine.UI.Control()
     self.frame:SetParent( self )
     self.frame:SetMouseVisible( false )
-    self.frame:SetZOrder( 2 )
 
     self.barBack = Turbine.UI.Control()
     self.barBack:SetParent( self.frame )
     self.barBack:SetMouseVisible( false )
-    self.barBack:SetZOrder( 3 )
 
     self.barBase = Turbine.UI.Window()
     self.barBase:SetParent( self )
     self.barBase:SetMouseVisible( false )
-    self.barBase:SetZOrder( 3 )
 
     self.bar = Turbine.UI.Control()
     self.bar:SetParent( self.barBase )
     self.bar:SetMouseVisible( false )
-    self.bar:SetZOrder( 4 )
 
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
-    self.iconControl:SetZOrder( 5 )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
     self.labelBack:SetMouseVisible( false )
-    self.labelBack:SetZOrder( 6 )
-    
+
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.labelBack )
     self.textLabel:SetMouseVisible( false )
     self.textLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
     self.textLabel:SetMarkupEnabled(true)
-    self.textLabel:SetZOrder( 7 )
-    
+
     self.timerLabel = Turbine.UI.Label()
     self.timerLabel:SetParent( self.labelBack )
     self.timerLabel:SetMouseVisible( false )
     self.timerLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
-    self.timerLabel:SetZOrder( 8 )
-    
+
+    self:ApplyZOrder()
+
     -- start up
     self:Start( startTime, duration, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] set the draw order of all controls
+-- bar and labels sit in windows inside this window, and a recycled timer loses that stacking
+-- when it is added to the listbox again, which draws the text behind bar and icon
+---------------------------------------------------------------------------------------------------
+function BarElement:ApplyZOrder()
+
+    UTILS.ForceZOrder( self.entityControl, 1 )
+    UTILS.ForceZOrder( self.frame,         2 )
+    UTILS.ForceZOrder( self.barBack,       3 )
+    UTILS.ForceZOrder( self.barBase,       3 )
+    UTILS.ForceZOrder( self.bar,           4 )
+    UTILS.ForceZOrder( self.iconControl,   5 )
+    UTILS.ForceZOrder( self.labelBack,     6 )
+    UTILS.ForceZOrder( self.textLabel,     7 )
+    UTILS.ForceZOrder( self.timerLabel,    8 )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] rebuild the timer after it was added to the listbox again
+---------------------------------------------------------------------------------------------------
+function BarElement:Restore()
+
+    UTILS.RestoreInnerWindows( self, { self.barBase, self.labelBack } )
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -445,7 +445,9 @@ function TimerWindowElement:ActionAdd( timerData, timerIndex, startTime, duratio
         -- reuse a finished timer if possible
         child = self:TakeFromPool( timerIndex, timerData )
 
-        if child ~= nil then
+        local reused = child ~= nil
+
+        if reused then
 
             child:Start( startTime, duration, icon, text, entity, key, true )
 
@@ -466,9 +468,16 @@ function TimerWindowElement:ActionAdd( timerData, timerIndex, startTime, duratio
 
         -- a re-added timer is drawn with full opacity, although GetOpacity() still returns the old value
         -- and setting the same value again is ignored by lotro, so the opacity is forced to change once
-        if child.reuseCount ~= nil then
+        -- the windows inside a timer lose their place above it as well, so they are attached again
+        if reused then
+
             ForceOpacity( child )
             ForceOpacity( child.iconControl )
+
+            if child.Restore ~= nil then
+                child:Restore()
+            end
+
         end
 
     -- update running timer
