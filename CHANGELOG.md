@@ -1,6 +1,6 @@
 # Changelog
 
-### 3.8.2
+### 3.9.0 by ***Plugo***
 - All running timers are now updated together, 20 times a second, instead of each one separately on every frame. With a lot of timers on screen this takes far less work. Bars, circles and flashing move in 20 small steps a second, which may look a touch less smooth, and a timer running out or reaching its threshold is noticed up to a twentieth of a second later.
 - A timer that ends is kept and reused the next time the same timer starts in that window, instead of being built from scratch each time. Permanent timers are not affected.
 - Windows now sort and resize their timers only once, in the next frame, after timers start, refresh or end, instead of after every single one. Switching to a target with many effects no longer reorders the window over and over; when nothing changes, nothing is sorted at all.
@@ -299,9 +299,9 @@
 - enabled markup for timer text
 
 
-### 3.1.6
-- fixed color deep copy error || contributed by ***Dromo***
-- fixed folder deletion error || contributed by ***Dromo***
+### 3.1.6 by ***Dromo***
+- fixed color deep copy error 
+- fixed folder deletion error 
 
 
 ### 3.1.5
