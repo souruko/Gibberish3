@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.9.1
+- Fixed icons being drawn small in the corner of anything larger than themselves, instead of filling it. This started with the game's update 49.6 and affected the icon on bars, circles, counters and icon timers, the shadow that sweeps over an icon timer, its threshold animation, and the shortcut button.
+- Icons are only stretched while Use Global Scaling is ticked for the plugin in the game's plugin manager, so /gibdebug now tells you whether it is on.
+
 ### 3.9.0 by ***Plugo***
 - All running timers are now updated together, 20 times a second, instead of each one separately on every frame. With a lot of timers on screen this takes far less work. Bars, circles and flashing move in 20 small steps a second, which may look a touch less smooth, and a timer running out or reaching its threshold is noticed up to a twentieth of a second later.
 - A timer that ends is kept and reused the next time the same timer starts in that window, instead of being built from scratch each time. Permanent timers are not affected.
