@@ -1,5 +1,14 @@
 # Changelog
 
+### 3.9.0 by ***Plugo***
+- All running timers are now updated together, 20 times a second, instead of each one separately on every frame. With a lot of timers on screen this takes far less work. Bars, circles and flashing move in 20 small steps a second, which may look a touch less smooth, and a timer running out or reaching its threshold is noticed up to a twentieth of a second later.
+- A timer that ends is kept and reused the next time the same timer starts in that window, instead of being built from scratch each time. Permanent timers are not affected.
+- Windows now sort and resize their timers only once, in the next frame, after timers start, refresh or end, instead of after every single one. Switching to a target with many effects no longer reorders the window over and over; when nothing changes, nothing is sorted at all.
+- Effects on your target are checked faster: while you keep the same target, each effect is only checked once.
+- Fixed windows that reset when you change target also ending the new target's timers right after showing them. This affected timers with the reset option switched on.
+- Fixed a timer in its threshold switching back to its normal colours, for example after changing the window's settings.
+- New: the chat command /gibdebug shows how much memory the plugin uses and how many timers are running; /gibdebug timers lists every timer in your timer windows in detail. Meant for tracking down performance problems; running it can cause a brief hitch.
+
 ### 3.8.1
 - Resetting a timer no longer counts as that timer ending, so a reset can no longer set off another timer that is waiting for the first one to end.
 - Counters now stay in the order you arranged them, the same as timers. A counter window used to reorder itself by how high each count was, ignoring the order set in the list.
@@ -290,9 +299,9 @@
 - enabled markup for timer text
 
 
-### 3.1.6
-- fixed color deep copy error || contributed by ***Dromo***
-- fixed folder deletion error || contributed by ***Dromo***
+### 3.1.6 by ***Dromo***
+- fixed color deep copy error 
+- fixed folder deletion error 
 
 
 ### 3.1.5

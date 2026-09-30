@@ -54,3 +54,12 @@ Options.Collection.Effects  = {}
 Options2          = {}
 Options2.Elements = {}
 ---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- debug counters since plugin load ( printed by /gibdebug )
+DebugStats                  = {}
+DebugStats.timersCreated    = 0
+DebugStats.timersReused     = 0
+DebugStats.targetChanges    = 0
+DebugStats.effectsSkipped   = 0
+---------------------------------------------------------------------------------------------------

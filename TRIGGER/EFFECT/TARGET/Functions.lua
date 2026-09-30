@@ -7,6 +7,28 @@
 
 
 ---------------------------------------------------------------------------------------------------
+-- effect ids of the tracked target that were already processed
+---------------------------------------------------------------------------------------------------
+local seenEffectIDs = {}
+
+-- lotro fires EffectAdded again for effects that were already checked ( e.g. while filling the
+-- effect list of a new target ), every effect id is only processed once per target
+local function IsNewEffect( effect )
+
+    local id = effect:GetID()
+
+    if seenEffectIDs[ id ] == true then
+        DebugStats.effectsSkipped = DebugStats.effectsSkipped + 1
+        return false
+    end
+
+    seenEffectIDs[ id ] = true
+    return true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- effect target event processing start up
 ---------------------------------------------------------------------------------------------------
 -- the effect callback registered for the current target
@@ -17,6 +39,10 @@ Trigger[Trigger.Types.EffectTarget].Init = function ()
     -- the target is watched even while tracking is switched off, so that
     -- switching it on takes effect without a reload
     function LocalPlayer.TargetChanged( sender1, args1 )
+
+        if Data.trackTargetEffects == true then
+            DebugStats.targetChanges = DebugStats.targetChanges + 1
+        end
 
         Trigger[ Trigger.Types.EffectTarget ].Sync( true )
 
@@ -47,6 +73,8 @@ Trigger[ Trigger.Types.EffectTarget ].Sync = function ( targetChanged )
 
     end
 
+    seenEffectIDs = {}
+
     -- track target
     if Data.trackTargetEffects ~= true then
         return
@@ -68,9 +96,7 @@ Trigger[ Trigger.Types.EffectTarget ].Sync = function ( targetChanged )
 
     Trigger[ Trigger.Types.EffectTarget ].tracked = Trigger[ Trigger.Types.EffectTarget ].Register( target, targetName )
 
-    Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects( target, targetName )
-
-    -- reset on target changed
+    -- reset on target changed ( before checking the new target, otherwise its timers get reset too )
     if targetChanged == true then
 
         for windowIndex, windowData in ipairs(Data.window) do
@@ -85,6 +111,18 @@ Trigger[ Trigger.Types.EffectTarget ].Sync = function ( targetChanged )
         end
 
     end
+
+    Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects( target, targetName )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- returns if a target is currently tracked ( used by /gibdebug )
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectTarget ].IsTracking = function ()
+
+    return Trigger[ Trigger.Types.EffectTarget ].tracked ~= nil
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -106,6 +144,10 @@ Trigger[ Trigger.Types.EffectTarget ].Register = function ( target, targetName )
         end
 
         local effect = effects:Get( args.Index )
+
+        if IsNewEffect( effect ) == false then
+            return
+        end
 
         Trigger.AddToEffectCollection( effect, "Target" )
 
@@ -152,20 +194,26 @@ Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function( target, t
         
         for i = 1, effects:GetCount(), 1 do
 
-            local effectView = Trigger.NewEffectView( effects:Get(i) )
-     
-            -- all windows
-            for windowIndex, windowData in ipairs(Data.window) do
+            local effect = effects:Get(i)
 
-                Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effectView, target, windowIndex, windowData, targetName )
+            if IsNewEffect( effect ) == true then
 
-            end
+                local effectView = Trigger.NewEffectView( effect )
+
+                -- all windows
+                for windowIndex, windowData in ipairs(Data.window) do
+
+                    Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effectView, target, windowIndex, windowData, targetName )
+
+                end
 
 
-            -- all folder
-            for folderIndex, folderData in ipairs(Data.folder) do
+                -- all folder
+                for folderIndex, folderData in ipairs(Data.folder) do
 
-                Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effectView, target, folderIndex, folderData, targetName )
+                    Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effectView, target, folderIndex, folderData, targetName )
+
+                end
 
             end
 

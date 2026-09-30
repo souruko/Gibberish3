@@ -21,6 +21,9 @@ Options.Defaults.move.FrameSize     = 2
 Options.Defaults.timer               = {}
 Options.Defaults.timer.fontStyle     = Turbine.UI.FontStyle.Outline
 Options.Defaults.timer.labelSpacing  = 4
+Options.Defaults.timer.maxPoolSize   = 50
+-- seconds between two timer updates ( all timers are updated together )
+Options.Defaults.timer.updateInterval = 0.05
 
 -- shortcut
 Options.Defaults.shortcut            = {}

@@ -94,6 +94,57 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- set the draw order of a control again
+-- a control that was detached and re-attached ( recycled timers ) loses its draw order, while the
+-- lua side still holds the old value and lotro drops a setter that does not change anything, so the
+-- value has to change once before it is set to the wanted one
+---------------------------------------------------------------------------------------------------
+function ForceZOrder( control, zOrder )
+
+    if control == nil then
+        return
+    end
+
+    control:SetZOrder( zOrder + 100 )
+    control:SetZOrder( zOrder )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- attach the windows inside a timer to that timer again ( recycled timers )
+-- a window inside a timer only draws above the timer while the timer itself is in the listbox, so
+-- a recycled timer draws bar and text behind frame and icon until its windows are attached again,
+-- in the same order a new timer builds them
+-- lotro drops a setter that does not change anything, so size, position and visibility are cleared
+-- before the timer writes them again in Resize / ApplyZOrder
+---------------------------------------------------------------------------------------------------
+function RestoreInnerWindows( element, windows )
+
+    for i = 1, #windows do
+
+        local window = windows[i]
+
+        window:SetParent( nil )
+        window:SetParent( element )
+
+        window:SetVisible( false )
+        window:SetSize( 0, 0 )
+        window:SetPosition( 0, 0 )
+
+    end
+
+    element:Resize()
+    element:ApplyZOrder()
+
+    for i = 1, #windows do
+        windows[i]:SetVisible( true )
+    end
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- fix get tourbine color from data
 ---------------------------------------------------------------------------------------------------
 function ColorFix( color )

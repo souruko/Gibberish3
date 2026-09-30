@@ -223,6 +223,9 @@ function CounterBarElement:Finish()
 
     self.parent:ChildFinished( self )
 
+    -- release the entity reference
+    self.entityControl:SetEntity( nil )
+
     -- close all windows
     self.labelBack:Close()
     self.barBack:Close()

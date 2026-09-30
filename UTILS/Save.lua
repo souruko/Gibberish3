@@ -46,6 +46,10 @@ function Turbine.Plugin.Unload()
     Options.SaveData()
 	Options.SaveRunningTimer()
 
+    if DebugCommand ~= nil then
+        Turbine.Shell.RemoveCommand( DebugCommand )
+    end
+
 end
 ---------------------------------------------------------------------------------------------------
 

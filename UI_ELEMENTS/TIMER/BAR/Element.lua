@@ -43,51 +43,94 @@ function BarElement:Constructor( parent, data, index, startTime, duration, icon,
     -- build elements
     self.entityControl = Turbine.UI.Lotro.EntityControl()
     self.entityControl:SetParent( self )
-    self.entityControl:SetZOrder( 1 )
 
     self.frame = Turbine.UI.Control()
     self.frame:SetParent( self )
     self.frame:SetMouseVisible( false )
-    self.frame:SetZOrder( 2 )
 
     self.barBack = Turbine.UI.Control()
     self.barBack:SetParent( self.frame )
     self.barBack:SetMouseVisible( false )
-    self.barBack:SetZOrder( 3 )
 
     self.barBase = Turbine.UI.Window()
     self.barBase:SetParent( self )
     self.barBase:SetMouseVisible( false )
-    self.barBase:SetZOrder( 3 )
 
     self.bar = Turbine.UI.Control()
     self.bar:SetParent( self.barBase )
     self.bar:SetMouseVisible( false )
-    self.bar:SetZOrder( 4 )
 
     self.iconControl = Turbine.UI.Control()
     self.iconControl:SetParent( self )
     self.iconControl:SetMouseVisible( false )
-    self.iconControl:SetZOrder( 5 )
 
     self.labelBack = Turbine.UI.Window()
     self.labelBack:SetParent( self )
     self.labelBack:SetMouseVisible( false )
-    self.labelBack:SetZOrder( 6 )
-    
+
     self.textLabel = Turbine.UI.Label()
     self.textLabel:SetParent( self.labelBack )
     self.textLabel:SetMouseVisible( false )
     self.textLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
     self.textLabel:SetMarkupEnabled(true)
-    self.textLabel:SetZOrder( 7 )
-    
+
     self.timerLabel = Turbine.UI.Label()
     self.timerLabel:SetParent( self.labelBack )
     self.timerLabel:SetMouseVisible( false )
     self.timerLabel:SetFontStyle( Options.Defaults.timer.fontStyle )
-    self.timerLabel:SetZOrder( 8 )
-    
+
+    self:ApplyZOrder()
+
+    -- start up
+    self:Start( startTime, duration, icon, text, entity, key, activ )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] set the draw order of all controls
+-- bar and labels sit in windows inside this window, and a recycled timer loses that stacking
+-- when it is added to the listbox again, which draws the text behind bar and icon
+---------------------------------------------------------------------------------------------------
+function BarElement:ApplyZOrder()
+
+    UTILS.ForceZOrder( self.entityControl, 1 )
+    UTILS.ForceZOrder( self.frame,         2 )
+    UTILS.ForceZOrder( self.barBack,       3 )
+    UTILS.ForceZOrder( self.barBase,       3 )
+    UTILS.ForceZOrder( self.bar,           4 )
+    UTILS.ForceZOrder( self.iconControl,   5 )
+    UTILS.ForceZOrder( self.labelBack,     6 )
+    UTILS.ForceZOrder( self.textLabel,     7 )
+    UTILS.ForceZOrder( self.timerLabel,    8 )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required for reuse] rebuild the timer after it was added to the listbox again
+---------------------------------------------------------------------------------------------------
+function BarElement:Restore()
+
+    UTILS.RestoreInnerWindows( self, { self.barBase, self.labelBack } )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] start the timer ( also used for recycled timers )
+---------------------------------------------------------------------------------------------------
+function BarElement:Start( startTime, duration, icon, text, entity, key, activ )
+
+    -- key
+    self.key = key
+    self.icon = icon
+
+    -- for threshold timer event
+    self.firstThreshold = true
+    self._inThreshold = nil
+    self._lastTimeKey = nil
+
     -- load settings
     self:DataChanged()
 
@@ -108,6 +151,9 @@ end
 -- [required] load timer settings
 ---------------------------------------------------------------------------------------------------
 function BarElement:DataChanged()
+
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
 
     -- declarations
     local parentData = self.parent.data
@@ -166,7 +212,7 @@ end
 function BarElement:UpdateContent( startTime, duration, icon, text, entity, key, activ )
 
     -- protrect timer from updates
-    if self.data.protect == true and (self:GetWantsUpdates() == true) then
+    if self.data.protect == true and (Windows.IsTimerActive( self ) == true) then
         return
     end
 
@@ -233,10 +279,28 @@ end
 function BarElement:Finish()
 
     -- stop updates and set visibility to false
-    self:SetWantsUpdates( false )
+    Windows.SetTimerActive( self, false )
     self:SetVisibility( false )
 
     self.parent:ChildFinished( self )
+
+    -- release the entity reference
+    self.entityControl:SetEntity( nil )
+
+    -- keep the timer for reuse instead of closing it
+    if self.parent.RecycleChild ~= nil and self.parent:RecycleChild( self ) == true then
+        return
+    end
+
+    self:Dispose()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- [required] close all windows
+---------------------------------------------------------------------------------------------------
+function BarElement:Dispose()
 
     -- close all windows
     self.labelBack:Close()
@@ -249,10 +313,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- update element ( called every frame )
 ---------------------------------------------------------------------------------------------------
-function BarElement:Update()
+function BarElement:Update( gameTime )
     
-    -- calculate the timeLeft until timer ends
-    local timeLeft = self.endTime - Turbine.Engine.GetGameTime()
+    -- calculate the timeLeft until timer ends ( gameTime comes from the central updater )
+    local timeLeft = self.endTime - gameTime
 
     -- timer ended
     if timeLeft <= 0 then
@@ -463,6 +527,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function BarElement:Activ( value )
 
+    -- colors / fonts / opacity get changed here, threshold appearance has to be applied again
+    self._inThreshold = nil
+
     -- change opacity and text/timer visiblilty depending on activ
     if value == true then
 
@@ -494,7 +561,7 @@ function BarElement:Activ( value )
     end
 
     -- start or stop updates
-    self:SetWantsUpdates( value )
+    Windows.SetTimerActive( self, value )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -619,7 +686,7 @@ end
 function BarElement:GetRunningInformation()
 
     -- permanent inactiv timer
-    if self:GetWantsUpdates() == false then
+    if Windows.IsTimerActive( self ) == false then
         return nil
     end
 
