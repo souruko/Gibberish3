@@ -34,6 +34,9 @@ end
 -- the effect callback registered for the current target
 Trigger[ Trigger.Types.EffectTarget ].tracked = nil
 
+-- the trigger types an effect of the target is checked against
+local TARGET_TYPES = { Trigger.Types.EffectTarget }
+
 Trigger[Trigger.Types.EffectTarget].Init = function ()
 
     -- the target is watched even while tracking is switched off, so that
@@ -154,19 +157,7 @@ Trigger[ Trigger.Types.EffectTarget ].Register = function ( target, targetName )
 
         Trigger.AddToEffectCollection( effect, "Target", effectView )
 
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-
-            Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effectView, target, windowIndex, windowData, targetName )
-
-        end
-
-        -- all folder
-        for folderIndex, folderData in ipairs(Data.folder) do
-
-            Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effectView, target, folderIndex, folderData, targetName )
-
-        end
+        Trigger.EffectIndex.Check( TARGET_TYPES, effectView, target, targetName )
 
     end )
 
@@ -198,22 +189,7 @@ Trigger[ Trigger.Types.EffectTarget ].CheckAllActivEffects = function( target, t
 
             if IsNewEffect( effect ) == true then
 
-                local effectView = Trigger.NewEffectView( effect )
-
-                -- all windows
-                for windowIndex, windowData in ipairs(Data.window) do
-
-                    Trigger[ Trigger.Types.EffectTarget ].CheckWindows( effectView, target, windowIndex, windowData, targetName )
-
-                end
-
-
-                -- all folder
-                for folderIndex, folderData in ipairs(Data.folder) do
-
-                    Trigger[ Trigger.Types.EffectTarget ].CheckFolder( effectView, target, folderIndex, folderData, targetName )
-
-                end
+                Trigger.EffectIndex.Check( TARGET_TYPES, Trigger.NewEffectView( effect ), target, targetName )
 
             end
 
@@ -225,87 +201,16 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check folder
+-- trigger index
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectTarget ].CheckFolder = function(effectView, target, folderIndex, folderData, targetName)
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectTarget ]) do
-        
-        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effectView, target, triggerData, targetName)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Windows.FolderAction( folderIndex, folderData, triggerData )
-
-        end
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check if added effect is tracked
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectTarget ].CheckWindows = function ( effectView, target, windowIndex, windowData, targetName )
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectTarget ]) do
-        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effectView, target, triggerData, targetName)
-
-        if posAdjustment ~= nil then
-            Windows.WindowAction( windowIndex, windowData, triggerData )
-
-        end
-
-    end
-
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
- 
-    -- check the timers of the window
-    for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.EffectTarget ].CheckTimer(effectView, target, windowIndex, timerIndex, timerData, targetName)
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check if added effect is tracked
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectTarget ].CheckTimer = function ( effectView, target, windowIndex, timerIndex, timerData, targetName )
-
-    -- only check for enabled timers
-    if timerData.enabled == false then
-        return
-    end
-
-    if Condition.HasAny( timerData ) then
-        Condition.CheckAll( timerData, Trigger.Types.EffectTarget, function(t)
-            return Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effectView, target, t, targetName)
-        end, nil, effectView.effect)
-    end
-
-    -- check timer triggers
-    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectTarget ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectTarget ].CheckTrigger(effectView, target, triggerData, targetName)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effectView.effect, target, posAdjustment, windowIndex, timerIndex, triggerData, nil, targetName )
-
-        end
-
-    end
-end
+-- how the target triggers are found for an effect, see TRIGGER/EffectIndex.lua
+Trigger.EffectIndex.Register( Trigger.Types.EffectTarget, {
+    check = function ( effectView, target, triggerData, targetName )
+        return Trigger[ Trigger.Types.EffectTarget ].CheckTrigger( effectView, target, triggerData, targetName )
+    end,
+    folders           = true,
+    conditionDuration = true,
+} )
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

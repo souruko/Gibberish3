@@ -14,11 +14,10 @@ function Options.SaveData()
     -- the resolved &name / &class patterns are per character, they must not reach the account data
     Options.ClearPatternCache( Data )
 
-    -- every change to the triggers ends here, so the group trigger index is
-    -- dropped and rebuilt from the saved data on the next group effect
-    if Trigger ~= nil and Trigger.Types ~= nil and Trigger[ Trigger.Types.EffectGroup ] ~= nil
-        and Trigger[ Trigger.Types.EffectGroup ].InvalidateIndex ~= nil then
-        Trigger[ Trigger.Types.EffectGroup ].InvalidateIndex()
+    -- every change to the triggers ends here, so the effect trigger indexes are
+    -- dropped and rebuilt from the saved data on the next effect
+    if Trigger ~= nil and Trigger.EffectIndex ~= nil then
+        Trigger.EffectIndex.InvalidateAll()
     end
 
     if Language.Local == Language.English then

@@ -68,6 +68,8 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- before the effect triggers, which register with it while they load
+import "Gibberish3.TRIGGER.EffectIndex"
 import "Gibberish3.TRIGGER.EFFECT.SELF"
 import "Gibberish3.TRIGGER.EFFECT.GROUP"
 import "Gibberish3.TRIGGER.EFFECT.TARGET"

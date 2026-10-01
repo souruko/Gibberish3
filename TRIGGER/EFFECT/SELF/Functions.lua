@@ -7,6 +7,15 @@
 
 
 ---------------------------------------------------------------------------------------------------
+-- the trigger types an effect of the player is checked against
+---------------------------------------------------------------------------------------------------
+-- the player counts as a member of the group, so a group trigger also reacts to
+-- the player's own effects. Within a window the self triggers run first.
+local ADD_TYPES    = { Trigger.Types.EffectSelf, Trigger.Types.EffectGroup }
+local REMOVE_TYPES = { Trigger.Types.EffectRemoveSelf }
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- effect self event processing start up
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectSelf ].Init = function ()
@@ -28,20 +37,7 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
 
         Trigger.AddToEffectCollection( effect, "Self", effectView )
 
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-
-            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effectView, windowIndex, windowData )
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, LocalPlayer, windowIndex, windowData, LpData.name )
-
-        end
-
-        for folderIndex, folderData in ipairs(Data.folder) do
-
-            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effectView, folderIndex, folderData )
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, LocalPlayer, folderIndex, folderData, LpData.name )
-
-        end
+        Trigger[ Trigger.Types.EffectSelf ].CheckEffect( effectView )
 
     end
 
@@ -51,12 +47,7 @@ Trigger[ Trigger.Types.EffectSelf ].Init = function ()
         -- read the effect once for the whole event instead of once per trigger
         local effectView = Trigger.NewEffectView( args.Effect )
 
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-
-            Trigger[ Trigger.Types.EffectRemoveSelf ].CheckWindows( effectView, windowIndex, windowData )
-        
-        end
+        Trigger.EffectIndex.Check( REMOVE_TYPES, effectView, LocalPlayer, LpData.name )
 
     end
 
@@ -74,20 +65,7 @@ Trigger[ Trigger.Types.EffectSelf ].CheckAllActivEffects = function ()
         
         local effectView = Trigger.NewEffectView( effects:Get(index) )
 
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-
-            Trigger[ Trigger.Types.EffectSelf ].CheckWindows( effectView, windowIndex, windowData )
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, LocalPlayer, windowIndex, windowData, LpData.name )
-
-        end
-
-        for folderIndex, folderData in ipairs(Data.folder) do
-
-            Trigger[ Trigger.Types.EffectSelf ].CheckFolder( effectView, folderIndex, folderData )
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, LocalPlayer, folderIndex, folderData, LpData.name )
-
-        end
+        Trigger[ Trigger.Types.EffectSelf ].CheckEffect( effectView )
 
     end
 
@@ -95,89 +73,41 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check folder
+-- check one effect on the player against the self and the group triggers
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckFolder = function(effectView, folderIndex, folderData)
+-- both come from their trigger index, see TRIGGER/EffectIndex.lua, and run
+-- window by window, the self triggers of a window before its group triggers,
+-- the order the full walks always fired them in
+Trigger[ Trigger.Types.EffectSelf ].CheckEffect = function ( effectView )
 
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectSelf ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effectView, triggerData)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Windows.FolderAction( folderIndex, folderData, triggerData )
-
-        end
-
-    end
+    Trigger.EffectIndex.Check( ADD_TYPES, effectView, LocalPlayer, LpData.name )
 
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check windows
+-- trigger index
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckWindows = function ( effectView, windowIndex, windowData )
+-- how the self triggers are found for an effect, see TRIGGER/EffectIndex.lua
+Trigger.EffectIndex.Register( Trigger.Types.EffectSelf, {
+    check = function ( effectView, player, triggerData, playerName )
+        return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger( effectView, triggerData )
+    end,
+    folders           = true,
+    conditionDuration = true,
+} )
 
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectSelf ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effectView, triggerData)
-
-        if posAdjustment ~= nil then
-            Windows.WindowAction( windowIndex, windowData, triggerData )
-
-        end
-
-    end
-
-      -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-
-    -- check the timers of the window
-    for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.EffectSelf ].CheckTimer(effectView, windowIndex, timerIndex, timerData)
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check timer
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectSelf ].CheckTimer = function ( effectView, windowIndex, timerIndex, timerData )
-
-    -- only check for enabled timers
-    if timerData.enabled == false then
-        return
-    end
-
-    if Condition.HasAny( timerData ) then
-        Condition.CheckAll( timerData, Trigger.Types.EffectSelf, function(t)
-            return Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effectView, t)
-        end, nil, effectView.effect)
-    end
-
-    -- check timer triggers
-    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectSelf ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectSelf ].CheckTrigger(effectView, triggerData)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effectView.effect, LocalPlayer, posAdjustment, windowIndex, timerIndex, triggerData, nil, LpData.name )
-
-        end
-
-    end
-    
-end
+-- a removed effect is only looked for in enabled windows, its window triggers
+-- included, and never in folders; a condition it sets has no duration to take
+Trigger.EffectIndex.Register( Trigger.Types.EffectRemoveSelf, {
+    check = function ( effectView, player, triggerData, playerName )
+        return Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger( effectView, triggerData )
+    end,
+    folders                         = false,
+    windowTriggersNeedEnabledWindow = true,
+    conditionDuration               = false,
+    remove                          = true,
+} )
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -244,71 +174,6 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check window
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectRemoveSelf ].CheckWindows = function ( effectView, windowIndex, windowData  )
-  
-      -- only check for enabled windows
-      if windowData.enabled == false then
-        return
-    end
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectRemoveSelf ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effectView, triggerData)
-
-        if posAdjustment ~= nil then
-            Windows.WindowAction( windowIndex, windowData, triggerData )
-
-        end
-
-    end
-
-
-    -- check the timers of the window
-    for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTimer(effectView, windowIndex, timerIndex, timerData)
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check timer
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTimer = function ( effectView, windowIndex, timerIndex, timerData  )
-
-    -- only check for enabled timers
-    if timerData.enabled == false then
-        return
-    end
-
-    if Condition.HasAny( timerData ) then
-        Condition.CheckAll( timerData, Trigger.Types.EffectRemoveSelf, function(t)
-            return Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effectView, t)
-        end)
-    end
-
-    -- check timer triggers
-    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectRemoveSelf ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger(effectView, triggerData)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effectView.effect, LocalPlayer, posAdjustment, windowIndex, timerIndex, triggerData, true, LpData.name )
-
-        end
-
-    end
-    
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
 -- check trigger
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectRemoveSelf ].CheckTrigger = function ( effectView, triggerData )
@@ -345,12 +210,15 @@ end
 ---------------------------------------------------------------------------------------------------
 -- process effect trigger
 ---------------------------------------------------------------------------------------------------
-Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowIndex, timerIndex, triggerData, remove, playerName )
+-- takes the effect view of the event: the name and icon were already read by the
+-- trigger checks, and reading them again would be a call into the game each
+Trigger.ProcessEffectTrigger = function ( effectView, player, posAdjustment, windowIndex, timerIndex, triggerData, remove, playerName )
 
     -- declarations
+    local effect     = effectView.effect
     local windowData = Data.window[windowIndex]
     local timerData = windowData.timerList[timerIndex]
-    local name = effect:GetName()
+    local name = Trigger.EffectName( effectView )
 
     -- callers that already read it pass it in
     local target = playerName
@@ -392,13 +260,14 @@ Trigger.ProcessEffectTrigger = function ( effect, player, posAdjustment, windowI
     elseif timerData.permanent == false and
         timerData.stacking == Stacking.PerTarget then
 
-        key = player:GetName()
+        -- the name of player, read once above
+        key = target
 
     end
 
     -- icon
     if icon == nil then
-        icon = effect:GetIcon()
+        icon = Trigger.EffectIcon( effectView )
     end
 
     -- text   
