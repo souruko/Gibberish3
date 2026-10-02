@@ -119,6 +119,17 @@ function DebugCommand:Execute( command, arguments )
     end
     Turbine.Shell.WriteLine( "Target tracking: " .. tracking )
 
+    -- group tracking
+    local groupTrigger  = Trigger[ Trigger.Types.EffectGroup ]
+    local groupTracking = "off"
+    if Data.trackGroupEffects == true then
+        groupTracking = "on"
+    end
+    if groupTrigger.TrackedCount ~= nil then
+        groupTracking = groupTracking .. ", members registered: " .. tostring( groupTrigger.TrackedCount() )
+    end
+    Turbine.Shell.WriteLine( "Group tracking: " .. groupTracking )
+
     -- timers per window
     local totalTimers = 0
     local totalActiv  = 0

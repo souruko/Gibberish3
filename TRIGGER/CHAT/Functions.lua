@@ -7,6 +7,11 @@
 
 
 ---------------------------------------------------------------------------------------------------
+-- the trigger types a line of chat is checked against
+local CHAT_TYPES = { Trigger.Types.Chat }
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- chat event processing start up
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.Chat ].Init = function ()
@@ -38,22 +43,50 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         -- collection
         Trigger[ Trigger.Types.Chat ].AddToCollection( args.Message, args.ChatType )
-        
-        -- iterate all window data
-        for windowIndex, windowData in ipairs(Data.window) do
-            Trigger[ Trigger.Types.Chat ].CheckWindows(args.Message, args.ChatType, windowIndex, windowData)
 
-        end
-
-        -- iterate folder data
-        for folderIndex, folderData in ipairs(Data.folder) do
-            Trigger[ Trigger.Types.Chat ].CheckFolder(args.Message, args.ChatType, folderIndex, folderData)
-
-        end
+        -- only the chat triggers for this chat type and those for any chat
+        -- type, see TRIGGER/EffectIndex.lua
+        Trigger.EffectIndex.Check( CHAT_TYPES, args.Message, args.ChatType, nil )
 
     end
 
 end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- trigger index
+---------------------------------------------------------------------------------------------------
+-- A chat trigger is a pattern, so it cannot be looked up by the text of a line.
+-- CheckTrigger drops a trigger for another chat type before anything else,
+-- though, so the triggers are filed by their source and a line only tries the
+-- ones for its own chat type and the ones for any chat type.
+Trigger.EffectIndex.Register( Trigger.Types.Chat, {
+    check = function ( message, chatType, triggerData )
+        return Trigger[ Trigger.Types.Chat ].CheckTrigger( message, chatType, triggerData )
+    end,
+    bucket = function ( triggerData )
+
+        -- CheckTrigger never matches these
+        if triggerData.token == nil or triggerData.token == "" or triggerData.source == nil then
+            return nil
+        end
+
+        if triggerData.source == Source.Any then
+            return Trigger.EffectIndex.EVERY_EVENT
+        end
+
+        return triggerData.source
+
+    end,
+    lookupKey = function ( message, chatType )
+        return chatType
+    end,
+    process = function ( message, chatType, posAdjustment, entry )
+        Trigger[ Trigger.Types.Chat ].ProcessTrigger( message, chatType, posAdjustment, entry.windowIndex, entry.timerIndex, entry.triggerIndex )
+    end,
+    folders           = true,
+    conditionDuration = false,
+} )
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -93,93 +126,6 @@ Trigger[ Trigger.Types.Chat ].AddToCollection = function( message, chatType )
     Options.Collection.Chat[ index ].persistent = false
 
     Options.ChatCollectionChanged()
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check folder
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].CheckFolder = function(message, chatType, folderIndex, folderData)
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.Chat ]) do
-        
-        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Windows.FolderAction( folderIndex, folderData, triggerData )
-
-        end
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check windows
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].CheckWindows = function(message, chatType, windowIndex, windowData)
-
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Chat ]) do
-        
-        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-
-            Windows.WindowAction( windowIndex, windowData, triggerData )
-
-        end
-
-    end
-
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-    
-    -- check the timers of the window
-    for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.Chat ].CheckTimer(message, chatType, windowIndex, timerIndex, timerData)
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check timers
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.Chat ].CheckTimer = function(message, chatType, windowIndex, timerIndex, timerData)
-
-    -- only check for enabled timers
-    if timerData.enabled == false then
-        return
-    end
-
-    if Condition.HasAny( timerData ) then
-        Condition.CheckAll( timerData, Trigger.Types.Chat, function(t)
-            return Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, t)
-        end)
-    end
-
-    -- check timer triggers
-    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Chat ]) do
-        local posAdjustment = Trigger[ Trigger.Types.Chat ].CheckTrigger(message, chatType, triggerData)
-
-        if posAdjustment ~= nil then
-            Trigger[ Trigger.Types.Chat ].ProcessTrigger( message, chatType, posAdjustment, windowIndex, timerIndex, triggerIndex )
-
-        end
-
-    end
 
 end
 ---------------------------------------------------------------------------------------------------

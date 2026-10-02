@@ -247,23 +247,26 @@ end
 ---------------------------------------------------------------------------------------------------
 -- add to collection
 ---------------------------------------------------------------------------------------------------
-Trigger.AddToEffectCollection = function( effect, originType )
+-- effectView is optional: when the caller has one, the values read here are
+-- shared with the trigger checks instead of being read from the game again
+Trigger.AddToEffectCollection = function( effect, originType, effectView )
 
     -- stop if not collecting
     if Options.CollectEffects == false then
         return
     end
 
+    local view = effectView or Trigger.NewEffectView( effect )
+
     -- check for onlydebuffs
     if Options.OnlyDebuffs == true and
-        effect:IsDebuff() == false then
+        Trigger.EffectIsDebuff( view ) == false then
 
         return
     end
 
-    local name = effect:GetName()
-    local icon = effect:GetIcon()
-    local duration = effect:GetDuration()
+    local name = Trigger.EffectName( view )
+    local icon = Trigger.EffectIcon( view )
 
     -- check for duplicates
     for index, value in ipairs(Options.Collection.Effects) do
@@ -274,6 +277,9 @@ Trigger.AddToEffectCollection = function( effect, originType )
 
         end
     end
+
+    -- only a new entry needs the duration
+    local duration = effect:GetDuration()
 
     -- filter permanent effect timers
     if duration > 999999 then
