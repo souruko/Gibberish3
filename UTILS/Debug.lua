@@ -84,23 +84,6 @@ function DebugCommand:Execute( command, arguments )
         return
     end
 
-    -- /gibdebug group: count group effects that arrive a second time
-    if arguments ~= nil and string.find( arguments, "group" ) ~= nil then
-
-        local enabled = DebugStats.groupCounting ~= true
-
-        Trigger[ Trigger.Types.EffectGroup ].SetDuplicateCounting( enabled )
-
-        if enabled == true then
-            Turbine.Shell.WriteLine( "Gibberish3: counting repeated group effects, /gibdebug shows the result, /gibdebug group stops." )
-        else
-            Turbine.Shell.WriteLine( "Gibberish3: stopped counting repeated group effects." )
-        end
-
-        return
-
-    end
-
     local memoryBefore = collectgarbage( "count" )
     collectgarbage( "collect" )
     local memoryAfter  = collectgarbage( "count" )
@@ -189,16 +172,10 @@ function DebugCommand:Execute( command, arguments )
     Turbine.Shell.WriteLine( string.format( "Since load: %d timer elements created, %d reused, %d target changes", DebugStats.timersCreated, DebugStats.timersReused, DebugStats.targetChanges ) )
     Turbine.Shell.WriteLine( string.format( "Duplicate target effects skipped: %d", DebugStats.effectsSkipped ) )
 
-    if DebugStats.groupCounting == true then
-        Turbine.Shell.WriteLine( string.format( "Group effects since /gibdebug group: %d received, %d with an id already seen", DebugStats.groupEffects, DebugStats.groupDuplicates ) )
-    else
-        Turbine.Shell.WriteLine( "Repeated group effects: not counted, /gibdebug group starts counting" )
-    end
-
 end
 
 function DebugCommand:GetHelp()
-    return "Prints Gibberish3 memory usage and timer counts. 'timers' for the state of every running timer, 'group' to start or stop counting repeated group effects."
+    return "Prints Gibberish3 memory usage and timer counts. 'timers' for the state of every running timer."
 end
 
 function DebugCommand:GetShortHelp()

@@ -1,7 +1,7 @@
 --=================================================================================================
 --= Effect Index
 --= ===============================================================================================
---= finds the effect triggers that can match an effect without walking all data
+--= finds the effect and chat triggers that can match an event without walking all data
 --=================================================================================================
 
 
@@ -23,7 +23,16 @@
 -- Only a change to the structure or a token makes an index stale, and all of
 -- those end in Options.SaveData, which drops every index. Each is rebuilt on
 -- the next event of its type.
+--
+-- Chat triggers use the same index with another key: a chat trigger is a
+-- pattern and cannot be looked up by text, but it only matches lines from its
+-- own chat type ( source ), so it is keyed by that, and the triggers for any
+-- chat type take the place of the regex list. Even without a match by key, a
+-- line then only visits the places that hold a chat trigger at all.
 Trigger.EffectIndex = {}
+
+-- returned by spec.bucket for a trigger that every event has to try
+Trigger.EffectIndex.EVERY_EVENT = {}
 
 local ENTRY_WINDOW_TRIGGER   = 1
 local ENTRY_TIMER_CONDITIONS = 2
@@ -42,7 +51,10 @@ local NO_ENTRIES = {}
 ---------------------------------------------------------------------------------------------------
 -- register a trigger type
 ---------------------------------------------------------------------------------------------------
--- spec.check( effectView, entity, triggerData, entityName )
+-- An event is what Trigger.EffectIndex.Check is handed, for effects the effect
+-- view and the entity that has the effect, for chat the message and its type.
+--
+-- spec.check( event, entity, triggerData, entityName )
 --     the CheckTrigger of the type, returns the match position or nil
 -- spec.folders
 --     folder triggers of the type are checked
@@ -52,6 +64,13 @@ local NO_ENTRIES = {}
 --     a condition without a custom duration runs as long as the effect
 -- spec.remove
 --     handed to Trigger.ProcessEffectTrigger: the effect is going away
+-- spec.bucket( triggerData )            optional, effect triggers by default
+--     the key a trigger is filed under, Trigger.EffectIndex.EVERY_EVENT for one
+--     every event has to try, nil for one that can never match
+-- spec.lookupKey( event, entity )       optional, the effect name by default
+--     the key an event is looked up by
+-- spec.process( event, entity, match, entry, entityName )   optional
+--     a timer trigger matched; by default Trigger.ProcessEffectTrigger
 function Trigger.EffectIndex.Register( triggerType, spec )
 
     spec.triggerType     = triggerType
@@ -79,22 +98,39 @@ local function build( spec )
     local index       = { spec = spec, byToken = {}, regex = {}, empty = true }
     local seq         = 0
 
-    -- the list a trigger belongs in, or nil when it can never match
-    local function bucket_of( triggerData )
+    -- effect triggers: by token, regex triggers are tried by every event
+    local key_of = spec.bucket or function( triggerData )
 
         if triggerData.token == nil then
             return nil
         end
 
         if triggerData.useRegex == true then
+            return Trigger.EffectIndex.EVERY_EVENT
+        end
+
+        return triggerData.token
+
+    end
+
+    -- the list a trigger belongs in, or nil when it can never match
+    local function bucket_of( triggerData )
+
+        local key = key_of( triggerData )
+
+        if key == nil then
+            return nil
+        end
+
+        if key == Trigger.EffectIndex.EVERY_EVENT then
             return index.regex
         end
 
-        local bucket = index.byToken[ triggerData.token ]
+        local bucket = index.byToken[ key ]
 
         if bucket == nil then
             bucket = {}
-            index.byToken[ triggerData.token ] = bucket
+            index.byToken[ key ] = bucket
         end
 
         return bucket
@@ -152,8 +188,8 @@ local function build( spec )
 
             end
 
-            for _, triggerData in ipairs( timerData[ triggerType ] or {} ) do
-                add( { kind = ENTRY_TIMER_TRIGGER, windowIndex = windowIndex, windowData = windowData, timerIndex = timerIndex, timerData = timerData, triggerData = triggerData }, triggerData )
+            for triggerIndex, triggerData in ipairs( timerData[ triggerType ] or {} ) do
+                add( { kind = ENTRY_TIMER_TRIGGER, windowIndex = windowIndex, windowData = windowData, timerIndex = timerIndex, timerData = timerData, triggerIndex = triggerIndex, triggerData = triggerData }, triggerData )
             end
 
         end
@@ -253,6 +289,12 @@ local function run_entry( spec, entry, effectView, entity, entityName )
     local posAdjustment = spec.check( effectView, entity, entry.triggerData, entityName )
 
     if posAdjustment ~= nil then
+
+        if spec.process ~= nil then
+            spec.process( effectView, entity, posAdjustment, entry, entityName )
+            return
+        end
+
         -- fix posAdjustment
         posAdjustment = posAdjustment - 1
         Trigger.ProcessEffectTrigger( effectView, entity, posAdjustment, entry.windowIndex, entry.timerIndex, entry.triggerData, spec.remove, entityName )
@@ -266,16 +308,34 @@ end
 ---------------------------------------------------------------------------------------------------
 -- goes through the entries for the effect name and the regex entries together,
 -- in seq order
-local function new_cursor( index, effectView )
+local function new_cursor( index, effectView, entity )
 
     if index.empty == true then
         return nil
     end
 
-    local exact = index.byToken[ Trigger.EffectName( effectView ) ] or NO_ENTRIES
+    local key = nil
 
-    if #exact == 0 and #index.regex == 0 then
-        return nil
+    if index.spec.lookupKey ~= nil then
+        key = index.spec.lookupKey( effectView, entity )
+    else
+        key = Trigger.EffectName( effectView )
+    end
+
+    local exact = nil
+
+    if key ~= nil then
+        exact = index.byToken[ key ]
+    end
+
+    if exact == nil then
+
+        if #index.regex == 0 then
+            return nil
+        end
+
+        exact = NO_ENTRIES
+
     end
 
     return { spec = index.spec, exact = exact, regex = index.regex, i = 1, j = 1 }
@@ -334,7 +394,7 @@ function Trigger.EffectIndex.Check( triggerTypes, effectView, entity, entityName
 
     for i = 1, #triggerTypes, 1 do
 
-        local cursor = new_cursor( Trigger.EffectIndex.Get( triggerTypes[i] ), effectView )
+        local cursor = new_cursor( Trigger.EffectIndex.Get( triggerTypes[i] ), effectView, entity )
 
         if cursor ~= nil then
             cursors[ #cursors + 1 ] = cursor

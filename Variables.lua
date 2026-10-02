@@ -62,10 +62,4 @@ DebugStats.timersCreated    = 0
 DebugStats.timersReused     = 0
 DebugStats.targetChanges    = 0
 DebugStats.effectsSkipped   = 0
-
--- /gibdebug group: off by default, reading the effect id costs a call into the
--- game for every group effect
-DebugStats.groupCounting   = false
-DebugStats.groupEffects    = 0
-DebugStats.groupDuplicates = 0
 ---------------------------------------------------------------------------------------------------

@@ -67,7 +67,7 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
                         tracked[ playerName ] = Trigger[ Trigger.Types.EffectGroup ].Register( player, playerName )
 
-                        Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName, tracked[ playerName ] )
+                        Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName )
 
                     end
 
@@ -96,71 +96,8 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- count group effects whose id was already seen for that member ( /gibdebug group )
----------------------------------------------------------------------------------------------------
--- Measures whether lotro sends EffectAdded again for effects a member already
--- has, the way it does for a new target. Only runs while switched on.
--- The ids are kept per member and dropped once there are too many: a repeat
--- arrives shortly after the first one, and the list must not grow for a whole
--- session.
-local MAX_SEEN_IDS = 500
-
-local function note_effect_id( record, effect, isEvent )
-
-    local id   = effect:GetID()
-    local seen = record.seenIDs
-
-    if isEvent == true then
-        DebugStats.groupEffects = DebugStats.groupEffects + 1
-    end
-
-    if seen[ id ] == true then
-
-        if isEvent == true then
-            DebugStats.groupDuplicates = DebugStats.groupDuplicates + 1
-        end
-
-        return
-
-    end
-
-    if record.seenCount >= MAX_SEEN_IDS then
-        seen             = {}
-        record.seenIDs   = seen
-        record.seenCount = 0
-    end
-
-    seen[ id ]       = true
-    record.seenCount = record.seenCount + 1
-
-end
-
--- switches the count on or off; switching it on starts from zero, with the
--- effects every tracked member has right now counted as already seen
-Trigger[ Trigger.Types.EffectGroup ].SetDuplicateCounting = function ( enabled )
-
-    DebugStats.groupCounting   = enabled
-    DebugStats.groupEffects    = 0
-    DebugStats.groupDuplicates = 0
-
-    for playerName, record in pairs( Trigger[ Trigger.Types.EffectGroup ].tracked ) do
-
-        record.seenIDs   = {}
-        record.seenCount = 0
-
-        if enabled == true then
-
-            for j = 1, record.effects:GetCount(), 1 do
-                note_effect_id( record, record.effects:Get(j), false )
-            end
-
-        end
-
-    end
-
-end
-
 -- number of members with a registered callback ( used by /gibdebug )
+---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].TrackedCount = function ()
 
     local count = 0
@@ -180,7 +117,7 @@ end
 Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
 
     local effects = player:GetEffects()
-    local record  = { effects = effects, active = true, seenIDs = {}, seenCount = 0 }
+    local record  = { effects = effects, active = true }
 
     -- add
     record.callback = Trigger.AddCallback( effects, "EffectAdded", function ( sender, args )
@@ -191,20 +128,15 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
             return
         end
 
-        local index    = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
-        local counting = DebugStats.groupCounting == true
+        local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
 
         -- without a single group trigger there is nothing to check, so the
-        -- effect is not even read unless it is being collected or counted
-        if index.empty == true and Options.CollectEffects == false and counting == false then
+        -- effect is not even read unless it is being collected
+        if index.empty == true and Options.CollectEffects == false then
             return
         end
 
         local effect = effects:Get(args.Index)
-
-        if counting == true then
-            note_effect_id( record, effect, true )
-        end
 
         -- read the effect once for the whole event instead of once per trigger
         local effectView = Trigger.NewEffectView( effect )
@@ -225,12 +157,11 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check the active effects of one party member
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName, record )
+Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName )
 
-    local index    = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
-    local counting = DebugStats.groupCounting == true and record ~= nil
+    local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
 
-    if index.empty == true and counting == false then
+    if index.empty == true then
         return
     end
 
@@ -239,17 +170,7 @@ Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, pla
     -- iterate effects
     for j = 1, effects:GetCount(), 1 do
 
-        local effect = effects:Get(j)
-
-        -- the effects a member already has, so that EffectAdded for one of
-        -- them again counts as a repeat
-        if counting == true then
-            note_effect_id( record, effect, false )
-        end
-
-        if index.empty ~= true then
-            Trigger.EffectIndex.Check( GROUP_TYPES, Trigger.NewEffectView( effect ), player, playerName )
-        end
+        Trigger.EffectIndex.Check( GROUP_TYPES, Trigger.NewEffectView( effects:Get(j) ), player, playerName )
 
     end
 
