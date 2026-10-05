@@ -13,6 +13,9 @@
 Trigger[ Trigger.Types.EffectGroup ].tracked = {}
 Trigger[ Trigger.Types.EffectGroup ].party   = nil
 
+-- the trigger types an effect of a party member is checked against
+local GROUP_TYPES = { Trigger.Types.EffectGroup }
+
 Trigger[Trigger.Types.EffectGroup].Init = function ()
 
     -- only the first GetParty works, so it is read once here and kept. A party
@@ -93,6 +96,22 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- number of members with a registered callback ( used by /gibdebug )
+---------------------------------------------------------------------------------------------------
+Trigger[ Trigger.Types.EffectGroup ].TrackedCount = function ()
+
+    local count = 0
+
+    for playerName, record in pairs( Trigger[ Trigger.Types.EffectGroup ].tracked ) do
+        count = count + 1
+    end
+
+    return count
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- register the effect callback of one party member
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
@@ -109,22 +128,23 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
             return
         end
 
-        local effect = effects:Get(args.Index)
+        local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
 
-        Trigger.AddToEffectCollection( effect, "Group" )
+        -- without a single group trigger there is nothing to check, so the
+        -- effect is not even read unless it is being collected
+        if index.empty == true and Options.CollectEffects == false then
+            return
+        end
+
+        local effect = effects:Get(args.Index)
 
         -- read the effect once for the whole event instead of once per trigger
         local effectView = Trigger.NewEffectView( effect )
 
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
+        Trigger.AddToEffectCollection( effect, "Group", effectView )
 
-        end
-
-        for folderIndex, folderData in ipairs(Data.folder) do
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
-
+        if index.empty ~= true then
+            Trigger.EffectIndex.Check( GROUP_TYPES, effectView, player, playerName )
         end
 
     end )
@@ -139,25 +159,18 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName )
 
+    local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
+
+    if index.empty == true then
+        return
+    end
+
     local effects = player:GetEffects()
 
     -- iterate effects
     for j = 1, effects:GetCount(), 1 do
 
-        local effectView = Trigger.NewEffectView( effects:Get(j) )
-
-        -- all groups
-        for windowIndex, windowData in ipairs(Data.window) do
-
-            Trigger[ Trigger.Types.EffectGroup ].CheckWindows( effectView, player, windowIndex, windowData, playerName )
-
-        end
-
-        for folderIndex, folderData in ipairs(Data.folder) do
-
-            Trigger[ Trigger.Types.EffectGroup ].CheckFolder( effectView, player, folderIndex, folderData, playerName )
-
-        end
+        Trigger.EffectIndex.Check( GROUP_TYPES, Trigger.NewEffectView( effects:Get(j) ), player, playerName )
 
     end
 
@@ -165,88 +178,16 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- check folder
+-- trigger index
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckFolder = function(effectView, player, folderIndex, folderData, playerName)
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(folderData[ Trigger.Types.EffectGroup ]) do
-        
-        local posAdjustment = Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effectView, player, triggerData, playerName)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Windows.FolderAction( folderIndex, folderData, triggerData )
-
-        end
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check windows
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckWindows = function ( effectView, player, windowIndex, windowData, playerName )
-
-    -- check window triggers
-    for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.EffectGroup ]) do
-        local posAdjustment = Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effectView, player, triggerData, playerName)
-
-        if posAdjustment ~= nil then
-            Windows.WindowAction( windowIndex, windowData, triggerData )
-
-        end
-
-    end
-
-    -- only check for enabled windows
-    if windowData.enabled == false then
-        return
-    end
-
-    -- check the timers of the window
-    for timerIndex, timerData in ipairs( windowData.timerList ) do
-        Trigger[ Trigger.Types.EffectGroup ].CheckTimer(effectView, player, windowIndex, timerIndex, timerData, playerName)
-
-    end
-
-end
----------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- check timer
----------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckTimer = function ( effectView, player, windowIndex, timerIndex, timerData, playerName )
-
-    -- only check for enabled timers
-    if timerData.enabled == false then
-        return
-    end
-
-    if Condition.HasAny( timerData ) then
-        Condition.CheckAll( timerData, Trigger.Types.EffectGroup, function(t)
-            return Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effectView, player, t, playerName)
-        end, nil, effectView.effect)
-    end
-
-    -- check timer triggers
-    for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.EffectGroup ]) do
-
-        local posAdjustment = Trigger[ Trigger.Types.EffectGroup ].CheckTrigger(effectView, player, triggerData, playerName)
-
-        if posAdjustment ~= nil then
-            -- fix posAdjustment
-            posAdjustment = posAdjustment - 1
-            Trigger.ProcessEffectTrigger( effectView.effect, player, posAdjustment, windowIndex, timerIndex, triggerData, nil, playerName )
-
-        end
-
-    end
-
-end
+-- how the group triggers are found for an effect, see TRIGGER/EffectIndex.lua
+Trigger.EffectIndex.Register( Trigger.Types.EffectGroup, {
+    check = function ( effectView, player, triggerData, playerName )
+        return Trigger[ Trigger.Types.EffectGroup ].CheckTrigger( effectView, player, triggerData, playerName )
+    end,
+    folders           = true,
+    conditionDuration = true,
+} )
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

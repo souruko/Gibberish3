@@ -1,5 +1,11 @@
 # Changelog
 
+### 3.9.2 by ***Plugo***
+- Effects on you, your target and your group are checked much faster. An effect used to be checked against every window, timer, condition and folder, whether anything tracked it or not. Now only the triggers with that effect's name are checked, plus any that use a pattern (regex). An effect nothing tracks costs next to nothing, however many windows and timers you have, so many effects at once no longer cause a stutter, for example stacked ground effects or switching to a target with many effects.
+- Chat triggers are checked much faster. Every line of chat, each line of the combat log included, used to be checked against every window, timer, condition and folder. Now a line only tries the chat triggers for its own chat type and those set to any chat type, so busy fights with lots of combat log lines take far less work.
+- With no group triggers at all, group effects cost next to nothing.
+- Starting a timer and collecting effects read less from the game for each effect.
+
 ### 3.9.1
 - Fixed icons being drawn small in the corner of anything larger than themselves, instead of filling it. This started with the game's update 49.6 and affected the icon on bars, circles, counters and icon timers, the shadow that sweeps over an icon timer, its threshold animation, and the shortcut button.
 - Icons are only stretched while Use Global Scaling is ticked for the plugin in the game's plugin manager, so /gibdebug now tells you whether it is on.
