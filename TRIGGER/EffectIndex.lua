@@ -454,13 +454,3 @@ function Trigger.EffectIndex.Check( triggerTypes, effectView, entity, entityName
 
 end
 ---------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------------------------------
--- returns if a trigger type has no trigger at all
----------------------------------------------------------------------------------------------------
-function Trigger.EffectIndex.IsEmpty( triggerType )
-
-    return Trigger.EffectIndex.Get( triggerType ).empty == true
-
-end
----------------------------------------------------------------------------------------------------
