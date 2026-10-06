@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.9.3
+- Fixed the coloured bar on a bar timer ignoring the opacity settings. It stayed fully solid while the rest of the bar faded, so bars could not be made see-through. It now matches the active, inactive and threshold opacity like the text and icon do.
+
 ### 3.9.2 by ***Plugo***
 - Effects on you, your target and your group are checked much faster. An effect used to be checked against every window, timer, condition and folder, whether anything tracked it or not. Now only the triggers with that effect's name are checked, plus any that use a pattern (regex). An effect nothing tracks costs next to nothing, however many windows and timers you have, so many effects at once no longer cause a stutter, for example stacked ground effects or switching to a target with many effects.
 - Chat triggers are checked much faster. Every line of chat, each line of the combat log included, used to be checked against every window, timer, condition and folder. Now a line only tries the chat triggers for its own chat type and those set to any chat type, so busy fights with lots of combat log lines take far less work.
