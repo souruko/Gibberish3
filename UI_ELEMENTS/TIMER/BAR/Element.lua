@@ -445,6 +445,7 @@ function BarElement:UpdateThreshold( timeLeft )
             self.textLabel:SetFont( self.font )
             self:SetOpacity( self.parent.data.opacityActiv )
             self.iconControl:SetOpacity( self.parent.data.opacityActiv )
+            self.barBase:SetOpacity( self.parent.data.opacityActiv )
         end
 
     -- in the threshold
@@ -465,6 +466,7 @@ function BarElement:UpdateThreshold( timeLeft )
             self.textLabel:SetFont( self.thresholdFont )
             self:SetOpacity( self.parent.data.opacityThreshold )
             self.iconControl:SetOpacity( self.parent.data.opacityThreshold )
+            self.barBase:SetOpacity( self.parent.data.opacityThreshold )
             -- static background: set once on entry when not flashing
             if not ( self.data.useAnimation == true and self.data.animationType == AnimationType.Flashing ) then
                 self.barBack:SetBackColor( self.thresholdColor )
@@ -534,6 +536,7 @@ function BarElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityActiv )
         self.iconControl:SetOpacity( self.parent.data.opacityActiv )
+        self.barBase:SetOpacity( self.parent.data.opacityActiv )
 
         self.textLabel:SetVisible( true )
         self.timerLabel:SetVisible( self.parent.data.showTimer )
@@ -542,6 +545,7 @@ function BarElement:Activ( value )
 
         self:SetOpacity( self.parent.data.opacityPassiv )
         self.iconControl:SetOpacity( self.parent.data.opacityPassiv )
+        self.barBase:SetOpacity( self.parent.data.opacityPassiv )
         self.barBack:SetBackColor( self.backColor )
         self:SetBarWidth( 0 )
 
