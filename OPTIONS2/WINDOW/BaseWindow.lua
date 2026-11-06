@@ -360,14 +360,23 @@ function Options2.Window.Constructor:Constructor()
     self:_RefreshToggles()
 
     self:SetText("Gibberish")
-    -- open at the size the restored mode needs, not always the advanced one
+    -- open at the size it was last left at, with the floor the restored mode
+    -- needs - not always the advanced one. A bigger font size raises that floor
+    -- after the fact, so a size saved under a smaller one has to be clamped up.
+    local min_w, min_h
     if self:IsSimpleMode() then
-        self:SetSize(Options.Defaults.window.min_width_simple,
-                     Options.Defaults.window.min_height_simple)
+        min_w = Options.Defaults.window.min_width_simple
+        min_h = Options.Defaults.window.min_height_simple
     else
-        self:SetSize(Options.Defaults.window.min_width,
-                     Options.Defaults.window.min_height)
+        min_w = Options.Defaults.window.min_width
+        min_h = Options.Defaults.window.min_height
     end
+    -- and capped at the screen, so a size saved on a larger monitor cannot put
+    -- the gripper in the corner out of reach. The floor still wins: Fonts.lua
+    -- already fits the minimums to the screen
+    local save_w = math.min(Data.options.window.width2  or min_w, Options.ScreenWidth)
+    local save_h = math.min(Data.options.window.height2 or min_h, Options.ScreenHeight)
+    self:SetSize(math.max(min_w, save_w), math.max(min_h, save_h))
 
     -- MoveTo, not SetPosition: a position saved on a bigger screen than the one
     -- we are on now would otherwise put the title bar out of reach
@@ -529,6 +538,14 @@ end
 -- programmatic SetPosition
 function Options2.Window.Constructor:OnMoved()
     self:_SavePosition()
+end
+
+-- PanelWindow gripper hook, fired once the drag is let go of. Kept out of
+-- SizeChanged on purpose: that runs on every mouse move of the resize.
+function Options2.Window.Constructor:OnResized()
+    local w, h = self:GetSize()
+    Data.options.window.width2  = w
+    Data.options.window.height2 = h
 end
 
 -- ── layout ──────────────────────────────────────────────────────────────────

@@ -264,6 +264,13 @@ function Options.OverwriteCharData( global_data, char_data )
     global_data.options.window.left2       = char_data.options.window.left2
     global_data.options.window.top2        = char_data.options.window.top2
 
+    -- a save from before the panel remembered its size has neither key; leave
+    -- the account wide value standing rather than blanking it
+    if char_data.options.window.width2 ~= nil then
+        global_data.options.window.width2  = char_data.options.window.width2
+        global_data.options.window.height2 = char_data.options.window.height2
+    end
+
     return global_data
 
 end

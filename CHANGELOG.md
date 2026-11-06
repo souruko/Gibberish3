@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.9.4
+- The options panel now opens at the size you last dragged it to. Resizing it was forgotten as soon as you reloaded or logged out, so it always came back at its default size. The size is remembered per character, the same as the panel's position, and is brought back within the screen if it was saved on a larger one.
+
 ### 3.9.3
 - Fixed the coloured bar on a bar timer ignoring the opacity settings. It stayed fully solid while the rest of the bar faded, so bars could not be made see-through. It now matches the active, inactive and threshold opacity like the text and icon do.
 

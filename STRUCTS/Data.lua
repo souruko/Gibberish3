@@ -63,6 +63,10 @@ function DataFunction.New()
     data.options.window.open2       = false
     data.options.window.left2       = 0.23
     data.options.window.top2        = 0.23
+    -- the options2 panel is resizable; its size is remembered in pixels, unlike
+    -- the position, which is a screen ratio
+    data.options.window.width2      = Options.Defaults.window.min_width
+    data.options.window.height2     = Options.Defaults.window.min_height
     data.options.window.tab1        = 1
     data.options.window.tab2        = 1
     data.options.window.fontScale   = Options.Defaults.window.font_scale
