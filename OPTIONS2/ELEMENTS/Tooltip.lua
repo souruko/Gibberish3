@@ -26,9 +26,21 @@ function Options2.Elements.Tooltip:Show(left, top, text_control, text_descriptio
     local text = UTILS.GetText(text_control, text_description)
 
     self.text:SetText(text)
-    -- 35 characters is what fits on one line, and the box widens with the font,
-    -- so only the line height follows the panel's font size
-    local child_height = (math.floor(string.len(text) / 35) + 2) * Options2.Fonts.Px(14)
+
+    -- Around 26 characters fit on a line at the box's fixed width, but whole
+    -- words are never split, so 23 is what a line reliably holds. A line break
+    -- starts a new line whatever is left of the old one, so the lines are
+    -- counted one break-separated piece at a time: measuring the whole string
+    -- instead loses a line for every break in it, which is what used to cut the
+    -- longer tooltips off at the bottom. One spare line covers an awkward wrap.
+    local lines = 0
+
+    for segment in string.gmatch(text .. "\n", "([^\n]*)\n") do
+        lines = lines + math.max(1, math.ceil(string.len(segment) / 23))
+    end
+
+    -- only the line height follows the panel's font size; the box keeps its width
+    local child_height = (lines + 1) * Options2.Fonts.Px(14)
     local child_width  = Options.Defaults.tooltip.width - (2 * Options.Defaults.tooltip.frame)
     local height       = child_height + (2 * Options.Defaults.tooltip.frame)
 
