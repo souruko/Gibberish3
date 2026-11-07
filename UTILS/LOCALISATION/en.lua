@@ -181,7 +181,6 @@ L[ Language.English ].shortcut.options2                     = "Options"
 L[ Language.English ].shortcut.move                         = "Move Windows"
 L[ Language.English ].shortcut.track_group                  = "Track Group"
 L[ Language.English ].shortcut.track_target                 = "Track Target"
-L[ Language.English ].shortcut.auto_reload                  = "Auto Reload"
 
 -- move
 L[ Language.English ].move = {}
@@ -285,6 +284,10 @@ L[ Language.English ].general.show_tooltips                 = "Show Tooltips"
 L[ Language.English ].general.english                       = "English"
 L[ Language.English ].general.german                        = "German"
 L[ Language.English ].general.french                        = "French"
+L[ Language.English ].general.reload_mode                   = "Group Change"
+L[ Language.English ].general.reload_manual                 = "Manual"
+L[ Language.English ].general.reload_auto                   = "Automatic"
+L[ Language.English ].general.reload_prompt                 = "Ask First"
 
 -- collection
 L[ Language.English ].collection = {}
@@ -331,6 +334,13 @@ L[ Language.English ].import.external_images              = "Uses external image
 
 L[ Language.English ].traitline_changed                     = "You have acquired the Class Specialization Bonus Trait:"
 
+-- the reload prompt, shown on a group change when the reload mode asks first
+L[ Language.English ].reload_prompt = {}
+L[ Language.English ].reload_prompt.title                   = "Gibberish3"
+L[ Language.English ].reload_prompt.message                 = "Your group has changed.\nReload now to track the effects of everyone in it?"
+L[ Language.English ].reload_prompt.reload                  = "Reload Now"
+L[ Language.English ].reload_prompt.later                   = "Not Now"
+
 L[ Language.English ].ReloadMessages = {
 
     [ "raid_convert" ]                                      = "You have joined the chat room for your raid, raid chat is now available.",
@@ -373,7 +383,7 @@ L[ Language.English ].tooltip.button_collect_chat           = "Record incoming c
 L[ Language.English ].tooltip.cb_only_debuffs               = "Only record debuffs when collecting effects. Buffs will be ignored."
 L[ Language.English ].tooltip.cb_only_say                   = "Only record messages from the Say channel when collecting chat."
 L[ Language.English ].tooltip.cb_show_tooltips              = "Show or hide tooltips throughout the options panel."
-L[ Language.English ].tooltip.cb_auto_reload                = "Automatically reload the plugin when a matching reload request message is seen in chat."
+L[ Language.English ].tooltip.dd_reload_mode                = "Group effect tracking reads your group once, when the plugin starts, so a reload is needed after anyone joins or leaves.\nManual: nothing happens, use the reload button yourself.\nAutomatic: the plugin reloads itself as soon as it sees the group change in chat.\nAsk First: a window appears offering to reload, so it never happens mid fight."
 
 L[ Language.English ].tooltip.dd_language                   = "Sets the display language of the options panel. Does not affect the game client language."
 L[ Language.English ].tooltip.dd_shortcut_size               = "Size in pixels of the draggable shortcut button used to open this options panel."

@@ -336,6 +336,13 @@ local function _RebuildUI()
         end
     end
 
+    -- the reload prompt reads its metrics in its constructor, so an open one is
+    -- built again rather than left standing at the old size
+    if Options2.Window.ReloadPopupObject ~= nil then
+        Options2.Window.ReloadPopupObject:CloseWindow()
+        Options2.ShowReloadPrompt()
+    end
+
     -- last, because the change was made in this one
     local settings = Options2.Window.SettingsWindowObject
     if settings ~= nil then

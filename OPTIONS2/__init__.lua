@@ -29,6 +29,8 @@ import "Gibberish3.OPTIONS2.ELEMENTS.OPTIONS_ROW.TargetListRow"
 -- window shell first (defines Options2.Window = {})
 import "Gibberish3.OPTIONS2.WINDOW.BaseWindow"
 import "Gibberish3.OPTIONS2.WINDOW.DeletePopup"
+-- the group change reload prompt; standalone, so it only needs PanelWindow
+import "Gibberish3.OPTIONS2.WINDOW.ReloadPopup"
 import "Gibberish3.OPTIONS2.WINDOW.ImportDialog"
 -- right-click menus, shared by both list columns
 import "Gibberish3.OPTIONS2.WINDOW.ContextMenus"

@@ -1,7 +1,7 @@
 -- Small standalone window hosting Options2.Window.SettingsPanel.
 -- Opened from the gear in the options panel title bar.
 
-local ROWS   = 5    -- language, shortcut size, font size, auto reload, tooltips
+local ROWS   = 5    -- language, shortcut size, font size, reload mode, tooltips
 local CHROME = 36   -- title bar, border and a little slack below the last row
 
 local WIN_W = 380
@@ -71,9 +71,9 @@ function Options2.Window.SettingsWindow:LanguageChanged()
     self.panel:LanguageChanged()
 end
 
-function Options2.Window.SettingsWindow:AutoReloadChanged()
+function Options2.Window.SettingsWindow:ReloadModeChanged()
     if self.panel == nil then return end
-    self.panel:AutoReloadChanged()
+    self.panel:ReloadModeChanged()
 end
 
 -- open, or toggle if it already exists

@@ -24,12 +24,12 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         end
 
-        -- auto reload
-        if Data.autoReload == true and
+        -- group change: reload straight away, or ask first
+        if Data.reloadMode ~= ReloadMode.Manual and
             args.ChatType == Turbine.ChatType.Standard then
-            
+
                 Trigger[ Trigger.Types.Chat ].CheckForReload( args.Message )
-            
+
         end
 
         -- keep track of activ skills
@@ -292,9 +292,17 @@ Trigger[ Trigger.Types.Chat ].CheckForReload = function (message)
     -- for the matcher on every line of chat. They are literal text, so ask for a
     -- plain search.
     for key, text in pairs(L[ Language.Local ].ReloadMessages) do
-        
+
         if string.find( message, text, 1, true ) then
-            Options.Reload()
+
+            if Data.reloadMode == ReloadMode.Prompt then
+                Options2.ShowReloadPrompt()
+
+            else
+                Options.Reload()
+
+            end
+
             return
         end
 

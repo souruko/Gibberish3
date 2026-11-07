@@ -181,7 +181,6 @@ L[ Language.French ].shortcut.options2                     = "Options"
 L[ Language.French ].shortcut.move                         = "Déplacer les fenêtres"
 L[ Language.French ].shortcut.track_group                  = "Groupe de suivi"
 L[ Language.French ].shortcut.track_target                 = "Poursuivre l'objectif"
-L[ Language.French ].shortcut.auto_reload                  = "Recharge automatique"
 
 -- move
 L[ Language.French ].move = {}
@@ -284,6 +283,10 @@ L[ Language.French ].general.show_tooltips                 = "Afficher les infob
 L[ Language.French ].general.english                       = "Anglais"
 L[ Language.French ].general.german                        = "Allemand"
 L[ Language.French ].general.french                        = "Français"
+L[ Language.French ].general.reload_mode                   = "Groupe modifié"
+L[ Language.French ].general.reload_manual                 = "Manuel"
+L[ Language.French ].general.reload_auto                   = "Automatique"
+L[ Language.French ].general.reload_prompt                 = "Demander"
 
 -- collection
 L[ Language.French ].collection = {}
@@ -330,6 +333,13 @@ L[ Language.French ].import.external_images               = "Utilise des images 
 
 L[ Language.French ].traitline_changed                     = "Vous avez acquis le Trait bonus de spécialisation de classe :"
 
+-- la demande de rechargement, affichée lors d'un changement de groupe
+L[ Language.French ].reload_prompt = {}
+L[ Language.French ].reload_prompt.title                   = "Gibberish3"
+L[ Language.French ].reload_prompt.message                 = "Votre groupe a changé.\nRecharger maintenant pour suivre les effets de tous ses membres ?"
+L[ Language.French ].reload_prompt.reload                  = "Recharger"
+L[ Language.French ].reload_prompt.later                   = "Pas maintenant"
+
 L[ Language.French ].ReloadMessages = {
 
     [ "raid_convert" ]                                     = "Vous avez rejoint la salle de discussion de votre raid, la discussion de raid est désormais disponible.",
@@ -372,7 +382,7 @@ L[ Language.French ].tooltip.button_collect_chat           = "Enregistrer les me
 L[ Language.French ].tooltip.cb_only_debuffs               = "N'enregistrer que les effets négatifs lors de la collecte. Les buffs seront ignorés."
 L[ Language.French ].tooltip.cb_only_say                   = "N'enregistrer que les messages du canal Dire lors de la collecte de chat."
 L[ Language.French ].tooltip.cb_show_tooltips              = "Afficher ou masquer les infobulles dans le panneau d'options."
-L[ Language.French ].tooltip.cb_auto_reload                = "Recharge automatiquement le plugin lorsqu'un message de demande de rechargement correspondant est vu dans le chat."
+L[ Language.French ].tooltip.dd_reload_mode                = "Le suivi des effets de groupe lit votre groupe une seule fois, au démarrage du plugin : un rechargement est donc nécessaire après chaque arrivée ou départ.\nManuel : rien ne se passe, utilisez vous-même le bouton de rechargement.\nAutomatique : le plugin se recharge dès qu'il voit le changement de groupe dans le chat.\nDemander : une fenêtre propose de recharger, cela n'arrive donc jamais en plein combat."
 
 L[ Language.French ].tooltip.dd_language                   = "Définit la langue d'affichage du panneau d'options. N'affecte pas la langue du client de jeu."
 L[ Language.French ].tooltip.dd_shortcut_size               = "Taille en pixels du bouton de raccourci déplaçable utilisé pour ouvrir ce panneau d'options."

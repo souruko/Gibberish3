@@ -81,15 +81,25 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- auto reload changed
+-- reload mode changed
 ---------------------------------------------------------------------------------------------------
-function Options.AutoReloadChanged()
+function Options.ReloadModeChanged( value )
 
-    Data.autoReload = not( Data.autoReload )
+    if value == nil or value == Data.reloadMode then
+        return
+    end
+
+    Data.reloadMode = value
+    Options.SaveData()
+
+    -- a prompt already on screen was asked for by the old mode
+    if value ~= ReloadMode.Prompt and Options2.Window.ReloadPopupObject ~= nil then
+        Options2.Window.ReloadPopupObject:CloseWindow()
+    end
 
     -- settings panel
     if Options2.Window.SettingsWindowObject ~= nil then
-        Options2.Window.SettingsWindowObject:AutoReloadChanged()
+        Options2.Window.SettingsWindowObject:ReloadModeChanged()
     end
 
 end
@@ -158,6 +168,13 @@ function Options.LanguageChanged( value )
     -- telling too; without this its buttons keep the language they were built in
     if Options2.Window.ImportDialogObject ~= nil then
         Options2.Window.ImportDialogObject:LanguageChanged()
+    end
+
+    -- the reload prompt takes its text in its constructor, so an open one is
+    -- built again instead of being told
+    if Options2.Window.ReloadPopupObject ~= nil then
+        Options2.Window.ReloadPopupObject:CloseWindow()
+        Options2.ShowReloadPrompt()
     end
 
 end

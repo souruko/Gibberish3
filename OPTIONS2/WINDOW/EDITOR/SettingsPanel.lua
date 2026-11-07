@@ -133,16 +133,22 @@ function Options2.Window.SettingsPanel:Constructor()
         Options2.ApplyFontScale(value)
     end)
 
-    -- ── auto reload ──────────────────────────────────────────────────────────
-    self.auto_reload = Options2.Elements.CheckBoxRow(
+    -- ── reload mode ──────────────────────────────────────────────────────────
+    -- Group effect tracking reads the party once, at start up, so a group change
+    -- needs the plugin reloaded. This picks who does it: nobody, the plugin, or
+    -- the player answering a prompt.
+    self.reload_mode = Options2.Elements.DropDownRow(
         Options.Defaults.window.row_odd,
-        "shortcut", "auto_reload", "cb_auto_reload", ROW_H
+        "general", "reload_mode", "dd_reload_mode", ROW_H, nil
     )
-    self.auto_reload:SetParent(self)
-    self.auto_reload:SetPosition(LEFT, TOP + 3 * (ROW_H + ROW_GAP))
-    self.auto_reload:SetChecked(Data.autoReload)
-    self.auto_reload:SetCallback(function(value)
-        Options.AutoReloadChanged()
+    self.reload_mode:SetParent(self)
+    self.reload_mode:SetPosition(LEFT, TOP + 3 * (ROW_H + ROW_GAP))
+    self.reload_mode:AddItem("general", "reload_manual", ReloadMode.Manual)
+    self.reload_mode:AddItem("general", "reload_auto",   ReloadMode.Auto)
+    self.reload_mode:AddItem("general", "reload_prompt", ReloadMode.Prompt)
+    self.reload_mode:SetSelection(Data.reloadMode)
+    self.reload_mode:SetCallback(function(sender, index, value)
+        Options.ReloadModeChanged(value)
     end)
 
     -- ── show tooltips ────────────────────────────────────────────────────────
@@ -185,7 +191,7 @@ function Options2.Window.SettingsPanel:SizeChanged()
     self.language:SetWidth(w)
     self.shortcut_row:SetWidth(w)
     self.font_size:SetWidth(w)
-    self.auto_reload:SetWidth(w)
+    self.reload_mode:SetWidth(w)
     self.show_tooltips:SetWidth(w)
 end
 
@@ -198,11 +204,13 @@ function Options2.Window.SettingsPanel:LanguageChanged()
     self.font_size:LanguageChanged()
     self.font_size.dropdown:LanguageChanged()
     self.font_size:SetSelection(Options2.Fonts.Current())
-    self.auto_reload:LanguageChanged()
+    self.reload_mode:LanguageChanged()
+    self.reload_mode.dropdown:LanguageChanged()
+    self.reload_mode:SetSelection(Data.reloadMode)
     self.show_tooltips:LanguageChanged()
 end
 
-function Options2.Window.SettingsPanel:AutoReloadChanged()
-    if self.auto_reload == nil then return end
-    self.auto_reload:SetChecked(Data.autoReload)
+function Options2.Window.SettingsPanel:ReloadModeChanged()
+    if self.reload_mode == nil then return end
+    self.reload_mode:SetSelection(Data.reloadMode)
 end

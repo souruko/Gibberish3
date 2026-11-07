@@ -85,6 +85,34 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- reload mode migration
+---------------------------------------------------------------------------------------------------
+-- Before 3.10.0 the choice was the boolean autoReload: reload on a group change, or do nothing. It
+-- is now three ways - manual, automatic, or ask first - so an older save is read off the old flag
+-- and the flag is dropped. A save that already has the mode is left alone.
+---------------------------------------------------------------------------------------------------
+function Options.MigrateReloadMode( data )
+
+    if data == nil then
+        return
+    end
+
+    if data.reloadMode == nil then
+
+        if data.autoReload == true then
+            data.reloadMode = ReloadMode.Auto
+        else
+            data.reloadMode = ReloadMode.Manual
+        end
+
+    end
+
+    data.autoReload = nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- load data
 ---------------------------------------------------------------------------------------------------
 function Options.LoadData()
@@ -110,6 +138,7 @@ function Options.LoadData()
     -- no char data > use global_data
     if char_data == nil then
         Options.ClearPatternCache( global_data )
+        Options.MigrateReloadMode( global_data )
         return global_data
 
     end
@@ -123,6 +152,7 @@ function Options.LoadData()
     local data = Options.OverwriteCharData( global_data, char_data )
 
     Options.ClearPatternCache( data )
+    Options.MigrateReloadMode( data )
 
     return data
 
@@ -253,8 +283,18 @@ function Options.OverwriteCharData( global_data, char_data )
     end
 
     -- the options
-    global_data.moveMode                   = char_data.moveMode             
-    global_data.autoReload                 = char_data.autoReload           
+    global_data.moveMode                   = char_data.moveMode
+
+    -- the reload mode is per character, like the move mode. A save from before it
+    -- existed has no such key; the old autoReload flag is carried across in its
+    -- place, for Options.MigrateReloadMode to read
+    if char_data.reloadMode ~= nil then
+        global_data.reloadMode             = char_data.reloadMode
+    else
+        global_data.reloadMode             = nil
+        global_data.autoReload             = char_data.autoReload
+    end
+
     global_data.options.shortcut.left      = char_data.options.shortcut.left
     global_data.options.shortcut.top       = char_data.options.shortcut.top 
     global_data.options.window.left        = char_data.options.window.left

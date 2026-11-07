@@ -39,7 +39,7 @@ function DataFunction.New()
     -- 
     data.moveMode                   = false
     data.showTooltips               = true
-    data.autoReload                 = false
+    data.reloadMode                 = ReloadMode.Manual
 
     -- list of options data
     data.options                    = {}

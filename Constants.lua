@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------------------------------------
 -- Plugin version, shown next to the name in the options panel title bar.
 -- Keep in step with Gibberish.plugin and Gibberish.plugincompendium.
-Options.Version = "3.9.4"
+Options.Version = "3.10.0"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -54,6 +54,15 @@ Action.Clear    = 5
 Action.Enable   = 6
 Action.Disable  = 7
 Action.SetTo    = 8
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- what the plugin does when a chat message says the group has changed, and the
+-- group effect tracking needs the plugin restarted to pick the new members up
+ReloadMode          = {}
+ReloadMode.Manual   = 1
+ReloadMode.Auto     = 2
+ReloadMode.Prompt   = 3
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

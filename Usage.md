@@ -337,5 +337,30 @@ The small Gibberish shortcut button on your toolbar opens a quick menu:
 | **Reset All** | Stops all running timers and resets all counters that have reset enabled. |
 | **Track Group** | Switches effect tracking to your fellowship/raid. Reload the plugin after changing this setting. |
 | **Track Target** | Switches effect tracking to your current target. Reload the plugin after changing this setting. |
-| **Auto Reload** | Automaticly reloads the plugin when the current group/raid is changed. |
 | **Reload Plugin** | Full plugin reload. |
+
+---
+
+## Settings
+
+The gear button in the options panel title bar opens the settings window.
+
+| Option | What it does |
+|---|---|
+| **Language** | Display language of the options panel. Independent of your game client language. |
+| **Shortcut Size** | Size in pixels of the draggable shortcut button. |
+| **Font Size** | Text size of the options panel and the move window. Timers in the game world are unaffected - each window has its own font. |
+| **Group Change** | What happens when somebody joins or leaves your fellowship/raid. See below. |
+| **Show Tooltips** | Shows or hides the tooltips throughout the options panel. |
+
+### Group Change
+
+Group effect tracking reads your group once, when the plugin starts, so the plugin
+has to be reloaded after anyone joins or leaves for their effects to be tracked.
+**Group Change** decides who does that:
+
+| Setting | What it does |
+|---|---|
+| **Manual** | Nothing happens on a group change. Reload yourself with the reload button or `/plugins reload Gibberish3`. |
+| **Automatic** | The plugin reloads itself as soon as it sees the group change announced in chat. |
+| **Ask First** | A small window appears offering to reload. Pick **Reload Now** to reload, or **Not Now** (or Escape) to dismiss it - so a reload never lands in the middle of a fight. |

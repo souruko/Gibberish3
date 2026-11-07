@@ -181,7 +181,6 @@ L[ Language.German ].shortcut.options2                      = "Optionen"
 L[ Language.German ].shortcut.move                          = "Fenster bewegen"
 L[ Language.German ].shortcut.track_group                   = "Gruppe Verfolgen"
 L[ Language.German ].shortcut.track_target                  = "Ziel Verfolgen"
-L[ Language.German ].shortcut.auto_reload                   = "Automatisch Neuladen"
 
 -- move
 L[ Language.German ].move = {}
@@ -284,6 +283,10 @@ L[ Language.German ].general.show_tooltips                  = "Tooltips anzeigen
 L[ Language.German ].general.english                        = "Englisch"
 L[ Language.German ].general.german                         = "Deutsch"
 L[ Language.German ].general.french                         = "Französisch"
+L[ Language.German ].general.reload_mode                    = "Gruppenwechsel"
+L[ Language.German ].general.reload_manual                  = "Manuell"
+L[ Language.German ].general.reload_auto                    = "Automatisch"
+L[ Language.German ].general.reload_prompt                  = "Nachfragen"
 
 -- collection
 L[ Language.German ].collection = {}
@@ -330,6 +333,13 @@ L[ Language.German ].import.external_images               = "Verwendet externe B
 
 L[ Language.German ].traitline_changed                      = "Ihr habt diese Bonus.Eigenschaft für Klassenspezialisierung erlangt:"
 
+-- die Neuladen-Abfrage, bei einem Gruppenwechsel angezeigt, wenn nachgefragt wird
+L[ Language.German ].reload_prompt = {}
+L[ Language.German ].reload_prompt.title                    = "Gibberish3"
+L[ Language.German ].reload_prompt.message                  = "Eure Gruppe hat sich geändert.\nJetzt neu laden, um die Effekte aller Mitglieder zu verfolgen?"
+L[ Language.German ].reload_prompt.reload                   = "Jetzt neu laden"
+L[ Language.German ].reload_prompt.later                    = "Nicht jetzt"
+
 L[ Language.German ].ReloadMessages = {
 
     [ "raid_convert" ]                                      = "Ihr habt den Chat-Raum Eurer Gefährtengruppe betreten. Der Gefährten-Chat ist jetzt verfügbar.",
@@ -372,7 +382,7 @@ L[ Language.German ].tooltip.button_collect_chat            = "Eingehende Chatna
 L[ Language.German ].tooltip.cb_only_debuffs                = "Beim Sammeln von Effekten nur Debuffs aufzeichnen. Buffs werden ignoriert."
 L[ Language.German ].tooltip.cb_only_say                    = "Beim Sammeln von Nachrichten nur Nachrichten aus dem Sagen-Kanal aufzeichnen."
 L[ Language.German ].tooltip.cb_show_tooltips               = "Tooltips im Optionsfenster ein- oder ausblenden."
-L[ Language.German ].tooltip.cb_auto_reload                 = "Lädt das Plugin automatisch neu, wenn im Chat eine passende Neuladen-Anfrage erkannt wird."
+L[ Language.German ].tooltip.dd_reload_mode                 = "Die Gruppeneffekt-Verfolgung liest Eure Gruppe nur einmal beim Start des Plugins, daher ist nach jedem Bei- oder Austritt ein Neuladen nötig.\nManuell: es passiert nichts, benutzt den Neuladen-Knopf selbst.\nAutomatisch: das Plugin lädt sich neu, sobald es den Gruppenwechsel im Chat sieht.\nNachfragen: ein Fenster bietet das Neuladen an, so passiert es nie mitten im Kampf."
 
 L[ Language.German ].tooltip.dd_language                    = "Legt die Anzeigesprache des Optionsfensters fest. Hat keinen Einfluss auf die Sprache des Spielclients."
 L[ Language.German ].tooltip.dd_shortcut_size                = "Größe in Pixeln der verschiebbaren Verknüpfungsschaltfläche, mit der dieses Optionsfenster geöffnet wird."
