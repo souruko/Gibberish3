@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.10.1
+- The options panel now keeps up when a trigger switches a window or a timer on or off.
+- A window switched on or off by a trigger now stays that way after a reload.
+
 ### 3.10.0
 - New: the plugin can now ask before reloading itself when your group changes. Group effect tracking only reads your fellowship or raid when the plugin starts, so somebody joining or leaving means a reload. The Auto Reload tick box in the settings window has become a Group Change setting with three choices: Manual leaves it to you, Automatic is what Auto Reload used to do, and Ask First opens a small window beside the shortcut button offering to reload, so a reload never lands in the middle of a fight. Dismiss that window with Not Now or the Escape key and reload whenever it suits you. Anyone who had Auto Reload switched on keeps it; everyone else stays on Manual.
 - The options panel now opens at the size you last dragged it to. Resizing it was forgotten as soon as you reloaded or logged out, so it always came back at its default size. The size is remembered per character, the same as the panel's position, and is brought back within the screen if it was saved on a larger one.
