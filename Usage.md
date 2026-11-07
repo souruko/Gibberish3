@@ -352,6 +352,7 @@ The gear button in the options panel title bar opens the settings window.
 | **Font Size** | Text size of the options panel and the move window. Timers in the game world are unaffected - each window has its own font. |
 | **Group Change** | What happens when somebody joins or leaves your fellowship/raid. See below. |
 | **Show Tooltips** | Shows or hides the tooltips throughout the options panel. |
+| **Prime Parse Integration** | Lets Prime Parse work without Prime's own interface plugins. Needs **Track Group**. See below. |
 
 ### Group Change
 
@@ -364,3 +365,21 @@ has to be reloaded after anyone joins or leaves for their effects to be tracked.
 | **Manual** | Nothing happens on a group change. Reload yourself with the reload button or `/plugins reload Gibberish3`. |
 | **Automatic** | The plugin reloads itself as soon as it sees the group change announced in chat. |
 | **Ask First** | A small window appears offering to reload. Pick **Reload Now** to reload, or **Not Now** (or Escape) to dismiss it - so a reload never lands in the middle of a fight. |
+
+### Prime Parse Integration
+
+Rolo's **Prime Parse** needs to know who is in your group. Normally that comes from Prime's own
+interface plugins, so you had to run those alongside Gibberish3 even if the parser was all you
+wanted. Switch this on and Gibberish3 tells it instead, so Prime Parse works on its own.
+
+It needs **Track Group** in the shortcut button menu. While Track Group is off the setting warns
+you and does nothing.
+
+A couple of things worth knowing:
+
+- Your own trait line is known straight away. Everyone else's is worked out from the skills they
+  use, so a new group can take a fight to settle. Names and classes are always right.
+- A few trait lines cannot be recognised yet, and none of the monster play ones can.
+- **Leave this off if you also run Prime's own interface plugins** - they do the same job, and
+  whichever went last wins.
+- On a German or French client the names and classes come through, but the trait lines do not yet.

@@ -288,6 +288,8 @@ L[ Language.English ].general.reload_mode                   = "Group Change"
 L[ Language.English ].general.reload_manual                 = "Manual"
 L[ Language.English ].general.reload_auto                   = "Automatic"
 L[ Language.English ].general.reload_prompt                 = "Ask First"
+L[ Language.English ].general.export_group_setup            = "Prime Parse Integration"
+L[ Language.English ].general.export_group_warning          = "Needs Track Group, which is switched off. Switch it on from the shortcut button menu."
 
 -- collection
 L[ Language.English ].collection = {}
@@ -383,6 +385,7 @@ L[ Language.English ].tooltip.button_collect_chat           = "Record incoming c
 L[ Language.English ].tooltip.cb_only_debuffs               = "Only record debuffs when collecting effects. Buffs will be ignored."
 L[ Language.English ].tooltip.cb_only_say                   = "Only record messages from the Say channel when collecting chat."
 L[ Language.English ].tooltip.cb_show_tooltips              = "Show or hide tooltips throughout the options panel."
+L[ Language.English ].tooltip.cb_export_group_setup         = "Lets Prime Parse read your group from Gibberish, so it works without Prime UI plugin.\nNeeds Track Group, in the shortcut button menu.\nSwitch it off if you do run Prime UI."
 L[ Language.English ].tooltip.dd_reload_mode                = "Group effect tracking reads your group once, when the plugin starts, so a reload is needed after anyone joins or leaves.\nManual: nothing happens, use the reload button yourself.\nAutomatic: the plugin reloads itself as soon as it sees the group change in chat.\nAsk First: a window appears offering to reload, so it never happens mid fight."
 
 L[ Language.English ].tooltip.dd_language                   = "Sets the display language of the options panel. Does not affect the game client language."

@@ -70,6 +70,11 @@ import "Gibberish3.TRIGGER"
 Windows.StartUp()
 Options.LoadRunningTimer()
 Trigger.InitAll()
+
+-- after Trigger.InitAll: it reads the party the export reports on, and the combat trigger writes
+-- LocalPlayer.InCombatChanged straight into the slot rather than adding to it, so the export's own
+-- callback has to go in afterwards to survive
+GroupSetup.StartUp()
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

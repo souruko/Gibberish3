@@ -378,6 +378,10 @@ function SkillTreeChanged:Update()
         self:SetWantsUpdates(false)
         -- Windows.SkillTreeChanged()
         Trigger[Trigger.Types.Skill].Init()
+
+        -- our own line in the group setup export is read from the trained skills, which have just
+        -- changed. The wait above is what makes this safe: the new skills are in by now
+        GroupSetup.OwnLineChanged()
     end
 end
 

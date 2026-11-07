@@ -67,6 +67,10 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
                         tracked[ playerName ] = Trigger[ Trigger.Types.EffectGroup ].Register( player, playerName )
 
+                        -- the class for the group setup export, read here because this is where
+                        -- the player object is in hand
+                        GroupSetup.AddMember( player, playerName )
+
                         Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName )
 
                     end
@@ -87,6 +91,8 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
             record.active = false
             Trigger.RemoveCallback( record.effects, "EffectAdded", record.callback )
             tracked[ playerName ] = nil
+
+            GroupSetup.RemoveMember( playerName )
 
         end
 
@@ -128,11 +134,13 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
             return
         end
 
-        local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
+        local index          = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
+        local exportingSetup = GroupSetup.Enabled()
 
         -- without a single group trigger there is nothing to check, so the
-        -- effect is not even read unless it is being collected
-        if index.empty == true and Options.CollectEffects == false then
+        -- effect is not even read unless it is being collected, or the group
+        -- setup export needs it to work out the member's trait line
+        if index.empty == true and Options.CollectEffects == false and exportingSetup == false then
             return
         end
 
@@ -142,6 +150,10 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
         local effectView = Trigger.NewEffectView( effect )
 
         Trigger.AddToEffectCollection( effect, "Group", effectView )
+
+        if exportingSetup == true then
+            GroupSetup.CheckEffect( effectView, playerName )
+        end
 
         if index.empty ~= true then
             Trigger.EffectIndex.Check( GROUP_TYPES, effectView, player, playerName )
@@ -159,9 +171,12 @@ end
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName )
 
-    local index = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
+    local index          = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
+    local exportingSetup = GroupSetup.Enabled()
 
-    if index.empty == true then
+    -- the export sweeps too, so a member whose line effect is already running is
+    -- known straight away instead of only after they cast it again
+    if index.empty == true and exportingSetup == false then
         return
     end
 
@@ -170,7 +185,15 @@ Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, pla
     -- iterate effects
     for j = 1, effects:GetCount(), 1 do
 
-        Trigger.EffectIndex.Check( GROUP_TYPES, Trigger.NewEffectView( effects:Get(j) ), player, playerName )
+        local effectView = Trigger.NewEffectView( effects:Get(j) )
+
+        if exportingSetup == true then
+            GroupSetup.CheckEffect( effectView, playerName )
+        end
+
+        if index.empty ~= true then
+            Trigger.EffectIndex.Check( GROUP_TYPES, effectView, player, playerName )
+        end
 
     end
 

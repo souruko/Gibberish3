@@ -287,6 +287,8 @@ L[ Language.German ].general.reload_mode                    = "Gruppenwechsel"
 L[ Language.German ].general.reload_manual                  = "Manuell"
 L[ Language.German ].general.reload_auto                    = "Automatisch"
 L[ Language.German ].general.reload_prompt                  = "Nachfragen"
+L[ Language.German ].general.export_group_setup             = "Prime Parse Integration"
+L[ Language.German ].general.export_group_warning           = "Benötigt Gruppe verfolgen, das ausgeschaltet ist. Im Menü der Verknüpfung einschalten."
 
 -- collection
 L[ Language.German ].collection = {}
@@ -382,6 +384,7 @@ L[ Language.German ].tooltip.button_collect_chat            = "Eingehende Chatna
 L[ Language.German ].tooltip.cb_only_debuffs                = "Beim Sammeln von Effekten nur Debuffs aufzeichnen. Buffs werden ignoriert."
 L[ Language.German ].tooltip.cb_only_say                    = "Beim Sammeln von Nachrichten nur Nachrichten aus dem Sagen-Kanal aufzeichnen."
 L[ Language.German ].tooltip.cb_show_tooltips               = "Tooltips im Optionsfenster ein- oder ausblenden."
+L[ Language.German ].tooltip.cb_export_group_setup          = "Lässt Prime Parse deine Gruppe aus Gibberish lesen, sodass es ohne Primes eigene Interface-Plugins funktioniert.\nBenötigt Gruppe verfolgen aus dem Menü der Verknüpfung.\nSchalte es aus, wenn du Primes Interface-Plugins doch nutzt."
 L[ Language.German ].tooltip.dd_reload_mode                 = "Die Gruppeneffekt-Verfolgung liest Eure Gruppe nur einmal beim Start des Plugins, daher ist nach jedem Bei- oder Austritt ein Neuladen nötig.\nManuell: es passiert nichts, benutzt den Neuladen-Knopf selbst.\nAutomatisch: das Plugin lädt sich neu, sobald es den Gruppenwechsel im Chat sieht.\nNachfragen: ein Fenster bietet das Neuladen an, so passiert es nie mitten im Kampf."
 
 L[ Language.German ].tooltip.dd_language                    = "Legt die Anzeigesprache des Optionsfensters fest. Hat keinen Einfluss auf die Sprache des Spielclients."

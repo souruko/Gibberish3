@@ -36,10 +36,15 @@ function DataFunction.New()
     data.selectedConditionTriggerIndex  = 0
     data.selectedConditionTriggerType   = 0
 
-    -- 
+    --
     data.moveMode                   = false
     data.showTooltips               = true
     data.reloadMode                 = ReloadMode.Manual
+
+    -- writes the group's names, classes and trait lines for Prime Group Parse, off unless the
+    -- player asks for it. An older save has no such key, which reads as off, so it needs no
+    -- migration: everything goes through GroupSetup.Enabled and its == true test
+    data.exportGroupSetup           = false
 
     -- list of options data
     data.options                    = {}

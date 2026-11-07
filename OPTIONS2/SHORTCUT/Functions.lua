@@ -133,6 +133,15 @@ function Options.TrackGroupChanged()
     -- them as they were until the next reload
     Trigger[ Trigger.Types.EffectGroup ].Sync()
 
+    -- the group setup export needs group tracking, so switching it changes
+    -- whether the export runs at all: write what we have now, and let the
+    -- settings window show or hide its warning
+    GroupSetup.Write()
+
+    if Options2.Window.SettingsWindowObject ~= nil then
+        Options2.Window.SettingsWindowObject:TrackGroupChanged()
+    end
+
     -- shortcut
     Options.Shortcut.Object:TrackGroupChanged()
 

@@ -130,6 +130,29 @@ function DebugCommand:Execute( command, arguments )
     end
     Turbine.Shell.WriteLine( "Group tracking: " .. groupTracking )
 
+    -- prime parse integration ( the savefile Prime Parse reads )
+    local exportState = "off"
+    if Data.exportGroupSetup == true then
+        exportState = "on"
+        if GroupSetup.Enabled() == false then
+            exportState = exportState .. ", idle: needs group tracking"
+        elseif groupTrigger.party == nil then
+            exportState = exportState .. ", idle: not in a group"
+        else
+            exportState = exportState .. ", own line: " .. tostring( GroupSetup.DetectOwnLine() )
+        end
+    end
+    Turbine.Shell.WriteLine( "Prime Parse integration: " .. exportState )
+
+    -- what it would pass along right now, so it can be checked without leaving the game
+    if Data.exportGroupSetup == true and GroupSetup.Enabled() == true and groupTrigger.party ~= nil then
+        for playerName, record in pairs( GroupSetup.roster ) do
+            Turbine.Shell.WriteLine( "   " .. playerName
+                .. " | " .. tostring( record.className )
+                .. " | " .. tostring( record.line ) )
+        end
+    end
+
     -- timers per window
     local totalTimers = 0
     local totalActiv  = 0
