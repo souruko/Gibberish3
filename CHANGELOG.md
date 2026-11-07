@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.11.2
+- Fixed the Prime Parse Integration not passing on a group member's trait line after they swapped it. The new line was recognised, but it was only handed over once the next fight ended, so Prime Parse went on crediting them to their old line until then - and if nobody went into combat, for the rest of the session. A line recognised out of combat is now passed on straight away. Anything worked out during a fight is still held back until the fight is over, so nothing is written in the middle of one. Your own trait line was already passed on the moment you swapped and is unchanged.
+
 ### 3.11.1
 - The Show Frame tick box on a window's Color tab turns the frame off altogether. The frame is not an outline but a solid rectangle that each timer's bar or icon sits on top of, so a custom icon with transparent parts showed the frame colour through them rather than the world behind it. Turning the frame thickness down to 0 did not help, because the rectangle was then exactly the size of the icon and still sat right behind it. With Show Frame unticked nothing is painted there and the transparency comes through. Clearing the Frame Color field was the only way to get this before, and it never lasted - the colour was filled back in with the default the next time the plugin loaded. The frame also carries the Threshold Back Color on an icon timer, so that is not shown either while the frame is off; the threshold font, opacity and border animations are unaffected. Windows you already have keep their frame.
 
