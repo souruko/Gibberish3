@@ -335,6 +335,14 @@ function Options2.Window.Content.Constructor:RebuildFresh()
     self:Rebuild()
 end
 
+-- repaint every visible row that shows an enable state, without rebuilding the
+-- list: a trigger can flip a timer while the player is working in here
+function Options2.Window.Content.Constructor:RefreshEnabledStates()
+    for _, item in ipairs(self.items) do
+        if item.RefreshEnabled ~= nil then item:RefreshEnabled() end
+    end
+end
+
 -- ── ordering ───────────────────────────────────────────────────────────────────
 
 -- enabled first, then A-Z on the display name, per SPEC. index breaks ties so

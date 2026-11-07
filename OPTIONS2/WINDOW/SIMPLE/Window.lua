@@ -466,6 +466,14 @@ function Options2.Window.Simple.Constructor:Rebuild()
     self:_RestoreSelection()
 end
 
+-- repaint the rows that show an enable state, without rebuilding the list: a
+-- trigger can flip a timer while the player is working in here
+function Options2.Window.Simple.Constructor:RefreshEnabledStates()
+    for _, item in ipairs(self.items) do
+        if item.RefreshEnabled ~= nil then item:RefreshEnabled() end
+    end
+end
+
 -- Keep whatever key is current if it is still in the list; SetContainer has
 -- already cleared it when the window changed, which lands this on the first row.
 function Options2.Window.Simple.Constructor:_RestoreSelection()

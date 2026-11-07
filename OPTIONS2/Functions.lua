@@ -75,6 +75,37 @@ function Options2.ClearContentSelection()
     Options2.selectedNode = nil
 end
 
+-- A trigger flipped a window's enabled flag. Every row that shows that flag read
+-- it when it was built, so the panel would keep showing the old state until
+-- something else rebuilt it. Repaint the rows instead of rebuilding: the player
+-- keeps their selection, their scroll position and any open editor tab.
+--
+-- Only the structure column shows it - the window's own enable box, and the
+-- folder box above it, which reads its subtree. Both modes share that column, so
+-- this covers simple mode too. Done whether or not the panel is on screen; a
+-- hidden panel is not rebuilt when it is shown again.
+function Options2.WindowEnabledChanged()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
+    if obj.nav ~= nil then obj.nav:RefreshEnabledStates() end
+end
+
+-- A trigger flipped a timer's enabled flag. Same story as above, in the places a
+-- timer's own state shows: the contents column's timer rows, simple mode's timer
+-- rows, and the enable box of the timer editor if that timer is the one open.
+function Options2.TimerEnabledChanged()
+    local obj = Options2.Window.Object
+    if obj == nil then return end
+
+    if obj.contents ~= nil then obj.contents:RefreshEnabledStates() end
+    if obj.simple   ~= nil then obj.simple:RefreshEnabledStates() end
+
+    local ep = obj.editor_panel
+    if ep ~= nil and ep.content ~= nil and ep.content.RefreshEnabled ~= nil then
+        ep.content:RefreshEnabled()
+    end
+end
+
 function Options2.EffectCollectionChanged()
     local obj = Options2.Window.Object
     if obj ~= nil and obj.library ~= nil then

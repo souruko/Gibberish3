@@ -138,6 +138,12 @@ function Options2ContentTimer:SetSelected(v)
     self:SetBackColor(v and Options.Defaults.window.select or nil)
 end
 
+-- re-reads the enable state only; unlike Refresh it keeps the row's selection,
+-- because a trigger can flip a timer while the player has that row open
+function Options2ContentTimer:RefreshEnabled()
+    self:_Sync()
+end
+
 function Options2ContentTimer:Refresh()
     self:SetSelected(false)
     self:_Sync()

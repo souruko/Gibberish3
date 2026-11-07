@@ -528,6 +528,7 @@ function TimerWindowElement:ActionEnableTimer( timerIndex, enabled )
     end
 
     Options.SaveData()
+    Options.TimerEnabledChanged()
 
 end
 ---------------------------------------------------------------------------------------------------

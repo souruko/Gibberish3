@@ -197,12 +197,16 @@ function Windows.WindowAction( windowIndex, windowData, triggerData )
         windowData.enabled = true
         Windows.EnabledChanged( windowIndex )
         Options.DataChanged( windowIndex )
+        Options.SaveData()
+        Options.WindowEnabledChanged()
 
     elseif triggerData.action == Action.Disable and windowData.enabled == true then
 
         windowData.enabled = false
         Windows.EnabledChanged( windowIndex )
         Options.DataChanged( windowIndex )
+        Options.SaveData()
+        Options.WindowEnabledChanged()
 
     elseif windowData.enabled == true 
            and Windows[ windowIndex ] ~= nil then

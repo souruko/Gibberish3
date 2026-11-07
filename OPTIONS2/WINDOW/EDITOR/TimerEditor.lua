@@ -268,7 +268,7 @@ local function make_general_tab(data, bc, windowIndex, timerIndex)
     return panel, load, save,
         function() lang_rows(rows) testBtn.LanguageChanged() end,
         function(w) size_paste(rows, plist, w) end,
-        plist
+        plist, enabled
 end
 
 -- ── General tab (COUNTER_BAR) ─────────────────────────────────────────────────
@@ -310,7 +310,8 @@ local function make_counter_tab(data, bc)
     load()
     return panel, load, save,
         function() lang_rows(rows) end,
-        function(w) size_rows(rows, w) end
+        function(w) size_rows(rows, w) end,
+        nil, enabled
 end
 
 -- ── Style tab ─────────────────────────────────────────────────────────────────
@@ -426,10 +427,10 @@ function Options2.Window.TimerEditor:Constructor(nodeData)
 
     local gp, gl, gs, glc, gsc, gpl
     if is_counter then
-        gp, gl, gs, glc, gsc = make_counter_tab(data, bc)
-        gpl = {}
+        gp, gl, gs, glc, gsc, gpl, self._enabled_row = make_counter_tab(data, bc)
     else
-        gp, gl, gs, glc, gsc, gpl = make_general_tab(data, bc, nodeData.windowIndex, nodeData.timerIndex)
+        gp, gl, gs, glc, gsc, gpl, self._enabled_row =
+            make_general_tab(data, bc, nodeData.windowIndex, nodeData.timerIndex)
     end
     local sp, sl, ss, slc, ssc, spl = make_style_tab(data, bc)
     local ap, al, as, alc, asc      = make_animation_tab(data, bc)
@@ -476,6 +477,14 @@ function Options2.Window.TimerEditor:LanguageChanged()
     if self.tabs == nil then return end
     self.tabs:LanguageChanged()
     for _, fn in ipairs(self._tab_lang) do fn() end
+end
+
+-- A trigger flipped this timer's enabled flag while it was open here. Only that
+-- one box is re-read: the other fields may hold edits the player has not saved
+-- yet, and running the tab's load would throw them away.
+function Options2.Window.TimerEditor:RefreshEnabled()
+    if self._enabled_row == nil then return end
+    self._enabled_row:SetChecked(self.nodeData.data.enabled == true)
 end
 
 function Options2.Window.TimerEditor:ClipboardChanged()

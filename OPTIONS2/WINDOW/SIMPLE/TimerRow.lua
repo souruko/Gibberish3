@@ -174,3 +174,9 @@ function Options2SimpleTimer:SetSelected(v)
     self:SetBackColor(v and Options.Defaults.window.select or nil)
     self:_ApplyNameColor()
 end
+
+-- a trigger flipped this timer; _Sync keeps the selection, so the row can be
+-- repainted under the player without their place moving
+function Options2SimpleTimer:RefreshEnabled()
+    self:_Sync()
+end
