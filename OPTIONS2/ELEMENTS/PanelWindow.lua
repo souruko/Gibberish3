@@ -80,6 +80,9 @@ function Options2.Elements.PanelWindow:Constructor(config)
     self.title_label:SetForeColor(Options.Defaults.window.text)
     self.title_label:SetTextAlignment(Turbine.UI.ContentAlignment.MiddleLeft)
     self.title_label:SetMarkupEnabled(true)
+    -- a title is one line; without this a label narrower than its text wraps,
+    -- and the second line is cut off by the height of the bar
+    self.title_label:SetMultiline(false)
     self.title_label:SetMouseVisible(false)
 
     self.btn_close = Turbine.UI.Control()
@@ -205,6 +208,10 @@ function Options2.Elements.PanelWindow:SizeChanged()
     local close_left = rw - PAD - BTN_SIZE
     self.btn_close:SetPosition(close_left, math.floor((TITLE_H - BTN_SIZE) / 2))
     self._title_right = close_left - GAP
+
+    -- all the room up to the close button. A subclass with title-bar buttons of
+    -- its own narrows this again from its OnLayout, which runs below
+    self.title_label:SetWidth(math.max(0, self._title_right - PAD))
 
     local client_h = math.max(0, rh - TITLE_H - BORDER)
     self.client:SetSize(rw, client_h)
