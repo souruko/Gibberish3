@@ -32,8 +32,9 @@ function Options2.Elements.RightClickSubMenu:Constructor(width)
     self.list:SetMouseVisible(false)
 end
 
-function Options2.Elements.RightClickSubMenu:Show(left, top, orientation)
-    self.orientation = orientation or self.orientation
+-- left, top is the top left corner of the submenu in the coordinates of the
+-- menu window it is drawn on; the caller has already placed it
+function Options2.Elements.RightClickSubMenu:Show(left, top)
     self:SetPosition(left, top)
     self:SetVisible(true)
 end
@@ -106,6 +107,24 @@ end
 
 function Options2.Elements.RightClickSubMenu:GetPos()
     return self:GetPosition()
+end
+
+-- a submenu of a submenu is placed on the same canvas, so both of these pass
+-- through to the menu window
+function Options2.Elements.RightClickSubMenu:GetCanvasSize()
+    local parent = self:GetParent()
+    if parent ~= nil and parent.GetCanvasSize ~= nil then
+        return parent:GetCanvasSize()
+    end
+    return self:GetWidth(), self:GetHeight()
+end
+
+function Options2.Elements.RightClickSubMenu:FlipsLeft()
+    local parent = self:GetParent()
+    if parent ~= nil and parent.FlipsLeft ~= nil then
+        return parent:FlipsLeft()
+    end
+    return false
 end
 
 function Options2.Elements.RightClickSubMenu:LanguageChanged()

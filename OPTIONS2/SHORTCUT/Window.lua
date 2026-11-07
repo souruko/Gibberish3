@@ -156,7 +156,9 @@ end
 ---------------------------------------------------------------------------------------------------
 function Options.Shortcut.Constructor:GetMenuPos()
 
-    -- get shortcut position
+    -- the menu opens away from the nearest screen corner. what is returned is
+    -- the point the menu hangs off together with the corner of the menu that
+    -- lands on it, so it always ends up beside the icon and never over an edge
     local left, top = self:GetPosition()
     local size = self:GetWidth()
     local orientation = nil
@@ -166,13 +168,10 @@ function Options.Shortcut.Constructor:GetMenuPos()
 
     if left > horizontal and top > vertical then
         orientation = Turbine.UI.ContentAlignment.BottomRight
-        left = left - 1000
-        top = top - 1000
 
     elseif left <= horizontal and top > vertical then
         orientation = Turbine.UI.ContentAlignment.BottomLeft
         left = left + size
-        top = top - 1000
 
     elseif left <= horizontal and top <= vertical then
         orientation = Turbine.UI.ContentAlignment.TopLeft
@@ -181,7 +180,6 @@ function Options.Shortcut.Constructor:GetMenuPos()
 
     elseif left > horizontal and top <= vertical then
         orientation = Turbine.UI.ContentAlignment.TopRight
-        left = left - 1000
         top = top + size
 
     end

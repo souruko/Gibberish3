@@ -45,13 +45,29 @@ function Options2.Elements.SubRow:Hover(value)
 end
 
 function Options2.Elements.SubRow:ShowSubMenu()
-    local left, top = self.parent:GetPos()
-    local item_top  = self:GetTop()
-    local orientation = self.parent.orientation
 
-    if self.sub_menu ~= nil then
-        self.sub_menu:Show(left + self:GetWidth(), top + item_top, orientation)
+    if self.sub_menu == nil then return end
+
+    -- all of this is in canvas coordinates - the submenu is a child control of
+    -- the menu window, so it has to stay inside the canvas or it gets clipped
+    local left, top          = self.parent:GetPos()
+    local canvas_w, canvas_h = self.parent:GetCanvasSize()
+    local sub_width          = self.sub_menu:GetWidth()
+    local sub_height         = self.sub_menu:GetHeight()
+
+    -- beside the row, and to its left when the menu itself opened leftwards or
+    -- there is no room on the right
+    local sub_left = left + self:GetWidth()
+    if self.parent:FlipsLeft() or sub_left + sub_width > canvas_w then
+        sub_left = left - sub_width
     end
+
+    local sub_top = top + self:GetTop()
+
+    sub_left = math.max(0, math.min(sub_left, canvas_w - sub_width))
+    sub_top  = math.max(0, math.min(sub_top,  canvas_h - sub_height))
+
+    self.sub_menu:Show(sub_left, sub_top)
 end
 
 function Options2.Elements.SubRow:LanguageChanged()

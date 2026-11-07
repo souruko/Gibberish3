@@ -1,14 +1,33 @@
+-- the window is not the menu - it is an oversized invisible canvas the menu and
+-- its submenus are drawn on, because submenus are child controls and a window
+-- cut to the size of the menu would clip them away
+local CANVAS = 1000
+
+-- which corner of the menu sits on the anchor point
+local function corner(flip_left, flip_top)
+    if flip_left then
+        if flip_top then return Turbine.UI.ContentAlignment.BottomRight end
+        return Turbine.UI.ContentAlignment.TopRight
+    end
+    if flip_top then return Turbine.UI.ContentAlignment.BottomLeft end
+    return Turbine.UI.ContentAlignment.TopLeft
+end
+
 Options2.Elements.RightClickMenu = class(Turbine.UI.Window)
 function Options2.Elements.RightClickMenu:Constructor(width)
     Turbine.UI.Window.Constructor(self)
 
-    self.width       = width or 180
-    self.height      = 2 * Options.Defaults.rc_menu.spacing
-    self.orientation = Turbine.UI.ContentAlignment.BottomRight
-    self.children    = {}
+    self.width         = width or 180
+    self.height        = 2 * Options.Defaults.rc_menu.spacing
+    self.orientation   = Turbine.UI.ContentAlignment.BottomRight
+    self.flip_left     = false
+    self.flip_top      = false
+    self.canvas_width  = CANVAS
+    self.canvas_height = CANVAS
+    self.children      = {}
 
     self:SetMouseVisible(false)
-    self:SetSize(1000, 1000)
+    self:SetSize(CANVAS, CANVAS)
 
     self.border = Turbine.UI.Control()
     self.border:SetParent(self)
@@ -29,26 +48,49 @@ function Options2.Elements.RightClickMenu:Constructor(width)
     self.list:SetMouseVisible(false)
 end
 
+-- left, top is the anchor point the menu hangs off; orientation names the corner
+-- of the menu that lands on it, and nil picks whichever corners keep the whole
+-- menu on screen ( the cursor, for a right click )
 function Options2.Elements.RightClickMenu:Show(left, top, orientation)
-    self.orientation = orientation
 
     if left == nil then
         left, top = Turbine.UI.Display.GetMousePosition()
     end
-    self:SetPosition(left, top)
 
-    local b_left = 0
-    local b_top  = 0
-    if self.orientation == Turbine.UI.ContentAlignment.BottomRight then
-        b_left = 1000 - self.width
-        b_top  = 1000 - self.height
-    elseif self.orientation == Turbine.UI.ContentAlignment.BottomLeft then
-        b_top = 1000 - self.height
-    elseif self.orientation == Turbine.UI.ContentAlignment.TopRight then
-        b_left = 1000 - self.width
+    local menu_width  = self.width + 2
+    local menu_height = self.height + 2
+
+    if orientation == nil then
+        -- open down and right unless the menu would run off the screen there
+        self.flip_left = left + menu_width  > Options.ScreenWidth
+        self.flip_top  = top  + menu_height > Options.ScreenHeight
+    else
+        self.flip_left = orientation == Turbine.UI.ContentAlignment.TopRight
+                      or orientation == Turbine.UI.ContentAlignment.BottomRight
+        self.flip_top  = orientation == Turbine.UI.ContentAlignment.BottomLeft
+                      or orientation == Turbine.UI.ContentAlignment.BottomRight
     end
+    self.orientation = corner(self.flip_left, self.flip_top)
 
-    self.border:SetPosition(b_left, b_top)
+    -- where the menu itself has to end up
+    local menu_left = self.flip_left and (left - menu_width)  or left
+    local menu_top  = self.flip_top  and (top  - menu_height) or top
+    menu_left, menu_top = UTILS.ClampToScreen(menu_left, menu_top, menu_width, menu_height)
+
+    -- the canvas is kept fully on screen as well and the menu is then offset
+    -- inside it: a window hanging over an edge is pushed back on screen by the
+    -- client, which used to drag the menu along with it and was why a menu
+    -- raised in the lower half of the screen jumped away from the cursor
+    self.canvas_width  = math.min(CANVAS, Options.ScreenWidth)
+    self.canvas_height = math.min(CANVAS, Options.ScreenHeight)
+
+    local canvas_left = math.max(0, math.min(menu_left, Options.ScreenWidth  - self.canvas_width))
+    local canvas_top  = math.max(0, math.min(menu_top,  Options.ScreenHeight - self.canvas_height))
+
+    self:SetSize(self.canvas_width, self.canvas_height)
+    self:SetPosition(canvas_left, canvas_top)
+    self.border:SetPosition(menu_left - canvas_left, menu_top - canvas_top)
+
     self:LanguageChanged()
     self:SetVisible(true)
     self:Activate()
@@ -117,6 +159,15 @@ end
 
 function Options2.Elements.RightClickMenu:GetPos()
     return self.border:GetPosition()
+end
+
+-- the area a submenu has to stay inside to not be clipped
+function Options2.Elements.RightClickMenu:GetCanvasSize()
+    return self.canvas_width, self.canvas_height
+end
+
+function Options2.Elements.RightClickMenu:FlipsLeft()
+    return self.flip_left == true
 end
 
 function Options2.Elements.RightClickMenu:LanguageChanged()
