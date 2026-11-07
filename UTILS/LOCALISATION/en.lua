@@ -261,6 +261,7 @@ L[ Language.English ].options.saved                         = "Saved!"
 
 L[ Language.English ].options.permanent                     = "permanent"
 
+L[ Language.English ].options.showFrame                     = "Show Frame"
 L[ Language.English ].options.color1                        = "Frame Color"
 L[ Language.English ].options.color2                        = "Back Color"
 L[ Language.English ].options.color3                        = "Bar Color"
@@ -426,6 +427,7 @@ L[ Language.English ].tooltip.tim_direction                 = "Descending: count
 L[ Language.English ].tooltip.tim_counter_end               = "The value at which the counter stops incrementing. Further actions in the same direction are ignored once this is reached."
 L[ Language.English ].tooltip.tim_counter_start             = "The value the counter begins at when first triggered."
 
+L[ Language.English ].tooltip.win_show_frame                = "Draw the frame behind each timer element. Uncheck it to leave the frame unpainted, so an icon with transparent parts shows the world through them instead of the frame color. The threshold background color is not drawn either."
 L[ Language.English ].tooltip.win_color_frame               = "Color of the border drawn around each timer element."
 L[ Language.English ].tooltip.win_color_back                = "Background color behind the timer bar or icon."
 L[ Language.English ].tooltip.win_color_bar                 = "Fill color of the progress bar (Bar and Counter Bar types)."
@@ -442,7 +444,7 @@ L[ Language.English ].tooltip.win_use_target_entity         = "Attach the curren
 L[ Language.English ].tooltip.win_overlay                   = "When enabled, this window renders on top of LOTRO UI elements. When disabled, the game interface may cover it."
 L[ Language.English ].tooltip.win_width                     = "Width of each individual timer element in pixels."
 L[ Language.English ].tooltip.win_height                    = "Height of each individual timer element in pixels."
-L[ Language.English ].tooltip.win_frame                     = "Thickness of the border around each timer element in pixels. Set to 0 to remove the border."
+L[ Language.English ].tooltip.win_frame                     = "Thickness of the border around each timer element in pixels. Set to 0 to close the border up against the bar or icon; use Show Frame on the Color tab to stop the frame being drawn at all."
 L[ Language.English ].tooltip.win_spacing                   = "Gap in pixels between timers when multiple are displayed at once."
 L[ Language.English ].tooltip.win_orientation               = "Vertical: timers stack top to bottom.\nHorizontal: timers stack left to right."
 L[ Language.English ].tooltip.win_direction                 = "Descending: the window grows upward or leftward as timers are added.\nAscending: it grows downward or rightward."

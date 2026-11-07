@@ -28,6 +28,7 @@ Window[ Window.Types.COUNTER_WINDOW ].Defaults.overlay                 = false
 -- colours, taken from the Nocturne palette the options panel is drawn in, so a
 -- brand new window already looks like the rest of the plugin. The count fills
 -- the bar with the accent over a dark track, the same way round as a timer bar
+Window[ Window.Types.COUNTER_WINDOW ].Defaults.showFrame                = true
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color1                  = Options.Defaults.Nocturne("line")        -- frame
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color2                  = Options.Defaults.Nocturne("bg_sunken")   -- background
 Window[ Window.Types.COUNTER_WINDOW ].Defaults.color3                  = Options.Defaults.Nocturne("accent")      -- bar fill

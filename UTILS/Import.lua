@@ -345,6 +345,10 @@ function StringToWindow( text, folder )
         data.overlay               = ToBool(window_attributes["overlay"])
     end
 
+    if window_attributes["showFrame"] ~= nil then
+        data.showFrame             = ToBool(window_attributes["showFrame"])
+    end
+
     if window_attributes["color1"] ~= nil then
         data.color1                = StringToColor( window_attributes["color1"] )
     end

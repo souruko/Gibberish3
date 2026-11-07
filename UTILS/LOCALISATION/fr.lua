@@ -260,6 +260,7 @@ L[ Language.French ].options.saved                         = "Enregistré!"
 
 L[ Language.French ].options.permanent                     = "permanent"
 
+L[ Language.French ].options.showFrame                     = "Afficher le cadre"
 L[ Language.French ].options.color1                        = "Couleur du cadre"
 L[ Language.French ].options.color2                        = "Couleur de fond"
 L[ Language.French ].options.color3                        = "Couleur des barres"
@@ -425,6 +426,7 @@ L[ Language.French ].tooltip.tim_direction                 = "Descendant : déco
 L[ Language.French ].tooltip.tim_counter_end               = "La valeur à laquelle le compteur arrête d'incrémenter. Les actions ultérieures dans la même direction sont ignorées une fois cette valeur atteinte."
 L[ Language.French ].tooltip.tim_counter_start             = "La valeur à laquelle le compteur commence lors du premier déclenchement."
 
+L[ Language.French ].tooltip.win_show_frame                = "Dessiner le cadre derrière chaque élément de minuteur. Décochez pour laisser le cadre non peint : une icône comportant des parties transparentes laisse alors voir le monde au travers plutôt que la couleur du cadre. La couleur de fond du seuil n'est pas dessinée non plus."
 L[ Language.French ].tooltip.win_color_frame               = "Couleur de la bordure dessinée autour de chaque élément de minuteur."
 L[ Language.French ].tooltip.win_color_back                = "Couleur de fond derrière la barre de minuteur ou l'icône."
 L[ Language.French ].tooltip.win_color_bar                 = "Couleur de remplissage de la barre de progression (types Barre et Barre compteur)."
@@ -441,7 +443,7 @@ L[ Language.French ].tooltip.win_use_target_entity         = "Attacher l'identit
 L[ Language.French ].tooltip.win_overlay                   = "Si cette case est cochée, cette fenêtre s'affiche au-dessus des éléments de l'interface du SdAO. Si non cochée, l'interface du jeu peut la couvrir."
 L[ Language.French ].tooltip.win_width                     = "Largeur de chaque élément de minuteur individuel en pixels."
 L[ Language.French ].tooltip.win_height                    = "Hauteur de chaque élément de minuteur individuel en pixels."
-L[ Language.French ].tooltip.win_frame                     = "Épaisseur de la bordure autour de chaque élément de minuteur en pixels. Mettre à 0 pour supprimer la bordure."
+L[ Language.French ].tooltip.win_frame                     = "Épaisseur de la bordure autour de chaque élément de minuteur en pixels. Mettre à 0 pour coller la bordure à la barre ou à l'icône ; utilisez « Afficher le cadre » dans l'onglet Couleur pour ne plus dessiner le cadre du tout."
 L[ Language.French ].tooltip.win_spacing                   = "Espace en pixels entre les minuteurs lorsque plusieurs sont affichés simultanément."
 L[ Language.French ].tooltip.win_orientation               = "Vertical : les minuteurs s'empilent de haut en bas.\nHorizontal : les minuteurs s'empilent de gauche à droite."
 L[ Language.French ].tooltip.win_direction                 = "Descendant : la fenêtre grandit vers le haut ou vers la gauche à mesure que des minuteurs sont ajoutés.\nAscendant : elle grandit vers le bas ou vers la droite."

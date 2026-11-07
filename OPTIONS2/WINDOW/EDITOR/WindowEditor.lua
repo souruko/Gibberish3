@@ -195,6 +195,9 @@ local function make_color_tab(data, bc)
     local panel = Turbine.UI.Control()
     local add, rows = make_rows(panel, data, bc)
 
+    -- the frame switch sits above the frame colour it turns off
+    local showFrame = Options2.Elements.CheckBoxRow(bc, "options", "showFrame", "win_show_frame", ROW_H)
+    add(showFrame, ROW_H)
     local color1 = Options2.Elements.ColorBoxRow(bc, "options", "color1", "win_color_frame", ROW_H)
     add(color1, ROW_H)
     local color2 = Options2.Elements.ColorBoxRow(bc, "options", "color2", "win_color_back", ROW_H)
@@ -221,6 +224,7 @@ local function make_color_tab(data, bc)
     add(opacityThreshold, ROW_H)
 
     local function load()
+        showFrame:SetChecked(data.showFrame ~= false)
         color1:SetText(data.color1)
         color2:SetText(data.color2)
         color3:SetText(data.color3)
@@ -236,6 +240,7 @@ local function make_color_tab(data, bc)
     end
 
     local function save()
+        data.showFrame        = showFrame:IsChecked()
         data.color1           = color1:GetText()
         data.color2           = color2:GetText()
         data.color3           = color3:GetText()

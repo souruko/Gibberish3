@@ -169,8 +169,12 @@ function IconElement:DataChanged()
     self:Resize()
 
     -- colors
-    self.frame:SetBackColor( UTILS.ColorFix( parentData.color1 ) )
-    
+    -- the frame is a filled rectangle the icon sits on top of, not an outline, so a
+    -- window with the frame switched off has to leave it unpainted - otherwise the
+    -- frame color shows through the transparent parts of a custom icon
+    self.showFrame = parentData.showFrame ~= false
+    self.frame:SetBackColor( self.showFrame and UTILS.ColorFix( parentData.color1 ) or nil )
+
     -- font colors
     self.timerLabel:SetForeColor( UTILS.ColorFix( parentData.color4 ) )
     self.textLabel:SetForeColor( UTILS.ColorFix( parentData.color5 ) )
@@ -203,6 +207,23 @@ function IconElement:DataChanged()
     self.thresholdColor = UTILS.ColorFix( parentData.color7 )
     self.thresholdTimerColor = UTILS.ColorFix( parentData.color8 )
     self.thresholdTextColor = UTILS.ColorFix( parentData.color9 )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- paint the frame
+-- with the frame switched off the control is left alone instead of being painted
+-- transparent, so the threshold colors and the flashing animation do not write a
+-- color to it every frame for nothing
+---------------------------------------------------------------------------------------------------
+function IconElement:SetFrameColor( color )
+
+    if self.showFrame == false then
+        return
+    end
+
+    self.frame:SetBackColor( color )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -418,7 +439,7 @@ function IconElement:UpdateThreshold( timeLeft )
 
         if self._inThreshold ~= false then
             self._inThreshold = false
-            self.frame:SetBackColor( self.frameColor )
+            self:SetFrameColor( self.frameColor )
         end
 
     -- in the threshold
@@ -446,7 +467,7 @@ function IconElement:UpdateThreshold( timeLeft )
 
             -- static background: set once on entry
             if self._inThreshold ~= true then
-                self.frame:SetBackColor( self.thresholdColor )
+                self:SetFrameColor( self.thresholdColor )
             end
 
         -- flashing: update every frame
@@ -461,7 +482,7 @@ function IconElement:UpdateThreshold( timeLeft )
                 value = ( flashValue - math.floor( flashValue ) )
             end
 
-            self.frame:SetBackColor( Turbine.UI.Color( 1, value, value ) )
+            self:SetFrameColor( Turbine.UI.Color( 1, value, value ) )
 
         -- border animation: has its own rate-limiting via nextAnimation
         elseif self.data.animationType == AnimationType.Activation_Border or
@@ -486,7 +507,7 @@ function IconElement:UpdateThreshold( timeLeft )
 
             -- static background: set once on entry
             if self._inThreshold ~= true then
-                self.frame:SetBackColor( self.thresholdColor )
+                self:SetFrameColor( self.thresholdColor )
             end
 
         end
@@ -600,7 +621,7 @@ function IconElement:Activ( value )
             self.timerLabel:SetFont( self.font )
             self.textLabel:SetFont( self.font )
             self.animation:SetBackground(UTILS.IconID.Blank)
-            self.frame:SetBackColor( self.frameColor )
+            self:SetFrameColor( self.frameColor )
             self.iconControl:SetSize(self.width, self.height)
             self.iconControl:SetPosition(self.parent.data.frame, self.parent.data.frame)
 

@@ -113,7 +113,9 @@ function CounterBarElement:DataChanged()
     self:Resize()
 
     -- colors
-    self.frame:SetBackColor( UTILS.ColorFix( parentData.color1 ) )
+    -- the frame carries the bar, so a window with the frame switched off leaves the
+    -- control in place and only stops painting it
+    self.frame:SetBackColor( parentData.showFrame ~= false and UTILS.ColorFix( parentData.color1 ) or nil )
     self.barBack:SetBackColor( UTILS.ColorFix( parentData.color2 ) )
     self.bar:SetBackColor( UTILS.ColorFix( parentData.color3 ) )
     

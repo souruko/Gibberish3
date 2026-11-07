@@ -175,6 +175,11 @@ function Options.OverwriteCharData( global_data, char_data )
             end
 
         end
+        -- the frame switch arrived after the colours; a save from before it has
+        -- the frame drawn, so an absent key means on
+        if window_data.showFrame == nil then
+            window_data.showFrame = true
+        end
         if window_data.opacityThreshold == nil then
             window_data.opacityThreshold = window_data.opacityActiv
         end

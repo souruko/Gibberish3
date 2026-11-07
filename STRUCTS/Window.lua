@@ -50,6 +50,7 @@ function Window.New(name, type, timerType)
     window.overlay               = Window[type].Defaults.overlay
 
     -- color / opacity
+    window.showFrame             = Window[type].Defaults.showFrame
     window.color1                = deepcopy(Window[type].Defaults.color1)
     window.color2                = deepcopy(Window[type].Defaults.color2)
     window.color3                = deepcopy(Window[type].Defaults.color3)
@@ -129,6 +130,8 @@ function Window.Copy(index)
     window.overlay               = Data.window[index].overlay
 
     -- color / opacity
+    window.showFrame               = Data.window[index].showFrame
+
     window.color1                  = {}
     window.color2                  = {}
     window.color3                  = {}

@@ -260,6 +260,7 @@ L[ Language.German ].options.saved                          = "Gespeichert!"
 
 L[ Language.German ].options.permanent                      = "dauerhaft"
 
+L[ Language.German ].options.showFrame                      = "Rahmen Anzeigen"
 L[ Language.German ].options.color1                         = "Rahmenfarbe"
 L[ Language.German ].options.color2                         = "Hintergrundfarbe"
 L[ Language.German ].options.color3                         = "Balkenfarbe"
@@ -425,6 +426,7 @@ L[ Language.German ].tooltip.tim_direction                  = "Absteigend: zähl
 L[ Language.German ].tooltip.tim_counter_end                = "Der Wert, bei dem der Zähler aufhört zu zählen. Weitere Aktionen in dieselbe Richtung werden ignoriert, sobald dieser Wert erreicht ist."
 L[ Language.German ].tooltip.tim_counter_start              = "Der Wert, bei dem der Zähler beim ersten Auslösen beginnt."
 
+L[ Language.German ].tooltip.win_show_frame                 = "Den Rahmen hinter jedem Timer-Element zeichnen. Wenn deaktiviert, bleibt der Rahmen ungefüllt, sodass bei einem Icon mit transparenten Stellen die Welt durchscheint und nicht die Rahmenfarbe. Die Schwellen-Hintergrundfarbe wird dann ebenfalls nicht gezeichnet."
 L[ Language.German ].tooltip.win_color_frame                = "Farbe des Rahmens um jedes Timer-Element."
 L[ Language.German ].tooltip.win_color_back                 = "Hintergrundfarbe hinter dem Timer-Balken oder Icon."
 L[ Language.German ].tooltip.win_color_bar                  = "Füllfarbe des Fortschrittsbalkens (Balken- und Counter-Balken-Typen)."
@@ -441,7 +443,7 @@ L[ Language.German ].tooltip.win_use_target_entity          = "Die Identität de
 L[ Language.German ].tooltip.win_overlay                    = "Wenn aktiviert, wird dieses Fenster über den LOTRO-UI-Elementen dargestellt. Wenn deaktiviert, kann die Spieloberfläche es verdecken."
 L[ Language.German ].tooltip.win_width                      = "Breite jedes einzelnen Timer-Elements in Pixeln."
 L[ Language.German ].tooltip.win_height                     = "Höhe jedes einzelnen Timer-Elements in Pixeln."
-L[ Language.German ].tooltip.win_frame                      = "Rahmendicke um jedes Timer-Element in Pixeln. Auf 0 setzen, um den Rahmen zu entfernen."
+L[ Language.German ].tooltip.win_frame                      = "Rahmendicke um jedes Timer-Element in Pixeln. Auf 0 setzen, damit der Rahmen direkt am Balken oder Icon anliegt; mit 'Rahmen Anzeigen' im Reiter Farbe wird der Rahmen gar nicht mehr gezeichnet."
 L[ Language.German ].tooltip.win_spacing                    = "Abstand in Pixeln zwischen Timern, wenn mehrere gleichzeitig angezeigt werden."
 L[ Language.German ].tooltip.win_orientation                = "Vertikal: Timer werden von oben nach unten gestapelt.\nHorizontal: Timer werden von links nach rechts gestapelt."
 L[ Language.German ].tooltip.win_direction                  = "Absteigend: das Fenster wächst aufwärts oder nach links, wenn Timer hinzugefügt werden.\nAufsteigend: es wächst abwärts oder nach rechts."

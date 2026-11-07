@@ -70,7 +70,7 @@ To collect effects or chat lines, open the **Effects** or **Chat** tab and press
 | Setting | What it does |
 |---|---|
 | **Width / Height** | Size of each individual timer element, in pixels. |
-| **Frame** | Thickness of the border around each timer, in pixels. Set to 0 to remove the border. |
+| **Frame** | Thickness of the border around each timer, in pixels. Set to 0 to close the border up against the bar or icon; **Show Frame** on the Color tab stops it being drawn at all. |
 | **Spacing** | Gap between timers when multiple are displayed at once, in pixels. |
 | **Orientation** | Whether timers stack **Vertically** (top to bottom) or **Horizontally** (left to right). |
 | **Direction** | Which way the window grows when new timers are added: **Ascending** (downward/rightward) or **Descending** (upward/leftward). |
@@ -80,7 +80,8 @@ To collect effects or chat lines, open the **Effects** or **Chat** tab and press
 
 | Color slot | Used for |
 |---|---|
-| **Frame Color** | Border around each timer. |
+| **Show Frame** | Whether the frame is painted at all. The frame is a filled rectangle that each timer's bar or icon sits on top of, so with a custom icon that has transparent parts the frame colour shows through them. Uncheck this to leave the frame unpainted and let the world show through instead. The Threshold Back Color is then not drawn on an Icon timer either. |
+| **Frame Color** | Border around each timer. Ignored while Show Frame is off. |
 | **Back Color** | Background fill behind the timer bar/icon. |
 | **Bar Color** | The progress bar itself (BAR and COUNTER_BAR types). |
 | **Timer Color** | Font color for the countdown number. |
