@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.11.0
+- New: the Prime Parse Integration tick box in the settings window lets Rolo's Prime Parse work without Prime's own interface plugins. The parser needs to know who is in your group, and until now only those plugins could tell it, so you had to run them alongside Gibberish even if the parser was all you wanted - and both ended up watching your group for the same answer. Gibberish can now do it instead. It needs Track Group from the shortcut button menu, and says so if that is switched off. Your own trait line is known as soon as the plugin loads and keeps up when you swap lines; everyone else's is worked out from the skills they use, so a new group can take a fight to settle, and a few lines cannot be recognised yet. Names and classes are always right. Leave this switched off if you also run Prime's own interface plugins, since they do the same job and whichever went last wins. On a German or French client the names and classes come through but the trait lines do not yet.
+- /gibdebug now reports whether the Prime Parse integration is on and what it would pass along right now.
+- Fixed longer tooltips in the options panel being cut off at the bottom. The box was sized from the length of the text alone, which came up short whenever the text was split over several lines - so the last line or two of the longest tooltips, the Group Change one among them, could not be read at all. Tooltips are now always tall enough for everything in them.
+
 ### 3.10.1
 - The options panel now keeps up when a trigger switches a window or a timer on or off.
 - A window switched on or off by a trigger now stays that way after a reload.
