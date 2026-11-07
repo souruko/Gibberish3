@@ -74,9 +74,17 @@ GroupSetup.roster = {}
 -- our own line, worked out once from the trained skills. nil means "not worked out yet"
 GroupSetup.ownLine = nil
 
--- a line changed since the last write, so the next time we leave combat is worth a save. Writing
--- on the effect itself would mean writing in the middle of a fight, over and over
+-- a line changed while we were in combat, so the next time we leave it is worth a save. Writing on
+-- the effect itself would mean writing in the middle of a fight, over and over. Out of combat the
+-- write is not put off at all, see GroupSetup.CheckEffect
 GroupSetup.dirty = false
+
+-- a write is already coming, so a line worked out right now must not write on its own. True while
+-- the active effects of the whole group are being swept, which works out several lines in a row
+-- and would otherwise save the file once per member: at start up, where StartUp writes at the end
+-- of it, and when either tracking setting is switched, where Options.TrackGroupChanged and the
+-- settings panel do. Starts true for the sweep that runs before StartUp.
+GroupSetup.holdWrite = true
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -193,6 +201,15 @@ function GroupSetup.CheckEffect( effectView, playerName )
 
     record.line      = line
     GroupSetup.dirty = true
+
+    -- A trait line swap is done out of combat, so waiting for combat to end would mean waiting for
+    -- a fight that may never come and leaving the file on the old line the whole time. Out of
+    -- combat the save happens now; in combat it is left to GroupSetup.WriteIfDirty, which is the
+    -- point of the dirty flag. IsInCombat is a call into the game, but this only runs when a line
+    -- actually changed, not for every effect.
+    if GroupSetup.holdWrite == false and LocalPlayer:IsInCombat() == false then
+        GroupSetup.Write()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -319,6 +336,9 @@ function GroupSetup.StartUp()
     end )
 
     GroupSetup.Write()
+
+    -- the start up sweep is over, so from here a line change writes on its own
+    GroupSetup.holdWrite = false
 
 end
 ---------------------------------------------------------------------------------------------------

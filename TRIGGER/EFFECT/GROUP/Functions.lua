@@ -182,6 +182,15 @@ Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, pla
 
     local effects = player:GetEffects()
 
+    -- Several lines can be worked out in the course of one sweep, and the export writes its file
+    -- as soon as a line changes out of combat. Everyone who sweeps writes once at the end of it,
+    -- so the per-change write is held off until then, see GroupSetup.holdWrite.
+    local heldWrite = GroupSetup.holdWrite
+
+    if exportingSetup == true then
+        GroupSetup.holdWrite = true
+    end
+
     -- iterate effects
     for j = 1, effects:GetCount(), 1 do
 
@@ -196,6 +205,8 @@ Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, pla
         end
 
     end
+
+    GroupSetup.holdWrite = heldWrite
 
 end
 ---------------------------------------------------------------------------------------------------
