@@ -1,9 +1,14 @@
 # Changelog
 
+### 3.11.3 by ***Plugo***
+- Fixed a crash that could bring the client down when you were made the group's assist target. It took Track Group being switched off, and the plugin having started or reloaded while you were already in a group: your fellowship or raid was still read from the game even though nothing was watching it, and being made assist target then crashed the client. With Track Group off the group is no longer read at all, and with it on this never happened in the first place.
+
 ### 3.11.2
 - Fixed the Prime Parse Integration not passing on a group member's trait line after they swapped it. The new line was recognised, but it was only handed over once the next fight ended, so Prime Parse went on crediting them to their old line until then - and if nobody went into combat, for the rest of the session. A line recognised out of combat is now passed on straight away. Anything worked out during a fight is still held back until the fight is over, so nothing is written in the middle of one. Your own trait line was already passed on the moment you swapped and is unchanged.
 
 ### 3.11.1
+- Combat triggers now only fire on the combat event they are set to. A trigger set to Start fired when you left combat as well, one set to End fired when you entered it, and a combat trigger you had switched off kept firing too - so anything hanging off a combat trigger went off at both ends of every fight. A combat trigger saved before the Combat Event setting existed counts as End, which is what the editor already shows for it.
+- The Group Change setting now only acts while Track Group is on. With it off there is nothing for a reload to pick up, so Automatic no longer reloads and Ask First no longer asks, and chat is not watched for the group messages either. Switching Track Group off also closes a reload prompt already on screen.
 - The Show Frame tick box on a window's Color tab turns the frame off altogether. The frame is not an outline but a solid rectangle that each timer's bar or icon sits on top of, so a custom icon with transparent parts showed the frame colour through them rather than the world behind it. Turning the frame thickness down to 0 did not help, because the rectangle was then exactly the size of the icon and still sat right behind it. With Show Frame unticked nothing is painted there and the transparency comes through. Clearing the Frame Color field was the only way to get this before, and it never lasted - the colour was filled back in with the default the next time the plugin loaded. The frame also carries the Threshold Back Color on an icon timer, so that is not shown either while the frame is off; the threshold font, opacity and border animations are unaffected. Windows you already have keep their frame.
 
 ### 3.11.0
