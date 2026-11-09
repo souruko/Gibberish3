@@ -73,7 +73,8 @@ Trigger[Trigger.Types.Combat].CheckWindows = function ( combatState, windowIndex
     -- check window triggers
     for triggerIndex, triggerData in ipairs(windowData[ Trigger.Types.Combat ]) do
 
-        if Trigger[ Trigger.Types.Combat ].CheckTrigger(combatState, triggerData) ~= false then
+        -- CheckTrigger returns the match position or nil, never false
+        if Trigger[ Trigger.Types.Combat ].CheckTrigger(combatState, triggerData) ~= nil then
             Windows.WindowAction( windowIndex, windowData, triggerData )
 
         end
@@ -113,7 +114,8 @@ Trigger[Trigger.Types.Combat].CheckTimer = function ( combatState, windowIndex, 
     -- check timer triggers
     for triggerIndex, triggerData in ipairs(timerData[ Trigger.Types.Combat ]) do
 
-        if Trigger[ Trigger.Types.Combat ].CheckTrigger( combatState, triggerData ) ~= false then
+        -- CheckTrigger returns the match position or nil, never false
+        if Trigger[ Trigger.Types.Combat ].CheckTrigger( combatState, triggerData ) ~= nil then
             Trigger[ Trigger.Types.Combat ].ProcessTrigger( combatState, windowIndex, timerIndex, triggerIndex )
 
         end
@@ -134,8 +136,12 @@ Trigger[Trigger.Types.Combat].CheckTrigger = function ( combatState, triggerData
     end
 
     -- check if combatState matches
-    if triggerData.source == Source.Any
-    or triggerData.source == combatState then
+    -- a trigger saved before source was written out has none, and the editor
+    -- shows those as combat end, so they are checked as that
+    local source = triggerData.source or Source.CombatEnd
+
+    if source == Source.Any
+    or source == combatState then
         return 1
     end
 

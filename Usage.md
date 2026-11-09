@@ -367,6 +367,10 @@ has to be reloaded after anyone joins or leaves for their effects to be tracked.
 | **Automatic** | The plugin reloads itself as soon as it sees the group change announced in chat. |
 | **Ask First** | A small window appears offering to reload. Pick **Reload Now** to reload, or **Not Now** (or Escape) to dismiss it - so a reload never lands in the middle of a fight. |
 
+Both **Automatic** and **Ask First** only do anything while **Track Group** is on in the shortcut
+button menu, since a reload has nothing to pick up without it. Switching Track Group off also
+dismisses a prompt already on screen.
+
 ### Prime Parse Integration
 
 Rolo's **Prime Parse** needs to know who is in your group. Normally that comes from Prime's own

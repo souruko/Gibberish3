@@ -138,6 +138,12 @@ function Options.TrackGroupChanged()
     -- settings window show or hide its warning
     GroupSetup.Write()
 
+    -- a prompt on screen was asked for by a group change while tracking was on,
+    -- and there is nothing left for its reload to pick up
+    if Data.trackGroupEffects ~= true and Options2.Window.ReloadPopupObject ~= nil then
+        Options2.Window.ReloadPopupObject:CloseWindow()
+    end
+
     if Options2.Window.SettingsWindowObject ~= nil then
         Options2.Window.SettingsWindowObject:TrackGroupChanged()
     end

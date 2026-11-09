@@ -24,8 +24,12 @@ Trigger[ Trigger.Types.Chat ].Init = function ()
 
         end
 
-        -- group change: reload straight away, or ask first
+        -- group change: reload straight away, or ask first. A reload is only
+        -- worth anything with group tracking on - it is there so the party read
+        -- at start up is taken again - so with tracking off nothing is asked and
+        -- nothing is reloaded, and the messages are not even searched for.
         if Data.reloadMode ~= ReloadMode.Manual and
+            Data.trackGroupEffects == true and
             args.ChatType == Turbine.ChatType.Standard then
 
                 Trigger[ Trigger.Types.Chat ].CheckForReload( args.Message )
