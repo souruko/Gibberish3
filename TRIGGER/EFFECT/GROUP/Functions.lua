@@ -13,17 +13,44 @@
 Trigger[ Trigger.Types.EffectGroup ].tracked = {}
 Trigger[ Trigger.Types.EffectGroup ].party   = nil
 
+-- GetParty has been asked. Separate from party, because nil is also its answer
+-- when we are not in a group
+Trigger[ Trigger.Types.EffectGroup ].partyRead = false
+
 -- the trigger types an effect of a party member is checked against
 local GROUP_TYPES = { Trigger.Types.EffectGroup }
 
 Trigger[Trigger.Types.EffectGroup].Init = function ()
 
-    -- only the first GetParty works, so it is read once here and kept. A party
-    -- change reloads the plugin, by way of the auto reload on the party messages
-    -- in chat, and that runs this again with a fresh one.
-    Trigger[ Trigger.Types.EffectGroup ].party = LocalPlayer:GetParty()
-
     Trigger[ Trigger.Types.EffectGroup ].Sync()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- read the party
+---------------------------------------------------------------------------------------------------
+-- Only the first GetParty works, so it is read once and kept. A party change
+-- reloads the plugin, by way of the auto reload on the party messages in chat,
+-- and that reads a fresh one.
+--
+-- It is read only once group tracking is on, never just in case. With tracking
+-- off, holding the party crashed the client as soon as we were made an assist
+-- target in the group; with tracking on, which also asks for every member, it
+-- did not. Why is not known. The likeliest guess is that the client hands the
+-- party's assist target event to a member the plugin never asked for, but that
+-- is unconfirmed. Either way, with tracking off the game is not asked for the
+-- party at all.
+Trigger[ Trigger.Types.EffectGroup ].ReadParty = function ()
+
+    local groupTrigger = Trigger[ Trigger.Types.EffectGroup ]
+
+    if groupTrigger.partyRead == false then
+        groupTrigger.party     = LocalPlayer:GetParty()
+        groupTrigger.partyRead = true
+    end
+
+    return groupTrigger.party
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -33,7 +60,8 @@ end
 ---------------------------------------------------------------------------------------------------
 -- called at start up and whenever group tracking is switched on or off, so that
 -- switching it on registers the callbacks instead of leaving them until the next
--- reload. Works off the party read at start up: it never asks the game again.
+-- reload. The party is read the first time tracking is on, see ReadParty, and
+-- the game is never asked again after that.
 Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
 
     local tracked = Trigger[ Trigger.Types.EffectGroup ].tracked
@@ -42,7 +70,7 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
     -- track group
     if  Data.trackGroupEffects == true then
 
-        local party = Trigger[ Trigger.Types.EffectGroup ].party
+        local party = Trigger[ Trigger.Types.EffectGroup ].ReadParty()
 
         -- party exists
         if party ~= nil then
