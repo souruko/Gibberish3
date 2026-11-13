@@ -1,5 +1,11 @@
 # Changelog
 
+### 3.11.4
+- Fixed the game freezing when triggers switched windows on or off, which was worst when swapping trait lines. Whenever a trigger changes whether a window or a timer is switched on, the plugin writes your settings out so the change is still there after a reload - but it wrote all of them, twice over, once for every window involved, and the client stands still for as long as that takes. A trait line swap that switches one window of a set on and the rest off, or a folder trigger that covers the whole set at once, meant that write over and over. Everything a burst of triggers changes is now written once, a second after the last of them. Windows and timers switched by a trigger still survive a reload, and nothing is lost by the wait, since reloading and logging out both write on the way out.
+- A trigger that switches a timer on or off no longer writes anything when that timer was already in the state it asked for. Triggers fire every time their effect lands, not only when something actually changes, so that was being written over and over in the middle of a fight.
+- Swapping trait lines with Prime Parse Integration switched on takes less work: your own line is now read out of the skill list the plugin already goes through on a swap, rather than going through all of your skills a second time.
+- /gibdebug save reports what writing your settings costs and how many times triggers have asked for it since the plugin loaded.
+
 ### 3.11.3 by ***Plugo***
 - Fixed a crash that could bring the client down when you were made the group's assist target. It took Track Group being switched off, and the plugin having started or reloaded while you were already in a group: your fellowship or raid was still read from the game even though nothing was watching it, and being made assist target then crashed the client. With Track Group off the group is no longer read at all, and with it on this never happened in the first place.
 
