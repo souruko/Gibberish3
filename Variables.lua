@@ -63,4 +63,7 @@ DebugStats.timersCreated    = 0
 DebugStats.timersReused     = 0
 DebugStats.targetChanges    = 0
 DebugStats.effectsSkipped   = 0
+-- enabled flags a trigger has flipped, and the data saves that came of them
+DebugStats.enableToggles    = 0
+DebugStats.dataSaves        = 0
 ---------------------------------------------------------------------------------------------------

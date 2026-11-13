@@ -521,13 +521,23 @@ end
 ---------------------------------------------------------------------------------------------------
 function TimerWindowElement:ActionEnableTimer( timerIndex, enabled )
 
-    self.data.timerList[ timerIndex ].enabled = enabled
+    local timerData = self.data.timerList[ timerIndex ]
+
+    -- the trigger fires every time its effect lands, not only when it changes
+    -- something, so a timer already in that state is left alone. The save and
+    -- the panel repaint below are far too expensive to do for nothing
+    if timerData.enabled == enabled then
+        return
+    end
+
+    timerData.enabled = enabled
 
     if enabled == false then
         self:ActionRemove( timerIndex, nil )
     end
 
-    Options.SaveData()
+    -- asked for rather than done, see Windows.RequestSave
+    Windows.RequestSave()
     Options.TimerEnabledChanged()
 
 end

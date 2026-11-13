@@ -73,6 +73,67 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- /gibdebug save: what one data save costs
+---------------------------------------------------------------------------------------------------
+-- Options.SaveData writes the whole of Data twice, character scope and account scope, and the
+-- client stands still while it does. A trigger that turns a window or a timer on or off changes
+-- the data and so needs a save, and a trait line swap can fire a whole set of those at once, which
+-- is how the saving - not the switching - ends up freezing the game. This times one save, and
+-- counts how many the triggers have asked for since the plugin loaded.
+local function PrintSaveCost()
+
+    local windowCount, timerCount, triggerCount = 0, 0, 0
+
+    -- trigger lists sit under the numeric trigger type, on windows, timers, conditions and folders
+    local function CountTriggers( holder )
+
+        for _, triggerType in pairs( Trigger.Types ) do
+
+            local list = holder[ triggerType ]
+
+            if type( list ) == "table" then
+                triggerCount = triggerCount + #list
+            end
+
+        end
+
+    end
+
+    for _, folderData in ipairs( Data.folder ) do
+        CountTriggers( folderData )
+    end
+
+    for _, windowData in ipairs( Data.window ) do
+
+        windowCount = windowCount + 1
+        CountTriggers( windowData )
+
+        for _, timerData in ipairs( windowData.timerList or {} ) do
+
+            timerCount = timerCount + 1
+            CountTriggers( timerData )
+
+            for _, conditionData in ipairs( timerData.conditionList or {} ) do
+                CountTriggers( conditionData )
+            end
+
+        end
+
+    end
+
+    local start = Turbine.Engine.GetGameTime()
+    Options.SaveData()
+    local spent = Turbine.Engine.GetGameTime() - start
+
+    Turbine.Shell.WriteLine( "--- Gibberish3 save cost ---" )
+    Turbine.Shell.WriteLine( string.format( "%d windows, %d timers, %d triggers", windowCount, timerCount, triggerCount ) )
+    Turbine.Shell.WriteLine( string.format( "One save ( character and account scope ): %.0f ms", spent * 1000 ) )
+    Turbine.Shell.WriteLine( string.format( "Since load: %d enable flags flipped by a trigger, %d saves written for them", DebugStats.enableToggles, DebugStats.dataSaves ) )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- debug command
 ---------------------------------------------------------------------------------------------------
 DebugCommand = Turbine.ShellCommand()
@@ -81,6 +142,11 @@ function DebugCommand:Execute( command, arguments )
 
     if arguments ~= nil and string.find( arguments, "timers" ) ~= nil then
         PrintTimers()
+        return
+    end
+
+    if arguments ~= nil and string.find( arguments, "save" ) ~= nil then
+        PrintSaveCost()
         return
     end
 
@@ -198,7 +264,7 @@ function DebugCommand:Execute( command, arguments )
 end
 
 function DebugCommand:GetHelp()
-    return "Prints Gibberish3 memory usage and timer counts. 'timers' for the state of every running timer."
+    return "Prints Gibberish3 memory usage and timer counts. 'timers' for the state of every running timer, 'save' for what one data save costs."
 end
 
 function DebugCommand:GetShortHelp()

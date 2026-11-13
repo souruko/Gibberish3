@@ -18,11 +18,19 @@ Trigger[Trigger.Types.Skill].Init = function ()
     -- is collected once and each skill is then a single lookup.
     local usedSkills = Trigger[ Trigger.Types.Skill ].CollectUsedSkills()
 
+    -- the names read below, kept for the group setup export: it works our own
+    -- trait line out of them and reading them a second time is a call into the
+    -- game per skill, see GroupSetup.SkillsChanged
+    local skillNames = {}
+
     for i = 1, listOfSkills:GetCount(), 1 do
 
-        local skill = listOfSkills:GetItem(i)
+        local skill     = listOfSkills:GetItem(i)
+        local skillName = skill:GetSkillInfo():GetName()
 
-        if usedSkills[ skill:GetSkillInfo():GetName() ] == true then
+        skillNames[ i ] = skillName
+
+        if usedSkills[ skillName ] == true then
 
             function skill.ResetTimeChanged( sender, args )
 
@@ -35,10 +43,14 @@ Trigger[Trigger.Types.Skill].Init = function ()
                 Trigger[ Trigger.Types.Skill ].SkillUsed( skill )
 
             end
-            
+
         end
-        
+
     end
+
+    -- our own line in the group setup export is read from the trained skills,
+    -- which have just been walked
+    GroupSetup.SkillsChanged( skillNames )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -377,11 +389,9 @@ function SkillTreeChanged:Update()
     if Turbine.Engine.GetGameTime() > self.sleepEnd then
         self:SetWantsUpdates(false)
         -- Windows.SkillTreeChanged()
+        -- the wait above is what makes this safe: the new skills are in by now.
+        -- Init also hands the group setup export its new trait line
         Trigger[Trigger.Types.Skill].Init()
-
-        -- our own line in the group setup export is read from the trained skills, which have just
-        -- changed. The wait above is what makes this safe: the new skills are in by now
-        GroupSetup.OwnLineChanged()
     end
 end
 

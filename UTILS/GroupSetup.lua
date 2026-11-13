@@ -101,35 +101,29 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- our own trait line, from the trained skills
+-- our own trait line, from a list of trained skill names
 ---------------------------------------------------------------------------------------------------
 -- A line's own skills are only trained while that line is specced, so the skill list tells us
 -- which one it is without waiting for an effect to show up. That is why our own line is right
 -- straight away and everyone else's is not.
-function GroupSetup.DetectOwnLine()
-
-    if GroupSetup.ownLine ~= nil then
-        return GroupSetup.ownLine
-    end
-
-    GroupSetup.ownLine = GroupSetup.Undefined
+function GroupSetup.LineFromSkillNames( skillNames )
 
     local byClass = GroupSetup.OwnLineSkills[ LocalPlayer:GetClass() ]
 
     -- no data for this class, or none for this client language
     if byClass == nil then
-        return GroupSetup.ownLine
+        return GroupSetup.Undefined
     end
 
-    local listOfSkills = LocalPlayer:GetTrainedSkills()
+    local line = GroupSetup.Undefined
 
     -- The last match wins rather than the first, because that is what Prime does: it tests every
     -- line against every skill and keeps assigning, so the end of the skill list has the final
     -- say. Returning early instead would answer differently for anyone whose trained skills match
     -- two lines, and the point of this file is to agree with Prime.
-    for i = 1, listOfSkills:GetCount(), 1 do
+    for i = 1, #skillNames, 1 do
 
-        local skillName = listOfSkills:GetItem(i):GetSkillInfo():GetName()
+        local skillName = skillNames[i]
 
         for _, entry in ipairs( byClass ) do
 
@@ -138,7 +132,7 @@ function GroupSetup.DetectOwnLine()
                 -- patterns, not plain names: a few of them escape a hyphen
                 if string.find( skillName, pattern ) ~= nil then
 
-                    GroupSetup.ownLine = entry.line
+                    line = entry.line
                     break
 
                 end
@@ -149,16 +143,48 @@ function GroupSetup.DetectOwnLine()
 
     end
 
+    return line
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- our own trait line
+---------------------------------------------------------------------------------------------------
+-- Worked out once and then kept, because reading the name of every trained skill is a call into
+-- the game each and there are hundreds of them. GroupSetup.SkillsChanged hands the names over from
+-- the walk the skill trigger does anyway, so this only has to ask the game itself if something
+-- wants the line before that has happened.
+function GroupSetup.DetectOwnLine()
+
+    if GroupSetup.ownLine ~= nil then
+        return GroupSetup.ownLine
+    end
+
+    local listOfSkills = LocalPlayer:GetTrainedSkills()
+    local skillNames   = {}
+
+    for i = 1, listOfSkills:GetCount(), 1 do
+        skillNames[ i ] = listOfSkills:GetItem(i):GetSkillInfo():GetName()
+    end
+
+    GroupSetup.ownLine = GroupSetup.LineFromSkillNames( skillNames )
+
     return GroupSetup.ownLine
 
 end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
--- our own line changed
+-- the trained skills changed
 ---------------------------------------------------------------------------------------------------
--- called when the game announces a trait line swap, see TRIGGER/SKILL/Functions.lua
-function GroupSetup.OwnLineChanged()
+-- Called at the end of the skill trigger's walk over the trained skills, with the names it read on
+-- the way, which is every trait line swap and once at start up. The names are handed over rather
+-- than read again: GetSkillInfo():GetName() is a call into the game for each of several hundred
+-- skills, and doing that twice over was a visible stall on a line swap.
+--
+-- See TRIGGER/SKILL/Functions.lua.
+function GroupSetup.SkillsChanged( skillNames )
 
     GroupSetup.ownLine = nil
 
@@ -166,8 +192,14 @@ function GroupSetup.OwnLineChanged()
         return
     end
 
-    -- a line swap happens out of combat, so there is nothing to wait for
-    GroupSetup.Write()
+    GroupSetup.ownLine = GroupSetup.LineFromSkillNames( skillNames )
+
+    -- A line swap happens out of combat, so there is nothing to wait for. While holdWrite is set
+    -- somebody else is about to write anyway, which is the case at start up, where the walk
+    -- happens before GroupSetup.StartUp.
+    if GroupSetup.holdWrite == false then
+        GroupSetup.Write()
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

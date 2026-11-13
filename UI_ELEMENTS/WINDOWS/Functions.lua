@@ -14,6 +14,11 @@
 Windows.ActiveTimers    = {}
 Windows.PendingLayouts  = {}
 
+-- a trigger changed an enabled flag and the data has to be written, see
+-- Windows.RequestSave
+Windows.PendingSave     = false
+Windows.saveAt          = 0
+
 Windows.Updater             = Turbine.UI.Control()
 Windows.Updater.lastUpdate  = 0
 
@@ -53,9 +58,23 @@ Windows.Updater.Update = function( sender )
 
     end
 
+    -- the one data save for everything a burst of triggers changed, see
+    -- Windows.RequestSave
+    if Windows.PendingSave == true and gameTime >= Windows.saveAt then
+
+        Windows.PendingSave  = false
+        DebugStats.dataSaves = DebugStats.dataSaves + 1
+        Options.SaveData()
+
+    end
+
     -- nothing to do, stop the updates
-    if next( Windows.ActiveTimers ) == nil and next( Windows.PendingLayouts ) == nil then
+    if Windows.PendingSave == false
+       and next( Windows.ActiveTimers ) == nil
+       and next( Windows.PendingLayouts ) == nil then
+
         Windows.Updater:SetWantsUpdates( false )
+
     end
 
 end
@@ -86,6 +105,38 @@ end
 function Windows.IsTimerActive( element )
 
     return Windows.ActiveTimers[ element ] == true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- save the data once for a whole burst of trigger driven changes
+---------------------------------------------------------------------------------------------------
+-- A trigger that turns a window or a timer on or off changes the data, so it has to be written,
+-- but Options.SaveData writes the whole of Data twice - character scope and account scope - and
+-- the client stands still while it does. One of those is not noticed; a trait line swap that fires
+-- an enable for one window and a disable for every other window of a set is a pair of writes per
+-- window, and the game freezes for as long as that takes.
+--
+-- So the save is asked for instead of done. The first ask sets the deadline, the updater writes
+-- once when it passes, and everything that changed in between is in that one write. Later asks do
+-- not push the deadline back, so a steady stream of changes is still written within the delay
+-- rather than never. Nothing is lost by waiting: a reload and a log out both save on the way out,
+-- see Turbine.Plugin.Unload.
+local SAVE_DELAY = 1
+
+function Windows.RequestSave()
+
+    DebugStats.enableToggles = DebugStats.enableToggles + 1
+
+    if Windows.PendingSave == true then
+        return
+    end
+
+    Windows.PendingSave = true
+    Windows.saveAt      = Turbine.Engine.GetGameTime() + SAVE_DELAY
+
+    Windows.Updater:SetWantsUpdates( true )
 
 end
 ---------------------------------------------------------------------------------------------------
@@ -197,7 +248,7 @@ function Windows.WindowAction( windowIndex, windowData, triggerData )
         windowData.enabled = true
         Windows.EnabledChanged( windowIndex )
         Options.DataChanged( windowIndex )
-        Options.SaveData()
+        Windows.RequestSave()
         Options.WindowEnabledChanged()
 
     elseif triggerData.action == Action.Disable and windowData.enabled == true then
@@ -205,7 +256,7 @@ function Windows.WindowAction( windowIndex, windowData, triggerData )
         windowData.enabled = false
         Windows.EnabledChanged( windowIndex )
         Options.DataChanged( windowIndex )
-        Options.SaveData()
+        Windows.RequestSave()
         Options.WindowEnabledChanged()
 
     elseif windowData.enabled == true 
