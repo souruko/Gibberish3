@@ -48,6 +48,8 @@ L[ Language.English ].action[ Action.Subtract ]             = "Subtract"
 L[ Language.English ].action[ Action.Remove ]               = "Remove"
 L[ Language.English ].action[ Action.Reset ]                = "Reset"
 L[ Language.English ].action[ Action.Clear ]                = "Clear"
+L[ Language.English ].action[ Action.EnableThreshold ]      = "Enable Threshold"
+L[ Language.English ].action[ Action.DisableThreshold ]     = "Disable Threshold"
 
 L[ Language.English ].source = {}
 

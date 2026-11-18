@@ -335,23 +335,81 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- put the normal background back ( leaving the threshold, or switching it off )
+---------------------------------------------------------------------------------------------------
+function CounterBarElement:RestoreNormalAppearance()
+
+    self.barBack:SetBackColor( self.backColor )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- switch the threshold on / off while the counter runs ( Enable/Disable Threshold trigger )
+---------------------------------------------------------------------------------------------------
+function CounterBarElement:SetThresholdActive( value )
+
+    if self.thresholdForced == value then
+        return
+    end
+
+    self.thresholdForced = value
+    -- sampled on the next update: where the counters own threshold value has it by then, so
+    -- a later crossing can be told apart and hand control back
+    self.thresholdForcedFrom = nil
+
+    -- let the threshold trigger event fire again
+    self.firstThreshold = true
+
+    -- the bar can be painted red right now, and with the threshold ended nothing else
+    -- would paint it back
+    if value == false then
+        self:RestoreNormalAppearance()
+    end
+
+    -- make the next update apply the look again
+    self._inThreshold = nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- update threshold
 ---------------------------------------------------------------------------------------------------
 function CounterBarElement:UpdateThreshold( counterLeft )
 
-    -- return if not using threshold
-    if self.data.useThreshold == false then
+    local useThreshold = self.data.useThreshold == true
+
+    -- return if there is no threshold set up and no trigger asking for one
+    if not useThreshold and self.thresholdForced == nil then
         return
     end
 
-    local inThreshold = counterLeft <= self.data.thresholdValue
+    -- where the counters own threshold value puts it
+    local inThreshold = useThreshold and counterLeft <= self.data.thresholdValue or false
+
+    -- an Enable/Disable Threshold trigger overrides that, until the counter crosses its own
+    -- threshold value and hands control back to the setting
+    if self.thresholdForced ~= nil then
+
+        if self.thresholdForcedFrom == nil then
+            self.thresholdForcedFrom = inThreshold
+        end
+
+        if inThreshold ~= self.thresholdForcedFrom then
+            self.thresholdForced = nil
+        else
+            inThreshold = self.thresholdForced
+        end
+
+    end
 
     -- not in the threshold: restore normal background only on state change
     if not inThreshold then
 
         if self._inThreshold ~= false then
             self._inThreshold = false
-            self.barBack:SetBackColor( self.backColor )
+            self:RestoreNormalAppearance()
         end
 
     -- in the threshold
@@ -396,6 +454,12 @@ end
 -- timer is done
 ---------------------------------------------------------------------------------------------------
 function CounterBarElement:Ended( silent )
+
+    -- the run is over: an Enable/Disable Threshold trigger only ever applies to the run it
+    -- was fired in. a counters UpdateContent runs on every single count, so unlike the other
+    -- timers this is the only place that counts as a fresh run
+    self.thresholdForced     = nil
+    self.thresholdForcedFrom = nil
 
     -- timer ended trigger event
     -- a silent end ( reset ) stops the timer without firing the event, so a reset

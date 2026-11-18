@@ -157,6 +157,12 @@ function TimerWindowElement:TimerAction( triggerData, timerData, timerIndex, sta
     elseif triggerData.action == Action.Disable then
         self:ActionEnableTimer( timerIndex, false )
 
+    elseif triggerData.action == Action.EnableThreshold then
+        self:ActionEnableThreshold( timerIndex, true )
+
+    elseif triggerData.action == Action.DisableThreshold then
+        self:ActionEnableThreshold( timerIndex, false )
+
     end
 
 end
@@ -539,6 +545,28 @@ function TimerWindowElement:ActionEnableTimer( timerIndex, enabled )
     -- asked for rather than done, see Windows.RequestSave
     Windows.RequestSave()
     Options.TimerEnabledChanged()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- start or end the threshold changes on the timers running right now
+-- nothing is saved and nothing is remembered for later: a timer started after this is back to
+-- its own threshold setting, which is also what the timers still running fall back to once
+-- they cross their threshold value. the repeat guard lives on the timer itself, in
+-- SetThresholdActive, since there is no state out here to compare against
+---------------------------------------------------------------------------------------------------
+function TimerWindowElement:ActionEnableThreshold( timerIndex, enabled )
+
+    for i = #self.children, 1, -1 do
+
+        if self.children[i].index == timerIndex then
+
+            self.children[i]:SetThresholdActive( enabled )
+
+        end
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

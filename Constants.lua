@@ -9,7 +9,7 @@
 ---------------------------------------------------------------------------------------------------
 -- Plugin version, shown next to the name in the options panel title bar.
 -- Keep in step with Gibberish.plugin and Gibberish.plugincompendium.
-Options.Version = "3.11.4"
+Options.Version = "3.12.0"
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
@@ -54,6 +54,9 @@ Action.Clear    = 5
 Action.Enable   = 6
 Action.Disable  = 7
 Action.SetTo    = 8
+-- these two only change the live timers, the saved useThreshold stays as configured
+Action.EnableThreshold  = 9
+Action.DisableThreshold = 10
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------

@@ -157,6 +157,13 @@ function CounterWindowElement:TimerAction( triggerData, timerData, timerIndex, s
     elseif triggerData.action == Action.SetTo then
         self:ActionSetTo( duration, timerData, timerIndex, icon, text, entity, key )
 
+    -- switch the threshold on / off for the live timers only
+    elseif triggerData.action == Action.EnableThreshold then
+        self:ActionEnableThreshold( timerIndex, true )
+
+    elseif triggerData.action == Action.DisableThreshold then
+        self:ActionEnableThreshold( timerIndex, false )
+
     else
         -- error!
 
@@ -482,6 +489,26 @@ function CounterWindowElement:ActionSubtract( value, timerData, timerIndex, icon
 
     child:UpdateContent( value, icon, text, entity, key, true  )
     self:SortChildren()
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- start or end the threshold changes on the counters running right now
+-- nothing is saved and nothing is remembered for later, see the timer window for the detail.
+-- the repeat guard lives on the counter itself, in SetThresholdActive
+---------------------------------------------------------------------------------------------------
+function CounterWindowElement:ActionEnableThreshold( timerIndex, enabled )
+
+    for i = #self.children, 1, -1 do
+
+        if self.children[i].index == timerIndex then
+
+            self.children[i]:SetThresholdActive( enabled )
+
+        end
+
+    end
 
 end
 ---------------------------------------------------------------------------------------------------

@@ -1037,6 +1037,7 @@ function Options2.Window.Nav.Constructor:_ResetActionIfInvalid(trigData, nt, tgt
         local wi = tgt_nd.windowIndex
         local is_counter = Data.window[wi] and Data.window[wi].timerType == Timer.Types.COUNTER_BAR
         if a ~= Action.Add and a ~= Action.Remove and a ~= Action.Enable and a ~= Action.Disable
+            and a ~= Action.EnableThreshold and a ~= Action.DisableThreshold
             and not (is_counter and a == Action.Subtract) then
             trigData.action = Action.Add
         end

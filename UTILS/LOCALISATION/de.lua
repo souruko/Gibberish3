@@ -48,6 +48,8 @@ L[ Language.German ].action[ Action.Subtract ]              = "Abziehen"
 L[ Language.German ].action[ Action.Remove ]                = "Entfernen"
 L[ Language.German ].action[ Action.Reset ]                 = "Zurücksetzen"
 L[ Language.German ].action[ Action.Clear ]                 = "Leeren"
+L[ Language.German ].action[ Action.EnableThreshold ]       = "Schwelle aktivieren"
+L[ Language.German ].action[ Action.DisableThreshold ]      = "Schwelle deaktivieren"
 
 L[ Language.German ].source = {}
 

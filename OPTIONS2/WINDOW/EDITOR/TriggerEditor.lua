@@ -182,6 +182,8 @@ local function build_action_dd(bc, nodeData)
         dd:AddItem("action", Action.Remove,  Action.Remove)
         dd:AddItem("action", Action.Enable,  Action.Enable)
         dd:AddItem("action", Action.Disable, Action.Disable)
+        dd:AddItem("action", Action.EnableThreshold,  Action.EnableThreshold)
+        dd:AddItem("action", Action.DisableThreshold, Action.DisableThreshold)
     end
 
     return dd

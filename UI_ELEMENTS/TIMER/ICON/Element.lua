@@ -241,6 +241,11 @@ function IconElement:UpdateContent( startTime, duration, icon, text, entity, key
     -- reset key
     self.key = key
 
+    -- a fresh run of the timer: an Enable/Disable Threshold trigger only ever applies to the
+    -- run it was fired in
+    self.thresholdForced     = nil
+    self.thresholdForcedFrom = nil
+
     -- reset time
     self.startTime = startTime
     self.duration = duration
@@ -423,16 +428,91 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- put the normal colors / font / frame / icon size back
+-- the icon has more to undo than the other timers: the border animations paint into the
+-- animation layer and zoom resizes and moves the icon itself
+---------------------------------------------------------------------------------------------------
+function IconElement:RestoreNormalAppearance()
+
+    -- switching the threshold off can land on a permanent timer sitting idle, which belongs
+    -- at the passive opacity
+    local opacity = Windows.IsTimerActive( self ) and self.parent.data.opacityActiv
+                                                  or self.parent.data.opacityPassiv
+
+    self.timerLabel:SetForeColor( self.timerColor )
+    self.textLabel:SetForeColor( self.textColor )
+    self.timerLabel:SetFont( self.font )
+    self.textLabel:SetFont( self.font )
+    self.animation:SetBackground( UTILS.IconID.Blank )
+    self:SetFrameColor( self.frameColor )
+    self.iconControl:SetSize( self.width, self.height )
+    self.iconControl:SetPosition( self.parent.data.frame, self.parent.data.frame )
+    self:SetOpacity( opacity )
+    self.iconControl:SetOpacity( opacity )
+    self.shadow:SetOpacity( opacity )
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+-- switch the threshold on / off while the timer runs ( Enable/Disable Threshold trigger )
+---------------------------------------------------------------------------------------------------
+function IconElement:SetThresholdActive( value )
+
+    if self.thresholdForced == value then
+        return
+    end
+
+    self.thresholdForced = value
+    -- sampled on the next update: where the timers own threshold value has it by then, so a
+    -- later crossing can be told apart and hand control back
+    self.thresholdForcedFrom = nil
+
+    -- let the threshold trigger event fire again
+    self.firstThreshold = true
+
+    -- the timer can be painted with the threshold colors, a running border animation or a
+    -- zoomed icon right now, and with the threshold switched off nothing would undo any of it
+    if value == false then
+        self:RestoreNormalAppearance()
+    end
+
+    -- make the next update apply the look again
+    self._inThreshold = nil
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- update threshold
 ---------------------------------------------------------------------------------------------------
 function IconElement:UpdateThreshold( timeLeft )
 
-    -- return if not using threshold
-    if self.data.useThreshold == false then
+    local useThreshold = self.data.useThreshold == true
+
+    -- return if there is no threshold set up and no trigger asking for one
+    if not useThreshold and self.thresholdForced == nil then
         return
     end
 
-    local inThreshold = timeLeft <= self.data.thresholdValue
+    -- where the timers own threshold value puts it
+    local inThreshold = useThreshold and timeLeft <= self.data.thresholdValue or false
+
+    -- an Enable/Disable Threshold trigger overrides that, until the timer crosses its own
+    -- threshold value and hands control back to the setting
+    if self.thresholdForced ~= nil then
+
+        if self.thresholdForcedFrom == nil then
+            self.thresholdForcedFrom = inThreshold
+        end
+
+        if inThreshold ~= self.thresholdForcedFrom then
+            self.thresholdForced = nil
+        else
+            inThreshold = self.thresholdForced
+        end
+
+    end
 
     -- not in the threshold: restore frame color only on state change
     if not inThreshold then
@@ -614,7 +694,9 @@ function IconElement:Activ( value )
         self.textLabel:SetVisible( false )
         self.timerLabel:SetVisible( false )
 
-        if self.data.useThreshold == true then
+        -- a trigger can have forced the threshold on a timer that has none set up, so the
+        -- forced state counts here too
+        if self.data.useThreshold == true or self.thresholdForced ~= nil then
 
             self.timerLabel:SetForeColor( self.timerColor )
             self.textLabel:SetForeColor( self.textColor )

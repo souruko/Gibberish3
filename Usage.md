@@ -176,7 +176,7 @@ Animations trigger when the timer enters the threshold zone.
 
 | Setting | What it does |
 |---|---|
-| **Use Threshold** | Enables threshold mode. When the remaining time (or counter value) crosses the threshold, colors and font change to the threshold overrides, and the animation starts. |
+| **Use Threshold** | Enables threshold mode. When the remaining time (or counter value) crosses the threshold, colors and font change to the threshold overrides, and the animation starts. A trigger can also start or end these changes itself with the **Enable Threshold** / **Disable Threshold** actions, which does not affect this setting. |
 | **Threshold Value** | The time in seconds (or count value) at which the threshold activates. For descending timers this fires when time remaining falls below this value. |
 | **Use Animation** | Whether to play the animation when the threshold is active. Colors still change even when animation is off. |
 | **Animation Type** | Visual style of the animation (see below). |
@@ -221,6 +221,8 @@ Triggers tell a timer what to do and when. Each timer can have multiple triggers
 | **Reset** *(Counter only)* | Resets Counter to the start values. |
 | **Enable** | Enables the timer (reverses a Disable). |
 | **Disable** | Disables the timer so future triggers are ignored. |
+| **Enable Threshold** | Starts the threshold changes on the timer right now - the threshold colors, font, opacity and animation - without waiting for **Threshold Value** to be reached. Works whether or not **Use Threshold** is ticked. |
+| **Disable Threshold** | Ends them again, putting the timer back to its normal look straight away. |
 | **Subtract** *(Counter only)* | Subtracts Value from the current counter. |
 | **Clear** *(Counter only)* | Resets the counter to its Counter Start value and removes all instances. |
 | (**Set To** *(Counter only)*) | Sets the counter to an exact value. |

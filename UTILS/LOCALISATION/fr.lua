@@ -48,6 +48,8 @@ L[ Language.French ].action[ Action.Subtract ]             = "Soustraire"
 L[ Language.French ].action[ Action.Remove ]               = "Retirer"
 L[ Language.French ].action[ Action.Reset ]                = "Remise à zéro"
 L[ Language.French ].action[ Action.Clear ]                = "Effacer"
+L[ Language.French ].action[ Action.EnableThreshold ]      = "Activer le seuil"
+L[ Language.French ].action[ Action.DisableThreshold ]     = "Désactiver le seuil"
 
 L[ Language.French ].source = {}
 
