@@ -168,10 +168,12 @@ local function make_size_tab(data, bc)
     end
 
     local function save()
-        data.width         = width:GetText()
-        data.height        = height:GetText()
-        data.frame         = frame:GetText()
-        data.spacing       = spacing:GetText()
+        -- an empty or non-numeric field keeps the previous value; nil here
+        -- breaks the window layout arithmetic
+        data.width         = width:GetText()   or data.width
+        data.height        = height:GetText()  or data.height
+        data.frame         = frame:GetText()   or data.frame
+        data.spacing       = spacing:GetText() or data.spacing
         data.direction     = direction:GetSelectedValue()
         data.sort_direction = sort_direction:GetSelectedValue()
         data.orientation   = orientation:GetSelectedValue()
