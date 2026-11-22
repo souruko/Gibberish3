@@ -208,6 +208,38 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- is another instance of an effect with this name still on the entity
+---------------------------------------------------------------------------------------------------
+Trigger.HasOtherEffectNamed = function ( entity, removedEffect, name )
+
+    if entity == nil or entity.GetEffects == nil then
+        return false
+    end
+
+    local effects = entity:GetEffects()
+
+    if effects == nil then
+        return false
+    end
+
+    local removedID = removedEffect:GetID()
+
+    for index = 1, effects:GetCount(), 1 do
+
+        local other = effects:Get( index )
+
+        if other ~= nil and other:GetID() ~= removedID and other:GetName() == name then
+            return true
+        end
+
+    end
+
+    return false
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- process effect trigger
 ---------------------------------------------------------------------------------------------------
 -- takes the effect view of the event: the name and icon were already read by the
@@ -263,6 +295,14 @@ Trigger.ProcessEffectTrigger = function ( effectView, player, posAdjustment, win
         -- the name of player, read once above
         key = target
 
+    end
+
+    -- a refreshed effect: lotro can send the added event of the new instance before
+    -- the removed event of the old one. Without a key the remove would end the timer
+    -- the refresh just restarted, so it is skipped while an effect of the same name,
+    -- but another instance, is still on the entity
+    if remove == true and key == nil and Trigger.HasOtherEffectNamed( player, effect, name ) then
+        return
     end
 
     -- icon
