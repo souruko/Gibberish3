@@ -167,16 +167,29 @@ local function make_size_tab(data, bc)
         orientation:SetSelection(data.orientation)
     end
 
+    -- An empty or non-numeric field keeps the previous value, and a number below
+    -- the floor is raised to it: nil breaks the window layout arithmetic, and a
+    -- zero or negative size gives the game a size it cannot draw.
+    local function number(row, previous, floor)
+        local value = row:GetText() or tonumber(previous) or floor
+        if value < floor then value = floor end
+        return value
+    end
+
     local function save()
-        -- an empty or non-numeric field keeps the previous value; nil here
-        -- breaks the window layout arithmetic
-        data.width         = width:GetText()   or data.width
-        data.height        = height:GetText()  or data.height
-        data.frame         = frame:GetText()   or data.frame
-        data.spacing       = spacing:GetText() or data.spacing
+        data.width         = number(width,   data.width,   1)
+        data.height        = number(height,  data.height,  1)
+        data.frame         = number(frame,   data.frame,   0)
+        data.spacing       = number(spacing, data.spacing, 0)
         data.direction     = direction:GetSelectedValue()
         data.sort_direction = sort_direction:GetSelectedValue()
         data.orientation   = orientation:GetSelectedValue()
+
+        -- show what was actually stored, not the rejected text
+        width:SetText(data.width)
+        height:SetText(data.height)
+        frame:SetText(data.frame)
+        spacing:SetText(data.spacing)
     end
 
     local function lang_changed()
