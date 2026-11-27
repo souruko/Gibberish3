@@ -333,11 +333,16 @@ end
 
 -- ── filter predicates ──────────────────────────────────────────────────────────
 
-function Options2.Window.Nav.Constructor:_FolderVisible(fi, fd)
+-- visited guards against a folder loop in the data, which would otherwise
+-- recurse until the stack overflows.
+function Options2.Window.Nav.Constructor:_FolderVisible(fi, fd, visited)
     if self.filter == "" then return true end
+    visited = visited or {}
+    if visited[fi] then return false end
+    visited[fi] = true
     if (fd.name or ""):lower():find(self.filter, 1, true) then return true end
     for fi2, fd2 in ipairs(Data.folder) do
-        if fd2.folder == fi and self:_FolderVisible(fi2, fd2) then return true end
+        if fd2.folder == fi and self:_FolderVisible(fi2, fd2, visited) then return true end
     end
     for wi, wd in ipairs(Data.window) do
         if wd.folder == fi and self:_WindowVisible(wd) then return true end
@@ -359,8 +364,12 @@ end
 -- Only folders nest in this column. Keys saved by an older version may name a
 -- timer or trigger; those simply resolve to nothing and the selection is
 -- dropped, which is why every lookup here is guarded.
-function Options2.Window.Nav.Constructor:_EnsureKeyVisible(key)
+-- visited stops the walk if the folder chain loops back on itself.
+function Options2.Window.Nav.Constructor:_EnsureKeyVisible(key, visited)
     if key == nil then return end
+    visited = visited or {}
+    if visited[key] then return end
+    visited[key] = true
     local parts = {}
     for p in key:gmatch("[^_]+") do parts[#parts + 1] = p end
     local prefix = parts[1]
@@ -377,7 +386,7 @@ function Options2.Window.Nav.Constructor:_EnsureKeyVisible(key)
     if parent_folder ~= nil then
         local pkey = "f_" .. parent_folder
         self.expanded[pkey] = true
-        self:_EnsureKeyVisible(pkey)
+        self:_EnsureKeyVisible(pkey, visited)
     end
 end
 
@@ -818,6 +827,9 @@ function Options2.Window.Nav.Constructor:_DragMove(item, args)
         and hover.nodeData.nodeType == "folder"
         and (nodeType == "folder" or nodeType == "window")
         and hover ~= item
+        -- a folder must not go into one of its own subfolders, that would make a loop
+        and not (nodeType == "folder"
+            and Folder.IsInside(hover.nodeData.folderIndex, item.nodeData.folderIndex))
 
     if drop_into then
         -- Only update highlight if the target folder changed

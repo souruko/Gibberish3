@@ -249,6 +249,30 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- is folder_index the folder ancestor_index itself or somewhere below it
+---------------------------------------------------------------------------------------------------
+-- Walks up the .folder chain. The visited set keeps a broken save that already holds a loop
+-- from hanging the walk.
+---------------------------------------------------------------------------------------------------
+function Folder.IsInside( folder_index, ancestor_index )
+
+    local visited = {}
+    local current = folder_index
+
+    while current ~= nil and visited[ current ] == nil do
+        if current == ancestor_index then return true end
+        visited[ current ] = true
+        local folder_data = Data.folder[ current ]
+        if folder_data == nil then return false end
+        current = folder_data.folder
+    end
+
+    return false
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- delete folder
 ---------------------------------------------------------------------------------------------------
 function Folder.GetListOfWindows( folder_index )

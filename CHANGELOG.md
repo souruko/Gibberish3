@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.12.1 by ***Plugo***
+- Fixed folders vanishing from the options panel when one was dragged into one of its own subfolders. That left the two folders holding each other, so neither hung off the top of the list any more and both disappeared, along with every window inside them - and a folder trigger on either of them could crash the plugin when it fired. A folder can no longer be dropped anywhere inside itself: the drag shows as not allowed over those folders, the same as over anything else it cannot go into.
+- Fixed a window breaking when its Width, Height, Frame or Spacing field was left empty or had something other than a number typed into it. The field now keeps the value it had before. A Width or Height below 1, or a negative Frame or Spacing, is raised to the smallest value that works. Either way the field shows what was actually saved as soon as you apply, rather than the text that was turned down.
+
 ### 3.12.0
 - New: a timer trigger can now start or end a timer's threshold changes itself, with the new Enable Threshold and Disable Threshold actions. Until now the only way into the threshold was for the timer to run down to its Threshold Value, so the threshold colors, font, opacity and animation could only ever mean "this timer is nearly up". Enable Threshold brings all of that on straight away, whatever the time left, and Disable Threshold puts the timer back to its normal look - so the threshold can now mean whatever you want it to, something another trigger noticed rather than the clock. It works on a timer that has no threshold set up at all, so Use Threshold does not have to be ticked for it. Nothing about the timer's own settings changes, and nothing is remembered: the next run of the timer behaves normally again, and a timer that is still running goes back to its own Threshold Value as soon as it next crosses it. Works on bar, icon, circle, text and counter timers.
 
