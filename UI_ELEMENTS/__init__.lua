@@ -42,6 +42,20 @@ for index, timerType in pairs( Timer.Types ) do
 
 end
 
+-- icon width a window reserves per item: its height if any of its timers shows an icon, else 0
+-- the move mode frame is sized from this, so it has to match what the timers actually draw
+Timer.WindowIconSize = function ( parent_data )
+
+    for _, timerData in ipairs( parent_data.timerList or {} ) do
+        if timerData.showIcon == true then
+            return parent_data.height
+        end
+    end
+
+    return 0
+
+end
+
 -- timer imports
 import "Gibberish3.UI_ELEMENTS.TIMER.BAR"
 import "Gibberish3.UI_ELEMENTS.TIMER.CIRCEL"

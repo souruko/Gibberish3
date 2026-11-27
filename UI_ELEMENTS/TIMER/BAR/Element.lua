@@ -785,7 +785,7 @@ end
 ---------------------------------------------------------------------------------------------------
 Timer[ Timer.Types.BAR ].GetItemSize = function ( parent_data )
 
-    local width = parent_data.width + ( 2 * parent_data.frame ) + parent_data.height
+    local width = parent_data.width + ( 2 * parent_data.frame ) + Timer.WindowIconSize( parent_data )
     local height = parent_data.height + ( 2 * parent_data.frame)
 
     return width, height
