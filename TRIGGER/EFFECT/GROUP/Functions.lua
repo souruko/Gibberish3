@@ -99,7 +99,7 @@ Trigger[ Trigger.Types.EffectGroup ].Sync = function ()
                         -- the player object is in hand
                         GroupSetup.AddMember( player, playerName )
 
-                        Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName )
+                        Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects( player, playerName, tracked[ playerName ] )
 
                     end
 
@@ -146,12 +146,61 @@ end
 ---------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
+-- effect ids of a party member that were already processed
+---------------------------------------------------------------------------------------------------
+-- lotro fires EffectAdded again for effects of a party member that are still running, over and
+-- over in a fight, the same as it does for the target. Each of them restarted every timer the
+-- effect triggers, so a timer flickered for as long as the effect was up. Every effect id is
+-- only processed once per member; an effect that is applied again gets a new id.
+--
+-- A member stays tracked until the next reload, so the ids are not left to pile up: once there
+-- are more than this, the list is rebuilt from the effects the member still has.
+local SEEN_LIMIT = 128
+
+local function IsNewEffect( record, effect )
+
+    local id   = effect:GetID()
+    local seen = record.seen
+
+    if seen[ id ] == true then
+        DebugStats.groupEffectsSkipped = DebugStats.groupEffectsSkipped + 1
+        return false
+    end
+
+    seen[ id ]       = true
+    record.seenCount = record.seenCount + 1
+
+    if record.seenCount > SEEN_LIMIT then
+
+        local effects = record.effects
+        local count   = effects:GetCount()
+
+        seen = {}
+
+        for j = 1, count, 1 do
+            seen[ effects:Get(j):GetID() ] = true
+        end
+
+        -- the effect in hand counts as seen even if it is already gone again
+        seen[ id ] = true
+
+        record.seen      = seen
+        record.seenCount = count + 1
+
+    end
+
+    return true
+
+end
+---------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
 -- register the effect callback of one party member
 ---------------------------------------------------------------------------------------------------
 Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
 
     local effects = player:GetEffects()
-    local record  = { effects = effects, active = true }
+    local record  = { effects = effects, active = true, seen = {}, seenCount = 0 }
 
     -- add
     record.callback = Trigger.AddCallback( effects, "EffectAdded", function ( sender, args )
@@ -173,6 +222,10 @@ Trigger[ Trigger.Types.EffectGroup ].Register = function ( player, playerName )
         end
 
         local effect = effects:Get(args.Index)
+
+        if IsNewEffect( record, effect ) == false then
+            return
+        end
 
         -- read the effect once for the whole event instead of once per trigger
         local effectView = Trigger.NewEffectView( effect )
@@ -197,7 +250,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- check the active effects of one party member
 ---------------------------------------------------------------------------------------------------
-Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName )
+Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, playerName, record )
 
     local index          = Trigger.EffectIndex.Get( Trigger.Types.EffectGroup )
     local exportingSetup = GroupSetup.Enabled()
@@ -222,14 +275,22 @@ Trigger[ Trigger.Types.EffectGroup ].CheckMemberEffects = function ( player, pla
     -- iterate effects
     for j = 1, effects:GetCount(), 1 do
 
-        local effectView = Trigger.NewEffectView( effects:Get(j) )
+        local effect = effects:Get(j)
 
-        if exportingSetup == true then
-            GroupSetup.CheckEffect( effectView, playerName )
-        end
+        -- the effects already running are marked as seen, so the EffectAdded the game fires
+        -- for them again later does not restart their timers
+        if IsNewEffect( record, effect ) == true then
 
-        if index.empty ~= true then
-            Trigger.EffectIndex.Check( GROUP_TYPES, effectView, player, playerName )
+            local effectView = Trigger.NewEffectView( effect )
+
+            if exportingSetup == true then
+                GroupSetup.CheckEffect( effectView, playerName )
+            end
+
+            if index.empty ~= true then
+                Trigger.EffectIndex.Check( GROUP_TYPES, effectView, player, playerName )
+            end
+
         end
 
     end
