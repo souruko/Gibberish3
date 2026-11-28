@@ -260,6 +260,7 @@ function DebugCommand:Execute( command, arguments )
     -- counters since plugin load
     Turbine.Shell.WriteLine( string.format( "Since load: %d timer elements created, %d reused, %d target changes", DebugStats.timersCreated, DebugStats.timersReused, DebugStats.targetChanges ) )
     Turbine.Shell.WriteLine( string.format( "Duplicate target effects skipped: %d", DebugStats.effectsSkipped ) )
+    Turbine.Shell.WriteLine( string.format( "Duplicate group effects skipped: %d", DebugStats.groupEffectsSkipped ) )
 
 end
 
